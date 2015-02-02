@@ -173,14 +173,16 @@ Todas estas simplificaciones son realizadas a escala humana, es decir, sin tener
 
 \section{Conclusiones}
 
-\chapter{Modelamiento Procedimental de la Miga de Pan y Otros Materiales Porosos}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Modelamiento Procedimental de Geometrías de Miga de Pan y Otros Materiales Porosos}
 \section{Introducción y Motivación} % (Películas de Animación)
-Como fue previamente explicado, determinados materiales recibieron menor atención en la literatura científica debido, entre otros factores, a la dificultad en el modelado (incluyendo costos computacionales) y a la necesidad de utilización del material en aplicaciones prácticas.
-Con el paso de los a\~nos, la industria del cine y de los video juegos fue incrementando la necesidad de aplicar procedimientos artísticos para subsanar estas deficiencias.
+Como fue previamente explicado, determinados materiales recibieron menor atención en la literatura científica debido, entre otros factores, a la dificultad en el modelado, a los altos costos computacionales, y/o a la necesidad de utilización del material en aplicaciones prácticas.
+Con el paso de los a\~nos, la industria del cine y de los video juegos fue incrementando la necesidad de aplicación de procedimientos artísticos que intentan subsanar estas deficiencias.
 De esta forma, se busc\'o la mayor similitud posible entre el material sintetizado y el real, sin importar si el proceso en sí es una simulación física o el resultado de un procedimiento artístico.
-Entre los innumerables ejemplos que se pueden citar, uno particularmente relacionado al trabajo de esta tesis lo constituye la película Ratatouille \cite{Xenakis}.
+Entre los innumerables ejemplos que se pueden citar, uno particularmente relacionado al trabajo de esta tesis lo constituye la película Ratatouille \cite{Cho2007}.
 La misma se desarrolla en un ambiente de cocina, y por lo tanto existen alimentos y materiales naturales que deben ser modelados para ser renderizados.
-Debido a la inexistencia de modelos estándar en la literatura de computación gráfica, los artistas y programadores encargados de llevar a cabo la producción visual de la película debieron crear técnicas ad-hoc para lograr un renderizado realista de los diferentes materiales.
+Debido a la inexistencia de modelos estándar de determinados materiales en la literatura de computación gráfica (comestibles), los artistas y programadores encargados de llevar a cabo la producción visual de la película debieron crear técnicas ad-hoc para lograr un renderizado realista de los diferentes materiales.
 Sin embargo, el éxito visual obtenido no se vio acompañado de una liberación del código que producía dichas imágenes, por lo cual la técnica permaneció para uso privado de la compañía productora, resultando en una difícil reproducción de dichos materiales por parte de terceros.
 
 En nuestro trabajo intentamos subsanar estas deficiencias.
@@ -197,13 +199,21 @@ El procedimiento presentado ser\'a luego derivado para obtener texturas de pan y
 \subsection{Sistemas de Partículas y Autómatas Celulares}
 En un sistema de part\'iculas t\'ipico las part\'iculas nacen, se desarrollan y mueren, respetando reglas que les son impuestas por el sistema. Estos sistemas intentan modelar la din\'amica del fen\'omeno a trav\'es del tiempo, siendo uno de sus principales intereses mostrar una animaci\'on del mismo \cite{Gao2010, Bagar2010, Lentine2010}.
 
-Se propone utilizar estos sistemas como generadores procedimentales de texturas. Un enfoque similar puede observarse en \cite{Kranidotis98}, aunque el mismo no fue desarrollado en profundidad. En el presente trabajo, se sigue una linea de investigaci\'on similar, presentando un sistema de part\'iculas que est\'a caracterizado por el crecimiento de las mismas en cada iteraci\'on, las cuales ocupan texels asign\'andoles colores, pudi\'endose detener al mismo en la iteraci\'on que se crea conveniente, obteni\'endose una textura. Las im\'agenes resultantes presentan aleatoriedad, lo cual es deseable en materiales naturales. A trav\'es de la direcci\'on de crecimiento de las part\'iculas se producen distintos patrones visuales.
+Se propone utilizar estos sistemas como generadores procedimentales de texturas. Un enfoque similar puede observarse en \cite{Kranidotis98}, aunque el mismo no fue desarrollado en profundidad.
+Aquí se sigue una linea de investigaci\'on similar, presentando un sistema de part\'iculas que est\'a caracterizado por el crecimiento de las mismas en cada iteraci\'on, las cuales ocupan texels asign\'andoles colores, pudi\'endose detener al mismo en la iteraci\'on que se crea conveniente, obteni\'endose una textura.
+Las im\'agenes resultantes presentan aleatoriedad, lo cual es deseable en materiales naturales.
+A trav\'es de la direcci\'on de crecimiento de las part\'iculas se producen distintos patrones visuales.
 
-Es posible representar materiales cl\'asicos como madera, granito y m\'armol, pero tambi\'en otros como mosaicos, pinturas, vegetaci\'on, entre muchos otros. En un trabajo anterior \cite{Baravalle2010} se abord\'o la generaci\'on procedimental de texturas. La diferencia radica en el mecanismo de generaci\'on, dado que con esta nueva propuesta es un {\em proceso temporal} el que produce los resultados, con lo cual puede representarse todo el proceso de formaci\'on de un material. Adem\'as, cada corrida del algoritmo produce una textura distinta utilizando los mismos par\'ametros, debido a la naturaleza aleatoria de la generaci\'on (aunque el uso de seeding permitir\'ia repetir texturas en el caso de requerirse, por ejemplo para generar baldosas id\'enticas).
+Es posible representar materiales cl\'asicos como madera, granito y m\'armol, pero tambi\'en otros como mosaicos, pinturas, vegetaci\'on, entre muchos otros.
+En un trabajo anterior \cite{Baravalle2010} se abord\'o la generaci\'on procedimental de texturas.
+La diferencia radica en el mecanismo de generaci\'on, dado que con esta nueva propuesta es un {\em proceso temporal} el que produce los resultados, con lo cual puede representarse todo el proceso de formaci\'on de un material.
+Adem\'as, cada corrida del algoritmo produce una textura distinta utilizando los mismos par\'ametros, debido a la naturaleza aleatoria de la generaci\'on (aunque el uso de seeding permitir\'ia repetir texturas en el caso de requerirse, por ejemplo para generar baldosas id\'enticas).
 
-Se utiliza como plataforma de implementaci\'on a WebGL\footnote{\em http://www.khronos.org/webgl/}, recientemente propuesta por el Khronos Group (Open Standars for Media Authoring and Acceleration), dado que la misma otorga portabilidad al modelo. Programadores pueden incluirlo como biblioteca en aplicaciones gr\'aficas. Dise\~nadores pueden utilizar la implementaci\'on para producir materiales, dada la intuitividad de los par\'ametros del mismo.
+Se utiliza como plataforma de implementaci\'on a WebGL\footnote{\em http://www.khronos.org/webgl/}, recientemente propuesta por el Khronos Group (Open Standars for Media Authoring and Acceleration), dado que la misma otorga portabilidad al modelo. 
+Programadores pueden incluirlo como biblioteca en aplicaciones gr\'aficas.
+Dise\~nadores pueden utilizar la implementaci\'on para producir materiales, dada la intuitividad de los par\'ametros del mismo.
 
-\subsection{Desarrollo}
+\subsubsection{Desarrollo}
 Inicialmente el sistema consta de un conjunto de part\'iculas $P$
 \begin{equation}
 P = \{p_{1}, ... , p_{n}\}, n  \in \mathbb{N},
@@ -237,9 +247,13 @@ color_{i} = col_{h} + rand * varcolor,
 \end{equation}
 
 \noindent
-y donde rand es un n\'umero pseudo-aleatorio uniformemente distribuido entre $-1$ y $1$, $varcolor$ un par\'ametro y $col_{h} \in cols$. Cada $t \in T_{i}$ tiene asociado un color que var\'ia con respecto a $color_{i}$, de similar manera a la ecuaci\'on (\ref{eqColor}).
+y donde rand es un n\'umero pseudo-aleatorio uniformemente distribuido entre $-1$ y $1$, $varcolor$ un par\'ametro y $col_{h} \in cols$.
+Cada $t \in T_{i}$ tiene asociado un color que var\'ia con respecto a $color_{i}$, de similar manera a la ecuaci\'on (\ref{eqColor}).
 
-El {\em contorno} de una part\'icula determina los texels que la misma puede incorporar. En cada iteraci\'on, se elige aleatoriamente un texel en $C_{i}$, se lo quita del mismo y se lo incorpora a $T_{i}$. Luego se actualiza el contorno de acuerdo a $d_{i}$ y al nuevo texel incorporado. Se repite el proceso $\forall p_{i} \in P$, respetando las siguientes restricciones:
+El {\em contorno} de una part\'icula determina los texels que la misma puede incorporar. 
+En cada iteraci\'on, se elige aleatoriamente un texel en $C_{i}$, se lo quita del mismo y se lo incorpora a $T_{i}$.
+Luego se actualiza el contorno de acuerdo a $d_{i}$ y al nuevo texel incorporado.
+Se repite el proceso $\forall p_{i} \in P$, respetando las siguientes restricciones:
 \begin{eqnarray}
 \forall p_{i}, p_{j} \in P, t \in T_{i} \Rightarrow t \notin T_{j}, \\
 \forall p_{i} \in P, t \in T_{i} \Rightarrow t \notin C_{i}.
@@ -247,11 +261,22 @@ El {\em contorno} de una part\'icula determina los texels que la misma puede inc
 
 Es decir, si una part\'icula posee un texel en $T_{i}$, ninguna otra lo posee (las part\'iculas son disjuntas), y si una part\'icula posee un texel en $T_{i}$, \'este no est\'a en su contorno.
 
-Las part\'iculas pueden {\em nacer} y {\em morir}. Lo cual representa su inclusi\'on o eliminaci\'on de $P$. Al morir, la part\'icula deja asociados los colores de su conjunto $T_{i}$ en $B$, pudiendo utilizarse posteriormente esta informaci\'on.
+Las part\'iculas pueden {\em nacer} y {\em morir}, lo cual representa su inclusi\'on o eliminaci\'on de $P$.
+Al morir, la part\'icula deja asociados los colores de su conjunto $T_{i}$ en $B$, pudiendo utilizarse posteriormente esta informaci\'on.
 
 Podemos intentar aplicar estas técnicas al modelado procedimental de texturas. 
 
-En la Figura \ref{resultados} se observan algunas im\'agenes sintetizadas. En la primera fila, la primera y cuarta textura muestran patrones con direcci\'on vertical, direcci\'on elegida para hacer crecer a las part\'iculas. La \'ultima figura de la segunda fila, muestra part\'iculas que crecen en 3 direcciones posibles: aleatorio ($50\%$), vertical ($25\%$) y horizontal ($25\%$), lo cual demuestra que se posee un control preciso sobre las formas resultantes en las texturas. En la Figura \ref{sintesis} se observa un ejemplo de s\'intesis. De izquierda a derecha, se observan texturas obtenidas en las iteraciones $10$, $150$, $250$, $500$ y $1000$. En la Figura \ref{teteras} se observan texturas sintetizadas aplicadas a un objeto mediante texture mapping, mostrando una calidad aceptable para ser utilizadas en aplicaciones gr\'aficas. La Figura \ref{muerte} muestra el efecto de muerte de part\'iculas. Las mismas liberan el espacio en $T_{i}$ dejando asociado su color en $B$, permitiendo que las dem\'as puedan crecer en dichos texels. De esta forma, puede utilizarse posteriormente la informaci\'on que la misma dej\'o asociada. En este caso los colores de la part\'icula que libera el espacio y la ocupante fueron mezclados, obteni\'endose im\'agenes que parecen haber sido ``pintadas'' por capas. En la Figura \ref{software} se observa el modelo corriendo en un navegador web.
+En la Fig.~\ref{resultados} se observan algunas im\'agenes sintetizadas.
+En la primera fila, la primera y cuarta textura muestran patrones con direcci\'on vertical, direcci\'on elegida para hacer crecer a las part\'iculas.
+La \'ultima figura de la segunda fila, muestra part\'iculas que crecen en 3 direcciones posibles: aleatorio ($50\%$), vertical ($25\%$) y horizontal ($25\%$), lo cual demuestra que se posee un control preciso sobre las formas resultantes en las texturas.
+En la Figura \ref{sintesis} se observa un ejemplo de s\'intesis.
+De izquierda a derecha, se observan texturas obtenidas en las iteraciones $10$, $150$, $250$, $500$ y $1000$.
+En la Figura \ref{teteras} se observan texturas sintetizadas aplicadas a un objeto mediante texture mapping, mostrando una calidad aceptable para ser utilizadas en aplicaciones gr\'aficas.
+La Figura \ref{muerte} muestra el efecto de muerte de part\'iculas.
+Las mismas liberan el espacio en $T_{i}$ dejando asociado su color en $B$, permitiendo que las dem\'as puedan crecer en dichos texels.
+De esta forma, puede utilizarse posteriormente la informaci\'on que la misma dej\'o asociada.
+En este caso los colores de la part\'icula que libera el espacio y la ocupante fueron mezclados, obteni\'endose im\'agenes que parecen haber sido ``pintadas'' por capas.
+En la Figura \ref{software} se observa el modelo corriendo en un navegador web.
 
 
 \begin{figure}[t!]
@@ -294,43 +319,58 @@ Se muestra un ejemplo de s\'intesis de una textura en la Figura \ref{sintesis}. 
 \label{muerte}
 \end{figure}
 
-
+Los resultados obtenidos muestran una flexibilidad útil para producir distintos materiales.
+La idea de utilizar sistemas de partículas para producir materiales será utilizada en la sección siguiente.
+Más específicamente para producir geometrías de materiales porosos, particularmente la miga de pan.
+Para esto, se generalizarán los resultados a tres dimensiones.
 
 \section{Modelado Procedimental de la Geometría de la Miga de Pan}
 En esta sección introducimos un modelo procedimental que permite realizar simulaciones de la geometr\'ia de la miga de pan, basado en el framework introducido en la secci\'on anterior.
-Este modelo es un paso previo que permite sentar las bases de un modelo inspirado físicamente.
+Si bien el modelo introducido no está basado en primeros principios, el mismo es un paso previo que permite sentar las bases de un modelo inspirado físicamente.
 
-\subsection{Introducci\'on}
-The overwhelming variety of materials and their complex light interactions has been a central research topic in Computer Graphics for decades. 
-Physics-based modeling may achieve outstanding light transport phenomena, whose computational approximations are a mainstream topic in the current research on rendering.
-In complex materials, geometric modeling undergoes a similar research strategy, starting from a Physics-based understanding of the material that further leads to an adequate computational approximation.
-Realistic material rendering should take into consideration geometrical modeling and light interaction simultaneously.
+\subsection{Introducción}
+La inmensa variedad de materiales, y sus complejas interacciones con fuentes lumínicas, han sido un tópico central de investigación en las últimas décadas en Computación Gráfica.
+El modelado de la naturaleza en física ha demostrado capturar de manera muy precisa fenómenos de transporte de la luz.
+Las aproximaciones computacionales a estos modelos son una de las ramas más investigadas en el renderizado de materiales.
+El modelado geométrico de materiales sigue una estrategia de investigación similar. Primero se construye un modelo físico del material, el cual luego es aproximado computacionalmente.
+Debido a estas observaciones, el renderizado foto-realístico de materiales debe considerar tanto el modelado geométrico de los mismos como su interacción con la luz, para lograr una aproximación adecuada del material.
 
-The choice of a geometrical model depends on the material and the intended scale representation.
-This choice highly influences the rendering algorithm. Main approaches to material rendering include surface or volume treatment. 
-The rendering equation \cite{Kajiya1986} models geometrical optics behavior in surfaces. 
-The volume rendering equation \cite{Kajiya1984} represents scattering phenomena in volume densities.
+La elección del modelo geométrico depende de cada material, y de la escala de representación buscada.
+Esta elección influencia fuertemente el algoritmo de renderizado. 
+Existen dos tipos principales de modelado de materiales: superficies y volúmenes.
+Para esto existen dos ecuaciones principales.
+Por un lado, la ecuación del rendering \cite{Kajiya1986} captura la microgeometría de los materiales y su interacción con la luz en superficies.
+Por otro, la ecuación del rendering de volúmenes \cite{Kajiya1984} modela fenómenos volúmetricos como la transmitancia, la extinción, etc., debido a propiedades del medio (o material).
 
-Typically, authors use the surface representation for homogeneous materials (metals, plastics, and similar materials) \cite{Neumann1999}.
-This method models microscopic surface details using statistical assumptions.
-If mesoscopic details are modeled (as required for instance in wood or bricks) \cite{Lefebvre2000}, a usual technique is to precompute these details in textures that can be mapped onto surfaces.
-Locally flat surfaces are fast to render but they impose limitations to the rendering quality that are sometimes impossible to surmount, specially the features that arise due to the mesoscopic structure and light transport phenomena in the materials.
+Si el material a representar es homogéneo (metales, plásticos, y similares), la elección típica es utilizar una superficie para representar el mismo \cite{Neumann1999}.
+Esta elección modela la superficie del material asumiendo distribuciones estadísticas en su microgeometría.
+Para lograr capturar detalles mesoscópicos, por ejemplo en el caso de maderas o ladrillos \cite{Lefebvre2000}, una técnica usual es precomputar dichas características en texturas, las cuales luego son mapeadas en la superficie.
+La utilización de superficies es usualmente menos costosa computacionalmente, pero por otro lado impone limitaciones al realismo que se puede alcanzar, sobre todo en aquellos detalles que son propios de la estructura a nivel mesoscópico y la interacción de la misma con la luz (por ejemplo luz que pasa a través de agujeros en una superficie).
 
-Bread crumbs are extremely complex materials to model and render, due to the intricate geometries and light transport phenomena arising within them.
-In this particular case, the naive surface approach flatly fails, since mesoscopic details, clearly visible on their surfaces, are essential to recognize the material.
-More sophisticated surface modeling techniques, like the use of bidirectional texture functions \cite{Tong2002}, does not handle light propagation phenomena adequately.
-To overcome this limitation, a complex material model is proposed \cite{Tong2005}.
-This method produces more realistic results, but the capturing and rendering procedure are extremely complex, and the modeling is somewhat inflexible (for example, the surface representation does not allow arbitrary cuts).
+Siguiendo este razonamiento, la miga del pan es un material extremadamente complejo de capturar, modelar y renderizar, debido a la geometría a distintos niveles (microscópico y mesoscópico) y su resultante interacción y fenómenos lumínicos.
+De esta forma, la utilización de superficies no es adecuada bajo ningún punto de vista, ya que la textura del pan está dada en gran medida por los fenómenos previamente explicados.
+Si bien es cierto que existen métodos en la literatura que utilizan superficies para representar características mesoscópicas de los materiales como funciones de texturas bidireccionales (bidirectional texture functions, BTF) \cite{Tong2002}, las mismas no manejan adecuadamente la interacción lumínica antes mencionada.
+Existe un intento en la literatura por suprimir esta falta \cite{Tong2005}.
+El método produce imágenes realistas, pero existen muchas dificultades prácticas en la captura, el cómputo y el renderizado.
+Estas limitaciones provocan que la utilización de dicho método no sea práctica por el momento.
+Además, el método resulta inflexible dado que para cada imagen del material es necesario repetir todo el proceso (dos imágenes distintas del material requieren dos capturas).
+Tampoco es posible obtener cortes del mismo, dada la naturaleza de superficie del método.
 
-On the other hand, there is a wide literature about modeling materials that are better fitted to a volume representation (for example smoke and clouds) \cite{Chentanez2011,Zhou2008}.
-Volumes are computationally expensive but, being mesh-free, they do not have the rendering drawbacks mentioned above for surfaces.
-There is a trade-off, then, between geometrical representations for complex materials.
-Where simplicity and real-time rendering are required, surface-based representation is mostly used, and when photorealism is the final requirement, a volume-based modeling is chosen.
-However, the arise of GPUs is shifting this trade-off, since it may allow volume representations at interactive time rates, as we show in this work.
+Por otro lado, existen numerosas publicaciones que tratan el modelado de materiales mejor adaptados a una representación volumétrica (por ejemplo humo o nubes) \cite{Chentanez2011,Zhou2008}.
+La utilización de volúmenes es costosa computacionalmente pero presenta varias ventajas. Una de ellas es que no depende de una malla de triángulos, como en el caso de las superficies, y por lo tanto no presenta las desventajas mencionadas para las mismas.
 
-In this work we propose a volume representation for bread crumbs, extending our previous work \cite{Baravalle2014} with a more realistic modeling, and also achieving a faster rendering.
-Instead of computing voxel values using algebraic functions \cite{Perlin1989}, the crumb geometry is modeled using particle systems \cite{Reeves83} in a $3D$ cube that evolves with dynamical systems \cite{Strogatz2001}, emulating the yeast behavior in dough.
-This produces bubble distributions with controllable geometric and statistical properties that allow a photorealistic rendering of a variety of bread crumbs.
+Finalmente, existe una elección al momento de modelar materiales complejos y elegir una representación adecuada.
+Donde se requiere simplicidad y velocidad (posiblemente tiempo real), se utilizan superficies, en cambio, si el foto-realismo es el objetivo final, es más adecuado optar por una representación volumétrica.
+En los últimos años esta elección se ve perturbada por la aparición de hardware paralelo de alta velocidad (placas gráficas o GPUs), ya que un diseño adecuado podría alcanzar imágenes foto-realistas utilizando volúmenes en tiempos interactivos.
+Esto es lo que presentaremos a continuación.
+
+
+En este trabajo proponemos una representación volumétrica para la geometría de la miga de pan, alcanzando incluso tasas de refresco de tiempo real.
+Existe un intento similar en la literatura \cite{Perlin1989}, el cual utiliza funciones algebraicas que representan la geometría del material.
+En nuestro caso, para ganar flexibilidad de diseño, utilizamos los sistemas de partículas previamente mencionados, en un cubo (tres dimensiones), en conjunto con sistemas dinámicos \cite{Strogatz2001} que provocan una evolución del sistema, produciendo patrones con formas geométricas naturales.
+Este es un intento por simular el efecto de la levadura en la masa cruda del pan.
+Estos procedimientos producen distribuciones de burbujas de distintos tamaños, resultando en un mecanismo controlable, que presenta propiedades estadísticas.
+El sistema es capaz de generar imágenes foto-realistas de diversos tipos de pan, como se mostrará más adelante.
 
 \section{Sistemas Dinámicos como Modelo de Miga de Pan}
 El prop\'osito de este algoritmo es producir una geometr\'ia la cual se renderizar\'a posteriormente. Por lo tanto, en lugar de devolver el color de una posici\'on espec\'ifica, el algoritmo genera un campo escalar compuesto de $0$s y $1$s ($0$ si la posici\'on contiene aire, $1$ si la misma contiene masa).
@@ -514,31 +554,37 @@ Las part\'iculas se deforman de forma global en un patr\'on que es visualmente s
 \end{figure*}
 
 \subsection{Limitaciones}
-
+Si bien es posible la obtención de distintas geometrías de manera sencilla y prácticamente de manera automática, todavía existen limitaciones en cuanto a la flexibilidad de los tipos de pan a producir.
+Se depende de un sistema dinámico para producir la forma global de la deformación, pero este sistema es difícil de controlar.
+Además, no siempre se adapta de manera sencilla a la forma exterior del material.
+Debido a esto, en la siguiente sección presentamos un algoritmo más robusto el cual permite superar estas deficiencias.
+El mismo está basado en modelos físicos del proceso de fabricado del pan, extraído directamente de la literatura de ingeniería de los alimentos.
 
 \section{Modelamiento del Pan desde su Proceso de Fabricación}
 Para lograr un modelado realista de la geometría de la miga de pan es necesario comprender su proceso físico de formación.
 
 \begin{figure*}
-\includegraphics[width=19cm]{figures/pipeline}
-\caption{Pipeline for synthetic bread making.}
+\includegraphics[width=15cm]{figures/pipeline}
+\caption{Procedimiento semi-automático para obtener pan sintético foto-realista}
 \label{FigPipeline}
 \end{figure*}
 
-We propose to unify and differentiate the key steps of bread making (proving and baking) to produce a physically inspired pipeline for procedural generation of bread crumb and crust geometries.
-These processes have to be well understood before an accurate modeling can be developed.
+En esta sección proponemos unificar, y diferenciar, los pasos claves presentes en el proceso de fabricación del pan (sobre todo, leudado y cocción).
+El procedimiento busca utilizar el proceso físico de generación de geometrías de migas y cortezas de pan a partir de la masa original.
+Estos procesos han sido vagamente tenidos en cuenta en la literatura, la cual ha atendido siempre a procesos artísticos más simples, dada la complejidad de los mismos.
 
-In this Section we describe all the stages that lead to the final rendering of a realistic bread material.
-First, we review the state-of-the-art knowledge of the bread baking process, and we briefly introduce some ancillary mathematical models that will be required for understanding the main computational developments presented in this paper. 
-Then, we present the modeling procedures that, together with the illumination model, give rise to the main results presented in this paper.
+En primer lugar, reveeremos el estado del arte del proceso de cocción del pan e introduciremos modelos matemáticos requeridos para comprender el proceso de cocción.
+Luego presentaremos los procesos de modelado, que junto con el modelo de iluminación del siguiente capítulo, permiten obtener imágenes foto realistas de distintos tipos de pan.
 
-The whole process is comprised in a modeling pipeline (see Fig.~\ref{FigPipeline}), where all the stages emulating bread making are processes applied to scalar fields.
-The user can feed the pipeline with a $3D$ model of their preference, or allow the system to provide standard shapes, usual in bakeries.
-This geometry is voxelized in order to proceed.
-During the bread proving simulation, the user can parameterize the texture of the dough (related to the amount and size of the bubbles), or, again, leave the default parameters that lead to a standard looking bread.
-The dough will be intersected with the voxelized geometry in the previous step to obtain a final scalar field with the external shape provided by the user and with its interior filled with the bread material (see Section~\ref{breadprov}). 
-Then a specific baking model is computed  \cite{Powathil2004} to slightly twist the scalar field (and the bubbles therein) according to the effects that baking produces in the bread making process. 
-Finally we apply direct volume rendering (DVR) \cite{Kruger2003} to the final scalar field, obtaining realistic images of the resulting bread.
+\subsection{Visión global del Proceso}
+La Fig.~\ref{FigPipeline} muestra el proceso completo de formación de geometrías sintéticas de pan.
+Todos los pasos se aplican sobre campos escalares.
+Los usuarios pueden proveer el sistema con un modelo de tres dimensiones de su preferencia, o dejar que el sistema provea un pan de forma estándar ({\em croissants}, {\em baguettes}, etc.).
+La geometría introducida se voxeliza para proceder a las siguientes etapas.
+En la simulación del proceso de leudado, el usuario puede parametrizar la textura del pan (cantidad y tamaño de las burbujas y su distribución), o nuevamente dejar que el sistema provea parámetros estándar que producen tipos de pan conocidos.
+La masa cruda será intersectada con la geometría voxelizada para obtener un campo escalar, el cual tiene la forma externa que provee el usuario (o el sistema), con el interior de la misma compuesta de las burbujas procedentes de los parámetros establecidos (ver Section~\ref{breadprov}).
+Luego, se computa un modelo de cocción específico \cite{Powathil2004} para deformar el campo escalar (y las burbujas de éste), de acuerdo a los efectos que produce la cocción en el proceso de formación del pan.
+El último paso aplica renderizado directo de volúmenes (direct volume rendering, DVR) \cite{Kruger2003} al campo escalar resultado de la cocción, obteniendo imágenes realistas del pan resultante.
 
 %====================================================================
 
@@ -620,7 +666,7 @@ To account for this, the distance field computed at the previous stage is used t
 The resulting binary scalar field is computed as follows.
 
 \begin{figure*}
-\includegraphics[width=19cm]{figures/intersectProblem}
+\includegraphics[width=15cm]{figures/intersectProblem}
 \caption{Na\"ive geometry and bubbles intersection. Bubbles are unrealistically visible on the dough surface.}
 \label{fg:intersectProblem}
 \end{figure*}
@@ -637,13 +683,13 @@ These images show that the approach also allows to produce realistic arbitrary u
 Note that our model is flexible enough to render the material at any stage of the pipeline, and also to arbitrarily slice or intersect the model.
 
 \begin{figure*}
-\includegraphics[width=19cm]{figures/prebakebread}
+\includegraphics[width=15cm]{figures/prebakebread}
 \caption{Proved bread before baking.}
 \label{fg:proving}
 \end{figure*}
 
 \begin{figure*}
-\includegraphics[width=19cm]{figures/prebakebunny}
+\includegraphics[width=15cm]{figures/prebakebunny}
 \caption{Proved bunny-shaped bread before baking.}
 \label{fg:provingBunny}
 \end{figure*}
@@ -709,7 +755,7 @@ Fig.~\ref{fg:baking} shows slices of the result of this mapping ($R$), using tem
 The images are almost identical to what will be obtained with a $3D$ simulation~\cite{Purlis2010}.
 
 \begin{figure*}
-\includegraphics[width=19cm]{figures/tempsbunny}
+\includegraphics[width=15cm]{figures/tempsbunny}
 \caption{One dimensional temperatures mapped onto a bunny-shaped $3D$ scalar field. The images show that temperature results similar to a complete $3D$ simulation.}
 \label{fg:baking}
 \end{figure*}
@@ -727,7 +773,7 @@ where $(u,v,w)$ are the coordinates in the warped scalar field, ($x,y,z$) are th
 Fig.~\ref{fg:bakedbubbles} shows $2D$ scalar field slices with the baking process applied to different bread shapes.
 
 \begin{figure*}
-\includegraphics[width=19cm]{figures/bakedbubbles}
+\includegraphics[width=15cm]{figures/bakedbubbles}
 \caption{Two dimensional cuts showing bubbles after baking over different shapes.}
 \label{fg:bakedbubbles}
 \end{figure*}
@@ -737,7 +783,7 @@ When we increment $p$, we force the bubbles to follow more tightly the bread out
 The image also shows that the method deforms more intensely bubbles closer to the surface.
 
 \begin{figure*}
-\includegraphics[width=19cm]{figures/parameterp}
+\includegraphics[width=15cm]{figures/parameterp}
 \caption{Effect of the $p$ parameter: from left to right $p$ is $0$, $5$, $10$,$15$,and $25$, respectively.}
 \label{fg:parameterp}
 \end{figure*}
@@ -757,7 +803,7 @@ We use a distance parameter to obtain different thicknesses for the crust, getti
 
 \begin{figure*}[!ht]
 \begin{center}
-\includegraphics[width=19cm]{figures/otherbread}
+\includegraphics[width=15cm]{figures/otherbread}
 \caption{Sliced breads after baking, using a scalar field of dimensions $256^{3}$. The images show that crumb and crust are taken into account in our approach.}
 \label{fg:renders}
 \end{center}
@@ -765,7 +811,7 @@ We use a distance parameter to obtain different thicknesses for the crust, getti
 
 \begin{figure*}[!ht]
 \begin{center}
-\includegraphics[width=19cm]{figures/otherbread512}
+\includegraphics[width=15cm]{figures/otherbread512}
 \caption{Sliced breads after baking, using a scalar field of dimensions $256^{3}$. Finer details can be seen in the crumb, augmenting the image quality.}
 \label{fg:renders2}
 \end{center}
@@ -773,7 +819,7 @@ We use a distance parameter to obtain different thicknesses for the crust, getti
 
 \begin{figure*}[!ht]
 \begin{center}
-\includegraphics[width=19cm]{figures/final}
+\includegraphics[width=15cm]{figures/final}
 \caption{Sliced breads after baking. This image shows different $3D$ geometries.}
 \label{fg:renders3}
 \end{center}
@@ -781,7 +827,7 @@ We use a distance parameter to obtain different thicknesses for the crust, getti
 
 \begin{figure*}[!ht]
 \begin{center}
-\includegraphics[width=19cm]{figures/croissant}
+\includegraphics[width=15cm]{figures/croissant}
 \caption{Sliced croissant after baking. This image shows the interior of the croissant at different volume regions.}
 \label{fg:croissant}
 \end{center}
@@ -789,7 +835,7 @@ We use a distance parameter to obtain different thicknesses for the crust, getti
 
 \begin{figure*}[!ht]
 \begin{center}
-\includegraphics[width=19cm]{figures/baked}
+\includegraphics[width=15cm]{figures/baked}
 \caption{Sliced breads after baking showing big alveoli typical of real breads.}
 \label{fg:bigalveoli}
 \end{center}
@@ -797,7 +843,7 @@ We use a distance parameter to obtain different thicknesses for the crust, getti
 
 \begin{figure*}[!ht]
 \begin{center}
-\includegraphics[width=19cm]{figures/bakedbunny}
+\includegraphics[width=15cm]{figures/bakedbunny}
 \caption{Sliced breads after baking showing big alveoli typical of real breads. Also, the baking effect is clearly visible: bubbles tend to follow the crust shape.}
 \label{fg:bakedbunny}
 \end{center}
@@ -1007,6 +1053,13 @@ We easily perform cuts and slices by setting to $0$ different regions in the sca
 
 
 %This method also warps the bubbles' shape. The deformed bubbles have a natural appearance in concordance with real bread bubbles. 
+\section{Conclusiones}
+En este Cap\'itulo we introduced a pipeline to model realistic arbitrary bread crumb and crust geometries based on a fractal generation procedure.
+The proving step is defined by the user in two ways: the bread global shape is determined feeding a $3D$ model to the pipeline, and the bread local features are determined by setting different bubble distributions parameters (maximum and minimum bubble sizes, amount of bubbles, etc.).
+A physical simulation of the baking process slightly warps the proved dough.
+Finally, the crust is generated around the exterior of the baked volume.
+The results were generated applying direct volume rendering, producing realistic images of crumb and crust for several bread types.
+This pipeline is far more flexible and powerful than other state-of-the-art approaches for modeling bread geometry.
 
 \chapter{Características Fractales y Multifractales del Pan}
 %\subsection{Características Fractales y Multifractales del Pan}
