@@ -553,7 +553,22 @@ Las part\'iculas se deforman de forma global en un patr\'on que es visualmente s
   \label{fg:sistdin3}
 \end{figure*}
 
-\subsection{Limitaciones}
+\subsection{Resultados y Limitaciones}
+Las Figs.~\ref{fg:crumb} y \ref{fg:results2} muestran imágenes renderizadas utilizando el procedimiento descrito.
+
+\begin{figure}
+  \centerline{\includegraphics[width=15cm]{figures/crumb}}
+  \caption{Miga de pan sintetizada, vista desde distintos ángulos.}
+  \label{fg:crumb}
+\end{figure}
+
+
+\begin{figure}
+  \centerline{\includegraphics[width=15cm]{figures/results2}}
+  \caption{Miga de pan sintetizada, vista desde distintos ángulos (con corteza agregada).}
+  \label{fg:results2}
+\end{figure}
+
 Si bien es posible la obtención de distintas geometrías de manera sencilla y prácticamente de manera automática, todavía existen limitaciones en cuanto a la flexibilidad de los tipos de pan a producir.
 Se depende de un sistema dinámico para producir la forma global de la deformación, pero este sistema es difícil de controlar.
 Además, no siempre se adapta de manera sencilla a la forma exterior del material.
@@ -569,12 +584,48 @@ Para lograr un modelado realista de la geometría de la miga de pan es necesario
 \label{FigPipeline}
 \end{figure*}
 
+Utilizando las ideas de la sección anterior, proponemos otro modelo volumétrico de generación de geometrías de migas de pan.
 En esta sección proponemos unificar, y diferenciar, los pasos claves presentes en el proceso de fabricación del pan (sobre todo, leudado y cocción).
 El procedimiento busca utilizar el proceso físico de generación de geometrías de migas y cortezas de pan a partir de la masa original.
 Estos procesos han sido vagamente tenidos en cuenta en la literatura, la cual ha atendido siempre a procesos artísticos más simples, dada la complejidad de los mismos.
 
-En primer lugar, reveeremos el estado del arte del proceso de cocción del pan e introduciremos modelos matemáticos requeridos para comprender el proceso de cocción.
+En primer lugar, reveeremos el estado del arte del proceso de cocción del pan.
+% e introduciremos modelos matemáticos requeridos para comprender el proceso de cocción.
 Luego presentaremos los procesos de modelado, que junto con el modelo de iluminación del siguiente capítulo, permiten obtener imágenes foto realistas de distintos tipos de pan.
+
+\subsection{Trabajo Previo}
+El modelado procedimental de geometría reduce fuertemente la necesidad de intervención artística en dominios o situaciones donde la utilización de supervisión repetitiva del proceso se torna impráctica, por ejemplo al modelar ciudades \cite{Parish2001}, planetas \cite{Ebert2002}, edificios \cite{Muller2006}, y plantas \cite{Prusinkiewicz1990}. 
+Algunos métodos procedimentales utilizan gramáticas para definir descripciones matemáticas, representando relaciones espaciales entre las primitivas, por ejemplo cubos, cilindros o líneas.
+Las estructuras finales usualmente emergen utilizando recursión sobre elementos gramaticales.
+
+Si bien existen algunos ejemplos en la literatura sobre modelado y renderizado de la estructura de migas de pan \cite{Tong2005,Xenakis2007}, los mismos ignoran casi por completo el proceso real de formación.
+Algunos trabajos pioneros aplicaron modelos físicos de cocción a determinados tipos de pan para su renderizado, buscando obtener animaciones ({\em e.g.} \cite{Rodriguez-Arenas2011}), pero el modelado de la geometría de las burbujas de la miga del pan no fue tenido en cuenta.
+
+Por otro lado, el modelado procedimental de panes es un tópico multidisciplinario de investigación.
+La ingeniería de los alimentos lleva varias décadas de publicaciones en el área, tratando de desarrollar un mejor entendimiento del proceso de formación del pan.
+Esta rama de la ciencia muestra que el leudado determina fuertemente las características presentes en la miga de pan, particularmente las burbujas \cite{Babin2006}.
+La interacción entre la levadura y algunos nutrientes presentes en la masa produce {\em $CO_{2}$}. 
+El radio de las burbujas y sus distribuciones espaciales muestran estructuras con características fractales, exhibiendo autosimilaridad estadística en diferentes escalas de medición.
+Determinados trabajos han computado las dimensiones fractales de estas estructuras en determinados tipos de pan \cite{Gonzales2008}, sugiriendo distribuciones fractales uniformes.
+El modelado de la cocción del pan es sujeto de numerosos trabajos \cite{Mondal2008}.
+
+El modelado procedimental utilizando fractales también atendió las necesidades de otros variados materiales como montañas \cite{Prusinkiewicz1993}, cráteres lunares, y distribución de las burbujas en quesos \cite{Mandelbrot1982}. 
+Adicionalmente, determinados modelos matemáticos complejos representan el comportamiento y el crecimiento de diversos fenómenos naturales.
+En computación gráfica, estos modelos son unas de las fundaciones usadas para modelar agua y fluidos \cite{Stam1999,Fedkiw2001}.
+Estos trabajos utilizan complejos modelos diferenciales de otras ramas de la ciencia y las aproximan con técnicas numéricas.
+En años recientes, la tecnología GPGPU \cite{Owens2007} permitió la posibilidad de alcanzar tiempos reales o interactivos en el cómputo y renderizado de estos modelos numéricos.
+
+A pesar de todos estos avances, el modelado y visualización foto-realista de panes y materiales porosos todavía presenta diversos retos.
+Además de un modelo geométrico realista, el renderizado requiere que se represente de manera adecuada los fenómenos de transporte de la luz, incluyendo auto-oclusión, auto-sombreado, transmitancia, translucencia, transparencia, entre otras.
+Solamente unas pocas publicaciones proponen atacar ambos problemas, pero utilizando consideraciones artísticas \cite{Xenakis2007}.
+Además, estos autores no dan suficientes detalles del modelado y renderización ya que existen derechos de propiedad intelectual, limitando enormemente la reproducción de dichas imágenes.
+
+Por otro lado, la comunidad artística usualmente produce imágenes realistas de pan utilizando fotografías de los mismos, y definiendo geometrías a partir de ellas, junto a la utilización de materiales translúcidos.
+Si bien los resultados obtenidos son buenos, el proceso es tedioso y demanda horas.
+Además, si se requiere más de una imagen, se requiere repetir todo el proceso desde el principio, lo que torna el proceso muy poco práctico.
+Existen numerosas desventajas además de esta.
+Por ejemplo, no es posible obtener cortes arbitrarios del material resultante.
+
 
 \subsection{Visión global del Proceso}
 La Fig.~\ref{FigPipeline} muestra el proceso completo de formación de geometrías sintéticas de pan.
@@ -588,24 +639,24 @@ El último paso aplica renderizado directo de volúmenes (direct volume renderin
 
 %====================================================================
 
-\subsection{Geometry voxelization}
+\subsection{Voxelización de la Geometría}
 
-Users can generate arbitrary $3D$ bread shapes using our pipeline.
-The first step voxelizes an user-provided model with the open source {\tt binvox} utility\footnote{http://www.cs.princeton.edu/~min/binvox/} \cite{Nooruddin2003}.
-The voxelization generates a binary scalar field, where $1$ represents that the given voxel is inside the geometry, and $0$ means the voxel is outside.
-In the proving simulation step (next subsection), we generate the texture of the material that lies inside this voxelized model.
-This allows to generate arbitrary bread types such as {\em baguettes}, {\em croissants}, {\em sliced} breads, or fancy shapes.
+En nuestro modelo es posible generar panes con geometrías arbitrarias, supliendo un modelo de triángulos en algún formato estándar.
+El modelo consta de un conjunto de pasos. El primer paso de la secuencia voxeliza un modelo provisto por un usuario con la utilidad de código abierto {\tt binvox} \footnote{http://www.cs.princeton.edu/~min/binvox/} \cite{Nooruddin2003}.
+La voxelización genera un campo escalar binario, con $1$ representando que el voxel dado está dentro de la geometría, y $0$ significando que el voxel está fuera de la geometría.
+El paso de leudado (siguiente subsección) genera la textura del material que se ubica dentro de esta geometría voxelizada.
+Esto permite generar panes con formas arbitrarias, tales como {\em baguettes}, {\em croissants}, {\em lactal}, u otros menos comunes (una tetera o un conejo).
 
-An important sub-product of the geometry matrix is a secondary scalar field that can be obtained by means of a distance transform.
-The distance field transform generates a $n$-dimensional matrix of the same dimensions as the matrix being transformed \cite{osh03}. 
-The transformation computes, for each nonzero matrix entry, the distance to the closest zero entry in the matrix.
-Given a binary $n$-dimensional matrix $M$, the algorithm generates a real valued matrix $distField(M)$ with the same dimensions as $M$ in the following way:
+Un sub-producto importante de la matriz de geometría es un campo escalar secundario que puede ser obtenido por medio de una transformación de distancia.
+La transformación de distancia genera una matriz $n$-dimensional con las mismas dimensiones que la matriz que se transforma \cite{osh03}.
+La transformación computa, para cada entrada distinta de cero en la matriz, la distancia más cercana a una entrada nula de dicha matriz.
+Dada una matríz $n$-dimensional $M$, el algoritmo genera una matriz a valores reales $distField(M)$ con las mismas dimensiones que $M$,
 
 \[
 distField(M)[i] =
 \begin{cases}
-min(d(i,j)), & \text{if } M[i] != 0, \forall j \, M[j] = 0;\\
-0, & \text{otherwise, }\\
+min(d(i,j)), & \text{si } M[i] != 0, \forall j \, M[j] = 0;\\
+0, & \text{en otro caso, }\\
 \end{cases}
 \]
 
@@ -615,196 +666,244 @@ min(d(i,j)), & \text{if } M[i] != 0, \forall j \, M[j] = 0;\\
 %\end{align*}
 
 \noindent
-where $d(i,j)$ may be the Manhattan or the Euclid distances in an $n$-dimensional space. 
-Matrix entries far from the object boundaries get higher values than entries closer to the boundary, getting a map of the distances to the object surfaces. 
-This distance field will be required later at two different stages of the pipeline.
+donde $d(i,j)$ podría ser la distancia de Manhattan o la distancia Euclideana en un espacio $n$ dimensional.
+Las entradas de la matriz lejanas a los bordes del objeto tomar valores más altos que aquellas cercanas a los mismos.
+De esta manera se obtiene un mapa de la distancia de cada voxel a las superficies tridimensionales del objeto.
+Este campo escalar de distancias será requerido en etapas posteriores del proceso.
 
-\subsection{Proving simulation}
+
+\subsection{Simulación del Leudado}
 \label{breadprov}
+Como fue establecido, la textura observable en la masa cruda del pan está compuesta de burbujas, cuya distribución exacta es el resultado de procesos complejos, entre ellos, reacciones químicas, y deformaciones físicas de la masa.
+El paso de leudado consta en primera instancia del crecimiento libre de las burbujas, producido por seres vivos, la levadura.
+Luego, el cocinero interviene la masa deformándola de diversas maneras.
+Finalmente el paso de cocción produce la textura y distribución de burbujas finales.
+Los estudios fenomenológicos de estas texturas utilizan tomografía de rayos X y extracción de características sobre las mismas \cite{Babin2006,Gonzales2008,VanDyck2014}.
+Buscando obtener una variabilidad similar, en esta tesis generamos distribuciones de burbujas con un modelo basado en fractales, inspirado en las distribuciones de burbujas presentes en el queso, y la textura inducida por los cráteres lunares, propuesto en \cite{Mandelbrot1982}.
+Luego validamos los mismos utilizando el método multifractal denominado {\em Sandbox} (caja de arena, ya que realiza cálculos sobre una distribución de puntos aleatoria en la geometría).
+Esto será explicado en profundidad en el capítulo de validación.
 
-As stated above, the actual texture of the bread dough is due to bubble patterns, which in turn are the result of complex processes, including chemical reactions and physical deformations in the dough.
-The proving step accounts for the free bubble growth produced by living yeast in the dough.
-Then, human intervention deforms dough shapes in several ways, and the baking process gives the final bubble shapes.
-Phenomenological studies of bubble distribution employ X-ray tomography devices and image feature extraction \cite{Babin2006,Gonzales2008,VanDyck2014}.
-To obtain a similar structure variability, we generate bubble distributions with a fractal-based model inspired in the cheese and moon crater distributions proposed in \cite{Mandelbrot1982}, and we further validate it using the sandbox multifractal spectrum, as will be thoroughly explained later.
+La textura de la masa es creada procedimentalmente en un campo escalar separado, definido en una matriz de tres dimensiones, de una manera similar a la matriz de geometría en la Subsección arriba.
+Cada voxel es iniciado a $1$ (significando que el material aún no tiene burbujas).
+El proceso comienza substrayendo esferas de radio $r_{min}$ posicionadas arbitrariamente en el campo escalar (esto se logra seteando a $0$ las celdas respectivas).
+Luego, substraemos esferas de radio mayor, nuevamente en posiciones arbitrarias, hasta un radio máximo $r_{max}$.
+La relación entre el número de esferas $N_{s}$ a ser sustraídas en cada paso, y sus respectivos radios $r$, está dada por la ley fractal,
 
-The texture of the dough is procedurally created in a separate $3D$ scalar field defined within a $3D$ matrix, in a similar way as the geometry matrix in the Subsection above.
-Each cell is initially set to $1$ (meaning that the material has no bubbles so far).
-The process begins by subtracting randomly positioned spheres of radii $v$ to this scalar field (by setting the respective cells to $0$).
-Then, larger spheres will be subtracted, also at random positions, up to a maximum radius $M$.
-The relationship between the amount $N$ of spheres to be subtracted to the material at each step, and their respective radii $r$, is given by the following fractal law,
 
 \begin{equation*}
-N = \frac{k}{r^{d}},
+N_{s} = \frac{k}{r^{d}},
 \end{equation*}
-where $d$ is the fractal exponent that models the likelihood of occurrence of spheres in relation with their radii, and $k$ controls the amount of actual spheres at each radius. 
-Both parameters are sufficient to model a wide range of textures in general, and bread textures in particular.
 
-Fig.~\ref{FigProving} shows a $2D$ example of this model.
-Even though the resulting spherical bubble shapes are not completely realistic, the results show high resemblance in size and distribution with real bread binarizations (see \cite{Babin2006}).
-During baking, the resulting scalar field will undergo geometric deformations, and therefore the final texture will resemble actual bread more accurately.
-Finally, the issue of finding adequate parameter values to obtain features similar to real bread crumbs will be further discussed in the validation section.
+donde $d$ es el exponente fractal que modela la ocurrencia de esferas en relación con su radio, y $k$ controla la cantidad de esferas para cada radio.
+Con estos simples parámetros basta para modelar una gran cantidad de texturas en general, particularmente pan.
+
+La Fig.~\ref{FigProving} muestra un ejemplo de un corte en dos dimensiones de este modelo.
+Si bien las burbujas esféricas resultantes no son completamente realísticas debido a su forma, los resultados muestran un notorio parecido en tamaños y distribución de tamaños con binarizaciones de cortes reales de masas leudadas (ver \cite{Babin2006}).
+Durante la cocción, el campo escalar resultante será sometido a deformaciones geométricas. Consecuentemente, la textura final se ajustará aún más a burbujas de panes reales.
+Finalmente, en la sección de validación se buscarán parámetros de generación que ajusten diferentes panes reales. 
 
 \begin{figure}
 \includegraphics[scale=0.28]{figures/bubbles}
-\caption{Fractal bread proving simulation.}
+\caption{Simulación Fractal del Leudado de Pan.}
 \label{FigProving}
 \end{figure}
 
-After the voxelization and the proving simulation, we must constrain the dough to the interior of the geometry. 
-For this, we simply intersect the two scalar fields by means of a simple product or masking:
+Luego de la voxelización y la simulación de leudado, las burbujas deben estar presentes sólo en el interior de la geometría.
+Para esto, intersectamos ambos campos escalares utilizando un simple producto punto a punto, es decir, una máscara,
 
 \begin{equation*}
 P_{2} = P_{1} * G,
 \end{equation*}
 %
-where $P_{1}$ is the $3D$ field (matrix) containing the bubbles and $G$ is the scalar field representing the voxelized geometry. 
-Fig.~\ref{fg:intersectProblem} shows a rendered version of this intersection.
+donde $P_{1}$ es el campo $3D$ (matriz) que contiene las burbujas del leudado, y $G$ es el campo escalar que representa a la geometría voxelizada.
 
-Even though these results might appear realistic, bubbles are seldom present at the surface of real bread due to the proving and baking processes. 
-To account for this, the distance field computed at the previous stage is used to disallow bubbles to be generated close to the geometry's boundary. 
-The resulting binary scalar field is computed as follows.
+La Fig.~\ref{fg:intersectProblem} muestra una versión renderizada de esta intersección.
 
 \begin{figure*}
 \includegraphics[width=15cm]{figures/intersectProblem}
-\caption{Na\"ive geometry and bubbles intersection. Bubbles are unrealistically visible on the dough surface.}
+\caption{Intersección simple de la geometría y de las burbujas provenientes del leudado. A diferencia de masas reales, pueden verse burbujas en la superficie de la masa.}
 \label{fg:intersectProblem}
 \end{figure*}
 
+Si bien los resultados pueden parecer realistas, en panes reales, no es habitual que las burbujas sean visibles en la superficie, debido al leudado y cocción reales.
+Para solucionar este problema, utilizamos el campo escalar de distancias que computamos previamente, para deshabilitar la generación de burbujas en zonas cercanas a los bordes de la geometría.
+El campo escalar binario resultante se computa de la siguiente manera,
+
 \begin{align*}
 DF    &= distField(G),\\
-inner &= DF > threshold,\\
-dough &= G - inner*(1-P_{2}),
+interior &= DF > umbral,\\
+masa &= G - interior*(1-P_{2}),
 \end{align*}
 %
-where $DF$ is the $3D$ distance field to the surface of the voxelized input geometry and $threshold$ is a value determining the outer region's width.
-The final dough is computed by subtracting the bubbles ($1-P_{2}$) from the original geometry, but limited to the computed {\em inner} region. Figs.~\ref{fg:proving} and \ref{fg:provingBunny} show the result of limiting the bubble interactions to the inner region of the original geometry.
-These images show that the approach also allows to produce realistic arbitrary unbaked doughs.
-Note that our model is flexible enough to render the material at any stage of the pipeline, and also to arbitrarily slice or intersect the model.
+donde $DF$ es el campo escalar de distancias a la superficie, computado a partir de la geometría de entrada, voxelizada, y $umbral$ es un parámetro que determina el ancho de la región exterior, donde no pueden crearse burbujas.
+Computamos la masa final substrayendo las burbujas ($1-P_{2}$) de la geometría original, pero limitada a la región {\em interior} que acabamos de definir. Las Figs.~\ref{fg:proving} y \ref{fg:provingBunny} muestran resultados de limitar las interacciones de burbujas a la región interior de la geometría original, donde se observa que no existen burbujas en la superficie de la masa, como ocurre en masas reales.
+Las imágenes muestran que el método definido es capaz de producir imágenes realistas de panes crudos con formas arbitrarias.
+Cabe remarcar que el modelo es lo suficientemente flexible, permitiendo renderizar el material en cualquier etapa de su proceso de fabricación, además de poder realizar cortes arbitrarios del mismo.
 
 \begin{figure*}
 \includegraphics[width=15cm]{figures/prebakebread}
-\caption{Proved bread before baking.}
+\caption{Pan luego del leudado, y antes de la cocción.}
 \label{fg:proving}
 \end{figure*}
 
 \begin{figure*}
 \includegraphics[width=15cm]{figures/prebakebunny}
-\caption{Proved bunny-shaped bread before baking.}
+\caption{Conejo de pan, luego del leudado, y antes de la cocción.}
 \label{fg:provingBunny}
 \end{figure*}
 
 %====================================================================
-\subsection{Baking}
+\subsection{Cocción}
 %To adequately simulate the bread baking process, mathematical models should be able to accurately model the heat and mass transfer in dough.
-Adequate mathematical models of the bread baking process should be able to accurately model the heat and mass transfer in dough.
-Full $3D$ bread baking models may lead to precise solutions to the temperature's distribution in dough during baking.
-However, these models are usually very complex to implement and they have high computational costs.
-In addition, only the most complex models take into account the crust formation, but usually using overly simplified assumptions.
-This is due to the fact that a formal crust definition is currently missing~\cite{Vanin2009}.
+Los modelos matemáticos del proceso de cocción del pan deben ser capaces de modelar correctamente las transferencias de calor y masa en el mismo.
+Los modelos físicos más completos del proceso producen soluciones precisas a la distribución de temperaturas en la masa durante la cocción.
+Sin embargo, estos modelos son usualmente muy complejos para implementar y son muy costosos computacionalmente.
+Además, sólo los modelos más complejos toman en consideración la formación de la corteza del pan.
+La corteza, por otro lado, aún carece de una definición formal~\cite{Vanin2009}.
+Por lo tanto, los modelos antes citados incluyen sólo una simplificación de la formación de la misma, muy lejos de lo que ocurre en la cocción real.
 
-The most relevant results suggest that a $1D$ model could suffice for most purposes. 
-For instance, Purlis~\cite{Purlis2011} models bread baking as a 1D problem, representing it as an infinite cylinder.
-Other frameworks assume only one radial coordinate, resulting also in 1D models~\cite{Powathil2004, Thorvaldsson1999}.  
-These works show that employing a simple one-dimensional representation produces almost identical results to the ones using higher dimensions, since the baking effect on bubble shapes is the least significant in the bread making pipeline. 
+Los resultados más relevantes en la literatura sugieren que un modelo unidimensional de la cocción puede ser suficiente para la mayoría de los casos prácticos.
+Por ejemplo, Purlis~\cite{Purlis2011} modela la cocción del pan como un problema unidimensional, representando la geometría como un cilindro infinito.
+Otros trabajos asumen sólo una coordenada radial, resultando también en modelos $1D$~\cite{Powathil2004, Thorvaldsson1999}.
+Estos trabajos muestran que utilizar una representación de una única dimensión produce resultados casi idénticos a aquellos que se obtienen utilizando un mayor número de dimensiones, ya que el efecto de la cocción en las burbujas es la menos importante en el proceso de fabricación del pan.
 
-The numerical simulation that we implemented is based on the finite-differences foundation proposed by Powathil~\cite{Powathil2004} and Thorvaldsson and Janestead~\cite{Thorvaldsson1999}. 
-The framework presented consists of a set of three coupled equations describing heat transfer, water vapor diffusion and liquid water diffusion.
-In our algorithm, we require only the computed temperatures ($T$) as the input for the next stages.
-Equation~\ref{Eq:heat} models heat transfer in bread dough, accounting for energy balance and water evaporation due to temperature~\cite{Thorvaldsson1999}:
+La simulación numérica que implementamos está basada en el esquema de diferencias finitas propuesto por Powathil~\cite{Powathil2004}, y Thorvaldsson y Janestead~\cite{Thorvaldsson1999}. 
+El sistema presentado consiste de un conjunto de tres ecuaciones acopladas que describen transferencia de calor, difusión de varpor de agua y difusión de agua líquida.
+En nuestro algoritmo, sólo utilizamos las temperaturas ($T$) como entrada para las siguientes etapas de la formación del pan.
+La Ec.~\ref{Eq:heat} modela transferencia de calor en la masa del pan, tomando en consideración el balance de energía y evaporación del agua debido a la temperatura~\cite{Thorvaldsson1999},
 %
 \begin{equation}
 \label{Eq:heat}
 \frac{\partial T}{\partial t} = \frac{1}{\rho C_{p}} \frac{\partial}{\partial x} \left ( k \frac{\partial T}{\partial x} \right ) + \frac{\lambda}{C_{p}} \frac{\partial W}{\partial t}+\frac{\lambda W}{ \rho C_{p} }\frac{\partial \rho}{\partial t},
 \end{equation}
 %
-where $T$ is temperature, $x$ is the radial coordinate, $t$ is time, $C_{p}$ is the specific heat, $\rho$ is density, $k$ is thermal conductivity, $\lambda$ is the latent heat of evaporation of water, and $W(x,t)$ is the liquid water content. 
-The initial conditions
+donde $T$ es la temperatura, $x$ es la coordenada radial, $t$ es el tiempo, $C_{p}$ el calor específico, $\rho$ la densidad, $k$ la conductividad térmica, $\lambda$ es el calor latente de la evaporación de agua, y $W(x,t)$ es el contenido de agua líquida. 
+Las condiciones iniciales
 %
 \begin{align*}
 T(x,0) &= T_{0}(x), 0\le x \le L/2,
 \end{align*}
-and the boundary conditions (continuity and smoothness) define the model:
+y las condiciones de borde (continuidad y suavidad) definen el modelo,
 \begin{align*}
 \left ( \frac{\partial T}{\partial x} \right )_{x=L/2} &= 0 , t > 0 \\
 -k \left ( \frac{\partial T}{\partial x} \right )_{x=0} &= h_{r}(T_{r}-T_{s}) + h_{c}(T_{air}-T_{s}) - \lambda \rho D_{w} \left (\frac{\partial W}{\partial x} \right )_{x=0}
 \end{align*}
 %
-where $h_{r}$ and $h_{c}$ are subterms of the heat transfer coefficient ($h = h_{r}+h_{c}$), $T_{air}$, $T_{s}$, $T_{r}$ are the temperatures in the surrounding air, at the surface of the bread and at the radiation source, respectively, $L$ is the bread height ($x = L/2$ is the bread center and $x = 0$ is the bread boundary), $D_{w}$ is liquid water diffusivity, and $T_{0}$ is the initial temperature. 
-Temperatures are expressed in Kelvin ($K$). 
-The model presents similar equations for water vapor diffusion ($W$) and  liquid water diffusion ($V$). 
-Further details of this model can be found in \cite{Thorvaldsson1999}.
-We use this model to obtain a map of temperatures at the end of the baking process. 
-These temperatures will in turn affect the bubbles' shapes and sizes.
+donde $h_{r}$ y $h_{c}$ son subtérminos del coeficiente de transferencia de calor ($h = h_{r}+h_{c}$), $T_{air}$, $T_{s}$, $T_{r}$ son temperaturas en el aire circundante, en la superficie del pan, y en la fuente de radiación, respectivamente, $L$ es el alto del pan($x = L/2$ es el centro del pan y $x = 0$ es el contorno del mismo), $D_{w}$ representa la difusividad del agua líquida, y $T_{0}$ la temperatura inicial. 
+Las temperaturas están expresadas en Kelvin ($K$). 
+El modelo consta de ecuaciones similares para la difusión del vapor de agua ($W$) y difusión de agua líquida ($V$).
+Otros detalles del modelo pueden ser consultados en \cite{Thorvaldsson1999}.
+En nuestro trabajo, utilizamos este modelo para obtener un mapa de temperaturas al final del proceso de cocción.
+Estas temperaturas afectarán posteriormente las formas y tamaños de las burbujas.
 
-The baking simulation sets an oven at a typical baking temperature (by default we take $210^{\circ}C$) and discretizes time in intervals of $\Delta t = 30s$, and from the simulation we obtain an array $Temp$ of $N_{grid}$ temperature values. 
-For numerical stability, we set $N_{grid}=32$ and we interpolate the temperatures to obtain higher resolutions ($N_{int}$). 
+La simulación de la cocción define el horno a una temperatura típica (por defecto utilizamos $210^{\circ}C$) y discretiza el tiempo en intervalos $\Delta t = 30s$.
+De la simulación se obtiene un arreglo $Temp$, de tamaño $N_{grid}$, compuesto por valores de temperatura.
+Por estabilidad numérica, utilizamos $N_{grid}=32$ (como en el trabajo original) e interpolamos las temperaturas para obtener mayores resoluciones ($N_{int}$). 
 %Each value represents a dough position after $M$ baking time steps. 
 
-The vector we obtained from baking has decreasing temperatures from $R = 0$ to $R = L/2$, as the center and the boundary of the bread have the lowest and highest temperatures respectively (heat transfer flows from the boundary to the center). 
-We can use the previously computed distance field in conjunction with the temperature vector to map distances to temperatures. 
-This allows us to define temperatures in the scalar field in a way that is compatible with a $3D$ baking simulation. Based on these considerations, we map the temperatures vector $Temp$ into $3D$ coordinates using the following relationship:
+El vector obtenido presenta temperaturas decrecientes de $R = 0$ a $R = L/2$, ya que el centro y el borde del pan poseen la menor y la mayor temperatura, respectivamente, luego de la cocción (el calor fluye desde la corteza hacia el centro del pan). 
+Si utilizamos el campo escalar de distancias computado previamente, en conjunto con el vector de temperaturas, podemos mapear distancias a temperaturas.
+Esto permite definir temperaturas en el campo escalar de forma compatible a una simulación $3D$.
+Basados en estos razonamientos, mapeamos el vector de temperaturas $Temp$ en $3D$ de la siguiente manera,
 
 \begin{equation*}
 \displaystyle R(x,y,z) = Temp[ round( DF(x,y,z) ) ], 
 \end{equation*}
 %
-where $R$ is the resulting scalar field, and $x$, $y$ and $z$ are $3D$ coordinates in $R$. When $DF(x,y,z) = 0$, the $3D$ position lies at the boundary of the geometry, and $Temp[0]$ is mapped to $R(x,y,z)$. 
-When $DF(x,y,z) > 0$, a lower temperature is mapped to $R$, since the position lies in the geometry's interior. 
-Fig.~\ref{fg:baking} shows slices of the result of this mapping ($R$), using temperatures from an arbitrary baking time step in the three Cartesian planes. 
-The images are almost identical to what will be obtained with a $3D$ simulation~\cite{Purlis2010}.
+donde $R$ es el campo escalar resultante del mapeo, y $x$, $y$ y $z$ son coordenadas $3D$ en $R$. Cuando $DF(x,y,z) = 0$, la posición actual $3D$ se encuentra en la superficie de la geometría, y $Temp[0]$ se mapea $R(x,y,z)$.
+Cuando $DF(x,y,z) > 0$, mapeamos una temperatura menor a $R$, ya que la posición actual se encuentra en el interior de la geometría.
+La Fig.~\ref{fg:baking} muestra cortes del resultado de este mapeo ($R$), usando temperaturas resultantes de un tiempo arbitrario de cocción, en los tres planos Cartesianos. 
+Las imágenes son casi idénticas a lo que se obtendría con una simulación $3D$~\cite{Purlis2010}.
 
 \begin{figure*}
 \includegraphics[width=15cm]{figures/tempsbunny}
-\caption{One dimensional temperatures mapped onto a bunny-shaped $3D$ scalar field. The images show that temperature results similar to a complete $3D$ simulation.}
+\caption{Temperaturas unidimensionales mapeadas a un campo escalar con forma de conejo. Las imágenes muestran que la distribución de temperaturas es similar a una simulación en tres dimensiones.}
 \label{fg:baking}
 \end{figure*}
 
-After a number of simulation steps (up to $t=20$ in our case), we compute the gradient vector field $g$ of $R$ \cite{Gonzalez2006}, and we smooth these fields using a Gaussian kernel.
-We use the Gaussian smoothed versions to warp the original scalar field in the following way:
+Luego de cierto número de pasos de simulación ($t=20$ en nuestro caso), computamos el campo vectorial del gradiente ($g$) de $R$ \cite{Gonzalez2006}, y luego suavizamos el mismo utilizando un kernel Gaussiano.
+Finalmente, utilizamos las versiones suavizadas para deformar el campo escalar de la siguiente manera,
+
 \begin{align*}
 \displaystyle
 u &= x+p*g'_{x}[x,y,z],\\
 v &= y+p*g'_{y}[x,y,z],\\
 w &= z+p*g'_{z}[x,y,z]
 \end{align*}
-where $(u,v,w)$ are the coordinates in the warped scalar field, ($x,y,z$) are the original field coordinates, $p$ is a real positive valued parameter that denotes field intensity (it controls the baking effect on bubbles) and the $g'$s are the smoothed Gaussian version of the original gradient $g$.
+donde $(u,v,w)$ son las coordenadas en el campo escalar resultante, ($x,y,z$) son las coordenadas originales, $p$ es un parámetro real positivo que denota la intensidad con la que se deforma el campo (controla el efecto neto de la cocción en las burbujas), y las $g'$s son las versiones suavizadas del gradiente original $g$.
 %Fig.~\ref{FigBakingVectorField} also shows the computed gradient, where using $[-g_{x},-g_{y}]$ produces a similar vector but in the clockwise direction that can be applied with similar effects on the bubbles. 
-Fig.~\ref{fg:bakedbubbles} shows $2D$ scalar field slices with the baking process applied to different bread shapes.
+La Fig.~\ref{fg:bakedbubbles} muestra cortes $2D$ de campos escalares luego de aplicado el proceso de cocción a diferentes formas.
 
 \begin{figure*}
 \includegraphics[width=15cm]{figures/bakedbubbles}
-\caption{Two dimensional cuts showing bubbles after baking over different shapes.}
+\caption{Cortes bidimensionales con burbujas deformadas por el proceso de cocción en diferentes tipos de panes.}
 \label{fg:bakedbubbles}
 \end{figure*}
 
-The $p$ parameter can be used to synthesize different bread crumb appearances, from non-baked to highly deformed bubbles (see Fig.~\ref{fg:parameterp}).
-When we increment $p$, we force the bubbles to follow more tightly the bread outer shape. 
-The image also shows that the method deforms more intensely bubbles closer to the surface.
+El parámetro $p$ puede ser utilizado para sintetizar diferentes apariencias de miga de pan, desde cruda hasta burbujas con mucha deformación (ver Fig.~\ref{fg:parameterp}).
+Cuando incrementamos $p$, forzamos a las burbujas a seguir más ajustadamente la forma exterior del pan. 
+La imagen también muestra que el método deforma más pronunciadamente las burbujas más cercanas a la corteza.
 
 \begin{figure*}
 \includegraphics[width=15cm]{figures/parameterp}
-\caption{Effect of the $p$ parameter: from left to right $p$ is $0$, $5$, $10$,$15$,and $25$, respectively.}
+\caption{Efecto del parámetro $p$: de izquierda a derecha $p$ es $0$, $5$, $10$,$15$, y $25$, respectivamente.}
 \label{fg:parameterp}
 \end{figure*}
 
 
-\subsection{Crust formation}
+\subsection{Formación de la Corteza}
+El modelo de cocción que hemos introducido no incluye detalles precisos de la formación de la corteza.
+En estas ecuaciones, la corteza se asume es producida en la superficie del material, a determinada temperatura, pero esta simplificación está lejana a lo que ocurre actualmente en el proceso real de cocción.
+La literatura de ingeniería de los alimentos define la corteza como una interfase que emerge entre la masa y el aire.
+Entre sus principales características se encuentra la formación de un material más denso en la superficie, y una diferenciación de color.
+Sin embargo, los detalles precisos acerca de cómo esto ocurre se desconocen, por lo tanto, la apariencia exacta de la misma, está lejos de ser comprendida en los modelos presentes acutalmente.
 
-The baking model we introduced does not include precise details of the crust formation. 
-In these equations, the crust is assumed to be produced in the surface and at certain temperature, but this assumption is far from what actually happens in the real baking process. 
-The food engineering literature defines the crust as an interface that appears between the dough and the surrounding air.
-Its main characteristics include the formation of a thicker material at the dough surface, and color differentiation, but the precise details surrounding the crust formation and appearance are still far from known.
+Debido a esto, y basados en la aproximación inicial asumida, utilizamos el campo escalar de distancias computado previamente para definir una región de corteza.
+Esta elección está fundada en el hecho de que la corteza está mayormente determinada por un frente de evaporación que resulta de la temperatura \cite{Jefferson2007}.
+En otras palabras, obtenemos las posiciones utilizando el campo escalar mencionado, ya que hemos definido una relación entre la temperatura y la distancia a la superficie.
+Además, obtenemos diferentes apariencias de pan utilizando un parámetro de distancia que determina diferentes anchos de corteza.
+\subsection{Tiempos de cómputo}
+En la implementación utilizamos Python\footnote{python.org} y Cython\footnote{cython.org}.
+En la Tabla~\ref{tab:computingtimes} se muestran tiempos de cómputo típicos para los distintos pasos en la simulación de la formación del pan, detallados en secciones anteriores. %In addition, rendering times with DVR are in the order of $~300$ ms (milliseconds), achieving interactive framerates.
 
-Based on this initial approximation, we take advantage of the distance field that was previously computed to define a crust region.
-We based this choice on the fact that the crust is mostly determined by an evaporation front that is result of the temperature \cite{Jefferson2007}. 
-In other words, we obtain crust positions using the distance field, since we have defined a relationship between temperature and distance to the surface.
-We use a distance parameter to obtain different thicknesses for the crust, getting different bread appearances.
+\begin{table}[h!]
+       % Give a unique label
+% For LaTeX tables use
+\begin{tabular}{lllll}
+\hline\noalign{\smallskip}
+Resolución del Campo Escalar & $256^{3}$ & $384^{3}$  & $512^{3}$ \\
+\noalign{\smallskip}\hline\noalign{\smallskip}
+Leudado & 0.28 & 0.97 & 2.29 \\
+Intersección & 8 & 10.81 & 14.97 \\
+Campo escalar de Distancias & 7 & 23.73 & 56 \\
+Cocción & 19.92 & 51.15 & 117.27 \\
+%Rendering & 1s & 4s & 0\% \\
+\noalign{\smallskip}\hline
+\end{tabular}
+\caption{Tiempos de cómputo típicos en nuestro modelo expresados en segundos.}
+\label{tab:computingtimes}
+\end{table}
+
+Es importante mencionar que la mayor parte del tiempo de cómputo en la cocción está dedicado al cómputo del gradiente, y no al proceso de cocción en sí.
+Debido a los costos computacionales en resoluciones superiores, el usuario puede generar vistas previas de los panes utilizando campos escalares con menores resoluciones.
+
+
+\section{Resultados}
+En esta sección presentamos imágenes renderizadas de geometrías de pan obtenidas utilizando nuestro modelo.
+
+Las Figs.~\ref{fg:renders}, \ref{fg:renders2}, y ~\ref{fg:renders3} muestran imágenes renderizadas de panes obtenidos en este trabajo.
+Las Figs.~\ref{fg:renders} y ~\ref{fg:renders2} marcan las diferencias en realismo entre resoluciones del campo escalar de ($256^{3}$) y  ($512^{3}$) respectivamente.
+La Fig.~\ref{fg:renders3} muestra versiones de alta resolución en el campo escalar de otras geometrías, incluyendo panes con formas de conejos.
+La Fig.~\ref{fg:croissant} muestra un pan con forma de {\em croissant} en el cual se han hechos distintos cortes, los cuales demuestran que el método permite obtener imágenes de partes arbitrarias del material.
+Las Figs.~\ref{fg:bigalveoli} y ~\ref{fg:bakedbunny} muestran un pan típico y uno con forma de conejo, mostrando burbujas grandes y las burbujas deformadas como resultado del proceso de cocción.
+Además se cambió el color de la miga.
+
+Los colores de corteza y miga son parámetros definibles por el usuario. Los cortes en la miga son fácilmente producidos cambiando a $0$ las regiones deseadas en el campo escalar luego de la cocción, y antes del renderizado.
 
 \begin{figure*}[!ht]
 \begin{center}
 \includegraphics[width=15cm]{figures/otherbread}
-\caption{Sliced breads after baking, using a scalar field of dimensions $256^{3}$. The images show that crumb and crust are taken into account in our approach.}
+\caption{Cortes de pan luego de la cocción, utilizando un campo escalar de dimensiones $256^{3}$. Las imágenes muestran que la miga y la corteza son consideradas en nuestro modelo.}
 \label{fg:renders}
 \end{center}
 \end{figure*}
@@ -812,7 +911,7 @@ We use a distance parameter to obtain different thicknesses for the crust, getti
 \begin{figure*}[!ht]
 \begin{center}
 \includegraphics[width=15cm]{figures/otherbread512}
-\caption{Sliced breads after baking, using a scalar field of dimensions $256^{3}$. Finer details can be seen in the crumb, augmenting the image quality.}
+\caption{Cortes de pan luego de la cocción, utilizando un campo escalar de dimensiones $512^{3}$. Se observan mayores detalles en la miga, lo cual aumenta el realismo de la imagen.}
 \label{fg:renders2}
 \end{center}
 \end{figure*}
@@ -820,7 +919,7 @@ We use a distance parameter to obtain different thicknesses for the crust, getti
 \begin{figure*}[!ht]
 \begin{center}
 \includegraphics[width=15cm]{figures/final}
-\caption{Sliced breads after baking. This image shows different $3D$ geometries.}
+\caption{Cortes de pan luego de la cocción con distintas geometrías.}
 \label{fg:renders3}
 \end{center}
 \end{figure*}
@@ -828,7 +927,7 @@ We use a distance parameter to obtain different thicknesses for the crust, getti
 \begin{figure*}[!ht]
 \begin{center}
 \includegraphics[width=15cm]{figures/croissant}
-\caption{Sliced croissant after baking. This image shows the interior of the croissant at different volume regions.}
+\caption{Cortes de una Croissant luego de la cocción. La imagen muestra el interior de la miga en distintas regiones del volumen.}
 \label{fg:croissant}
 \end{center}
 \end{figure*}
@@ -836,7 +935,7 @@ We use a distance parameter to obtain different thicknesses for the crust, getti
 \begin{figure*}[!ht]
 \begin{center}
 \includegraphics[width=15cm]{figures/baked}
-\caption{Sliced breads after baking showing big alveoli typical of real breads.}
+\caption{Cortes de pan luego de la cocción, con burbujas de mayor tamaño, como es típico en determinados panes reales.}
 \label{fg:bigalveoli}
 \end{center}
 \end{figure*}
@@ -844,53 +943,13 @@ We use a distance parameter to obtain different thicknesses for the crust, getti
 \begin{figure*}[!ht]
 \begin{center}
 \includegraphics[width=15cm]{figures/bakedbunny}
-\caption{Sliced breads after baking showing big alveoli typical of real breads. Also, the baking effect is clearly visible: bubbles tend to follow the crust shape.}
+\caption{Cortes de pan luego de la cocción con burbujas de mayor tamaño. Además, puede observarse más claramente el efecto de la cocción en la deformación de las burbujas, las cuales tienden a seguir la forma de la corteza.}
 \label{fg:bakedbunny}
 \end{center}
 \end{figure*}
 
-
-
-\subsection{Computing Times}
-We used Python\footnote{python.org} and Cython\footnote{cython.org} for the implementation.
-%Cython accelerates Python code using C-extensions
-In Table~\ref{tab:computingtimes} we show typical times for the different processes in the bread making pipeline. %In addition, rendering times with DVR are in the order of $~300$ ms (milliseconds), achieving interactive framerates.
-
-\begin{table}[h!]
-       % Give a unique label
-% For LaTeX tables use
-\begin{tabular}{lllll}
-\hline\noalign{\smallskip}
-Scalar Field Resolution & $256^{3}$ & $384^{3}$  & $512^{3}$ \\
-\noalign{\smallskip}\hline\noalign{\smallskip}
-Proving & 0.28 & 0.97 & 2.29 \\
-Intersection & 8 & 10.81 & 14.97 \\
-Distance Field & 7 & 23.73 & 56 \\
-Baking & 19.92 & 51.15 & 117.27 \\
-%Rendering & 1s & 4s & 0\% \\
-\noalign{\smallskip}\hline
-\end{tabular}
-\caption{Typical computing times in our pipeline expressed in seconds.}
-\label{tab:computingtimes}
-\end{table}
-
-
-It is worth to mention that most of the baking computations are dedicated to the gradient computation and not the baking itself.
-The user can generate previews using lower resolution scalar fields, avoiding high computing times when testing different bubble distributions and dough shapes.
-
-
-\section{Resultados}
-In this section we present the results of our procedural bread making pipeline.
-Fig.~\ref{fg:renders}, \ref{fg:renders2}, and ~\ref{fg:renders3} show DVR-rendered images of $3D$ volumes we obtained in this work.
-Figs.~\ref{fg:renders} and ~\ref{fg:renders2} highlights the differences in image quality between a low ($256^{3}$) and high  ($512^{3}$) resolution versions respectively. Fig.~\ref{fg:renders3} shows high resolution versions of other geometries, including bunny shaped breads.
-Fig.~\ref{fg:croissant} shows a croissant-shaped bread in which we perform different cuts, showing different bread crumb sections.
-Figs.~\ref{fg:bigalveoli} and ~\ref{fg:bakedbunny} show a typical and a bunny shaped bread highlighting big alveoli and the deformed bubbles resulting from the baking process.
-Also we changed the bread crumb color to show slightly different bread crumbs.
-
-
 %Images show realistic bread appearances, suitable for photo-realistic rendering and serious ga\-mes \cite{Susi2007}. 
-Crust and crumb colors are user-defined parameters. 
-We easily perform cuts and slices by setting to $0$ different regions in the scalar field after baking and before rendering.
+
 
 %This is illustrated in Figure~, where arrow lengths indicate vector modulus. The image shows that the field's influence is higher near the crust, mostly deforming outer bubbles. This behavior is consistent with real bread crumbs: baking influences the outer bubbles' shape, elongating them parallel to the crust \cite{Scanlon2001}, in other words, following its isotherms.
 
@@ -1054,12 +1113,23 @@ We easily perform cuts and slices by setting to $0$ different regions in the sca
 
 %This method also warps the bubbles' shape. The deformed bubbles have a natural appearance in concordance with real bread bubbles. 
 \section{Conclusiones}
-En este Cap\'itulo we introduced a pipeline to model realistic arbitrary bread crumb and crust geometries based on a fractal generation procedure.
-The proving step is defined by the user in two ways: the bread global shape is determined feeding a $3D$ model to the pipeline, and the bread local features are determined by setting different bubble distributions parameters (maximum and minimum bubble sizes, amount of bubbles, etc.).
-A physical simulation of the baking process slightly warps the proved dough.
-Finally, the crust is generated around the exterior of the baked volume.
-The results were generated applying direct volume rendering, producing realistic images of crumb and crust for several bread types.
-This pipeline is far more flexible and powerful than other state-of-the-art approaches for modeling bread geometry.
+En este Cap\'itulo hemos introducido diversos algoritmos para subsanar la falta de procedimientos flexibles e intuitivos para modelar determinados materiales, entre ellos materiales porosos, particularmente el pan, pero también para producir madera, granito, mármol y otros materiales comunes en la literatura.
+Hemos demostrado visualmente la capacidad de los métodos.
+
+El primer aporte es un algoritmo que produce texturas bidimensionales de materiales conocidos como madera y granito, utilizando sistemas de partículas, el cual fue presentado en una conferencia local \cite{Baravalle2011}.
+
+Haciendo hincapié en materiales porosos, particularmente el pan, diseñamos algoritmos que utilizan sistemas de partículas en conjunción con Sistemas Dinámicos para producir texturas que representan de manera realista geometrías de pan, el cual fue presentado en un congreso y revista nacionales \cite{Baravalle2014}.
+
+Finalmente, utilizando como referencia el proceso de formación real del pan, utilizamos conocimientos de ingeniería de los alimentos para producir una secuencia de pasos que emulan el proceso real de formación del pan.
+El mismo permite modelar de manera realista panes de tipo arbitrario, produciendo geometrías de su miga y su corteza, utilizando un proceso fractal de generación.
+Para ello, emulamos un proceso de leudado configurable por el usuario, tanto en forma global, supliendo una geometría arbitraria en tres dimensiones, como en el burbujeado interno, por medio de parámetros intuitivos de generación (radio máximo y mínimo de las burbujas, cantidad de burbujas, etc.).
+Luego aplicamos una simulación física de la cocción que deformó ligeramente las burbujas.
+Finalmente, la corteza fue generada sobre la superficie del material.
+El algoritmo de renderizado utilizado será explicado en el siguiente capítulo, el mismo produjo imágenes realistas de diversos tipos de pan, en varias etapas del proceso de formación del mismo.
+
+El modelo introducido es más flexible y poderoso que el estado del arte actual en modelado de geometría de materiales porosos y panes.
+
+En un capítulo posterior, y con intención de validar el procedimiento, mostraremos que las geometrías obtenidas por el método inspirado en el proceso de formación del pan, arroja distribuciones de burbujas coincidentes con panes reales.
 
 \chapter{Características Fractales y Multifractales del Pan}
 %\subsection{Características Fractales y Multifractales del Pan}
