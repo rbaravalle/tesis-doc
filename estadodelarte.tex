@@ -1,0 +1,94 @@
+
+\chapter[Estado del Arte]{Simulación de Materiales en Computación Gráfica: Estado del Arte}
+\section{Introducción} %(hablar de los diferentes materiales, cómo los modelos "fáciles" no sirven)
+El renderizado en computación gráfica es el intento de producir imágenes que representan una escena tridimensional, representada por medio de primitivas matemáticas como puntos, líneas, cubos, etc..
+
+En los últimos años, el avance en el campo del renderizado de escenas ha sido muy notorio. El nivel de realismo presente en las imágenes obtenidas ha ido en aumento hasta el punto de ser de difícil distinción para un ser humano. Dichos avances han sido, en gran parte, debido al desarrollo de dispositivos de hardware gráficos más poderosos, ya que la teoría matemática que describe el comportamiento de la luz en escenas estuvo presente desde hace varias décadas \cite{Kajiya} mediante la denominada Ecuación del Rendering.
+
+
+La ecuación es una aproximación, un modelo físico que intenta describir los aspectos considerados más importantes en el fenómeno de interacción de la luz con diversos objetos en una escena.
+
+Lamentablemente, la ecuación es, en términos teóricos, no computable. Sin embargo, el estudio a lo largo de los años de técnicas que permitan aproximarla ha dado sus frutos y ha permitido la obtención de imágenes de un realismo asombroso.
+
+A pesar de estos increíbles avances en un corto período de tiempo, el renderizado de una escena es un problema que involucra otros inconvenientes. El más notorio de ellos, es que la ecuación del rendering no tiene en cuenta qué {\em materiales} componen los objetos que definen la escena. En otras palabras, un objeto compuesto por madera no lucirá exactamente igual que uno compuesto por metales, ni por un material orgánico compuesto de tejidos. A la par del desarrollo de técnicas de iluminación global, han surgido técnicas que han intentado abordar materiales específicos \cite{} y familias de materiales \cite{}.
+
+Estas técnicas buscan capturar la intrincada geometría propia de cada material. Diferentes estructuras microscópicas producen distintas apariencias, reflejando la luz de distinta manera, hecho que es interpretado por la percepción humana como diferentes materiales. Por ejemplo: una superficie metálica tiene un gran componente reflexivo, emitiendo luz en direcciones bien definidas, a diferencia de una superficie más opaca como un plástico. Dado que la ecuación del rendering usa los materiales como {\em caja negra}, los mismos deben ser modelados de una manera adecuada para ser integrados en las distintas técnicas de renderizado global.
+
+Determinados materiales han recibido mayor atención debido a su ubicuidad en escenas de películas y video juegos, o a la facilidad de su diseño: agua, fuego, aire, humo, piel humana, madera, etc. Por esta razón, las imágenes sintéticas obtenidas presentan cierta asimetría en la calidad de los distintos materiales. En contraste, otros materiales han recibido menor atención, la cual puede atribuirse a una menor presencia en escenas o a una dificultad en el modelado y visualización, la cual ha resistido las técnicas más simples.
+
+Entre estos materiales, aquellos sometidos a un proceso de cocción han permanecido entre los más dificultosos por su compleja geometría y los fenómenos lumínicos involucrados. Tal vez el caso más emblemático de los materiales cocidos es el pan, debido a su importancia en la vida cotidiana. Como nota de color, un reconocido  científico del área, Alain Fournier, pronunció en 2001 la frase "la Computación Gráfica todavía no ha sido capaz de renderizar de manera convincente una feta de pan". En las siguientes secciones mostraremos que unos pocos intentos por abordar el problema fueron realizados pocos años después.
+
+\section{Modelos de Geometría de Materiales}
+En esta sección presentaremos distintos modelos geométricos que han hecho su aparición a lo largo de los años en computación gráfica. Los mismos son el resultado de un balance entre detalle de representación, tiempos de cómputo y recursos de memoria utilizados.
+
+\subsection{Modelos Procedimentales}
+\subsubsection{Plantas}
+\subsubsection{Ciudades}
+\subsubsection{Planetas}
+\subsubsection{Montañas}
+
+
+\subsection{Multifractal theory}
+
+Fractal Dimensions (FD) measure key image features using few values. Different FDs capture different features, {\em e.g.}, porosity, rugosity, etc. Studies shows fractal bread characterisations using several FDs \cite{Gonzales2008,Baravalle2012}. 
+
+Literature shows different representations for the multifractal spectrum. These representations provide identical information and differ only for a Legendre transformation. There are two main classes of multifractal spectra: generalised multifractal dimensions ($D_{q}$) and Lipschitz-H\"older exponents ($f(\alpha)$). The latter representation boosts the performance in classification tasks.
+
+Studies compute generalised multifractal dimensions in several ways. The Sandbox multifractal method \cite{Tel1989} aims to compute the dimensions using the meaning value in a set of randomly distributed points belonging to the structure \cite{Debartolo2004}. The author defines the sandbox multifractal dimension of order q as:
+
+ \begin{align}
+D_{q\ne 1}^{sb} &= \frac{1}{q-1} \lim_{R \rightarrow 0}{
+\frac{ln   { \left\langle  (M(R)/M_{0})^{q-1} \right\rangle   }}
+{ln {(R/L)}       }},\\
+D_{q=1}^{sb} &= \lim_{R \rightarrow 0}{
+\frac{ \left\langle ln   { (M(R)/M_{0})  }  \right\rangle}
+{ln {(R/L)}       }},
+\end{align}
+
+\noindent where $M_{0}$ is the white pixels count in the image binarization and  $M(R)$ is the number of points belonging to the structure in a circle of radius $R$ centered at the $i$ point. When $q\ne1$, we compute the limit as the slope of the linear fit of the values $ln(R/L)$ vs. $ ln  \left\langle  { (M(R)/M_{0})^{q-1}  }  \right\rangle$, for $R$ in $[R_{min}, R_{max}]$, where $ \left\langle   \right\rangle$ denotes mean value over sampled points. We proceed similarly when $q=1$. Computing the value for different $q \in [-Q,Q]$  we obtain the sandbox spectrum.
+
+%The Multifractal Spectrum $f(\alpha)$ (MFS) \cite{Xu2009} applies a pixel based discrimination using pixel neighborhood information. The discrimination produces different substructures in the image characterised by a local scaling $\alpha$ exponent. The method obtains the Box FD \cite{Peitgen2004} for each structure characterised by this exponent. This produces a vector of fractal dimensions $f(\alpha)$, meaning that different fractals coexists in the structure.
+
+%We compute the local scaling exponent $\alpha$ for every pixel in the following way: we divide the structure $E$ in disjoint substructures $E_{i}$ of size $\varepsilon$ characterised by a measure $\mu(E_{i})$, and we define the H\"older exponent, $\alpha_{i}$, for each substructure $E_{i}$, as a function of $\varepsilon$, 
+ %\begin{align}
+%\alpha_{i} &= \lim_{\varepsilon\to0} %\frac{ln(\mu(E_{i}))}{ln(\varepsilon)}.
+%\label{eqn:eqn4}
+%\end{align}
+%In our case, we define $\mu$ as the image value sum in the region $E_{i}$ . We compute an $\alpha_{i}$ exponent for every pixel as the linear fit slope of the values $ln(\varepsilon)$ and $ln(\mu(E_{i}))$. We obtain the MFS computing the Box Dimension of the sub structures characterised by different $\alpha_{i}$ under different real ranges $(\alpha_{i}, \alpha_{i+1})$. For each range, the (multi) fractal dimension $f(\alpha_{i})$ of the resulting structure is:
+%\begin{align}
+%f(\alpha_{i}) &= -  %\lim_{\varepsilon\to0} %\frac{ln(N_{\varepsilon}(\alpha_{i}))}%{ln(\varepsilon)}.
+%\end{align}
+%\noindent where $N_{\varepsilon}(\alpha_{i})$is the number of points in a circle of radius $\varepsilon$ centered at the pixel with exponent $\alpha_{i}$. In practice we compute $f(\alpha_{i})$ as the (negative) slope of the linear fit between the values of $\varepsilon$ and $N_{\varepsilon}(\alpha_{i})$, for different $\varepsilon$. Computing the value for differents $\alpha_{i}$ we obtain the multifractal spectrum.
+
+%The MFS and the sanbox spectrum are related via a Legendre Transform. We can compute the MFS using the Legendre transform of the sandbox spectrum or we can compute it directly from the underlying structure. The latter gives better classification performance. In our experiments, we use the latter approach to compute the MFS for reañ and rendered bread images, and 
+
+
+
+\subsection{Modelos Físicos}
+Desde el surgimiento del área, estos modelos han ido evolucionando gracias al incremento en el poder de cómputo del hardware gráfico disponible. Sin embargo, aún nos encontramos en los comienzos de una aplicación más difundida de los mismos.
+\subsubsection{Fluídos}
+\subsubsection{Telas}
+
+\section{Representación (Renderizado)}
+\subsection{Ecuación del Rendering}
+
+\begin{equation}
+EC  = REND
+\end{equation}
+
+, donde.
+
+
+\subsection{BRDFs}
+\subsection{Radiancia}
+\subsection{Simplificaciones: Ray Tracing, Radiosity, Photon Mapping, Ray Marching, Volume Rendering }
+Todas estas simplificaciones son realizadas a escala humana, es decir, sin tener en consideración la naturaleza microscópica de la luz. En esta escala, las trayectorias que describe la luz son aproximadas por líneas rectas.
+\section{Materiales específicos:}
+\subsection{Agua}
+\subsection{Fuego}
+\subsection{Humo}
+\subsection{Piel}
+\subsection{Otros}
+
+
+\section{Conclusiones}

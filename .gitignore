@@ -5,3 +5,5 @@ main.pdf
 *.aux
 *.bbl
 *.toc
+*.lot
+*.lof
