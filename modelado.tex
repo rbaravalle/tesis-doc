@@ -183,13 +183,13 @@ Tampoco es posible obtener cortes del mismo, dada la naturaleza de superficie de
 Por otro lado, existen numerosas publicaciones que tratan el modelado de materiales mejor adaptados a una representación volumétrica (por ejemplo humo o nubes) \cite{Chentanez2011,Zhou2008}.
 La utilización de volúmenes es costosa computacionalmente pero presenta varias ventajas. Una de ellas es que no depende de una malla de triángulos, como en el caso de las superficies, y por lo tanto no presenta las desventajas mencionadas para las mismas.
 
-Finalmente, existe una elección al momento de modelar materiales complejos y elegir una representación adecuada.
+Finalmente, existe un compromiso al momento de modelar materiales complejos y elegir una representación adecuada.
 Donde se requiere simplicidad y velocidad (posiblemente tiempo real), se utilizan superficies, en cambio, si el foto-realismo es el objetivo final, es más adecuado optar por una representación volumétrica.
 En los últimos años esta elección se ve perturbada por la aparición de hardware paralelo de alta velocidad (placas gráficas o GPUs), ya que un diseño adecuado podría alcanzar imágenes foto-realistas utilizando volúmenes en tiempos interactivos.
 Esto es lo que presentaremos a continuación.
 
 
-En este trabajo proponemos una representación volumétrica para la geometría de la miga de pan, alcanzando incluso tasas de refresco de tiempo real.
+En este capítulo proponemos una representación volumétrica para la geometría de la miga de pan, alcanzando incluso tasas de refresco de tiempo real.
 Existe un intento similar en la literatura \cite{Perlin1989}, el cual utiliza funciones algebraicas que representan la geometría del material.
 En nuestro caso, para ganar flexibilidad de diseño, utilizamos los sistemas de partículas previamente mencionados, en un cubo (tres dimensiones), en conjunto con sistemas dinámicos \cite{Strogatz2001} que provocan una evolución del sistema, produciendo patrones con formas geométricas naturales.
 Este es un intento por simular el efecto de la levadura en la masa cruda del pan.
@@ -683,6 +683,59 @@ Debido a esto, y basados en la aproximación inicial asumida, utilizamos el camp
 Esta elección está fundada en el hecho de que la corteza está mayormente determinada por un frente de evaporación que resulta de la temperatura \cite{Jefferson2007}.
 En otras palabras, obtenemos las posiciones utilizando el campo escalar mencionado, ya que hemos definido una relación entre la temperatura y la distancia a la superficie.
 Además, obtenemos diferentes apariencias de pan utilizando un parámetro de distancia que determina diferentes anchos de corteza.
+
+También, por completitud, presentamos otro método para calcular la misma.
+
+\paragraph{Determinación de la corteza utilizando morfología matemática}
+Debido a que es difícil o imposible definir funciones matemáticas algebraicas que se adapten a cualquier forma, proponemos un método automático para determinar regiones del volumen utilizando el formalismo conocido como morfología matemática \cite{Gonzalez2001}.
+
+Con esto, se presente obtener una región que se ajuste a los bordes del campo escalar.
+Para esto se utilizarán técnicas simples conocidas como apertura, cierre, erosión y dilatación.
+
+Las operaciones las definiremos en campos escalares tridimensionales.
+Un elemento estructurante $E$ es un campo escalar binario que representa una forma particular (cubo, esfera, etc.).
+Los elementos estructurantes son utilizados en la definición de las operaciones antes mencionadas.
+La operación de erosión se utiliza para reducir el tamaño total del campo escalar.
+La erosión de un campo escalar $A$ utilizando un elemento estructurante $B$ es definida de la siguiente manera,
+
+\begin{equation}
+A \ominus B = \{z\in \mathbb{Z}^3 | B_{z} \subseteq A\},
+\end{equation}
+
+\noindent donde $B_{z}$ es la traslación de $B$ por el vector tridimensional$z$.
+
+La dilatación es una operación utilizada para aumentar el tamaño total del campo escalar, siguiendo sus bordes.
+La dilatción de un campo escalar $A$ utilizando el elemento estructurante $E$ es definida como sigue,
+
+\begin{equation}
+A  \oplus E = \bigcup_{e\in E} A_e.
+\end{equation}
+
+La operación de cierre es utilizada para cerrar {\em agujeros} en el campo escalar.
+El cierre de un campo $B$ utilizando un elemento estructurante $E$ es definido como una dilatación seguida de una erosión,
+
+\begin{equation}
+B \bullet E = (B \oplus E) \ominus E,
+\end{equation}
+
+ver \cite{Gonzalez2001} para obtener mayores detalles.
+
+Para obtener la región externa de la geometría representada en el campo escalar, hay que eliminar los agujeros internos que representan las burbujas y luego computar el borde.
+Para esto, el primer paso produce un cierre $c$ del campo escalar utilizando un cubo (elemento estructurante de radio $r$), causando el cierre de las burbujas internas.
+Llamaremos $d$ a la dilatación de $c$ con un elemento esférico de radio $r_{2}$ y $e$ a la erosión $d$ utilizando un elemento estructurante esférico con un radio ligeramente menor($r_{3}$).
+La diferencia entre $d$ y $e$ ($d-e$) se encuentra en el borde del campo escalar, por lo cual puede utilizarse como corteza.
+Para eliminar posibles imperfecciones en los pasos anteriores, se suaviza el campo escalar por medio de un cierre de $d-e$ y una dilatación del resultado, obteniendo la corteza final.
+
+
+La Fig.~\ref{fg:crusts} muestra ejemplos de campos escalares con cortezas agregadas utilizando este técnica. Los resultados se adaptan naturalmente a cualquier campo escalar, inclusive si existen agujeros grandes.
+El resultado cubre completamente el campo escalar, por lo cual para poder observar la parte interna del material deben realizarse cortes en el mismo.
+
+\begin{figure}
+  \centerline{\includegraphics[width=13cm]{figures/crusts}}
+  \caption{Determinación de la corteza del pan utilizando morfología matemática. La imagen de la derecha muestra que el método de utilización de morfología matemática funciona incluso cuando existen grandes agujeros en el campo escalar.}
+  \label{fg:crusts}
+\end{figure}
+
 \subsection{Tiempos de cómputo}
 En la implementación utilizamos Python\footnote{python.org} y Cython\footnote{cython.org}.
 En la Tabla~\ref{tab:computingtimes} se muestran tiempos de cómputo típicos para los distintos pasos en la simulación de la formación del pan, detallados en secciones anteriores. %In addition, rendering times with DVR are in the order of $~300$ ms (milliseconds), achieving interactive framerates.
