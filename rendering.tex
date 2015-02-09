@@ -165,6 +165,16 @@ Describiremos el algoritmo de renderizado en detalle en una sección posterior.
 \section{Implementación}
 
 Se creó una aplicación demo \footnote{disponible en \emph{https://www.github.com/rbaravalle/Pysys}}  que usa el sistema de partículas descrito en secciones previas para renderizar panes en tiempo real, utilizando DVR.
+La Fig.~\ref{fg:application} muestra la aplicación desarrollada, con un pan renderizado en tiempo real.
+
+
+\begin{figure}
+  \centerline{\includegraphics[width=13cm]{figures/application}}
+  \caption{Aplicación desarrollada mostrando un pan renderizado en tiempo real.}
+  \label{fg:application}
+\end{figure}
+
+
 En la demo, el SP descrito produce una textura volumétrica.
 Un cubo que corresponde a esta textura es renderizado en la escena.
 El material utilizado para renderizar el cubo consta de un shader de vértices muy simple, y un shader de fragmentos, el cual implementa el algoritmo de DVR.
@@ -172,7 +182,6 @@ Para cada fragmento, el shader computa un rayo con origen en la posición de la 
 El procedimiento muestrea la textura volumétrica a intervalos regulares sobre la intersección del rayo y el cubo.
 Estos valores muestreados son luego utilizados como entrada de un algoritmo que implementa una versión simplificada de la RTE, computando el color del píxel resultante de la manera descrita en secciones previas.
 
-%~\ref{sec:DVR}.
 En la implementación, estas ecuaciones acumulan la transmitancia del rayo y la contribución de radiancia en cada punto muestreado.
 La computación termina si el valor de la transmitancia está por debajo un umbral o si el rayo sale del cubo.
 
@@ -199,7 +208,7 @@ Con la modificación de estos parámetros, el usuario puede producir imágenes q
 \end{figure*}
 
 
-\subsection*{Oclusión Ambiente}
+\subsection{Oclusión Ambiente}
 
 Un aspecto clave para resaltar la apariencia de la imagen final está basada en las contribuciones locales debido a características propias del material (emisión, oclusión, absorción).
 La literatura muestra que considerar la oclusión del ambiente puede producir imágenes más realistas \cite{Hernell2010}.
@@ -210,8 +219,16 @@ Luego, este valor se utiliza para modular la contribución de cada paso del rayo
 Experimentalmente encontramos que el valor $r$ resulta visualmente indistinguible al variarlo, por lo cual cualquier valor mayor que $0$ puede utilizarse para el cómputo.
 
 La Fig.~\ref{fg:occlusion} muestra que el realce que produce este concepto no es despreciable, resultando en un aspecto clave de nuestra implementación, a la hora de producir imágenes creíbles de migas de pan. 
+
+
+
+\begin{figure}
+\centerline{\includegraphics[width=13cm]{figures/occlusion}}
+  \caption{Pan sin (izquierda) y con (derecha) oclusión de ambiente. La apariencia final se mejora notablemente, mostrando una apariencia natural.}
+  \label{fg:occlusion}
+\end{figure}
  
-\subsection*{Cómputo de las Normales}
+\subsection{Cómputo de las Normales}
 Utilizamos un esquema {\em hacia adelante} en el cómputo de diferencias finitas del gradiente.
 El gradiente en el punto será utilizado luego para computar la normal, la cual el vector diferencia normalizado, entre la posición {\em hacia adelante} y la posición actual del campo escalar,
 
@@ -228,7 +245,7 @@ N &= normalizar([x,y,z])
 Las normales y el vector que representa la luz permiten determinar la contribución especular en el punto, aplicando un modelo de Phong simple \cite{Phong1973}, y estableciendo un parámetro que permite al usuario especificar el impacto deseado para la componente especular.
 Se han testeado otros modelos especulares más complejos, pero no se encontró diferencia apreciable en la apariencia final de la textura de pan.
 
-\subsection*{Cómputo de Sombras}
+\subsection{Cómputo de Sombras}
 La técnica de DVR puede ser utilizada para computar sombreas realísticas, por medio de mapas de sombras \cite{Williams1978}.
 Durante la generación del mapa de sombras, renderizamos muevamente un cubo representando el sistema de partículas.
 El shader de fragmentos para ese cubo utiliza el mismo método de rayos explicado, pero solo computa la transmitancia en el rayo.
@@ -237,7 +254,7 @@ Si durante el cómputo de la transmitancia, la misma cae por debajo del umbral, 
 Esta técnica se utiliza junto a un filtrado de porcentaje de cercanía, para generar sombras realísticas en nuestra aplicación.
 
 
-\subsection*{Corteza}
+\subsection{Corteza}
 Es posible proveer al sistema con una función que indique si la posición es parte de la corteza o la miga, u otras consideraciones en otros materiales (por ejemplo, si el color de la sección de una esponja debe ser amarillo u verde).
 Por ejemplo, una función puede definit una corteza cilíndrica asignando la etiqueta de miga a aquellas posiciones cercanas al eje del cilindro, y corteza a las restantes.
 También se provee otra función que establece si la posición debe ser considerada aire.
@@ -250,47 +267,104 @@ dos en el capítulo anterior, utilizando un mapa de distancias o bien morfologí
 
 %%%%%%%%%%%%%%%
 
-%Se cre\'o un programa de prueba\footnote{disponible en \emph{\url{https://www.github.com/rbaravalle/Pysys}}} para evaluar el sistema de partículas que describe la estructura del pan. Este programa usa un campo escalar representando la miga de pan para generar una textura volumétrica que se interpreta como una función de densidad. Esta textura precomputada se usa como entrada para un motor gráfico que utiliza la técnica de DVR para generar imágenes del pan representado por el sistema de partículas original. Este programa demuestra que el método de renderizado propuesto es compatible con los motores gráficos basados en técnicas de renderización en tiempo real en GPU. Se obtienen imágenes de un material realístico así como efectos de sombras suaves dentro del volumen. Esto significa que las técnicas usadas para renderizar estos materiales pueden ser integradas en cualquier motor de renderizado que soporte shaders.
-
-%La malla que utiliza el modelo es un cubo que contiene el volumen definido por el sistema que genera la miga del pan. El código del shader de vértices es muy simple, proveyendo sólamente información geométrica al shader de fragmentos. Este último es donde se encuentra la mayor parte de los cálculos a realizar.
-
 %Dentro del shader de fragmentos la primera operaci\'on es calcular la geometría de un rayo cuyo origen es la cámara de la escena y cuya dirección lo lleva hacia el fragmento siendo calculado. Este rayo es recorrido en intervalos regulares, evaluando la textura volumétrica para obtener la densidad del pan en esos puntos. Este valor se utiliza para calcular la transmitancia acumulada desde la cámara hasta el punto evaluado. Una vez que la transmitancia es menor que un valor preestablecido o el rayo sale del cubo que define el volumen, el cómputo termina.
 
 %En cada punto evaluado también se computa la transmitancia dentro del volumen desde el punto hacia la fuente de luz en la escena. Esto se hace emitiendo un rayo desde el punto con dirección a la luz y nuevamente calculando la densidad en varios puntos del rayo. Con esta nueva información se aproxima la cantidad de luz que llega directamente al punto considerado, y permite representar sombras dentro del volumen.
 
 %La información de transmitancia de los puntos evaluados del rayo principal y desde estos puntos hacia la luz se utilizan para calcular el color final del fragmento. A partir de esta información y tomando diferentes consideraciones artísticas pueden lograrse representaciones realísticas de diferentes materiales. En el caso de las imágenes de muestra presentadas en este trabajo el color del fragmento será más oscuro para areas del volumen que se consideran dentro de la corteza del pan y será de un color amarillo claro para la miga. También se usa un componente especular tenue. La información de transmitancia entre los puntos evaluados y la luz ayuda a proveer detalles de la estructura del pan. La Fig~\ref{fg:fragmentshader} muestra un esquema del cálculo del color final del pixel.
 
+\section{Resultados}
+Las imágenes obtenidas a partir del método descrito en la sección anterior fueron renderizadas en una computadora con una placa gráfica nVidia GTX 480 ($480$ cores), la cual es normalmente de uso hogareño.
+La CPU fue una Intel(R) Core(TM) i5-2300 CPU (cuatro procesadores).
+La resolución de las imágenes es de $1440\times990$ pixels. 
 
-
-%\paragraph{Corteza, fetas y cortes}
-
-%Las partes del volumen pertenecientes a la corteza y a la miga del pan fueron determinadas manualmente mediante una función que asigna una u otra propiedad a cada punto del volumen a partir de su posición. Por ejemplo, para volúmenes de forma cilíndrica se definió una función que designa como corteza a los puntos que están a más de una distancia predefinida del eje del cilindro.
-
-%De la misma manera se define una función que determina si puntos del volumen deben considerarse vacíos, independientemente del valor de la textura volumétrica en ese punto. Esto permite definir fetas de pan de manera sencilla. Un ejemplo del uso de este mecanismo puede apreciarse
-%en la Fig.~\ref{fg:fig5}.
-
-%La asignación de vacío y de corteza deben ser extendidos más allá de ecuaciones basadas en posiciones para poder ser usadas en un proceso artístico.
-
-%*MORFOLOGIA MATEMATICA*
-
-
-%En la siguiente sección se presentan y se evalúan los resultados obtenidos.
-%
-%En esta sección se detallan las imágenes y los tiempos de renderizado obtenidos. 
-
-\subsection{Resultados del renderizado}
-
-%Las imágenes obtenidas a partir del método descrito en la sección anterior fueron renderizadas en una computadora con una placa gráfica nVidia GTX 480 ($480$ cores), la cual es normalmente de uso hogareño. La CPU fue una Intel(R) Core(TM) i5-2300 CPU (cuatro procesadores). La resolución de las imágenes es de $1440\times990$ pixels. 
-%Se obtuvieron diferentes imágenes que semejan materiales horneados. Diferentes tipos de pan pueden ser representados variando los parámetros de transmitancia y colores utilizados (ver Fig.~\ref{fg:fig5}). En la imagen central los patrones producidos por los sistemas de partículas descritos en las secciones previas son claramente visibles. En ese caso, el tiempo de vida de las partículas es diferente para cada una y de esa manera se obtienen burbujas de
-%diferentes tamaños.
+Se obtuvieron diferentes imágenes que semejan materiales horneados.
+Diferentes tipos de pan pueden ser representados variando los parámetros de transmitancia y colores utilizados (ver Fig.~\ref{fg:fig5}).
+En esa imagen mostramos panes donde no se aplica oclusión de ambiente.
+En la imagen central los patrones producidos por los sistemas de partículas descritos en las secciones previas son claramente visibles.
+En ese caso, el tiempo de vida de las partículas es diferente para cada una y de esa manera se obtienen burbujas de diferentes tamaños.
 
 \begin{figure*}[htb!]
   \centerline{\includegraphics[width=13cm]{fig5}}
-  \caption{Imágenes de diferentes tipos de pan renderizados en tiempo real. La imagen de la derecha muestra un pan sin corteza}
+  \caption{Imágenes de diferentes tipos de pan renderizados en tiempo real, sin oclusión de ambiente. La imagen de la derecha muestra un pan sin corteza}
   \label{fg:fig5}
 \end{figure*}
 
-Es posible obtener otros materiales (ver Fig.~\ref{fg:fig6}). Estos son el resultado de la variación de parámetros técnicos y artísticos del modelo. En las imágenes de prueba pueden distinguirse un budín (izquierda), un pedazo de torta (medio) y una esponja (derecha). En el caso de la esponja se modificaron los parámetros que definen la función de densidad. Cuando no hay levadura en el proceso de creación puede utilizarse una textura volumétrica cuyos valores provienen de una función aleatoria. La retroiluminación es también aproximada con este modelo (ver Fig.\ref{fg:fig7}). En esa imagen puede apreciarse una esponja retroiluminada junto con la propagación de luz a través del volumen que representa.
+%La tabla muestra que los rayos secundarios constituyen el principal cuello de botella, lo cual es lógico, dado que a cada paso del rayo principal, el mismo computa un rayo secundario hacia la luz.
+
+
+%\begin{table}[htb]
+%\centering
+%\begin{tabular}{|c|c|c|c|c|c|c|}
+%\hline &  Pan 1 & Pan 2 & Pan 3 & Budín & Torta & Esponja \\
+%\hline
+%\hline
+% FPS promedio  & 32.2 &  75.5 &  45.2 & 28.5 &  54.2 & 29.7\\
+%\hline
+% Puntos de evaluación &  140 &  140 &  140 & 256 &  140 & 256 \\
+%\hline
+% Transmitancia &  15 &  15 &  15 & 15 &  15 & 2.25 \\
+%\hline
+%\end{tabular}
+%\caption{Tiempos de renderizado y parámetros de las imágenes de prueba.}
+%\label{tab:n1}
+%\end{table}
+
+%\begin{table}[htb]
+%\centering
+%\begin{tabular}{|c|c|c|c|c|c|c|}
+%\hline
+% Pasos del rayo         & 128 &  256 \\
+%\hline
+%\hline
+% Tiempo total shaders   & 10 ms &  32.5 ms \\
+%\hline
+% Rayo Principal         & 2 ms  & 5 ms  \\
+%\hline
+% Rayos Secundarios      &  8 ms & 27.5 ms  \\
+%\hline
+%\end{tabular}
+%\caption{Detalle de tiempos de renderizado en milisegundos.}
+%\label{tab:n2}
+%\end{table}
+
+La Fig.~\ref{fg:breads} muestra panes renderizados en tiempo real con oclusión de ambiente agregada.
+
+\begin{figure*}[htb!]
+  \centerline{\includegraphics[width=13cm]{breads}}
+  \caption{Imágenes de diferentes tipos de pan renderizados en tiempo real, con oclusión de ambiente.}
+  \label{fg:breads}
+\end{figure*}
+
+Puede observarse que los panes con este efecto muestran un grado de realismo superior.
+
+\subsection*{Tiempos de Cómputo}
+
+Todas las imágenes fueron obtenidas en tasas de refresco de tiempo real (cuadros por segundo, FPS, por encima de $30$).
+La eficiencia del proceso se resiente cuando la transmitancia es muy baja (el material es casi transparente), dado que se evaluarán más puntos en los rayos a recorrer antes de llegar al límite de transmitancia.
+Otro parámetro importante es la cantidad de puntos a evaluar, ya que para cada paso computamos la transmitancia hacia la luz por medio de un rayo secundario.
+Experimentalmente encontramos que utilizar $140$ o más pasos produce imágenes razonables para esponjas, pero se necesitan $300$ o más pasos para obtener imágenes razonables de panes, ver Fig.~\ref{fg:stepcount}.
+
+
+\begin{figure}
+  \centerline{\includegraphics[width=13cm]{figures/stepcount}}
+  \caption{Tiempos de cómputo de acuerdo a la cantidad de pasos utilizados. La imagen muestra que utilizar $300$ pasos del rayo produce imágenes razonables.}
+  \label{fg:stepcount}
+\end{figure}
+
+
+En las regiones con corteza, la velocidad del método es mayor, ya que la transmitancia es menor para estas zonas, {\em i.e.}, los rayos necesitan menos pasos para alcanzar el umbral de opacidad que en regiones con mayor transmitancia.
+
+\subsection{Otros Materiales y Efectos}
+Es posible obtener otros materiales (ver Fig.~\ref{fg:fig6}).
+Estos son el resultado de la variación de parámetros técnicos y artísticos del modelo.
+En las imágenes de prueba pueden distinguirse un budín (izquierda), un pedazo de torta (medio) y una esponja (derecha).
+En el caso de la esponja se modificaron los parámetros que definen la función de densidad.
+Cuando no hay levadura en el proceso de creación puede utilizarse una textura volumétrica cuyos valores provienen de una función aleatoria.
+En la Fig.~\ref{fg:sponges} puede observarse que la utilización de oclusión de ambiente produce imágenes de esponja más realistas que las obtenidas sin su aplicación.
+La retroiluminación es también aproximada con este modelo (ver Fig.\ref{fg:fig7}).
+En esa imagen puede apreciarse una esponja retroiluminada junto con la propagación de luz a través del volumen que representa.
+Este efecto es una consecuencia natural del algoritmo volumétrico basado en RTE utilizado en este capítulo.
 
 \begin{figure*}[htb!]
   \centerline{\includegraphics[width=13cm]{fig6}}
@@ -305,162 +379,72 @@ Es posible obtener otros materiales (ver Fig.~\ref{fg:fig6}). Estos son el resul
   \label{fg:fig7}
 \end{figure*}
 
-\subsection{Tiempos de renderizado}
 
-La mayoría de las imágenes se obtuvieron con tasas de refresco de tiempo real (más de 30 FPS), como muestra la Tabla~\ref{tab:n1}. La eficiencia del proceso se resiente cuando la transmitancia es muy baja (el material es casi transparente), dado que se evaluarán más puntos en los rayos a recorrer antes de llegar al límite de transmitancia. Otro parámetro importante es la distancia entre puntos a evaluar. En la Tabla~\ref{tab:n2} se observa que a medida que la cantidad de rayos y de pasos del rayo aumenta, la velocidad decrece. La tabla muestra que los rayos secundarios constituyen el principal cuello de botella, lo cual es lógico, dado que a cada paso del rayo principal, el mismo computa un rayo secundario hacia la luz.
-
-Experimentalmente se encontró que para todos los casos a evaluar $100$ puntos o más presenta buenos resultados.El proceso escala automáticamente con el número de procesadores en una GPU, por lo cual la tasa de refresco obtenida será mayor en GPUs más rápidas y de más procesadores.
-
-
-ACTUALIZAR!
-\begin{table}[htb]
-\centering
-\begin{tabular}{|c|c|c|c|c|c|c|}
-\hline &  Pan 1 & Pan 2 & Pan 3 & Budín & Torta & Esponja \\
-\hline
-\hline
- FPS promedio  & 32.2 &  75.5 &  45.2 & 28.5 &  54.2 & 29.7\\
-\hline
- Puntos de evaluación &  140 &  140 &  140 & 256 &  140 & 256 \\
-\hline
- Transmitancia &  15 &  15 &  15 & 15 &  15 & 2.25 \\
-\hline
-\end{tabular}
-\caption{Tiempos de renderizado y parámetros de las imágenes de prueba.}
-\label{tab:n1}
-\end{table}
-
-\begin{table}[htb]
-\centering
-\begin{tabular}{|c|c|c|c|c|c|c|}
-\hline
- Pasos del rayo         & 128 &  256 \\
-\hline
-\hline
- Tiempo total shaders   & 10 ms &  32.5 ms \\
-\hline
- Rayo Principal         & 2 ms  & 5 ms  \\
-\hline
- Rayos Secundarios      &  8 ms & 27.5 ms  \\
-\hline
-\end{tabular}
-\caption{Detalle de tiempos de renderizado en milisegundos.}
-\label{tab:n2}
-\end{table}
-
-
-\section{Resultados}
-We employed a nVidia GTX 480 ($480$ shader units), which is a typical user configuration.
-The CPU is an Intel(R) Core(TM) i5-2300 CPU (quad core).
-The screen resolution is $1440\times900$.
-In fig.~\ref{fg:application} we show a real-time rendered bread.
-Different kinds of bread can be easily modeled changing the parameters of the algorithms (see Fig.~\ref{fg:crumb}).
-In Fig.~\ref{fg:results2} we added crust to enhance the final results. 
-We also synthesized sponges (see Fig.~\ref{fg:sponges}) with yet different parameter values.
-They were easily derived by changing the color and the structure of the volume.
-Since yeast is unnecessary in the sponge manufacturing process, we used a random volume texture as a geometry.
-
-We also handled back illumination in the model (see Fig.~\ref{fg:backillum}): the render shows the light propagation in the medium when illuminated from behind.
-This is a natural consequence of the RTE based algorithm and the choice of the volume representation that we made.
-
-\subsection*{Computing times}
-
-We rendered all images in real time (FPS over 30). Two parameters are responsible for most of the computations: the transmittance coefficient and the step count.
-A low transmittance produces a more transparent material making the ray accumulate more information.
-
-The step count is crucial since for each step we compute the transmittance to the light using a secondary ray.
-We experimentally found that values above $140$ give reasonably images for sponges but we needed at least $300$ steps to get a reasonably bread appearance, see Fig.~\ref{fg:stepcount}.
-The process automatically scales with the number of GPU processors, so the fps count will increment in more powerful GPUs. 
-The use of crust slightly boosts the performance since the transmittance is lower for crust regions, {\em i.e.}, the rays need lower step counts to reach a threshold opacity level.
-
-
-\section{Otros Materiales Renderizados}
-
-%\section{Conclusiones}
-
-%Según el conocimiento de los autores, éste es el primer intento de llevar a cabo una renderización en tiempo real de pan de manera convincente sin el uso de procesos intermedios complicados (captura de imágenes, generación de mallas, post-procesamiento). Existen buenos resultados de renderizado de pan obtenidos con otros métodos \cite{Cho2007}, pero es difícil comparar ese trabajo con el presentado en este artículo debido a que ni los detalles de la técnica utilizada ni los tiempos de cálculo han sido publicados.
-
-%Dentro del volumen a renderizar se pueden definir regiones con diferentes propiedades. Esta idea permite generar imágenes con miga y corteza con diferentes parámetros.
-
-%La integración de la técnica descrita con motores gráficos es simple. La información de profundidad de los fragmentos puede obtenerse de manera sencilla y por lo tanto pueden utilizarse técnicas populares de sombras, tales como mapas de sombras.
-
-%Los tiempos de cómputo muestran una alta eficiencia del proceso, lo cual depende en gran medida del número de puntos de evaluación usados y la transmitancia del material. Se pueden alcanzcar tiempos de cómputo consistentes con aplicaciones de tiempo real en todos los casos menos en los cuales el volumen ocupa la mayor parte de la imagen a generar, dado que la técnica se calcula casi enteramente en los shader de fragmentos. 
+\begin{figure}
+  \centerline{\includegraphics[width=13cm]{figures/sponges}}
+  \caption{Esponjas renderizadas en tiempo real utilizando un campo escalar aleatorio como geometría, con oclusión de ambiente aplicada.}
+  \label{fg:sponges}
+\end{figure}
 
 \section{Discusión}
 
 %1)En primer lugar, un resumen de lo que hicimos en el paper y por qué es importante/novedoso
 
-To the best of the authors' knowledge, this is the first attempt to convincingly render bread crumb and other materials in real time without introducing complex intermediate processes (capture, mesh generation, precomputation, post-process).
-There are few previous approaches to bread rendering. An example is \cite{Cho2007}, but comparisons with this technique could not be established since key details are unexplained (computing times, render method).
-The proposed method is compatible with current rasterization-based real-time GPU rendering pipelines, providing a realistic looking material, and can be easily integrated into  shader-based 3D engines.
-Also, the presented shadow mapping technique allows a natural integration of the volume within scenes. 
+Hasta donde podemos ver en la literatura, en el tópico de renderizado de panes y otros materiales porosos, este es el primer trabajo que involucra tasas de refresco de tiempo real, sin la aparición de estructuras intermedias, procesos de captura onerosos, o post-procesamientos.
+
+La literatura previa incluye pocos trabajos, como por ejemplo \cite{Cho2007}, pero las comparaciones con este método no son posibles, ya que los detalles claves del desarrollo no fueron explicados (tiempos de cómputo, método de renderización).
+El método propuesto es compatible con el renderizado de ráster en tiempo real disponible en las GPUs actuales, contando con la capacidad de producir un material realista.
+El método puede ser integrado con facilidad en cualquier motor $3D$ basado en shaders.
+Además, la técnica de mapeo de sombras permite integrar el material en escenas de una manera natural.
 
 %3) Recordamos que las imagenes obtenidas fueron buenas, y que obtuvimos otros materiales cambiando pocos parametros
 
-The modeling and rendering algorithms are flexible enough to model different materials like bread or sponges, changing a few parameters.
-Other materials such as cakes, pizzas and cheeses can be implemented in the same way, allowing to manage several materials using the same method.
-Also, our volume representation method allows to make real time cuts in the bread crumb.
-This is clearly useful in many applications, for instance in video games.
+El algoritmo de renderizado es lo suficientemente flexible como para modelar diferentes materiales, como pan, esponjas, y tortas, cambiando unos pocos parámetros.
+Otros materiales porosos como pizzas, quesos, y otros, pueden ser fácilmente obtenidos definiendo geometrías adecuadas y parámetros de transmitancia y cantidad de pasos.
+Es decir, se pueden obtener diversos materiales con el mismo método.
 
-Regarding the illumination model, the success of our algorithms in rendering realistic bread crumbs and other materials could be attributed to the improvements we added to the basic DVR algorithm.
-A remarkable improvement in the final realism was due to the addition of an ambient occlusion term, giving the texture a more rich and complex appearance.
-Other effects, such as the Phong specular component, enhanced the bread crumb final appearance.
-More sophisticated specular methods (for instance, Cook-Torrance model \cite{Cook1982}) did not add a significant improvement.
+Además, nuestra representación volumétrica permite realizar cortes en tiempo real en la miga y corteza del pan.
+Esto puede resultar de gran ayuda en diversas aplicaciones, entre las cuales encontramos video juegos.
+
+Respecto al modelo de iluminación, el éxito visual obtenido por el método a la hora de obtener una apariencia que semeja al pan en tiempo real, parece estar dado por la utilización de oclusión ambiente, además de los agregados discutidos sobre el algoritmo básico de DVR.
+
+Debemos destacar que el mayor incremento en el realismo final en las imágenes fue dado a la inclusión del término de oclusión de ambiente, el cual proporcionó una textura mucho más detallada, mostrando una mayor complejidad y riqueza subyacente.
+Otros efectos que introdujimos, como el reflejo especular de Phong, también incidieron sobre el realismo final.
+Sin embargo, métodos especulares más sofisticados (por ejemplo, el modelo de Cook-Torrance \cite{Cook1982}) no mejoraron de manera apreciable las imágenes.
 
 %5)Tiempos de cómputo (muy importante en este paper!)
 
-Computing times were adequate for real-time rendering in standard off-the-shelf computers (we employed a nVidia GTX 480 GPU with an Intel(R) i5 processor).
-Reasonable framerates are always achieved except when the rendered object encompasses a big portion of the screen, since the approach is largely fragment-shader bound.
-The final framerate also depends on the step count and the transmittance coefficient.
-In addition, different materials require different computing costs for rendering.
-For instance, an adequate step count to simulate sponge is lower than the bread crumbs step count.
-This can be attributed to the fact that the method needs more steps to capture the macroscopic bread bubbles in crumb.
-So far, with current off-the-shelf hardware, our method is limited in the final 3D resolution of the material when real-time applications are required.
-In other words, drastic close-ups to the structure could lead to homogeneous areas.
-This limitation is tied to the GPU texture size, and will be eventually circumvented with next generations of hardware.
-In off-line applications, memory swap procedures allow more satisfactory 3D resolutions.
+Los tiempos de cómputo alanzados fueron adecuados para alcanzar tiempo real en computadoras estándares al año de publicación de la presente tesis (utilizamos una placa de video nVidia GTX 480, junto con una CPU Intel(R) i5).
 
+En la gran mayoría de los casos, las tasas de refresco alzancadas fueron de tiempo real.
+Los únicos casos que no lograron dichos tiempos ocurrieron cuando el objeto a ser renderizado ocupó una porción bastante considerable de la pantalla, ya que el método está implementado en el shader de fragmentos.
+Los tiempos de cómputo finales dependen de la cantidad de pasos utilizados y el coeficiente de transmitancia.
+
+Adicionalmente, diferentes materiales cuentan con diferentes tiempos de cómputo para su renderización.
+Por ejemplo, un tiempo de cómputo adecuado para simular esponjas es más bajo que aquél que se necesita para modelar migas de panes.
+Esto puede atribuirse al hecho de que el método necesita más pasos para capturar las burbujas macroscópicas del pan.
+
+Las GPUs actuales poseen límites en las texturas volumétricas que pueden soportar.
+Esto limita la calidad de las imágenes que podemos obtener, ya que a mayor resolución, fue demostrado que puede obtenerse un mayor detalle y realismo en las imágenes.
+Por lo tanto, las aplicaciones en tiempo real deben limitar la resolución de la textura que se carga en la GPU.
+En otras palabras, acercamientos extremos a la estructura a ser renderizada puede dar lugar áreas homogéneas (sin detalle).
+Esta limitación está atada al tamaño de textura de la GPU, y será eventualmente superado con la mejora del hardware de la próxima generación de GPUs.
+En aplicaciones fuera de línea, es posible utilizar texturas lo suficientemente grandes que dan lugar a imágenes foto-reaísticas.
 
 \section{Conclusiones}
 
-In this paper we applied the transmittance direct volume rendering model using the GPU to a 3D scalar field representing the bread crumb structure, obtaining realistic bread crumb images.
-We modeled this structure using particle systems and dynamical systems.
-We employed a numerical simulation to solve the resulting set of equations which represents the dynamical system. 
-The particles avoided each other and grew following the dynamic system.
-The modeling algorithm was easily implemented. 
-We implemented the render algorithm in the fragment shader using specular and diffuse components, ambient occlusion and automatic crust determination.
+En este capítulo hemos aplicado el modelo de transmitancia del renderizado directo de volúmenes utilizando la GPU, sobre un campo escalar tridimensional representando la estructura de la miga del pan (la cual fue computada en el capítulo anterior).
+Se obtuvieron imágenes realistas en tiempo real.
+Debido a limitaciones del hardware, también se obtuvieron imágenes con aún mayor detalle, pero a tasas de refresco menores.
 
-Results showed high fidelity images in real time, suitable for application in several areas, such as video games, serious games \cite{Susi2007} and photorealistic rendering. 
-These techniques are much simpler and does not present the drawbacks of other state of the art methods, such as capture processes or mesh generation.
-These results make us believe that the volume representation is a right choice for bread modeling and rendering.
+El algoritmo presentado fue implementado en el shader de fragmento utilizando componentes especulares y difusas, cómputo de normales y oclusión de ambiente.
 
-As possible continuations of this work, we may extend DVR to handle other phenomena such as indirect illumination, enhancing the resulting images.
-Other porous materials such as cheeses will be investigated.
-We will employ a number of possible solutions to overcome the resolution problem, such as setting different volume textures depending on the distance between the camera and the volume. 
+Los resultados alcanzados superan en gran medida al estado del arte, obteniendo imágenes que simulan el material en tiempo real con gran realismo.
+El método presenta aplicaciones en diversas áreas, como video juegos, juegos serios \cite{Susi2007} y renderizado foto-realista.
+
+Estas técnicas son mucho más simples y no presentan las desventajas de otros métodos, como procesos de captura, generación de mallas o post-procesos.
+
+Estos resultados demuestran que la elección de una representación volumétrica es la adecuada para estos materiales porosos.
 
 
 
-\begin{figure}
-  \centerline{\includegraphics[width=13cm]{figures/application}}
-  \caption{Our demo application showing a real time rendered bread.}
-  \label{fg:application}
-\end{figure}
-
-\begin{figure}
-  \centerline{\includegraphics[width=13cm]{figures/stepcount}}
-  \caption{Computing times and step count. The image shows that using $300$ sampling ray steps gives reasonably images. }
-  \label{fg:stepcount}
-\end{figure}
-
-\begin{figure}
-  \centerline{\includegraphics[width=13cm]{figures/sponges}}
-  \caption{Real time rendered sponges using a random scalar field as geometry.}
-  \label{fg:sponges}
-\end{figure}
-
-
-\begin{figure}
-\centerline{\includegraphics[width=13cm]{figures/occlusion}}
-  \caption{Bread without (left) and with (right) ambient occlusion. The final appearance is greatly improved, showing a more natural look. }
-  \label{fg:occlusion}
-\end{figure}
