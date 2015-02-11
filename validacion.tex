@@ -580,7 +580,7 @@ Las Fig.~\ref{realbin} y Fig.~\ref{best} muestran un ejemplo de binarizaciones d
 
 \begin{figure}[!ht]
 \begin{center}
-\includegraphics[width=8cm]{figures/best}
+\includegraphics[width=6cm]{figures/best}
 \caption{Resultado sintético mostrando características multifractales similares a imágenes reales del tipo de pan {\em baguette}.}
 \label{best}
 \end{center}
@@ -608,7 +608,7 @@ La Fig.~\ref{realbin2} y  Fig.~\ref{best2} muestran un ejemplo de binarizaciones
 
 \begin{figure}[!ht]
 \begin{center}
-\includegraphics[width=9cm]{figures/realbin2}
+\includegraphics[width=13cm]{figures/realbin2}
 \caption{ Pan casero real y ejemplo de binarización.}
 \label{realbin2}
 \end{center}
@@ -616,7 +616,7 @@ La Fig.~\ref{realbin2} y  Fig.~\ref{best2} muestran un ejemplo de binarizaciones
 
 \begin{figure}[!ht]
 \begin{center}
-\includegraphics[width=6cm]{figures/best2}
+\includegraphics[width=8cm]{figures/best2}
 \caption{Ejemplo de pan sintético con características similares a imágenes de un pan casero.}
 \label{best2}
 \end{center}
@@ -676,24 +676,40 @@ La Fig.~\ref{realbin2} y  Fig.~\ref{best2} muestran un ejemplo de binarizaciones
 
 %\section{Resultados}
 
-\section{Validación utilizando técnicas de Aprendizaje Profundo}
+%\section{Validación utilizando técnicas de Aprendizaje Profundo}
 
 \section{Discusión y Conclusiones}
 
-The visual appearance of different types of bread crumbs can be successfully characterised by the multifractal dimensions of their digital images. The FDs obtained from the MFS method whose $\alpha \in [0,0.23]$ provided a good measure of the bread crumb porosity, meaning that the higher these FDs, the higher the measure. In addition, the FDs whose $\alpha \in [0.79,1]$ are useful to measure coarseness and heterogeneity of bread crumb. The MFS contains useful data to characterise the three measures, combining the information in one feature vector.
+En este capítulo mostramos que los métodos fractales y sobre todo, multifractales, permiten capturar características útiles de panes, las cuales sirven para caracterizarlos y clasificarlos.
+Además, la información capturada es lo suficientemente descriptiva como para definir parámetros de entrada a un algoritmo que genera versiones sintéticas de los mismos, las cuales fueron también validadas.
 
-The use of multifractal features in bread crumb texture classification showed excellent performance. The MFS de\-monstrated to be accurate enough to perform a classification of different bread types and also to discriminate non bread from bread images. The classification performance of the MFS for the bread crumb database outperforms other state-of-the-art techniques employed in the computer vision literature. The information present in the MFS of the $L$, $a$ and $b$ channels of the CIElab space colour obtained the best classification performance in all the developed tests. This result appears to be a consequence of the different capturing devices used in this work. Also, it was shown that the MFS is sensitive to changes in the illumination conditions during image acquisition.
 
-The sandbox multifractal method allows to approximate the geometry of any real bread crumb, by 
-extracting parameters in order to accurately simulate it.
-Bubble distributions under our model were shown to be statistically coincident to real bread, according to multifractal methods.
-The sandbox analysis method produced very similar fractal features both with our synthetic images and with images of real bread crumbs.
-Two bread types were tested: a home-baked and the {\em baguette } bread types.
-The home-baked multifractal spectrum was more difficult to fit ({\em i.e.}, the errors were larger than those of the {\em baguette} bread type), but notwithstanding this the final bubble distribution was adequate for emulating this bread type.
-Multifractal spectra showed higher dispersion in the negative dimensions ($q < 0$), which means that at finer geometric scales it is more difficult to characterize the statistical distribution, due to the image resolution.
-A more detailed link between bread crumb physical features (coarseness, porosity) and multifractal features may be useful for designing better procedural models \cite{Baravalle2012}.
-Multifractal image analysis was used to validate the model.
-The statistical similarity between $2D$ cuts in our results and of real-word bread slices suggests that it may be suitable for applications in $3D$ engines, serious games \cite{Susi2007} and photorealistic rendering. 
+La apariencia visual de diferentes tipos de panes puede ser caracterizada exitosamente computando dimensiones multifractales de sus imágenes digitales.
+Las DFs obtenidas por el método MFS cuyo $\alpha \in [0,0.23]$ proveen una buena medida de la porosidad de la miga del pan, ya que mientras más alta es la DF, más alta es la porosidad.
+Además, las DFs cuyo $\alpha \in [0.79,1]$ permiten caracterizar la granularidad y la heterogeneidad en la distribución de sus burbujas.
+El MFS contiene datos útiles para caracterizar las tres medidas, combinando la información en un único vector de características.
+
+La utilización de características multifractales en la clasificación de dichas imágenes mostró además una excelente performance.
+El MFS demostró ser lo suficientemente preciso para realizar una clasificación de distintos tipos de panes y de separar panes de otros objetos.
+Los resultados superan otras características del estado del arte utilizadas en la literatura de visión por computador.
+La información presente en los canales $L$, $a$ y $b$ del MFS de las imágenes transformadas al espacio de color CIELab obtuvieron los mejores resultados en la clasificación.
+Este resultado parece ser consecuencia del comportamiento del espacio mencionado cuando existe más de un dispositivo de captura.
+Se mostró además que el MFS es sensible a cambios en la iluminación durante la adquisición de las imágenes.
+
+Por otro lado, el método multifractal sanbox permite aproximar la geometría de cualquier miga de pan, extrayendo parámetros para simular de manera precisa un tipo dado.
+Las distribuciones de burbujas de nuestro modelo pueden adecuarse de manera estadística con algún tipo de pan deseado, gracias al análisis multifractal sandbox.
+El método produce imágenes con características multifractales similares a panes reales.
+Para comprobar esta afirmación, se realizaron comprobaciones con dos tipos de pan diferentes, {\em baguette} y un tipo de pan casero.
+El espectro multifractal del pan casero resultó más dificultoso de sintetizar (es decir, los errores fueron mayores que aquellos del tipo {\em baguette}), pero a pesar de esto, las imágenes obtenidas resultan más que adecuadas para emular el tipo de pan deseado en computación gráfica.
+
+El espectro multifractal mostró mayor dispersión en las dimensiones negativas ($q < 0$), 
+lo cual significa que debido al límite de resolución en las imágenes, la distribución estadística es más difícil de capturar en escalas más pequeñas.
+
+
+
+%A more detailed link between bread crumb physical features (coarseness, porosity) and multifractal features may be useful for designing better procedural models \cite{Baravalle2012}.
+%Multifractal image analysis was used to validate the model.
+%The statistical similarity between $2D$ cuts in our results and of real-word bread slices suggests that it may be suitable for applications in $3D$ engines, serious games \cite{Susi2007} and photorealistic rendering. 
 
 %citar imfractal
 
