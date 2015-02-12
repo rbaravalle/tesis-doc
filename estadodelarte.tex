@@ -111,14 +111,65 @@ La utilización de un par $[\dots]$ produce que la tortuga dibuje una rama y vue
 \label{fg:sistemasLcorchete}
 \end{figure}
 
+
+Existen numerosas variantes a estos sistemas, entre los cuales encontramos sistemas-L estocásticos, los cuales eligen reglas de reescritura de acuerdo a una probabilidad que se pasa como parámetro, sistemas-L paramétricos, los cuales hacen variar el ángulo y el paso a dibujar dependiendo de la posición de la cadena donde se encuentran, y muchos otros.
+Además, el método es fácilmente generalizable en tres dimensiones, ver \cite{Prusinkiewicz1990} para obtener mayores detalles.
+
 \subsubsection{Edificios y Ciudades}
-\cite{Parish2001} \cite{Muller2006},
+Una de las ventajas del modelado procedimental es la capacidad de realizar el proceso prácticamente sin intervención humana, ahorrando costos y tiempos de diseño.
+En esta línea se ubica el trabajo de \cite{Wonka2003}, donde un proceso automático genera, de manera casi instantánea, edificios arquitectónicamente coherentes, es decir, con ciertas características estructurales que deben ser respetadas.
+
+La diferencia principal a la hora de utilizar sistemas-L para modelar edificios, es que los mismos no pueden ser modelados como una estructura que crece, sino que deben tratarse como conjuntos de objetos con una disposición específica.
+
+Para lograr esto, en \cite{Wonka2003} se proponen varias definiciones, entre las que se encuentran gramáticas de división y gramáticas de control.
+
+Una {\em forma} es un conjunto de líneas rectas en el espacio.
+Las gramáticas de división seleccionan reglas para subdividir formas en formas más básicas (cubos, cilindros, etc.).
+
+
+Una gramática puede ser definida de manera general como un álgebra de objetos $(U,+,-,F,\leq)$, cerrada bajo las operaciones $+$ y $-$, junto a un conjunto de operaciones $F$, de tal forma que si $u$ y $v$ son miembros de $U$, entonces $u+f(v)$ y $u-f(v)$ lo son, donde $f \in F$.
+Una gramática $G=(N,T,R,I)$ es una tupla que consta de cuatro elementos, donde $N \subset U$ representa los nodos no terminales, $T \subset U$ los terminales, $I \subset N$ un conjunto de objetos iniciales y un conjunto de producciones $R \subseteq U \times U$.
+
+%Para comprender mejor estos conceptos, definimos una gramática de conjuntos.
+%Este tipo de gramáticas 
+
+La Fig.~\ref{fg:splitgrammar} muestra un ejemplo del proceso involucrado en una gramática {\em de división}, en la cual una {\em forma} es dividida en otras, utilizando reglas definidas por dicha gramática, en este caso formando una secuencia de ventanas.
+Como puede observarse, una gramática de este tipo divide de forma completa el espacio de las formas padre, en formas hijas de la misma.
+
+Cuando el proceso llega a su fin, es decir, no existen nodos no terminales ($N$) en el desarrollo, entonces lo que se tiene es un {\em diseño} final.
+La principal diferencia con los sistemas-L se basa en que en aquellos, las reescrituras no necesariamente ocupaban el mismo volumen, como sí debe ocurrir en estas gramáticas.
+
+\begin{figure}
+\center
+\includegraphics[width=13cm]{figures/splitgrammar}
+\caption{Gramática de división mostrando los pasos seguidos para formar una secuencia de ventanas.}
+\label{fg:splitgrammar}
+\end{figure}
+
+Por otro lado, las gramáticas de control permiten tomar decisiones de diferenciación sobre las divisiones, con la idea de generar al mismo tiempo aleatoriedad en los edificios resultantes.
+Por ejemplo, se puede querer que la apariencia del primer piso de un edificio sea diferente al resto (puertas).
+La Fig.~\ref{fg:controlgrammar} muestra un ejemplo de una gramática de control.
+
+Las texturas, colores y otras decisiones pueden controlarse por medio de {\em atributos}.
+Esto resulta útil para mantener la coherencia en un mismo piso, por ejemplo, o asegurar que todas las columnas del edificio seguirán un mismo diseño arquitectónico.
+Los nodos terminales de la gramática presentan datos de posicionamiento con la forma $(c,a,v)$, donde $c$ es la posición en la división (fila, columna, capa, en $3D$), $a$ es el atributo y $v$ el valor que tomará.
+Las gramáticas de control también cumplen el propósito de lograr una distribución correcta de las formas.
+Por medio de ellas, es posible {\em excluir} elementos de ciertas posiciones indeseadas (por ejemplo una puerta en el tercer piso), utilizando los mismos atributos para elegir determinadas reglas por sobre otras, logrando coherencia y balance de formas en los resultados finales.
+
+\begin{figure}
+\center
+\includegraphics[width=11cm]{figures/controlgrammar}
+\caption{Gramática de control.}
+\label{fg:controlgrammar}
+\end{figure}
+
+La literatura de modelado procedimental de edificios y ciudades está creciendo en los últimos años \cite{Parish2001,Muller2006}.
+
+
 \subsubsection{Planetas}
 \cite{Ebert2002}
 \subsubsection{Montañas}
 
-Existen numerosas variantes a estos sistemas, entre los cuales encontramos sistemas-L estocásticos, los cuales eligen reglas de reescritura de acuerdo a una probabilidad que se pasa como parámetro, sistemas-L paramétricos, los cuales hacen variar el ángulo y el paso a dibujar dependiendo de la posición de la cadena donde se encuentran, y muchos otros.
-Además, el método es fácilmente generalizable en tres dimensiones, ver \cite{Prusinkiewicz1990} para obtener mayores detalles.
 
 \subsection{Modelos Físicos}
 Desde el surgimiento del área, estos modelos han ido evolucionando gracias al incremento en el poder de cómputo del hardware gráfico disponible. Sin embargo, aún nos encontramos en los comienzos de una aplicación más difundida de los mismos.
