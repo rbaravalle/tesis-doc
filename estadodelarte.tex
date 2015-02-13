@@ -164,26 +164,156 @@ Por medio de ellas, es posible {\em excluir} elementos de ciertas posiciones ind
 \end{figure}
 
 La literatura de modelado procedimental de edificios y ciudades está creciendo en los últimos años \cite{Parish2001,Muller2006}.
+La Fig.~\ref{edificios} muestra ejemplos de edificios generados procedimentalmente.
 
 
-\subsubsection{Planetas}
+
+\begin{figure}
+\center
+\includegraphics[width=11cm]{figures/edificios}
+\caption{Edificios generados procedimentalmente por medio de gramáticas.}
+\label{fg:edificios}
+\end{figure}
+
+\subsubsection{Fractales y Montañas}
+Una forma particularmente interesante de modelar fenómenos de apariencia pseudo-aleatoria es a través de fractales \cite{Mandelbrot1982}.
+Como en el caso de los sistemas-L, una única descripción matemática es lo suficientemente descriptiva como para encapsular todas los detalles, a diferentes escalas, de un fenómeno natural dado.
+Esto resulta de particular interés en computación, donde los recursos de memoria no son infinitos.
+
+En el siglo XIX, Brown describió el movimiento de partículas de polen en suspensión en agua, a lo cual se le otorgó el nombre de movimiento browniano.
+
+
+%\subsubsection{Planetas}
 \cite{Ebert2002}
-\subsubsection{Montañas}
 
 
 \subsection{Modelos Físicos}
 Desde el surgimiento del área, estos modelos han ido evolucionando gracias al incremento en el poder de cómputo del hardware gráfico disponible. Sin embargo, aún nos encontramos en los comienzos de una aplicación más difundida de los mismos.
-\subsubsection{Fluídos}
-\subsubsection{Telas}
 
-\section{Representación (Renderizado)}
-\subsection{Ecuación del Rendering}
+\subsubsection{Fluídos}
+Entre los primeros intentos por utilizar procesos físicos para modelar la apariencia de los materiales, encontramos ecuaciones que describen fluidos.
+Las ecuaciones de Navier-Stokes describen un fluído cuya temperatura es prácticamente constante por medio de un campo de velocidades $\bold{u}$ y un campo de presiones $p$.
+Dadas condiciones iniciales para $\bold{u}$ y $p$ cuando $t = 0$, la evolución de las cantidades puede describirse como sigue, independientemente del número de dimensiones,
+
+\begin{align}
+\nabla \cdot \bold{u} &= 0, \label{eq:eq1}\\
+\frac{\partial \bold{u} }{\partial t} &= - (\bold{u} \cdot \nabla) \bold{u} - \frac{1}{\rho} \nabla p + \nu \nabla^{2} \bold{u} + \bold{f} \label{eq:eq2},
+\end{align}
+
+donde $\nu$ es la viscosidad cinemática del fluído, $\rho$ es la densidad y $\bold{f}$ es una fuerza externa.
+Las ecuaciones modelan la conservación de masa (\ref{eq:eq1}) y de momento (\ref{eq:eq2}).
+
+Además, deben tenerse en cuenta condiciones de borde.
+Las mismas pueden variar en complejidad.
+Por ejemplo, una implementación sencilla puede darse utilizando condiciones de borde periódicas, es decir, sin la existencia de {\em paredes} (el fluido se repite indefinidamente, este es el caso utilizado en el trabajo descripto aquí).
+Un caso más complicado es una condición diferencial que describe el intercambio de masa con el ambiente.
+
+Es posible combinar ambas ecuaciones para obtener una única ecuación de la velocidad.
+Para esto, utilizaremos la descomposición Helmholtz-Hodge \cite{Chorin1990}, la cual establece que un campo vectorial $\bold{w}$ puede descomponerse como sigue, 
 
 \begin{equation}
-EC  = REND
+\label{eq:eq3}
+\bold{w} = \bold{u} + \nabla q,
 \end{equation}
 
-, donde.
+donde $\bold{u}$ tiene divergencia $0$, es decir $\nabla\cdot\bold{u} = 0$.
+Entonces, podemos definir un operador $\bold{P}$, el cual proyecta un campo vectorial $\bold{w}$ en su parte de divergencia $0$, $\bold{u} = \bold{P}\bold{w}$.
+Dicho operador se puede definir implícitamente multiplicando $\nabla$ en ambos términos en la ecuación (\ref{eq:eq3}),
+
+\begin{equation}
+\label{eq:eq4}
+\nabla\cdot\bold{w} = \nabla^{2} q.
+\end{equation}
+
+Una solución a esta ecuación está dada por
+
+\begin{equation}
+\label{eq:eq5}
+\bold{u} = \bold{P}\bold{w} = \bold{w} - \nabla q,
+\end{equation}
+
+Si aplicamos el operador $\bold{P}$ en ambos lados de la ecuación (\ref{eq:eq2}), obtenemos una ecuación única para la velocidad,
+
+\begin{equation}
+\frac{\partial \bold{u} }{\partial t} = \bold{P} (- (\bold{u} \cdot \nabla) \bold{u} + \nu \nabla^{2} \bold{u} + \bold{f}) \label{eq:eq6},
+\end{equation}
+
+ya que $\bold{P}\bold{u} = \bold{u}$ y $\bold{P}\nabla p = 0$.
+Esta ecuación es utilizada para derivar un algoritmo práctico para implementar apariencia de fluídos \cite{Stam1999}.
+En la ecuación pueden verse un paso difusivo $\nu \nabla^{2} \bold{u}$, un paso de advección $- (\bold{u} \cdot \nabla) \bold{u}$ y una fuerza final aplicada $\bold{f}$.
+Estos términos pueden resolverse por medio de la aplicación de métodos numéricos clásicos (por ejemplo diferencias finitas), por lo cual la solución final consiste en aplicar sucesivamente cada paso para obtener soluciones al campo vectorial $u$ en cada instante de tiempo $t$, finalmente proyectando el resultado con $P$.
+El paso más complicado es el paso de proyección $P$, el cual se resuelve por medio de sistemas lineales, teniendo en cuenta que es un proceso de Poisson.
+
+Cuando se conocen las velocidades $\bold{u}$, es posible aplicarlas a la utilización de partículas sobre el fluido, para proceder luego a su renderizado.
+
+Este método se utiliza para modelar el comportamiento de agua y otros líquidos, además de algunos gases, nubes y humo, ver Figs.~\ref{fg:fluidos1},\ref{fg:fluidos2}.
+La utilización de los procesos físicos subyacentes produce mayor realismo en el resultado que utilizar métodos heurísticos.
+Desafortunadamente muchas veces esto resulta prohibitivo, no solo por costos computacionales, sino también por la complejidad en el diseño de los métodos, ya que se requiere muchas veces la participación de personas idóneas en la física utilizada.
+
+
+\begin{figure}
+\center
+\includegraphics[width=11cm]{figures/fluidos1}
+\caption{Nubes y humo generados utilizando métodos basados en las ecuaciones de Navier-Stokes.}
+\label{fg:fluidos1}
+\end{figure}
+
+\begin{figure}
+\center
+\includegraphics[width=11cm]{figures/fluidos2}
+\caption{Fluidos generados utilizando métodos basados en las ecuaciones de Navier-Stokes.}
+\label{fg:fluidos2}
+\end{figure}
+
+%\subsubsection{Telas}
+
+\section{Representación Visual (Renderizado)}
+
+Los materiales, además de presentar una geometría compleja, también presentan fenómenos particulares de interacción con la luz, los cuales incluyen translucencia, reflectancia, absorción, etc.
+Debido a esto, en la década de $1980$ se simplificaron determinadas ecuaciones físicas para ser implementadas en computación gráfica, permitiendo modelar la apariencia de una gran variedad de materiales.
+
+\subsection{Ecuación del Renderizado}
+
+Esta ecuación modela el rebote de la luz en distintos tipos de superficie.
+
+\begin{equation}
+I(x,x') =  g(x,x')  \left[ \epsilon(x,x') + \int_{s}{\rho(x,x',x'')I(x,x'') dx''} \right],
+\end{equation}
+donde $I(x,x')$ es la intensidad de la luz que viaja de $x'$ a $x$ (sin oclusiones), $g(x,x')$ es un terminó geométrico que modela la oclusión que podría existir entre $x$ y $x'$, $\epsilon(x,x')$ es la intensidad de la luz emitida desde $x'$ a $x$, $\rho(x,x',x'')$ es la intensidad de la luz emitida de $x''$ a $x$ por medio de una superficie en $x'$ (esta cantidad será llamada BRDF en una sección posterior), y $S=\bigcup{s_{i}}$ es la unión de todas las superficies de la escena.
+De esta forma, $x$,$x'$ y $x''$ varían sobre todas las superficies de la escena.
+La ecuación es una aproximación a la ecuación del electromagnetismo de Maxwell, pero sólo tiene en cuenta fenómenos óptico-geométricos.
+Además existe una superficie $S_{0}$, la cual es un semi-hemisferio que engloba a toda la escena.
+$I(x,x')$ significa la radiación de energía por unidad de tiempo por unidad de superficie de destino por unidad de superficie de origen ($joule/m^{4} s$).
+El término geométrico se hace $0$ si los puntos en consideración no son mutuamente visibles.
+
+Por medio del modelado de cada término de forma separada, es posible obtener una gran cantidad de superficies.
+Trabajos previos a la aparición de la ecuación del renderizado habían logrado resultados parciales, sin saber que una única ecuación podía englobar todos los fenómenos en investigación hasta ese entonces.
+Como resultado de este modelo, hoy es posible llamar a los métodos previos a este como especializaciones o casos particulares de la ecuación del renderizado.
+
+Fuera de la ecuación quedan efectos más complejos, como la difracción y la polarización.
+De esta forma, la ecuación modela el comportamiento de la luz entre las superficies de la escena.
+Más detalles de la misma pueden ser consultados en \cite{Kajiya1986}.
+
+Si lo que se pretende modelar son fenómenos volumétricos, entonces debe atenderse a ciertas generalizaciones de la ecuación, como se ve en la siguiente sub-sección.
+
+\subsection{Ecuación del Renderizado de Volúmenes}
+
+Esta ecuación representa el comportamiento de la luz en volúmenes.
+
+\begin{equation}
+(\vec{\omega} \cdot \nabla) = - \sigma_{a}(\bold{x}) L(x \rightarrow \vec{\omega}) - \sigma_{s}(\bold{x}) L(x \rightarrow \vec{\omega}) + \sigma_{a}(\bold{x}) L_{e}(x \rightarrow \vec{\omega}) + \sigma_{s}(\bold{x}_{t}) L_{i}(x \rightarrow \vec{\omega})
+\end{equation}
+
+Podemos expresar esta ecuación en forma integral integrando ambos lados de la igualdad, obteniendo,
+
+\begin{equation}
+\begin{aligned}
+L(x \leftarrow \vec{\omega}) = T_{r}(\bold{x} \leftrightarrow \bold{x_{s}}) L(\bold{x_{s}} \rightarrow -\vec{\omega}) + \\
+\int_{0}^{s}{T_{r}(\bold{x} \leftrightarrow \bold{x_{t}}) \sigma_{a}(\bold{x}) L_{e}(x \rightarrow -\vec{\omega}) dt } + \\
+\int_{0}^{s}{T_{r}(\bold{x} \leftrightarrow \bold{x_{t}}) \sigma_{a}(\bold{x_{t}}) L_{i}(x_{t} \rightarrow -\vec{\omega})  }
+\end{aligned}
+\end{equation}
+
 
 
 \subsection{BRDFs}
