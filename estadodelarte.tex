@@ -551,11 +551,74 @@ El estudio de los patrones que produce el envejecimiento es sujeto de estudio en
 Los mismos fueron medidos en muestras reales de una empresa cosmética.
 También es posible obtener información geométrica fina a partir de imágenes \cite{Golovinskiy2006}.
 
-\subsection{Agua}
-\subsection{Fuego}
-\subsection{Humo}
+\subsection{Materiales Porosos}
+La utilización de superficies puede ser una limitación a la hora de modelar un material.
+En el caso de los materiales porosos, existen micro-poros en la geometría, los cuales interaccionan con la luz, que hacen que los enfoques clásicos no sean adecuados.
+Los poros mencionados son más pequeños que los poros de la piel humana.
+Si bien son más grandes que la longitud de onda de la luz, los mismos no son visibles al ojo humano.
 
-\subsection{Otros}
+Entre los pocos trabajos sobre estos materiales, se encuentra \cite{Merillou2000}.
+En dicho trabajo la BRDF estándar es modificada para incluir comportamiento de materiales porosos.
+Para esto, se realizan simulaciones Monte Carlo sobre posibles configuraciones microscópicas de poros bajo ciertas asunciones.
+Un ejemplo típico de poro puede verse en la Fig.~\ref{fg:poro}.
+Se simula el rebote de la luz en la geometría sintetizada, y luego se computan las distribuciones para múltiples poros con distintas formas.
+Con esto se modifican los coeficientes de especularidad y difusividad de la BRDF.
+En la Fig.~\ref{fg:ceramico} podemos observar una imagen de una maceta renderizada con una BRDF tradicional, y a la derecha, la misma imagen utilizando este método.
+
+\begin{figure}
+\center
+\includegraphics[width=8cm]{figures/poro}
+\caption{Ejemplo de poros sintetizados utilizando el método de \cite{Merillou2000}.}
+\label{fg:poro}
+\end{figure}
+
+\begin{figure}
+\center
+\includegraphics[width=11cm]{figures/ceramico}
+\caption{Cerámicos renderizados. Izquierda: maceta real. Centro: utilizando una BRDF tradicional. Derecha: utilizando el método propuesto en \cite{Merillou2000}.}
+\label{fg:ceramico}
+\end{figure}
+
+La tesis presente se ubica sobre este tipo de materiales.
+
+\subsection{Pelo}
+El mismo consiste de tres partes principales: una médula central, el córtex y una cutícula exterior.
+Su color está dado por gránulos de melanina en el córtex.
+Cuando no están presentes estos gránulos se observa un color blanco.
+
+
+Existen dos tipos principales de pelo, uno es el vello, el cual crece en prácticamente todo el cuerpo, con $1$ {\em mm} de alto, y otro es el pelo terminal, el cual se encuentra en el cuero cabelludo.
+Este último fue el que recibió mayor atención en computación gráfica.
+El pelo terminal tiene aproximadamente entre $50$ y $90$ micrones de diámetro.
+Existen entre $175$ y $300$ pelos terminales por {\em $cm^{2}$}.
+El pelo de animales difiere del humano en color tamaño, y densidad.
+
+Cada pelo individual puede considerarse una superficie con dispersión lumínica propia.
+Por otro lado, la apariencia típica del pelo está dada por el conjunto de muchos pelos individuales.
+Sin embargo, utilizar soluciones volumétricas típicas, como modelar el pelo como una nube o una nube no resulta adecuado, ya que la geometría del pelo afecta la reflectancia de la luz incidente.
+Para solucionar estos inconvenientes se utilizar una estructura denominada {\em texel}, que no debe confundirse con un elemento de una textura.
+Un texel es una {\em estructura de datos} volumétrica que asocia tres componentes: una densidad de área proyectada $\rho$, un conjunto de cuadros $\bold{B}$ y un modelo bidireccional de reflexión de la luz $\psi$, a cada posición $3D$ del espacio.
+La densidad de área proyectada $\rho$ es la fracción del área proyectada del voxel en una dirección particular que es cubierta por geometría del pelo proyectada en la misma dirección.
+En $\bold{B}$, la orientación queda especificada por los vectores normal, binormal, y tangente.
+Para determinar los vectores, se asume un cilindro general que crece desde la piel del cuero cabelludo.
+$\psi$ se define como una variación del modelo de Phong, devolviendo la luz reflejada en el punto.
+Los componentes difuso y especular del modelo son,
+
+\begin{align*}
+\psi_{d} &= K_{d} sin \theta_{i}\\
+\psi_{s} &= K_{s} (cos \theta_{i} cos \theta_{r} + sin \theta_{i} sin \theta_{r})^{p},
+\end{align*}
+
+donde $\theta_{i}$ es el ángulo entre la luz y la tangente al pelo, y $\theta_{r}$ es el ángulo entre la tangente al pelo y el observador.
+
+%The projected area density is the fraction of the projected area of the voxel in a particular direction that is covered by hair geoemetry projected in the same direction
+
+En \cite{Kajiya1989} se utiliza un enfoque volumétrico para renderizar pelo.
+
+%\subsection{Fuego}
+%\subsection{Humo}
+
+%\subsection{Otros}
 
 
 \section{Conclusiones}
