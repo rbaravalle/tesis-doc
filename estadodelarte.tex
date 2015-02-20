@@ -3,16 +3,16 @@
 \section{Introducción} %(hablar de los diferentes materiales, cómo los modelos "fáciles" no sirven)
 El renderizado en computación gráfica es el intento de producir imágenes que representan una escena tridimensional, representada por medio de primitivas matemáticas como puntos, líneas, cubos, etc.
 
-En los últimos años, el avance en el campo del renderizado de escenas ha sido muy notorio. El nivel de realismo presente en las imágenes obtenidas ha ido en aumento hasta el punto de ser de difícil distinción para un ser humano. Dichos avances han sido, en gran parte, debido al desarrollo de dispositivos de hardware gráficos más poderosos, ya que la teoría matemática que describe el comportamiento de la luz en escenas estuvo presente desde hace varias décadas \cite{Kajiya} mediante la denominada Ecuación del Rendering.
+En los últimos años, el avance en el campo del renderizado de escenas ha sido muy notorio. El nivel de realismo presente en las imágenes obtenidas ha ido en aumento hasta el punto de ser de difícil distinción para un ser humano. Dichos avances han sido, en gran parte, debido al desarrollo de dispositivos de hardware gráficos más poderosos, ya que la teoría matemática que describe el comportamiento de la luz en escenas estuvo presente desde hace varias décadas mediante la denominada Ecuación del Renderizado \cite{Kajiya1986}.
 
 
 La ecuación es una aproximación, un modelo físico que intenta describir los aspectos considerados más importantes en el fenómeno de interacción de la luz con diversos objetos en una escena.
 
 Lamentablemente, la ecuación es, en términos teóricos, no computable. Sin embargo, el estudio a lo largo de los años de técnicas que permitan aproximarla ha dado sus frutos y ha permitido la obtención de imágenes de un realismo asombroso.
 
-A pesar de estos increíbles avances en un corto período de tiempo, el renderizado de una escena es un problema que involucra otros inconvenientes. El más notorio de ellos, es que la ecuación del rendering no tiene en cuenta qué {\em materiales} componen los objetos que definen la escena. En otras palabras, un objeto compuesto por madera no lucirá exactamente igual que uno compuesto por metales, ni por un material orgánico compuesto de tejidos. A la par del desarrollo de técnicas de iluminación global, han surgido técnicas que han intentado abordar materiales específicos \cite{} y familias de materiales \cite{}.
+A pesar de estos increíbles avances en un corto período de tiempo, el renderizado de una escena es un problema que involucra otros inconvenientes. El más notorio de ellos, es que la ecuación del rendering no tiene en cuenta qué {\em materiales} componen los objetos que definen la escena. En otras palabras, un objeto compuesto por madera no lucirá exactamente igual que uno compuesto por metales, ni por un material orgánico compuesto de tejidos. A la par del desarrollo de técnicas de iluminación global, han surgido técnicas que han intentado abordar materiales específicos y familias de materiales.
 
-Estas técnicas buscan capturar la intrincada geometría propia de cada material. Diferentes estructuras microscópicas producen distintas apariencias, reflejando la luz de distinta manera, hecho que es interpretado por la percepción humana como diferentes materiales. Por ejemplo: una superficie metálica tiene un gran componente reflexivo, emitiendo luz en direcciones bien definidas, a diferencia de una superficie más opaca como un plástico. Dado que la ecuación del rendering usa los materiales como {\em caja negra}, los mismos deben ser modelados de una manera adecuada para ser integrados en las distintas técnicas de renderizado global.
+Estas técnicas buscan capturar la intrincada geometría propia de cada material. Diferentes estructuras microscópicas producen distintas apariencias, reflejando la luz de distinta manera, hecho que es interpretado por la percepción humana como diferentes materiales. Por ejemplo: una superficie metálica tiene un gran componente reflexivo, emitiendo luz en direcciones bien definidas, a diferencia de una superficie más opaca como un plástico. Dado que la ecuación del renderizado usa los materiales como {\em caja negra}, los mismos deben ser modelados de una manera adecuada para ser integrados en las distintas técnicas de renderizado global.
 
 Determinados materiales han recibido mayor atención debido a su ubicuidad en escenas de películas y video juegos, o a la facilidad de su diseño: agua, fuego, aire, humo, piel humana, madera, etc. Por esta razón, las imágenes sintéticas obtenidas presentan cierta asimetría en la calidad de los distintos materiales. En contraste, otros materiales han recibido menor atención, la cual puede atribuirse a una menor presencia en escenas o a una dificultad en el modelado y visualización, la cual ha resistido las técnicas más simples.
 
@@ -28,7 +28,7 @@ Existen numerosos ejemplos donde se aplica una técnica de modelado procedimenta
 En las siguientes sub-secciones presentaremos los casos más comunes de aplicación, los cuales constituyen estándares actuales en el modelado de dichos materiales.
 
 
-\subsubsection{Plantas}
+\subsection{Plantas}
 El modelado procedimental de plantas está basado en una interpretación de una tortuga que se mueve por un plano o el espacio, construyendo la geometría de los materiales \cite{Prusinkiewicz1986}.
 
 Las gramáticas formales \cite{Chomsky1956} intentaron describir el lenguaje natural de forma matemática, donde sub-cadenas de caracteres son reemplazadas por otras.
@@ -37,7 +37,7 @@ El concepto central que permite entender el modelado procedimental utilizando si
 La reescritura consiste en una aplicación sucesiva de reglas que reemplazan determinadas partes en una descripción matemática por otras.
 En un sistema-L, una cadena de caracteres representa la estructura de la planta.
 
-\paragraph{Definición de sistema-L}
+\subsubsection{Definición de sistema-L}
 Sea $V$ un alfabeto (conjunto de caracteres), $V^{*}$ el conjunto de todas las palabras que se pueden formar con $V$ y $V^{+}$ el conjunto de todas las palabras que se pueden formar y no son vacías.
 Una sistema-L de cadenas es una tripleta $G = (V,\omega,P)$, donde $V$ es el alfabeto, $\omega \in V^{+}$ es una cadena no vacía llamada {\em axioma} y $P \subset V \times V^{*}$ es un conjunto finito de reglas de producción.
 Una producción $(a,\chi)$ se denota $a \rightarrow \chi$.
@@ -61,7 +61,7 @@ entonces una cadena de derivaciones podría resultar $a, b, ab, bb, abab, \dots$
 Estos sistemas fueron diseñados buscando representar las divisiones celulares existentes en ciertas amebas.
 Sin embargo, luego se mostrará que los mismos pueden ser utilizados como modelos para capturar la geometría de diversos objetos.
 
-\paragraph{Interpretación de Tortuga}
+\subsubsection{Interpretación de Tortuga}
 El estado de la tortuga se define por una tripleta $(x,y,\alpha)$, donde $x,y$ representan la posición de la tortuga y $\alpha$ es el ángulo hacia donde {\em apunta} la tortuga.
 Dado un tamaño de paso $d$ y un incremento angular de $\delta$, la tortuga puede "programarse" para responder a cadenas de caracteres con la siguiente interpretación,
 
@@ -115,7 +115,7 @@ La utilización de un par $[\dots]$ produce que la tortuga dibuje una rama y vue
 Existen numerosas variantes a estos sistemas, entre los cuales encontramos sistemas-L estocásticos, los cuales eligen reglas de reescritura de acuerdo a una probabilidad que se pasa como parámetro, sistemas-L paramétricos, los cuales hacen variar el ángulo y el paso a dibujar dependiendo de la posición de la cadena donde se encuentran, y muchos otros.
 Además, el método es fácilmente generalizable en tres dimensiones, ver \cite{Prusinkiewicz1990} para obtener mayores detalles.
 
-\subsubsection{Edificios y Ciudades}
+\subsection{Edificios y Ciudades}
 Una de las ventajas del modelado procedimental es la capacidad de realizar el proceso prácticamente sin intervención humana, ahorrando costos y tiempos de diseño.
 En esta línea se ubica el trabajo de \cite{Wonka2003}, donde un proceso automático genera, de manera casi instantánea, edificios arquitectónicamente coherentes, es decir, con ciertas características estructurales que deben ser respetadas.
 
@@ -164,7 +164,7 @@ Por medio de ellas, es posible {\em excluir} elementos de ciertas posiciones ind
 \end{figure}
 
 La literatura de modelado procedimental de edificios y ciudades está creciendo en los últimos años \cite{Parish2001,Muller2006}.
-La Fig.~\ref{edificios} muestra ejemplos de edificios generados procedimentalmente.
+La Fig.~\ref{fg:edificios} muestra ejemplos de edificios generados procedimentalmente.
 
 
 
@@ -175,22 +175,49 @@ La Fig.~\ref{edificios} muestra ejemplos de edificios generados procedimentalmen
 \label{fg:edificios}
 \end{figure}
 
-\subsubsection{Fractales y Montañas}
-Una forma particularmente interesante de modelar fenómenos de apariencia pseudo-aleatoria es a través de fractales \cite{Mandelbrot1982}.
+\subsection{Fractales y Montañas}
+Una forma particularmente interesante de modelar fenómenos de apariencia pseudo-aleatoria es a través de fractales \cite{Mandelbrot1983}.
 Como en el caso de los sistemas-L, una única descripción matemática es lo suficientemente descriptiva como para encapsular todas los detalles, a diferentes escalas, de un fenómeno natural dado.
 Esto resulta de particular interés en computación, donde los recursos de memoria no son infinitos.
 
 En el siglo XIX, Brown describió el movimiento de partículas de polen en suspensión en agua, a lo cual se le otorgó el nombre de movimiento browniano.
+La partícula toma direcciones aleatorias por un período de tiempo también aleatorio, lo cual llevó a un modelo matemático del mismo \cite{}.
+Se asume que los movimientos de la partícula de polen son independientes entre sí.
 
+En \cite{Mandelbrot1968}, se plantea una generalización del método llamada movimiento browniano fraccionario (fBm). 
 
+\begin{equation}
+\begin{aligned}
+B_{H}(0,w) &= b_{0},\\
+B_{H}(t,w)- B_{H}(0,w) &= \frac{1}{\Gamma(H+0.5)} \big\{ \int_{-\infty}^{u} [(u-s)^{H-0.5} - (-s)^{H-0.5} ] dB(s,w) + \\
+ \int_{0}^{u} (u-s)^{H-0.5} dB(s,w) \big \},
+\end{aligned}
+\end{equation}
+
+donde $b_{0}$ es un número real y $0 < H < 1$.
+
+Cuando $H = 0.5$ se obtiene movimiento Browniano convencional.
+En el dominio frecuencial (al cual se puede acceder por medio de una transformada de Fourier), se observa que el fBm no posee una frecuencia dominante, es decir, la función está compuesta por frecuencias a todas las escalas.
+Además, la contribución de cada frecuencia es inversamente proporcional a la misma, es decir que el ruido pertenece a la clase de ruidos $\frac{1}{f}$.
+El ruido presenta autosimilaridad estadística.
+Intuitivamente significa que las características estadísticas del ruido son similares para todas las escalas.
+
+El ruido resulta ser un fractal no determinístico con dimensión $2-H$.
+El parámetro $H$ permite simular perfiles con distintas rugosidades.
+Cuando $H = 0$, el ruido es indistinguible de un plano
+Cuando $H = 1$, el ruido se transforma en una línea.
+Esto resulta útil para modelar perfiles de montañas con distintas rugosidades (más suaves o más pronunciadas).
+
+Existen diversos métodos para computar el fBm en computación gráfica.
+En \cite{Fournier1982} se presenta un método de subdivisión recursiva, denominado algoritmo de desplazamiento aleatorio del punto medio.
 %\subsubsection{Planetas}
-\cite{Ebert2002}
+%\cite{Ebert2002}
 
 
 \subsection{Modelos Físicos}
 Desde el surgimiento del área, estos modelos han ido evolucionando gracias al incremento en el poder de cómputo del hardware gráfico disponible. Sin embargo, aún nos encontramos en los comienzos de una aplicación más difundida de los mismos.
 
-\subsubsection{Fluídos}
+\subsection{Fluídos}
 Entre los primeros intentos por utilizar procesos físicos para modelar la apariencia de los materiales, encontramos ecuaciones que describen fluidos.
 Las ecuaciones de Navier-Stokes describen un fluído cuya temperatura es prácticamente constante por medio de un campo de velocidades $\bold{u}$ y un campo de presiones $p$.
 Dadas condiciones iniciales para $\bold{u}$ y $p$ cuando $t = 0$, la evolución de las cantidades puede describirse como sigue, independientemente del número de dimensiones,
@@ -400,7 +427,7 @@ Diversos algoritmos específicos surgieron con anterioridad a estas ecuaciones g
 
 %\section{Simplificaciones a las Ecuaciones de Renderizado}
 \section{Funciones de Distribución de Reflectancia (BRDFs)}
-\subsubsection{Motivación}
+\subsection{Motivación}
 En la ecuación del renderizado se introdujo un término llamado BRDF, el cual es una función que modela el comportamiento de la luz en relación con una superficie determinada.
 Diversos fenómenos tienen lugar cuando un rayo de luz impacta una superficie de un objeto.
 En su máxima expresión, una BRDF podría tomar en consideración variables como la longitud de onda a ser representada, la posición de salida del rayo reflejado en la superficie, e incluso el tiempo de demora entre la entrada y la salida del rayo.
@@ -417,7 +444,7 @@ Además, otros trabajos \cite{Dana1999,Matusik2003} realizaron mediciones de la 
 Los datos de las mediciones del material generalmente son publicados para uso de la comunidad gráfica y científica.
 Finalmente, es posible intentar representar los datos mesurados en materiales reales con modelos matemáticos, buscando reducir costos de almacenamiento \cite{Ngan2005}.
 
-\subsubsection{Definición}
+\subsection{Definición}
 Previamente definimos la BRDF como una función matemática que tomaba como parámetro tres puntos del espacio.
 Una forma equivalente consiste en definir, para cada punto de una superficie, el ángulo de entrada y salida del rayo
 
@@ -597,7 +624,7 @@ Cada pelo individual puede considerarse una superficie con dispersión lumínica
 Por otro lado, la apariencia típica del pelo está dada por el conjunto de muchos pelos individuales.
 Sin embargo, utilizar soluciones volumétricas típicas, como modelar el pelo como una nube o una nube no resulta adecuado, ya que la geometría del pelo afecta la reflectancia de la luz incidente.
 Para solucionar estos inconvenientes se utilizar una estructura denominada {\em texel}, que no debe confundirse con un elemento de una textura.
-Un texel es una {\em estructura de datos} volumétrica que asocia tres componentes: una densidad de área proyectada $\rho$, un conjunto de cuadros $\bold{B}$ y un modelo bidireccional de reflexión de la luz $\psi$, a cada posición $3D$ del espacio.
+Un texel es una {\em estructura de datos} volumétrica que asocia tres componentes: una densidad de área proyectada $\rho$, un marco de referencia $\bold{B}$ y un modelo bidireccional de reflexión de la luz $\psi$, a cada posición $3D$ del espacio.
 La densidad de área proyectada $\rho$ es la fracción del área proyectada del voxel en una dirección particular que es cubierta por geometría del pelo proyectada en la misma dirección.
 En $\bold{B}$, la orientación queda especificada por los vectores normal, binormal, y tangente.
 Para determinar los vectores, se asume un cilindro general que crece desde la piel del cuero cabelludo.
@@ -611,10 +638,79 @@ Los componentes difuso y especular del modelo son,
 
 donde $\theta_{i}$ es el ángulo entre la luz y la tangente al pelo, y $\theta_{r}$ es el ángulo entre la tangente al pelo y el observador.
 
+Luego, para calcular el color final de un pixel visto desde el observador en pantalla, se recorren en línea recta, desde $t_{near}$ a $t_{far}$ según corresponda a ese pixel, los texels necesarios,
+
+$$L = \sum_{t=t_{near}}^{t=t_{far}} {e^{-\tau \sum_{u=t_{near}}^{u=t} \rho(u)} \rho(t) \sum_{i} L_{i}(t) \bold{\psi}(t)},$$
+
+donde la suma sobre $i$ refiere a las fuentes de luz, y $\tau$ es un coeficiente que convierte las distribuciones de área proyectada en un coeficiente de atenuación.
+
+Este método sirve para simular pelo corto, pero visto a cierta distancia, ver Fig.~\ref{fg:osopelo}.
+La percepción de pelo se pierde cuando la cámara se acerca demasiado al objeto.
+
+\begin{figure}
+\center
+\includegraphics[width=6cm]{figures/osopelo}
+\caption{Ejemplo de renderizado de pelo en un oso de peluche con el método propuesto en \cite{Kajiya1989}.}
+\label{fg:osopelo}
+\end{figure}
+
 %The projected area density is the fraction of the projected area of the voxel in a particular direction that is covered by hair geoemetry projected in the same direction
 
-En \cite{Kajiya1989} se utiliza un enfoque volumétrico para renderizar pelo.
+Es posible mejorar el método por medio de otras funciones $\bold{\psi}$, teniendo en cuenta factores como la transmitancia y el impacto de las fibras individuales entre sí (iluminación indirecta).
+Puede verse un estudio más completo de la literatura sobre renderizado de pelo en \cite{Ward2007}.
 
+\subsection{Telas}
+Las telas son un material similar al pelo en el sentido de que su apariencia está basada en un conjunto de fibras.
+Las fibras de telas presentan diferentes {\em tinturas}.
+Es importante tener en cuenta las tinturas para entender la apariencia de una tela cuando es vista desde distintos ángulos.
+Por ejemplo, determinadas fibras de telas presentan más de una tintura, como muestra la Fig.~\ref{fg:fibra}.
+En este caso, los rayos de luz que llegan desde distintas posiciones atraviesan distintas longitudes sobre las tinturas, produciendo iridiscencia, es decir, cambio de color visible dependiendo del ángulo de visión.
+
+\begin{figure}
+\center
+\includegraphics[width=4cm]{figures/fibra}
+\caption{Ejemplo de fibra de tela con más de una tintura. Se puede observar una tintura roja en el centro, y una tintura azul que la envuelve.}
+\label{fg:fibra}
+\end{figure}
+
+La apariencia de cada tipo de tela es diferente, y depende del material utilizado (seda, lana, hilos, etc.) como del proceso de tejido en sí.
+En \cite{Xu2001} se observa que determinados hilos están formados por un conjunto de fibras, apretados y con estructura helicoidal.
+Esta observación se aprovecha para definir un texel específico como en el caso del pelo, el cual luego permite determinar la cantidad de luz que será emitida en una dirección para una dirección entrante.
+Para esto se tienen en cuenta efectos como sombras, oclusión y dispersión múltiple entre los distintos hilos que componen una tela.
+Debe contarse además con una estructura coherente que conecte a los hilos, formando una tela realista.
+Para esto se utilizan curvas $3D$ construídas a partir de los puntos de control definidos en la división de la superficie.
+
+
+\begin{figure}
+\center
+\includegraphics[width=13cm]{figures/tela}
+\caption{Pasos para la definición de un modelo de una tela, donde se toman en cuenta fibras individuales. Además de la utilización de una superficie (a), la misma se subdivide (b) para alojar distintas estructuras de hilo (c), los cuales se modelan individualmente ((d) y (e)).}
+\label{fg:tela}
+\end{figure}
+
+\subsection{Pinturas de autos}
+Determinadas marcas de automotores han presentado la necesidad de una correcta visualización de pinturas.
+Las mismas se han utlizado para mostrar autos nuevos, o permitir a los posibles compradores jugar con colores y características deseadas para las pinturas.
+Debido a esto, es deseable un buen modelo del material en computación gráfica, que permita luego una reproducción lo más fiel posible del mismo en la realidad.
+
+Se han desarrollado principalmente dos métodos para obtener un material en computación gráfica con la apariencia de una pintura de automóviles: basado en primeros principios \cite{Ershov2001}, y basado en medidas de pinturas reales.
+
+En el primero se realiza un modelo por capas, donde cada capa contiene partículas de pigmentos como en las pinturas reales.
+El modelo de dos capas presentados asume una capa con partículas que reflejan la luz como un espejo, y la otra con una pintura opaca.
+Tomando en consideración parámetros como la densidad, la distrbución de las orientaciones de las partículas, la transmitancia y la reflectancia, derivan una compleja BRDF parametrizada y analítica que permite definir distintos tipos de pinturas, ver Fig.~\ref{fg:pinturaauto}.
+
+En el caso de datos mesurados, es posible utilizar distintas tomas de la reflectancia saliente la pintura de autos para combinarlas en un modelo.
+En \cite{Dumont2001} además se utilizan texturas que representan la microgeometría de las pinturas También se utilizó ruido para producir efectos como el denominado {\em brillo} (sparkle).
+En otro trabajo \cite{Gunther2005}, se utilizaron los datos de las medidas para producir un modelo analítico estadístico del brillo.
+Como puede verse, es posible utilizar diversas metodologías para producir el mismo material o el mismo efecto.
+La elección final se hace en base a la complejidad de la captura, costos computacionales, objetivos, y el realismo resultante, entre otros factores.
+
+\begin{figure}
+\center
+\includegraphics[width=8cm]{figures/pinturaauto}
+\caption{Pinturas de autos diseñadas utilizando primeros principios en \cite{Ershov2001}. Cambiando un parámetro pueden obtenerse diferentes apariencias (en este caso, el ancho de las capas de interferencia).}
+\label{fg:pinturaauto}
+\end{figure}
 %\subsection{Fuego}
 %\subsection{Humo}
 
