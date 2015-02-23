@@ -19,13 +19,16 @@ Determinados materiales han recibido mayor atención debido a su ubicuidad en es
 Entre estos materiales, aquellos sometidos a un proceso de cocción han permanecido entre los más dificultosos por su compleja geometría y los fenómenos lumínicos involucrados. Tal vez el caso más emblemático de los materiales cocidos es el pan, debido a su importancia en la vida cotidiana. Como nota de color, un reconocido  científico del área, Alain Fournier, pronunció en 2001 la frase "la Computación Gráfica todavía no ha sido capaz de renderizar de manera convincente una feta de pan". En las siguientes secciones mostraremos que unos pocos intentos por abordar el problema fueron realizados pocos años después.
 
 \section{Modelos de Geometría de Materiales}
-En esta sección presentaremos distintos modelos geométricos que han hecho su aparición a lo largo de los años en computación gráfica. Los mismos son el resultado de un balance entre detalle de representación, tiempos de cómputo y recursos de memoria utilizados.
+En esta sección presentaremos distintos modelos geométricos que han hecho su aparición a lo largo de los años en computación gráfica.
+Los mismos son el resultado de un balance entre detalle de representación, tiempos de cómputo y recursos de memoria utilizados.
+Casi en todos los materiales en computación gráfica, un modelo de geometría correcto es necesario para lograr imágenes realistas de los materiales a ser renderizados.
 
 \subsection{Modelos Procedimentales}
 Un modelo procedimental resulta útil en determinadas situaciones donde la supervisión humana repetitiva no es adecuada.
 
 Existen numerosos ejemplos donde se aplica una técnica de modelado procedimental.
 En las siguientes sub-secciones presentaremos los casos más comunes de aplicación, los cuales constituyen estándares actuales en el modelado de dichos materiales.
+Si bien los resultados obtenidos presentan un gran realismo, los modelos utilizados no tienen una base física, por lo cual luego se muestra un ejemplo de la utilización de modelos físicos para el diseño de materiales.
 
 
 \subsection{Plantas}
@@ -177,10 +180,10 @@ La Fig.~\ref{fg:edificios} muestra ejemplos de edificios generados procedimental
 
 \subsection{Fractales y Montañas}
 Una forma particularmente interesante de modelar fenómenos de apariencia pseudo-aleatoria es a través de fractales \cite{Mandelbrot1983}.
-Como en el caso de los sistemas-L, una única descripción matemática es lo suficientemente descriptiva como para encapsular todas los detalles, a diferentes escalas, de un fenómeno natural dado.
+Como en el caso de los sistemas-L, una única fórmula matemática es lo suficientemente descriptiva como para encapsular todas los detalles, a diferentes escalas, de un fenómeno natural dado.
 Esto resulta de particular interés en computación, donde los recursos de memoria no son infinitos.
 
-En el siglo XIX, Brown describió el movimiento de partículas de polen en suspensión en agua, a lo cual se le otorgó el nombre de movimiento browniano.
+En el siglo $XIX$, Brown describió el movimiento de partículas de polen en suspensión en agua, a lo cual se le otorgó el nombre de movimiento browniano.
 La partícula toma direcciones aleatorias por un período de tiempo también aleatorio, lo cual llevó a un modelo matemático del mismo \cite{}.
 Se asume que los movimientos de la partícula de polen son independientes entre sí.
 
@@ -189,12 +192,12 @@ En \cite{Mandelbrot1968}, se plantea una generalización del método llamada mov
 \begin{equation}
 \begin{aligned}
 B_{H}(0,w) &= b_{0},\\
-B_{H}(t,w)- B_{H}(0,w) &= \frac{1}{\Gamma(H+0.5)} \big\{ \int_{-\infty}^{u} [(u-s)^{H-0.5} - (-s)^{H-0.5} ] dB(s,w) + \\
+B_{H}(u,w)- B_{H}(0,w) &= \frac{1}{\Gamma(H+0.5)} \big\{ \int_{-\infty}^{u} [(u-s)^{H-0.5} - (-s)^{H-0.5} ] dB(s,w) + \\
  \int_{0}^{u} (u-s)^{H-0.5} dB(s,w) \big \},
 \end{aligned}
 \end{equation}
 
-donde $b_{0}$ es un número real y $0 < H < 1$.
+donde $b_{0}$ es un número real, $0 < H < 1$, $-\infty < u < \infty $ y $w$ es un conjunto de valores aleatorios en un espacio uniforme de muestras.
 
 Cuando $H = 0.5$ se obtiene movimiento Browniano convencional.
 En el dominio frecuencial (al cual se puede acceder por medio de una transformada de Fourier), se observa que el fBm no posee una frecuencia dominante, es decir, la función está compuesta por frecuencias a todas las escalas.
@@ -204,18 +207,69 @@ Intuitivamente significa que las características estadísticas del ruido son si
 
 El ruido resulta ser un fractal no determinístico con dimensión $2-H$.
 El parámetro $H$ permite simular perfiles con distintas rugosidades.
-Cuando $H = 0$, el ruido es indistinguible de un plano
+Cuando $H = 0$, el ruido es indistinguible de un plano.
 Cuando $H = 1$, el ruido se transforma en una línea.
-Esto resulta útil para modelar perfiles de montañas con distintas rugosidades (más suaves o más pronunciadas).
+Esto resulta útil para modelar perfiles de montañas con distintas rugosidades (más suaves o más pronunciadas), ver Fig.~\ref{fg:hurst}.
+
+\begin{figure}
+\center
+\includegraphics[width=11cm]{figures/hurst}
+\caption{Curvas obtenida con distintos coeficientes de Hurst.}
+\label{fg:hurst}
+\end{figure}
 
 Existen diversos métodos para computar el fBm en computación gráfica.
 En \cite{Fournier1982} se presenta un método de subdivisión recursiva, denominado algoritmo de desplazamiento aleatorio del punto medio.
+
+El algoritmo tiene su base en una fórmula de esperanza condicional para $B_{H}(u,w)$ \cite{Mandelbrot1968}, partiendo de $B_{H}(0,w) = 0$ y $B_{H}(1,w) = 1$, $0 \le u \le 1$ entonces $E[B_{H}(u,w)|B_{H}(1,w)] = \frac{1}{2} (u^{2H} + 1 - |u-1|^{2H})$.
+Si $u=\frac{1}{2}$, entonces la esperanza es igual a $\frac{1}{2}$, independientemente de $H$.
+Esto, junto al hecho de que el proceso es autosimilar, permite diseñar un algoritmo que subdivide el segmento en su punto medio, y al valor esperado para el punto medio se lo desplaza por un número aleatorio con media $0$ y variancia $1$ multiplicado por la variancia, la cual es igual a $2^{-H}$ ($2^{-H} * gauss(0,1) $).
+Una vez computado el punto medio, el intervalo se subdivide y se computan de manera recursiva las mitades resultantes, donde la nueva variancia será proporcional al tamaño del nuevo segmento.
+
+En la Fig.~\ref{fg:puntomedio} puede observarse un ejemplo de una curva obtenida utilizando distintas profundidades en el algoritmo recursivo.
+Se observa que se puede obtener mayor detalle a mayor número de iteraciones, donde la curva resultante asemeja visualmente al perfil de una montaña.
+
+\begin{figure}
+\center
+\includegraphics[width=11cm]{figures/puntomedio}
+\caption{Curva obtenida con $H=0.8$, para $17$, $65$ y $257$ muestras, utilizando el algoritmo del punto medio.}
+\label{fg:puntomedio}
+\end{figure}
+
+
+Una extensión directa de este algoritmo se da en dos dimensiones, donde los valores que se subdividen representan las alturas de un terreno.
+Comenzando con $4$ puntos en un plano, formando un cuadrado, donde cada punto almacena la altura del terreno, es posible sudividir el terreno en $4$ cuadrados, a partir de los puntos medios de cada arista del cuadrado original.
+Con $H$ es posible controlar la rugosidad del terreno.
+La Fig.~\ref{fg:terreno} muestra un ejemplo de la renderización de un terreno generado utilizando este método, donde $H = 0.9$, en la Fig.~\ref{fg:terreno2} $H = 0.3$.
+Se puede observar que a medida que $H$ es mayor, el terreno es más suave.
+
+\begin{figure}
+\center
+\includegraphics[width=11cm]{figures/terreno}
+\caption{Terreno generado utilizando el algoritmo de desplazamiento del punto medio en dos dimensiones, con $H = 0.9$. La imagen de la izquierda muestra colores agregados de acuerdo al número generado, la imagen de la derecha muestra un ejemplo tridimensional de los mismos datos visto en perspectiva.}
+\label{fg:terreno}
+\end{figure}
+
+\begin{figure}
+\center
+\includegraphics[width=11cm]{figures/terreno2}
+\caption{Terreno generado utilizando el algoritmo de desplazamiento del punto medio en dos dimensiones, con $H = 0.3$.}
+\label{fg:terreno2}
+\end{figure}
+
 %\subsubsection{Planetas}
 %\cite{Ebert2002}
 
 
 \subsection{Modelos Físicos}
-Desde el surgimiento del área, estos modelos han ido evolucionando gracias al incremento en el poder de cómputo del hardware gráfico disponible. Sin embargo, aún nos encontramos en los comienzos de una aplicación más difundida de los mismos.
+Si bien los resultados obtenidos por los modelos presentados hasta ahora son muy satisfactorios, existe aún la necesidad de no depender de parámetros ad-hoc, además de aumentar el realismo de las imágenes resultantes.
+Hasta aquí, la utilización de los modelos se basa casi exclusivamente en su {\em parecido visual} a los objetos que se intentan modelar.
+
+Para poder mejorar esto es necesario utilizar los procesos físicos de formación o comportamiento de los materiales (movimiento de partículas, deformaciones, cambios químicos, etc.), lo cual permitiría definir parámetros más intuitivos que tienen su correlación en la realidad, logrando además una representación más exacta de la misma.
+La desventaja de utilizar modelos físicos o matemáticos, recae sobre los tiempos de cómputo y la dificultad de diseño de éstos.
+
+Sin embargo, desde el surgimiento del área, estos modelos han ido evolucionando gracias al incremento en el poder de cómputo del hardware gráfico disponible. A pesar de esto, aún nos encontramos en los comienzos de la utilización masiva de los mismos, por lo cual existen sólo unos pocos casos en los que se utilizan modelos de primeros principios.
+En esta sección presentamos un ejemplo de esto, lo cual ejemplifica la capacidad de representación que puede alcanzarse al agregar detalles reales en las implementaciones.
 
 \subsection{Fluídos}
 Entre los primeros intentos por utilizar procesos físicos para modelar la apariencia de los materiales, encontramos ecuaciones que describen fluidos.
