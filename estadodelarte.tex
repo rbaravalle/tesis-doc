@@ -1,27 +1,20 @@
 
 \chapter[Estado del Arte]{Simulación de Materiales en Computación Gráfica: Estado del Arte}
 \section{Introducción} %(hablar de los diferentes materiales, cómo los modelos "fáciles" no sirven)
-El renderizado en computación gráfica es el intento de producir imágenes que representan una escena tridimensional, representada por medio de primitivas matemáticas como puntos, líneas, cubos, etc.
+En este capítulo se presenta el estado del arte en modelado y renderización de materiales en computación gráfica, junto a un resumen de los aspectos más importantes que se deben considerar a la hora de diseñar materiales en computación gráfica, tanto modelos de su geometría como teorías sobre su renderizado.
 
-En los últimos años, el avance en el campo del renderizado de escenas ha sido muy notorio. El nivel de realismo presente en las imágenes obtenidas ha ido en aumento hasta el punto de ser de difícil distinción para un ser humano. Dichos avances han sido, en gran parte, debido al desarrollo de dispositivos de hardware gráficos más poderosos, ya que la teoría matemática que describe el comportamiento de la luz en escenas estuvo presente desde hace varias décadas mediante la denominada Ecuación del Renderizado \cite{Kajiya1986}.
-
-
-La ecuación es una aproximación, un modelo físico que intenta describir los aspectos considerados más importantes en el fenómeno de interacción de la luz con diversos objetos en una escena.
-
-Lamentablemente, la ecuación es, en términos teóricos, no computable. Sin embargo, el estudio a lo largo de los años de técnicas que permitan aproximarla ha dado sus frutos y ha permitido la obtención de imágenes de un realismo asombroso.
-
-A pesar de estos increíbles avances en un corto período de tiempo, el renderizado de una escena es un problema que involucra otros inconvenientes. El más notorio de ellos, es que la ecuación del rendering no tiene en cuenta qué {\em materiales} componen los objetos que definen la escena. En otras palabras, un objeto compuesto por madera no lucirá exactamente igual que uno compuesto por metales, ni por un material orgánico compuesto de tejidos. A la par del desarrollo de técnicas de iluminación global, han surgido técnicas que han intentado abordar materiales específicos y familias de materiales.
-
-Estas técnicas buscan capturar la intrincada geometría propia de cada material. Diferentes estructuras microscópicas producen distintas apariencias, reflejando la luz de distinta manera, hecho que es interpretado por la percepción humana como diferentes materiales. Por ejemplo: una superficie metálica tiene un gran componente reflexivo, emitiendo luz en direcciones bien definidas, a diferencia de una superficie más opaca como un plástico. Dado que la ecuación del renderizado usa los materiales como {\em caja negra}, los mismos deben ser modelados de una manera adecuada para ser integrados en las distintas técnicas de renderizado global.
-
-Determinados materiales han recibido mayor atención debido a su ubicuidad en escenas de películas y video juegos, o a la facilidad de su diseño: agua, fuego, aire, humo, piel humana, madera, etc. Por esta razón, las imágenes sintéticas obtenidas presentan cierta asimetría en la calidad de los distintos materiales. En contraste, otros materiales han recibido menor atención, la cual puede atribuirse a una menor presencia en escenas o a una dificultad en el modelado y visualización, la cual ha resistido las técnicas más simples.
-
-Entre estos materiales, aquellos sometidos a un proceso de cocción han permanecido entre los más dificultosos por su compleja geometría y los fenómenos lumínicos involucrados. Tal vez el caso más emblemático de los materiales cocidos es el pan, debido a su importancia en la vida cotidiana. Como nota de color, un reconocido  científico del área, Alain Fournier, pronunció en 2001 la frase "la Computación Gráfica todavía no ha sido capaz de renderizar de manera convincente una feta de pan". En las siguientes secciones mostraremos que unos pocos intentos por abordar el problema fueron realizados pocos años después.
+En cada sección se intenta ligar un ejemplo de material cuya síntesis se ajusta al método 
+siendo descripto.
+Se comienza presentando modelos de la geometría de distintos materiales, desde un punto de vista puramente fenomenológico, y poco a poco iremos incorporando comportamiento físico, hasta llegar a modelos con una base matemática sólida sobre el fenómeno relacionado al comportamiento o formación del material en consideración.
+Luego presentamos las ecuaciones fundamentales del renderizado, las cuales permiten obtener imágenes realistas de los materiales que se buscan renderizar.
+Finalmente, explicamos brevemente unos casos particulares de la ecuación del renderizado que han sido utilizados como estándar en la síntesis de la apariencia de los materiales (BRDF), y presentamos ejemplos de algunos materiales que, debido a diversos factores, deben considerar otros métodos menos tradicionales para lograr un renderizado adecuado.
 
 \section{Modelos de Geometría de Materiales}
 En esta sección presentaremos distintos modelos geométricos que han hecho su aparición a lo largo de los años en computación gráfica.
 Los mismos son el resultado de un balance entre detalle de representación, tiempos de cómputo y recursos de memoria utilizados.
-Casi en todos los materiales en computación gráfica, un modelo de geometría correcto es necesario para lograr imágenes realistas de los materiales a ser renderizados.
+Casi en todos los modelos de materiales en computación gráfica, un modelo de geometría correcto es indispensable para lograr imágenes realistas de los materiales a ser renderizados.
+
+Comenzaremos describiendo modelos fenomenológicos, para luego incorporar comportamiento físico a los mismos.
 
 \subsection{Modelos Procedimentales}
 Un modelo procedimental resulta útil en determinadas situaciones donde la supervisión humana repetitiva no es adecuada.
@@ -166,7 +159,7 @@ Por medio de ellas, es posible {\em excluir} elementos de ciertas posiciones ind
 \label{fg:controlgrammar}
 \end{figure}
 
-La literatura de modelado procedimental de edificios y ciudades está creciendo en los últimos años \cite{Parish2001,Muller2006}.
+La literatura de modelado procedimental de edificios y ciudades ha ido creciendo en los últimos años \cite{Parish2001,Muller2006}.
 La Fig.~\ref{fg:edificios} muestra ejemplos de edificios generados procedimentalmente.
 
 
@@ -481,7 +474,6 @@ Diversos algoritmos específicos surgieron con anterioridad a estas ecuaciones g
 
 %\section{Simplificaciones a las Ecuaciones de Renderizado}
 \section{Funciones de Distribución de Reflectancia (BRDFs)}
-\subsection{Motivación}
 En la ecuación del renderizado se introdujo un término llamado BRDF, el cual es una función que modela el comportamiento de la luz en relación con una superficie determinada.
 Diversos fenómenos tienen lugar cuando un rayo de luz impacta una superficie de un objeto.
 En su máxima expresión, una BRDF podría tomar en consideración variables como la longitud de onda a ser representada, la posición de salida del rayo reflejado en la superficie, e incluso el tiempo de demora entre la entrada y la salida del rayo.
@@ -756,11 +748,10 @@ La elección final se hace en base a la complejidad de la captura, costos comput
 \caption[Pinturas de autos diseñadas utilizando primeros principios]{Pinturas de autos diseñadas utilizando primeros principios en \cite{Ershov2001}. Cambiando un parámetro pueden obtenerse diferentes apariencias (en este caso, el ancho de las capas de interferencia).}
 \label{fg:pinturaauto}
 \end{figure}
-%\subsection{Fuego}
-%\subsection{Humo}
-
-%\subsection{Otros}
 
 
 \section{Conclusiones}
+En este capítulo presentamos el estado del arte en modelado y renderizado de materiales en computación gráfica.
+Del capítulo se desprende que para lograr un modelo realista de un material dado, es necesario modelizar tanto su geometría como su interacción con la luz, de la manera más realista posible.
+En los capítulos que siguen, mostraremos como el diseño de ambos aspectos fue necesario para lograr un renderizado realista de la miga y corteza de diferentes tipos de panes.
 
