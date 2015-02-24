@@ -96,7 +96,7 @@ Usualmente, y debido a la utlización de recursión y repetición, estos sistema
 \begin{figure}
 \center
 \includegraphics[width=13cm]{figures/sistemasL}
-\caption{Sistemas-L generados utilizando distintos parámetros. $n$ es la cantidad de derivaciones utilizadas para producir la cadena que da origen a la figura. En (a), el axioma es F-F-F-F, mientras que en (b) es -F.}
+\caption[Sistemas-L generados utilizando distintos parámetros]{Sistemas-L generados utilizando distintos parámetros. $n$ es la cantidad de derivaciones utilizadas para producir la cadena que da origen a la figura. En (a), el axioma es F-F-F-F, mientras que en (b) es -F.}
 \label{fg:sistemasL}
 \end{figure}
 
@@ -110,7 +110,7 @@ La utilización de un par $[\dots]$ produce que la tortuga dibuje una rama y vue
 \begin{figure}
 \center
 \includegraphics[width=13cm]{figures/sistemalcorchete}
-\caption{Sistemas-L con pila de estados, utilizando distintos parámetros. Las imágenes muestran estructuras muy parecidas a plantas. $n$ es la cantidad de derivaciones utilizadas para producir la cadena que da origen a la figura.}
+\caption[Sistemas-L con pila de estados, utilizando distintos parámetros]{Sistemas-L con pila de estados, utilizando distintos parámetros. Las imágenes muestran estructuras muy parecidas a plantas. $n$ es la cantidad de derivaciones utilizadas para producir la cadena que da origen a la figura.}
 \label{fg:sistemasLcorchete}
 \end{figure}
 
@@ -145,7 +145,7 @@ La principal diferencia con los sistemas-L se basa en que en aquellos, las reesc
 \begin{figure}
 \center
 \includegraphics[width=13cm]{figures/splitgrammar}
-\caption{Gramática de división mostrando los pasos seguidos para formar una secuencia de ventanas.}
+\caption[Gramática para formar una secuencia de ventanas]{Gramática de división mostrando los pasos seguidos para formar una secuencia de ventanas.}
 \label{fg:splitgrammar}
 \end{figure}
 
@@ -232,7 +232,7 @@ Se observa que se puede obtener mayor detalle a mayor número de iteraciones, do
 \begin{figure}
 \center
 \includegraphics[width=11cm]{figures/puntomedio}
-\caption{Curva obtenida con $H=0.8$, para $17$, $65$ y $257$ muestras, utilizando el algoritmo del punto medio.}
+\caption[Curva obtenida utilizando el algoritmo del punto medio]{Curva obtenida con $H=0.8$, para $17$, $65$ y $257$ muestras, utilizando el algoritmo del punto medio.}
 \label{fg:puntomedio}
 \end{figure}
 
@@ -246,14 +246,14 @@ Se puede observar que a medida que $H$ es mayor, el terreno es más suave.
 \begin{figure}
 \center
 \includegraphics[width=11cm]{figures/terreno}
-\caption{Terreno generado utilizando el algoritmo de desplazamiento del punto medio en dos dimensiones, con $H = 0.9$. La imagen de la izquierda muestra colores agregados de acuerdo al número generado, la imagen de la derecha muestra un ejemplo tridimensional de los mismos datos visto en perspectiva.}
+\caption[Terreno generado utilizando el algoritmo de desplazamiento del punto medio en dos dimensiones, con $H = 0.9$]{Terreno generado utilizando el algoritmo de desplazamiento del punto medio en dos dimensiones, con $H = 0.9$. La imagen de la izquierda muestra colores agregados de acuerdo al número generado, la imagen de la derecha muestra un ejemplo tridimensional de los mismos datos visto en perspectiva.}
 \label{fg:terreno}
 \end{figure}
 
 \begin{figure}
 \center
 \includegraphics[width=11cm]{figures/terreno2}
-\caption{Terreno generado utilizando el algoritmo de desplazamiento del punto medio en dos dimensiones, con $H = 0.3$.}
+\caption[Terreno generado utilizando el algoritmo de desplazamiento del punto medio en dos dimensiones, con $H = 0.3$]{Terreno generado utilizando el algoritmo de desplazamiento del punto medio en dos dimensiones, con $H = 0.3$.}
 \label{fg:terreno2}
 \end{figure}
 
@@ -518,7 +518,7 @@ Si el observador se coloca en la dirección de reflejo de estos lóbulos, verá 
 \begin{figure}
 \center
 \includegraphics[width=11cm]{figures/contribuciones}
-\caption{Diferentes comportamientos posibles de BRDFs. La imagen de la izquierda muestra una reflexión difusa, la del centro, una completamente especular, y la de la derecha, lobular.}
+\caption[Diferentes reflectancias en BRDFs]{Diferentes reflectancias en BRDFs. La imagen de la izquierda muestra una reflexión difusa, la del centro, una completamente especular, y la de la derecha, lobular.}
 \label{fg:contribuciones}
 \end{figure}
 
@@ -535,15 +535,6 @@ Como fue dicho, si no es posible modelar matemáticamente el comportamiento del 
 \caption{Explicación del comportamiento observable en BRDFs.}
 \label{fg:microestructura}
 \end{figure}
-
-
-\begin{figure}
-\center
-\includegraphics[width=11cm]{figures/contribuciones}
-\caption{Diferentes comportamientos posibles de BRDFs. La imagen de la izquierda muestra una reflexión difusa, la del centro, una completamente especular, y la de la derecha, lobular.}
-\label{fg:contribuciones}
-\end{figure}
-
 
 Un ejemplo muy común de BRDF es el modelo de Phong, ver Fig~\ref{fg:phongVecs}, el cual presenta la siguiente definición matemática:
 
@@ -563,7 +554,7 @@ Si bien el modelo es completamente fenomenológico, el mismo es flexible y obtie
 \begin{figure}
 \center
 \includegraphics[width=9cm]{figures/phongparametros}
-\caption{Diferentes Parámetros en el modelo de Phong. De izquierda a derecha $k_{s}$ varía de $0$ a $1$. De arriba hacia abajo, $\alpha$ varía de $50$ a $1$.}
+\caption[Diferentes Parámetros en el modelo de Phong]{Diferentes Parámetros en el modelo de Phong. De izquierda a derecha $k_{s}$ varía de $0$ a $1$. De arriba hacia abajo, $\alpha$ varía de $50$ a $1$.}
 \label{fg:phongparametros}
 \end{figure}
 
@@ -619,7 +610,7 @@ En otro trabajo se agregó información proveniente de moldes de polímeros pres
 \begin{figure}
 \center
 \includegraphics[width=9cm]{figures/piel}
-\caption{Piel Humana renderizada con el método de \cite{Marschner2000}. La imagen de la derecha muestra la mejora obtenida al agregar detalles de geometría fina en el modelo (nariz, parte inferior del labio).}
+\caption[Piel Humana renderizada]{Piel Humana renderizada con el método de \cite{Marschner2000}. La imagen de la derecha muestra la mejora obtenida al agregar detalles de geometría fina en el modelo (nariz, parte inferior del labio).}
 \label{fg:piel}
 \end{figure}
 
@@ -649,14 +640,14 @@ En la Fig.~\ref{fg:ceramico} podemos observar una imagen de una maceta renderiza
 \begin{figure}
 \center
 \includegraphics[width=8cm]{figures/poro}
-\caption{Ejemplo de poros sintetizados utilizando el método de \cite{Merillou2000}.}
+\caption[Poros sinterizados]{Ejemplo de poros sintetizados utilizando el método de \cite{Merillou2000}.}
 \label{fg:poro}
 \end{figure}
 
 \begin{figure}
 \center
 \includegraphics[width=11cm]{figures/ceramico}
-\caption{Cerámicos renderizados. Izquierda: maceta real. Centro: utilizando una BRDF tradicional. Derecha: utilizando el método propuesto en \cite{Merillou2000}.}
+\caption[Cerámicos renderizados]{Cerámicos renderizados. Izquierda: maceta real. Centro: utilizando una BRDF tradicional. Derecha: utilizando el método propuesto en \cite{Merillou2000}.}
 \label{fg:ceramico}
 \end{figure}
 
@@ -704,7 +695,7 @@ La percepción de pelo se pierde cuando la cámara se acerca demasiado al objeto
 \begin{figure}
 \center
 \includegraphics[width=6cm]{figures/osopelo}
-\caption{Ejemplo de renderizado de pelo en un oso de peluche con el método propuesto en \cite{Kajiya1989}.}
+\caption[Renderizado de pelo en un oso de peluche]{Ejemplo de renderizado de pelo en un oso de peluche con el método propuesto en \cite{Kajiya1989}.}
 \label{fg:osopelo}
 \end{figure}
 
@@ -723,7 +714,7 @@ En este caso, los rayos de luz que llegan desde distintas posiciones atraviesan 
 \begin{figure}
 \center
 \includegraphics[width=4cm]{figures/fibra}
-\caption{Ejemplo de fibra de tela con más de una tintura. Se puede observar una tintura roja en el centro, y una tintura azul que la envuelve.}
+\caption[Ejemplo de fibra de tela con más de una tintura]{Ejemplo de fibra de tela con más de una tintura. Se puede observar una tintura roja en el centro, y una tintura azul que la envuelve.}
 \label{fg:fibra}
 \end{figure}
 
@@ -738,7 +729,7 @@ Para esto se utilizan curvas $3D$ construídas a partir de los puntos de control
 \begin{figure}
 \center
 \includegraphics[width=13cm]{figures/tela}
-\caption{Pasos para la definición de un modelo de una tela, donde se toman en cuenta fibras individuales. Además de la utilización de una superficie (a), la misma se subdivide (b) para alojar distintas estructuras de hilo (c), los cuales se modelan individualmente ((d) y (e)).}
+\caption[Pasos para la definición de un modelo de una tela]{Pasos para la definición de un modelo de una tela, donde se toman en cuenta fibras individuales. Además de la utilización de una superficie (a), la misma se subdivide (b) para alojar distintas estructuras de hilo (c), los cuales se modelan individualmente ((d) y (e)).}
 \label{fg:tela}
 \end{figure}
 
@@ -762,7 +753,7 @@ La elección final se hace en base a la complejidad de la captura, costos comput
 \begin{figure}
 \center
 \includegraphics[width=8cm]{figures/pinturaauto}
-\caption{Pinturas de autos diseñadas utilizando primeros principios en \cite{Ershov2001}. Cambiando un parámetro pueden obtenerse diferentes apariencias (en este caso, el ancho de las capas de interferencia).}
+\caption[Pinturas de autos diseñadas utilizando primeros principios]{Pinturas de autos diseñadas utilizando primeros principios en \cite{Ershov2001}. Cambiando un parámetro pueden obtenerse diferentes apariencias (en este caso, el ancho de las capas de interferencia).}
 \label{fg:pinturaauto}
 \end{figure}
 %\subsection{Fuego}

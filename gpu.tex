@@ -5,7 +5,7 @@ La constante demanda de poder en las aplicaciones gr\'aficas, motivada sobre tod
 Dicha evoluci\'on ha tenido como consecuencia la rivalizaci\'on y posterior superaci\'on por parte de las GPU's al poder de procesamiento con el que cuentan las CPU's tradicionales\cite{Harris06}.
 En la siguiente sección se comenta la historia de la programación de las placas gráficas.
 
-\section{Introduccion a la historia del Shader Programable}
+\section{Historia del Shader Programable}
 Las placas gráficas o GPUs son microprocesadores, y por lo tanto tienen su propio lenguaje assembler, el cual puede programarse para realizar una tarea específica.
 A diferencia de las CPUs, las GPUs no son herramientas de propósito general, sino que son microprocesadores adaptados a realizar tareas gráficas, como manejar triángulos, líneas y puntos.
 Estos microprocesadores han ido evolucionando a lo largo de los años, donde distintas compañías han hecho su aparición.
@@ -142,7 +142,7 @@ Es decir, que está implementado en hardware por la placa gráfica y no es posib
 \begin{center}
 \includegraphics[width=13cm]{figures/raster}
 \end{center}
-\caption{Proceso de rasterización en la placa gráfica. En la imagen, un triángulo es convertido al conjunto de las posiciones de los píxeles que representará en la pantalla.}
+\caption[Proceso de rasterización en la placa gráfica]{Proceso de rasterización en la placa gráfica. En la imagen, un triángulo es convertido al conjunto de las posiciones de los píxeles que representará en la pantalla.}
 \label{fg:raster}
 \end{figure}
 
@@ -291,7 +291,7 @@ La implementación del modelo de iluminación está basada en shaders ya que el 
 \begin{center}
 \includegraphics[width=12cm]{figures/cpugpu}
 \end{center}
-\caption{Comparación de velocidades de cómputo de la CPU y la GPU por medio del número de operaciones de punto flotante por segundo (FLOPS, fuente nVidia).}
+\caption[Comparación de velocidades de cómputo de la CPU y la GPU]{Comparación de velocidades de cómputo de la CPU y la GPU por medio del número de operaciones de punto flotante por segundo (FLOPS, fuente nVidia).}
 \label{fg:cpugpu}
 \end{figure}
 
@@ -470,7 +470,7 @@ De esta forma con el par $(get\_global\_id(0), get\_global\_id(1))$, podríamos 
 %\section{Fractales y Multifractales en Computación Gráfica}
 \section{Aplicaciones}
 Como fue demostrado, además de su utilización en la producción de películas, video juegos, y otras áreas relacionadas a la computación gráfica, la programación de placas gráficas se ha abierto recientemente al cómputo general, por lo que otras ramas de la ciencia han comenzado a utilizar el inmenso poder computacional que proveen.
-Este es el caso de la física, la astronomía y determinadas ramas de la computación (por ejemplo aprendizaje automatizado), donde complejas simulaciones tienen lugar en tiempos más acotados gracias a esta nueva herramienta.
+Este es el caso de física, finanzas, procesamiento de audio y video, astronomía y determinadas ramas de la computación (por ejemplo aprendizaje automatizado, o big data), donde complejas simulaciones tienen lugar en tiempos más acotados gracias a esta nueva herramienta.
 
 En la presente tesis, el poder de la placa gráfica se ha utilizado sobre todo en el cómputo de la aproximación de la ecuación RTE, obteniendo tasas de refresco en tiempo real.
 No sólo su utilización fue de gran ayuda, sino que es indispensable para cualquier algoritmo gráfico moderno el poder ejecutarse en las mismas si se pretenden alcanzar tiempos interactivos.

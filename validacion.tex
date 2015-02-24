@@ -205,15 +205,15 @@ Los resultados de este procedimiento de extracción de características muestran
 \subsection{Teoría del Análisis Multifractal}
 %\label{sec:4}
 
-The idea behind multifractal analysis is to examine, in the limit, the local behaviour of a measure $\mu$ at each point of the set under study. 
-
-Let $E$ be a structure divided in disjoint substructures $E_{i}$ of size $\varepsilon$ in such a way that 
+La idea del análisis multifractal es examinar el límite en el comportamiento local de una medida $\mu$ en cada punto del conjunto en estudio
+Sea $E$ una estructura dividida en sub-estructuras disjuntas $E_{i}$ de tamaño $\varepsilon$ de tal manera que
 
 \begin{equation}
 \displaystyle\bigcup_{i}E_{i} = E.
 \end{equation}
 
-Each substructure $E_{i}$ is characterised by a measure $\mu(E_{i})$. From the point of view of multifractal analysis, it is useful to define the H\"older exponent, $\alpha_{i}$, for each substructure $E_{i}$, as a function of $\varepsilon$, {\em i.e.}
+Cada sub-estructura $E_{i}$ está caracterizada por una medida $\mu(E_{i})$.
+Deefinimos el exponente de H\"older, $\alpha_{i}$, para cada sub-estructura $E_{i}$, como una función de $\varepsilon$, es decir
 
 
 \begin{equation}
@@ -221,54 +221,72 @@ Each substructure $E_{i}$ is characterised by a measure $\mu(E_{i})$. From the p
 \label{eqn:eqn4}
 \end{equation}
 \noindent
-and to take the limit when $\varepsilon$ tends to $0$. The limit $\alpha$ represents the value of the H\"older exponent at a point in the structure, that is
+
+y se toma el límite cuando $\varepsilon$ tiende a $0$.
+El límite $\alpha$ representa el valor del exponente de H\"older en un punto de la estructura, 
 
 \begin{equation}
 \alpha = \lim_{\varepsilon\to0}{\alpha_{i}}.
 \label{eqn:eqn5}
 \end{equation}
 
-This exponent characterises the local regularity of the structure at a point. To obtain a global characterisation of the regularity of the structure it is necessary to obtain the distribution of $\alpha$ in $E$. Then, the multifractal spectrum related to the value of $\varepsilon$, $f_{\varepsilon}(\alpha_{i})$, is obtained by counting the $N_{\varepsilon}$ boxes characterised by $\alpha_{i}$, in the form:
+Este exponente caracteriza la regularidad locar de la estructura en un punto.
+Para obtener una caracterización global de la regularidad de la estructura es necesario obtener la distribución de $\alpha$ en $E$.
+Entonces, el espectro multifractal asociado al valor $\varepsilon$, $f_{\varepsilon}(\alpha_{i})$, se obtiene contando las $N_{\varepsilon}$ cajas caracterizadas por $\alpha_{i}$, de la siguiente manera,
 
 \begin{equation}
 f_{\varepsilon}(\alpha_{i}) = - \frac{ln(N_{\varepsilon}(\alpha_{i}))}{ln(\varepsilon)}.
 \label{eqn:eqn6}
 \end{equation}
 
-When $\varepsilon$ tends to $0$, the limiting value is the FD of the structure $E$ characterised by $\alpha$ (the Hausdorff dimension of the $\alpha$ distribution). It is also known as the {\em multifractal spectrum} $f(\alpha)$ (MFS) \cite{Silvetti2010}, {\em i.e.}
+Cuando $\varepsilon$ tiende a $0$, el valor límite es la dimensión fractal de la estructura $E$ caracterizada por $\alpha$ (la dimensión de Hausdorff de la distribución de $\alpha$).
+También conocida como espectro {\em multifractal} $f(\alpha)$ (MFS) \cite{Silvetti2010}, es decir
 
 \begin{equation}
 f(\alpha) = \lim_{\varepsilon\to0}{f_{\varepsilon}(\alpha)}.
 \label{eqn:eqn7}
 \end{equation}
 
-\subsubsection{Practical procedure for the MFS}
-There are several techniques described in the literature to obtain the MFS, which lead to different representations of the multifractal information present in the structure. Usually, the method of moments is used \cite{Mendoza2010,Serrano2012}, but it produces a feature vector which is not always suitable for classification tasks. In this work, the procedure presented in \cite{Xu2009} is employed, due to its better classification performance.
+\subsubsection{Procedimiento práctico para computar el MFS}
+Existen varias formas descriptas en la literatura para obtener el MFS, las cuales obtienen diferentes representaciones de la información multifractal presente en la estructura.
+El método de momentos es el más utilizado \cite{Mendoza2010,Serrano2012}, pero el mismo produce un vector de características que no es siempre adecuado para realizar tareas de clasificación.
+En esta sub-sección describiremos un procedimiento para implementar el método propuesto en\cite{Xu2009}, debido a su mayor eficiencia en la clasificación.
 
-The technique first computes $\alpha(x)$ for each pixel $x$ of the image. Denote with $B(x,\varepsilon)$ the closed disk of radius $\varepsilon > 0$ centred at $x$, then, $\alpha(x)$ is defined as a straight line fit of the values $log(\mu(B(x,\varepsilon)))$ and $log(\varepsilon)$. Then, a discrete sample set $\{\alpha_{i}, i = 1,\dots,M\}$ is taken from the interval $[0,1]$, and the point set corresponding to that value of $\alpha_{i}$ is formed by grouping the pixels with values that are close to that $\alpha_{i}$ under some threshold. The FD for each point set is computed as the straight line fit of the values $log((N_{\varepsilon}(\alpha_{i}))$ and $log(\varepsilon)$. The value M determines the vector length, {\em i.e.}. the number of FDs of the MFS.
+Se comienza computando $\alpha(x)$ para cada píxel $x$ de la imagen.
+Se define $B(x,\varepsilon)$ como el disco cerrado de radio $\varepsilon > 0$ centrado en $x$, y $\alpha(x)$ como el ajuste de línea recta de los valores $log(\mu(B(x,\varepsilon)))$ y $log(\varepsilon)$. 
+Para computar el MFS, se divide el intervalo $[0,1]$ en un conjunto discreto $\{\alpha_{i}, i = 1,\dots,M\}$, donde el conjunto de puntos que corresponde a un $\alpha_{i}$ se forma agrupando los píxeles cuyo valor está cerca a ese $\alpha_{i}$ bajo cierto umbral. 
+La DF de cada conjunto de puntos formado se computa por medio de la pendiente de la recta de ajuste entre los valores $log((N_{\varepsilon}(\alpha_{i}))$ y $log(\varepsilon)$. 
+El valor $M$ determina el largo del vector, es decir, el número de FDs del MFS.
+
+Como fue previamente aclarado, el espectro $f(\alpha)$ (MFS) y el método de momentos producen vectores que contienen la misma información.
+En esta sección utilizamos la primera representación ($f(\alpha)$), ya que la misma produce una representación más adecuada que el método de momentos para tareas de clasificación.
+El resultado de este proceso es un vector de características finito, el cual será utilizado posteriormente.
+La cantidad de DFs del vector a utilizar será analizada posteriormente.
 
 
-As previously stated, the $f(\alpha)$ spectrum (MFS) and the method of moments produce vectors which contains the same information, but in this work the first is employed, since it also outperforms the method of moments in classification tasks. This process produces a finite vector which is used as the feature vector later in this paper. In next sections, the vector length (the number of FDs) is chosen based on the classification performance of the computed feature vector.
-
-
-\subsubsection{Multifractal Measures}
+\subsubsection{Medidas Multifractales}
 \label{sec:mfsmeasures}
-Defining different $\mu$ functions accounts for different image features. The first approach is to define $\mu$ in the intensity domain (I), {\em i.e.}
+Las funciones $\mu$ son definidas intentando capturar determinadas características de las imágenes.
+El primer ejemplo consiste en definir $\mu$ en el dominio de intensidades de la imagen (I), es decir
 
 \begin{equation}
 \mu(B(x,\varepsilon)) = \int_{B(x,\varepsilon)}{(G_{\varepsilon} \ast I)} dx,
 \label{eqn:eqn11}
 \end{equation}
-where $\ast$ is the $2D$ convolution operator and $G_{\varepsilon}$ is a Gaussian smoothing kernel with variance $\varepsilon$, {\em i.e., } $\mu$ is the weighted average intensity value in the disk of radius $\varepsilon$ centred at $x$ ($B(x,\varepsilon)$). This is the density of the intensity function, and it describes how the intensity at a point changes over scale.
+donde $\ast$ es el operador de convolución $2D$ y $G_{\varepsilon}$ es un kernel Gaussiano con variancia $\varepsilon$, en otras palabras $\mu$ es el promedio ponderado de los valores de intensidades en el disco de radio $\varepsilon$ centrado en $x$ ($B(x,\varepsilon)$).
+Esta es la función de densidad de la intensidad, y describe como la intensidad cambia en un punto con la escala.
 
-The definition of $\mu$ could serve to specific purposes. For instance, if robustness to illumination changes is needed, one choice is to define $\mu(B(x,\varepsilon))$ on the domain of the energy of the gradients. Let ${ f_{k} , k = 1, 2, 3, 4}$ be four directional differential operators along (respectively) the vertical, horizontal, diagonal and anti-dia\-gonal directions. Then we define a measure function $\mu(B(x,\varepsilon))$ for the image $I$ as follows:
+La definición de $\mu$ puede ser realizada con fines específicos.
+Por ejemplo, si se requiere robustez ante los cambios de iluminación, una opción es definir$\mu(B(x,\varepsilon))$ en el dominio de la energía de los gradientes.
+Sean ${ f_{k} , k = 1, 2, 3, 4}$ cuatro operadores diferenciales en las direcciones vertical, horizontal, diagonal y anti-diagonal respectivamente.
+Se defome una función de medida $\mu(B(x,\varepsilon))$ para la imagen $I$ como sigue:
 
 \begin{equation}
 \mu(B(x,\varepsilon)) = (\int_{B(x,\varepsilon)}{\sum_{k}{(f_{k} \ast (G_{\varepsilon} \ast I))^{2}} dx)^{1/2}}.
 \label{eqn:gradient}
 \end{equation}
 
-Another choice is to define $\mu(B(x, \varepsilon))$ as the sum of the Laplacians of the image inside $B(x, \varepsilon)$, that is
+Otra elección es definir $\mu(B(x, \varepsilon))$ como la suma de los laplacianos de la imagen dentro de $B(x, \varepsilon)$, es decir
 
 \begin{equation}
 \mu(B(x,\varepsilon)) = \int_{B(x,\varepsilon)}|\nabla^2 (G_{\varepsilon} \ast I)| dx.
@@ -359,7 +377,7 @@ Estos resultados concuerdan con los obtenidos en \cite{Bosch2011} para la clasif
 \begin{figure}[h!]
 \centering
 \includegraphics[width=13cm]{dimensionbox}
-\caption{Cómputo de la dimensión Box. Una imagen de pan (izquierda) con su binarización (centro) y su dimensión box computada (derecha).}
+\caption[Cómputo de la dimensión Box]{Cómputo de la dimensión Box. Una imagen de pan (izquierda) con su binarización (centro) y su dimensión box computada (derecha).}
 \label{fig:fitbox}
 \end{figure}
 
@@ -380,7 +398,7 @@ Estos resultados concuerdan con los obtenidos en \cite{Bosch2011} para la clasif
 \begin{figure}[h!]
 \begin{centering}
 \includegraphics[width=13cm]{SOM}
-\caption{Mapas auto-organizados (self-organising maps SOM). SOM de imágenes de panes y no-panes (izquierda) y SOM sólo de tipos de panes (derecha). $1$: {\em baguette}, $2$: {\em lactal}, $3$: {\em salvado}, $4$: {\em sandwich}, $5$: {\em no-pan}.}
+\caption[Mapas auto-organizados de imágenes de panes y otros objetos]{Mapas auto-organizados (self-organising maps SOM). SOM de imágenes de panes y no-panes (izquierda) y SOM sólo de tipos de panes (derecha). $1$: {\em baguette}, $2$: {\em lactal}, $3$: {\em salvado}, $4$: {\em sandwich}, $5$: {\em no-pan}.}
 \label{fig:somfractal}
 \end{centering}
 \end{figure}
@@ -388,14 +406,14 @@ Estos resultados concuerdan con los obtenidos en \cite{Bosch2011} para la clasif
 \begin{figure}[h!]
 \centering
 \includegraphics[width=13cm]{boxplots}
-\caption{Boxplots de los cuatro tipos de panes. Las medianas de las dimensiones se unen con una línea a trozos. Arriba: {\em baguette} (izquierda), {\em lactal} (derecha), abajo: {\em salvado} (izquierda), {\em sandwich} (derecha).}
+\caption[Boxplots de distintos tipos de panes]{Boxplots de los cuatro tipos de panes. Las medianas de las dimensiones se unen con una línea a trozos. Arriba: {\em baguette} (izquierda), {\em lactal} (derecha), abajo: {\em salvado} (izquierda), {\em sandwich} (derecha).}
 \label{fig:boxplotsMFS}
 \end{figure}
 
 \begin{figure}[h!]
 \centering
 \includegraphics[width=13cm]{panstd}
-\caption{MFS promedio y desvíos estándar de las FDs para los cuatro tipos de panes. Izquierda: MFS promedio, derecha: desvíos estándar.}
+\caption[MFS promedio y desvíos estándar de las FDs para los cuatro tipos de panes]{MFS promedio y desvíos estándar de las FDs para los cuatro tipos de panes. Izquierda: MFS promedio, derecha: desvíos estándar.}
 \label{fig:meansMFS}
 \end{figure}
 
@@ -566,7 +584,7 @@ Las Fig.~\ref{realbin} y Fig.~\ref{best} muestran un ejemplo de binarizaciones d
 
 \begin{figure}[!ht]
 \includegraphics[width=9cm]{figures/bestboxplot}
-\caption{Mejores parámetros para el tipo de pan {\em baguette}. El error total en medianas es de $\sim 0.21$.}
+\caption[Mejores parámetros de síntesis para el tipo de pan {\em baguette}]{Mejores parámetros para el tipo de pan {\em baguette}. El error total en medianas es de $\sim 0.21$.}
 \label{bestboxplot}
 \end{figure}
 
@@ -602,7 +620,7 @@ La Fig.~\ref{realbin2} y  Fig.~\ref{best2} muestran un ejemplo de binarizaciones
 
 \begin{figure}[!ht]
 \includegraphics[width=9cm]{figures/bestboxplot2}
-\caption{Mejores parámetros para un tipo casero de pan. El error total en medianas es de $\sim 0.88$.}
+\caption[Mejores parámetros de síntesis para un tipo casero de pan]{Mejores parámetros para un tipo casero de pan. El error total en medianas es de $\sim 0.88$.}
 \label{bestboxplot2}
 \end{figure}
 
