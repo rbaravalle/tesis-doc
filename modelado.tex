@@ -9,33 +9,92 @@ La misma se desarrolla en un ambiente de cocina, y por lo tanto existen alimento
 Debido a la inexistencia de modelos estándar de determinados materiales en la literatura de computación gráfica (comestibles), los artistas y programadores encargados de llevar a cabo la producción visual de la película debieron crear técnicas ad-hoc para lograr un renderizado realista de los diferentes materiales.
 Sin embargo, el éxito visual obtenido no se vio acompañado de una liberación del código que producía dichas imágenes, por lo cual la técnica permaneció para uso privado de la compañía productora, resultando en una difícil reproducción de dichos materiales por parte de terceros.
 
-En nuestro trabajo intentamos subsanar estas deficiencias.
-Por un lado, la falta de modelos ad-hoc documentados y por lo tanto reproducibles, y por otro, la utilización de modelos físicos basados en los procesos reales de formación de los materiales, los cuales sin dudas provocarán que el resultado sintético posea una mayor similitud visual y estructural a los materiales que se pretenden representar.
+En esta tesis se intentan subsanar estas deficiencias.
+Por un lado, la falta de modelos fenomenologicos documentados y por lo tanto reproducibles, y por otro, la utilización de modelos físicos basados en los procesos reales de formación de los materiales, los cuales sin dudas provocarán que el resultado sintético posea una mayor similitud visual y estructural a los materiales que se pretenden representar.
 
-\section{Un Framework para la Síntesis de Texturas de Materiales}
-En primer lugar presentaremos un sencillo procedimiento, en dos dimensiones, que permite obtener texturas de distintos materiales.
-Dichos materiales usualmente se presentan en publicaciones separadas en la literatura, dado que los procedimientos que producen las mismas son fuertemente diferentes.
-El procedimiento presentado ser\'a luego derivado para obtener texturas de pan y otros materiales porosos.
+En este capítulo introducimos modelos procedimentales que permiten realizar simulaciones de la geometr\'ia de la miga de pan.
+
+%\subsection{Introducción}
+Como fue discutido en el capítulo anterior, la inmensa variedad de materiales, y sus complejas interacciones con la energía radiante que incide sobre los mismos, han sido un tópico central de investigación en las últimas décadas en Computación Gráfica.
+El modelado de la naturaleza en física ha demostrado capturar de manera muy precisa fenómenos de transporte de la luz.
+Las aproximaciones computacionales a estos modelos son una de las ramas más investigadas en el renderizado de materiales.
+El modelado geométrico de materiales sigue una estrategia de investigación similar. Primero se construye un modelo físico del material, el cual luego es aproximado computacionalmente.
+
+Debido a estas observaciones, el renderizado foto-realístico de materiales debe considerar tanto el modelado geométrico de los mismos como su interacción con la luz, para lograr una aproximación adecuada de la apariencia del material.
+La elección del modelo geométrico depende de cada material, y de la escala de representación buscada.
+Esta elección influencia fuertemente el algoritmo de renderizado. 
+
+Existen dos tipos principales de modelos para capturar la apariencia de materiales: superficies y volúmenes.
+Para esto existen dos ecuaciones principales.
+Por un lado, la ecuación del rendering \cite{Kajiya1986} captura la microgeometría de los materiales y su interacción con la luz en superficies.
+Por otro, la ecuación del rendering de volúmenes \cite{Kajiya1984} modela fenómenos volúmetricos como la transmitancia, la extinción, etc., debido a propiedades del medio (o material).
+
+Si el material a representar es homogéneo (metales, plásticos, y similares), la elección típica es utilizar una superficie para representar el mismo \cite{Neumann1999}.
+Esta elección modela la superficie del material asumiendo distribuciones estadísticas en su microgeometría.
+Para lograr capturar detalles mesoscópicos, por ejemplo en el caso de maderas o ladrillos \cite{Lefebvre2000}, una técnica usual es precomputar dichas características en texturas, las cuales luego son mapeadas en la superficie.
+La utilización de superficies es usualmente menos costosa computacionalmente, pero por otro lado impone limitaciones al realismo que se puede alcanzar, sobre todo en aquellos detalles que son propios de la estructura a nivel mesoscópico y la interacción de la misma con la luz (por ejemplo luz que pasa a través de agujeros en una superficie).
+
+Siguiendo este razonamiento, la miga del pan es un material extremadamente complejo de capturar, modelar y renderizar, debido a la geometría a distintos niveles (microscópico y mesoscópico) y su resultante interacción con la energía radiante.
+De esta forma, la utilización de superficies no resulta adecuada, ya que la textura del pan debe su apariencia en gran medida a los fenómenos previamente explicados.
+Si bien es cierto que existen métodos en la literatura que utilizan superficies para representar características mesoscópicas de los materiales como funciones bidireccionales de texturas (bidirectional texture functions, \acrshort{BTF}) \cite{Tong2002}, las mismas no manejan adecuadamente la interacción lumínica antes mencionada.
+Existe un intento en la literatura por suprimir esta falta \cite{Tong2005}.
+El método produce imágenes realistas, pero existen muchas dificultades prácticas en la captura, el cómputo y el renderizado.
+Estas limitaciones provocan que la utilización de dicho método no sea práctica por el momento.
+Además, el método resulta inflexible dado que para cada imagen del material es necesario repetir todo el proceso (dos imágenes distintas del material requieren dos capturas).
+Tampoco es posible obtener cortes del mismo, dada la naturaleza de superficie del método.
+
+Por otro lado, existen numerosas publicaciones que tratan el modelado de materiales mejor adaptados a una representación volumétrica (por ejemplo humo o nubes) \cite{Chentanez2011,Zhou2008}.
+La utilización de volúmenes es costosa computacionalmente pero presenta varias ventajas. Una de ellas es que no depende de una malla de triángulos, como en el caso de las superficies, y por lo tanto no presenta las desventajas mencionadas para las mismas.
+
+Finalmente, existe un compromiso al momento de modelar materiales complejos y elegir una representación adecuada.
+Donde se requiere simplicidad y velocidad (posiblemente tiempo real), se utilizan superficies, en cambio, si el foto-realismo es el objetivo final, es más adecuado optar por una representación volumétrica.
+En los últimos años esta elección se ve perturbada por la aparición de hardware paralelo de alta velocidad (placas gráficas o GPUs), ya que un diseño adecuado podría alcanzar imágenes foto-realistas utilizando volúmenes en tiempos interactivos.
+%Esto es lo que presentaremos a continuación.
+
+
+En este capítulo proponemos una representación volumétrica para la geometría de la miga de pan, alcanzando tasas de refresco de tiempo real.
+Existe un intento similar en la literatura \cite{Perlin1989}, el cual utiliza funciones algebraicas que representan la geometría del material, pero la utilización de funciones algebracias es impráctica para el caso de materiales porosos estocásticos.
+
+\section[Síntesis de Texturas de Materiales]{Un Framework para la Síntesis de Texturas de Materiales}
+
+La textura característica de la miga de pan es el resultado de numerosos procesos.
+Una de las principales transformaciones es producida por el crecimiento de la levadura en la masa cruda del pan.
+Este proceso atañe la mayor responsabilidad en la formación de la geometría porosa macroscópica del material.
+La observación detallada de binarizaciones de fotografías de cortes en la masa cruda, durante distintas etapas del proceso de leudado y cocción del pan \cite{Scanlon2001}, permite sentar las bases de un algoritmo fenomenológico que responde a este comportamiento.
+En dichas imágenes se observa un crecimiento pseudo-aleatorio de burbujas atrapadas en la masa.
+El resultado final es un conjunto de burbujas de distintos tamaños.
+
+La implementación de este método es el motivo de esta sección.
+Si bien el objetivo del mismo es la producción de geometrías, como subproducto, surgen imágenes o geometrías que recuerdan apariencias típicas de otros materiales.
+Al asignárseles colores, permiten obtener imágenes aceptables de los mismos.
+
+Presentamos entonces un método procedimental de generación de texturas de materiales en dos dimensiones, basado en el crecimiento de partículas.
+Una textura es una imagen. o arreglo bidimensional, con múltiples usos que almacena información sobre un fenómeno determinado.
+En este caso, una textura representará el material directamente, a nivel macroscópico (es decir una imagen del mismo).
+La simulación de imágenes de materiales usualmente se presenta en publicaciones separadas en la literatura, dado que los procedimientos que producen distintos materiales se basan en metodologías dispares.
+
+El algoritmo introducido será especializado en la siguiente sección para obtener geometrías de la miga de pan y otros materiales porosos.
 
 %Una vez establecidas las texturas en computación gráfica como un método simple y eficiente de representar materiales, se idearon técnicas automáticas para generarlas.
 %De esta forma, no se depende exclusivamente de imágenes para obtener las mismas.
 
-\subsection{Sistemas de Partículas y Autómatas Celulares}
-En un sistema de part\'iculas \cite{Reeves1983} t\'ipico las part\'iculas nacen, se desarrollan y mueren, respetando reglas que les son impuestas por el sistema. Estos sistemas intentan modelar la din\'amica del fen\'omeno a trav\'es del tiempo, siendo uno de sus principales intereses mostrar una animaci\'on del mismo \cite{Gao2010, Bagar2010, Lentine2010}.
+\subsection{Sistemas de Partículas}
+Un sistema de partículas está compuesto por abstracciones denominadas {\em partículas}, las cuales coexisten en un mismo ambiente.
+En un sistema de part\'iculas \cite{Reeves1983} las part\'iculas nacen, se desarrollan y mueren, respetando reglas que les son impuestas por el sistema. Estos sistemas intentan modelar la din\'amica del fen\'omeno a trav\'es del tiempo, siendo uno de sus principales intereses mostrar una animaci\'on del mismo \cite{Gao2010, Bagar2010, Lentine2010}.
 
 Se propone utilizar estos sistemas como generadores procedimentales de texturas. Un enfoque similar puede observarse en \cite{Kranidotis98}, aunque el mismo no fue desarrollado en profundidad.
-Aquí se sigue una linea de investigaci\'on similar, presentando un sistema de part\'iculas que est\'a caracterizado por el crecimiento de las mismas en cada iteraci\'on, las cuales ocupan texels asign\'andoles colores, pudi\'endose detener al mismo en la iteraci\'on que se crea conveniente, obteni\'endose una textura.
-Las im\'agenes resultantes presentan aleatoriedad, lo cual es deseable en materiales naturales.
+Aquí se atiende una linea de investigaci\'on similar, presentando un sistema de part\'iculas que est\'a caracterizado por el crecimiento de las mismas en cada iteraci\'on, las cuales ocupan texels (elemento individual de una textura bidimensional, correspondiente a una posición $(u,v)$ dentro de la misma) asign\'andoles colores, pudi\'endose detener al mismo en una iteración arbitraria, obteni\'endose una textura.
+Debido a la utilización de una selección aleatoria de los texels vecinos donde crece cada partícula, las im\'agenes resultantes presentan apariencia estocástica, lo cual es deseable en materiales naturales.
 A trav\'es de la direcci\'on de crecimiento de las part\'iculas se producen distintos patrones visuales.
 
 Es posible representar materiales cl\'asicos como madera, granito y m\'armol, pero tambi\'en otros como mosaicos, pinturas, vegetaci\'on, entre muchos otros.
-En un trabajo anterior \cite{Baravalle2010} se abord\'o la generaci\'on procedimental de texturas.
-La diferencia radica en el mecanismo de generaci\'on, dado que con esta nueva propuesta es un {\em proceso temporal} el que produce los resultados, con lo cual puede representarse todo el proceso de formaci\'on de un material.
-Adem\'as, cada corrida del algoritmo produce una textura distinta utilizando los mismos par\'ametros, debido a la naturaleza aleatoria de la generaci\'on (aunque el uso de seeding permitir\'ia repetir texturas en el caso de requerirse, por ejemplo para generar baldosas id\'enticas).
+Un ejemplo de generación procedimental de texturas puede observarse en \cite{Baravalle2010}.
+La principal diferencia con este trabajo radica en el mecanismo de generaci\'on, dado que con esta nueva propuesta es un {\em proceso temporal} el que produce los resultados, con lo cual puede representarse todo el proceso de formaci\'on de un material.
+Adem\'as, cada corrida del algoritmo produce una textura distinta utilizando los mismos par\'ametros, debido a la naturaleza aleatoria de la generaci\'on (aunque el uso de semillas permite repetir texturas en el caso de requerirse, por ejemplo para generar baldosas id\'enticas).
 
-Se utiliza como plataforma de implementaci\'on a WebGL\footnote{\em http://www.khronos.org/webgl/}, recientemente propuesta por el Khronos Group (Open Standars for Media Authoring and Acceleration), dado que la misma otorga portabilidad al modelo. 
-Programadores pueden incluirlo como biblioteca en aplicaciones gr\'aficas.
-Dise\~nadores pueden utilizar la implementaci\'on para producir materiales, dada la intuitividad de los par\'ametros del mismo.
+Se utiliza como plataforma de implementaci\'on a WebGL\footnote{\em http://www.khronos.org/webgl/}, recientemente propuesta por el Khronos Group (Open Standars for Media Authoring and Acceleration), dado que la misma otorga portabilidad al modelo (es posible ejecutarlo en una gran variedad de navegadores independientemente de la plataforma en la que se encuentre la computadora). 
+La implementación desarrollada permite incluirlo en aplicaciones gr\'aficas.
+Dada la intuitividad de los parámetros del mismo (direcciones de crecimiento, cantidad de partículas iniciales, etc.), los artistas pueden interactuar con el programa, buscando obtener características en las imágenes resultantes.
 
 \subsubsection{Desarrollo}
 Inicialmente el sistema consta de un conjunto de part\'iculas $P$
@@ -88,15 +147,16 @@ Es decir, si una part\'icula posee un texel en $T_{i}$, ninguna otra lo posee (l
 Las part\'iculas pueden {\em nacer} y {\em morir}, lo cual representa su inclusi\'on o eliminaci\'on de $P$.
 Al morir, la part\'icula deja asociados los colores de su conjunto $T_{i}$ en $B$, pudiendo utilizarse posteriormente esta informaci\'on.
 
-Podemos intentar aplicar estas técnicas al modelado procedimental de texturas. 
-
-En la Fig.~\ref{resultados} se observan algunas im\'agenes sintetizadas.
+%Podemos intentar aplicar estas técnicas al modelado procedimental de texturas. 
+En la Fig. \ref{resultados} se observan algunas im\'agenes sintetizadas con esta metodología.
 En la primera fila, la primera y cuarta textura muestran patrones con direcci\'on vertical, direcci\'on elegida para hacer crecer a las part\'iculas.
 La \'ultima figura de la segunda fila, muestra part\'iculas que crecen en 3 direcciones posibles: aleatorio ($50\%$), vertical ($25\%$) y horizontal ($25\%$), lo cual demuestra que se posee un control preciso sobre las formas resultantes en las texturas.
-En la Figura \ref{sintesis} se observa un ejemplo de s\'intesis.
+
+En la Fig. \ref{sintesis} se observa un ejemplo de s\'intesis.
 De izquierda a derecha, se observan texturas obtenidas en las iteraciones $10$, $150$, $250$, $500$ y $1000$.
-En la Figura \ref{teteras} se observan texturas sintetizadas aplicadas a un objeto mediante texture mapping, mostrando una calidad aceptable para ser utilizadas en aplicaciones gr\'aficas.
-La Figura \ref{muerte} muestra el efecto de muerte de part\'iculas.
+En la Fig. \ref{teteras} se observan texturas sintetizadas aplicadas a un objeto mediante mapeo de texturas, mostrando una calidad aceptable para ser utilizadas en aplicaciones gr\'aficas.
+
+La Fig. \ref{muerte} muestra el efecto de muerte de part\'iculas.
 Las mismas liberan el espacio en $T_{i}$ dejando asociado su color en $B$, permitiendo que las dem\'as puedan crecer en dichos texels.
 De esta forma, puede utilizarse posteriormente la informaci\'on que la misma dej\'o asociada.
 En este caso los colores de la part\'icula que libera el espacio y la ocupante fueron mezclados, obteni\'endose im\'agenes que parecen haber sido ``pintadas'' por capas.
@@ -144,63 +204,23 @@ Se muestra un ejemplo de s\'intesis de una textura en la Figura \ref{sintesis}. 
 \end{figure}
 
 Los resultados obtenidos muestran una flexibilidad útil para producir distintos materiales.
-La idea de utilizar sistemas de partículas para producir materiales será utilizada en la sección siguiente.
-Más específicamente para producir geometrías de materiales porosos, particularmente la miga de pan.
+Como fue aclarado, la idea de utilizar sistemas de partículas para producir materiales será utilizada en la sección siguiente.
 Para esto, se generalizarán los resultados a tres dimensiones.
 
 \section{Modelado Procedimental de la Geometría de la Miga de Pan}
-En esta sección introducimos un modelo procedimental que permite realizar simulaciones de la geometr\'ia de la miga de pan, basado en el framework introducido en la secci\'on anterior.
-Si bien el modelo introducido no está basado en primeros principios, el mismo es un paso previo que permite sentar las bases de un modelo inspirado físicamente.
-
-\subsection{Introducción}
-La inmensa variedad de materiales, y sus complejas interacciones con fuentes lumínicas, han sido un tópico central de investigación en las últimas décadas en Computación Gráfica.
-El modelado de la naturaleza en física ha demostrado capturar de manera muy precisa fenómenos de transporte de la luz.
-Las aproximaciones computacionales a estos modelos son una de las ramas más investigadas en el renderizado de materiales.
-El modelado geométrico de materiales sigue una estrategia de investigación similar. Primero se construye un modelo físico del material, el cual luego es aproximado computacionalmente.
-Debido a estas observaciones, el renderizado foto-realístico de materiales debe considerar tanto el modelado geométrico de los mismos como su interacción con la luz, para lograr una aproximación adecuada del material.
-
-La elección del modelo geométrico depende de cada material, y de la escala de representación buscada.
-Esta elección influencia fuertemente el algoritmo de renderizado. 
-Existen dos tipos principales de modelado de materiales: superficies y volúmenes.
-Para esto existen dos ecuaciones principales.
-Por un lado, la ecuación del rendering \cite{Kajiya1986} captura la microgeometría de los materiales y su interacción con la luz en superficies.
-Por otro, la ecuación del rendering de volúmenes \cite{Kajiya1984} modela fenómenos volúmetricos como la transmitancia, la extinción, etc., debido a propiedades del medio (o material).
-
-Si el material a representar es homogéneo (metales, plásticos, y similares), la elección típica es utilizar una superficie para representar el mismo \cite{Neumann1999}.
-Esta elección modela la superficie del material asumiendo distribuciones estadísticas en su microgeometría.
-Para lograr capturar detalles mesoscópicos, por ejemplo en el caso de maderas o ladrillos \cite{Lefebvre2000}, una técnica usual es precomputar dichas características en texturas, las cuales luego son mapeadas en la superficie.
-La utilización de superficies es usualmente menos costosa computacionalmente, pero por otro lado impone limitaciones al realismo que se puede alcanzar, sobre todo en aquellos detalles que son propios de la estructura a nivel mesoscópico y la interacción de la misma con la luz (por ejemplo luz que pasa a través de agujeros en una superficie).
-
-Siguiendo este razonamiento, la miga del pan es un material extremadamente complejo de capturar, modelar y renderizar, debido a la geometría a distintos niveles (microscópico y mesoscópico) y su resultante interacción y fenómenos lumínicos.
-De esta forma, la utilización de superficies no es adecuada bajo ningún punto de vista, ya que la textura del pan está dada en gran medida por los fenómenos previamente explicados.
-Si bien es cierto que existen métodos en la literatura que utilizan superficies para representar características mesoscópicas de los materiales como funciones de texturas bidireccionales (bidirectional texture functions, BTF) \cite{Tong2002}, las mismas no manejan adecuadamente la interacción lumínica antes mencionada.
-Existe un intento en la literatura por suprimir esta falta \cite{Tong2005}.
-El método produce imágenes realistas, pero existen muchas dificultades prácticas en la captura, el cómputo y el renderizado.
-Estas limitaciones provocan que la utilización de dicho método no sea práctica por el momento.
-Además, el método resulta inflexible dado que para cada imagen del material es necesario repetir todo el proceso (dos imágenes distintas del material requieren dos capturas).
-Tampoco es posible obtener cortes del mismo, dada la naturaleza de superficie del método.
-
-Por otro lado, existen numerosas publicaciones que tratan el modelado de materiales mejor adaptados a una representación volumétrica (por ejemplo humo o nubes) \cite{Chentanez2011,Zhou2008}.
-La utilización de volúmenes es costosa computacionalmente pero presenta varias ventajas. Una de ellas es que no depende de una malla de triángulos, como en el caso de las superficies, y por lo tanto no presenta las desventajas mencionadas para las mismas.
-
-Finalmente, existe un compromiso al momento de modelar materiales complejos y elegir una representación adecuada.
-Donde se requiere simplicidad y velocidad (posiblemente tiempo real), se utilizan superficies, en cambio, si el foto-realismo es el objetivo final, es más adecuado optar por una representación volumétrica.
-En los últimos años esta elección se ve perturbada por la aparición de hardware paralelo de alta velocidad (placas gráficas o GPUs), ya que un diseño adecuado podría alcanzar imágenes foto-realistas utilizando volúmenes en tiempos interactivos.
-Esto es lo que presentaremos a continuación.
 
 
-En este capítulo proponemos una representación volumétrica para la geometría de la miga de pan, alcanzando incluso tasas de refresco de tiempo real.
-Existe un intento similar en la literatura \cite{Perlin1989}, el cual utiliza funciones algebraicas que representan la geometría del material.
-En nuestro caso, para ganar flexibilidad de diseño, utilizamos los sistemas de partículas previamente mencionados, en un cubo (tres dimensiones), en conjunto con sistemas dinámicos \cite{Strogatz2001} que provocan una evolución del sistema, produciendo patrones con formas geométricas naturales.
+Utilizamos los sistemas de partículas previamente mencionados, en un cubo (tres dimensiones), pero reemplazando las direcciones de crecimiento por sistemas dinámicos \cite{Strogatz2001} que provocan una evolución del sistema, produciendo patrones con formas geométricas naturales.
 Este es un intento por simular el efecto de la levadura en la masa cruda del pan.
 Estos procedimientos producen distribuciones de burbujas de distintos tamaños, resultando en un mecanismo controlable, que presenta propiedades estadísticas.
-El sistema es capaz de generar imágenes foto-realistas de diversos tipos de pan, como se mostrará más adelante.
+
+Si bien la metodología introducida no está basada en primeros principios, la misma constituye un paso previo que permite sentar las bases de un modelo inspirado físicamente, el cual se presentará en la siguiente sección.
 
 \section{Sistemas Dinámicos como Modelo de Miga de Pan}
-El prop\'osito de este algoritmo es producir una geometr\'ia la cual se renderizar\'a posteriormente. Por lo tanto, en lugar de devolver el color de una posici\'on espec\'ifica, el algoritmo genera un campo escalar compuesto de $0$s y $1$s ($0$ si la posici\'on contiene aire, $1$ si la misma contiene masa).
-Esta representaci\'on resulta adecuada para ser renderizada utilizando DVR.
+El propósito de este algoritmo es producir una geometr\'ia la cual se renderizar\'a posteriormente. Por lo tanto, en lugar de devolver el color de una posici\'on espec\'ifica, el algoritmo genera un campo escalar compuesto de $0$s y $1$s ($0$ si la posici\'on contiene aire, $1$ si la misma contiene masa).
+%Esta representaci\'on resulta adecuada para ser renderizada utilizando DVR.
 
-El sistema consta de un conjunto de part\'iculas $P$,
+Similarmente al caso de generación de texturas, el sistema consta de un conjunto de part\'iculas $P$,
 
 \begin{equation}
   P = \{p_{1}, ... , p_{n}\}, n  \in \mathbb{N},
@@ -224,7 +244,7 @@ Cada elemento en $P$ posee las siguientes propiedades:
 
 El vector $O$ representa las posiciones que ser\'an afectadas por la part\'icula, y el contorno $C$ se utiliza para asegurar que las part\'iculas se eviten entre s\'i.
 
-El algoritmo se describe, simplificadamente, en Algoritmo $1$. 
+El procedimiento se describe, simplificadamente, en el Algoritmo $1$. 
 
 \begin{algorithm}[h!]
 \caption{Algoritmo de modelado}
@@ -294,7 +314,7 @@ Finalmente, el algoritmo devuelve la grilla $L$, la cual ser\'a renderizada post
 \subsection{Sistemas Din\'amicos}
 
 Las ecuaciones diferenciales tienen como prop\'osito tratar con la dificultad (o imposibilidad) de hallar soluciones anal\'iticas en procesos din\'amicos. En primer lugar, se define un modelo matem\'atico del problema, del cual luego se obtienen 
-las ecuaciones diferenciales asociadas. Los mismos se resuelven por medio de aproximaciones num\'ericas en cada instante de tiempo.
+las ecuaciones diferenciales asociadas. Las mismas se resuelven por medio de aproximaciones num\'ericas en cada instante de tiempo.
 
 Los costos computacionales de estas soluciones dependen de la complejidad del problema y el n\'umero de ecuaciones del sistema. En este trabajo proponemos utilizar una sub-\'area de ecuaciones diferenciales llamada ecuaciones diferenciales ordinarias (ODE). En esta representaci\'on, el tiempo es tratado como la \'unica variable independiente.
 
@@ -313,7 +333,9 @@ a $t$. Las variables $x_{i}$ y las funciones $f_{i}$ se definen de manera difere
 
 \subsection{Evoluci\'on de sistemas de part\'iculas utilizando sistemas din\'amicos}
 
-La percepci\'on humana puede detectar patrones en la estructura de la miga de pan. Distintas observaciones pueden realizarse sobre la distribuci\'on de las burbujas en la misma (ver Fig.~\ref{fg:panreal}). Primero, la forma de las burbujas cercanas a la corteza tiende a estirarse paralelamente a la misma. Esto es resultado de la acci\'on de las elevadas temperaturas durante la cocci\'on de la masa. Tambi\'en resulta evidente que la estructura completa es similar a un fluido con la forma de la corteza.
+La percepci\'on humana puede detectar patrones en la estructura de la miga de pan. Distintas observaciones pueden realizarse sobre la distribuci\'on de las burbujas en la misma (ver Fig.~\ref{fg:panreal}).
+Primero, la forma de las burbujas cercanas a la corteza tiende a estirarse paralelamente a la misma.
+Esto es resultado de la acci\'on de las elevadas temperaturas durante la cocci\'on de la masa. Tambi\'en resulta evidente que la estructura completa es similar a un fluido con la forma de la corteza.
 
 
 \begin{figure*}[htb!]
@@ -322,7 +344,10 @@ La percepci\'on humana puede detectar patrones en la estructura de la miga de pa
   \label{fg:panreal}
 \end{figure*}
 
-Por otro lado, los sistemas din\'amicos previamente presentados producen formas naturales (ver Fig.~\ref{fg:sistdin2}). En las im\'agenes pueden observarse c\'irculos y espirales, entre otras formas. Las im\'agenes se obtuvieron dibujando trayectorias sobre un plano, siguiendo distintas ODEs. Tres ODEs describen las din\'amicas presentes en las im\'agenes. A modo de ejemplo, la imagen de la izquierda es el resultado del siguiente conjunto de ecuaciones:
+Por otro lado, los sistemas din\'amicos previamente presentados producen formas naturales (ver Fig.~\ref{fg:sistdin2}).
+En las im\'agenes pueden observarse c\'irculos y espirales, entre otras formas.
+Las im\'agenes se obtuvieron dibujando trayectorias sobre un plano, siguiendo distintas ODEs.
+Tres ODEs describen las din\'amicas presentes en las im\'agenes. A modo de ejemplo, la imagen de la izquierda es el resultado del siguiente conjunto de ecuaciones:
 
 \begin{equation} \label{eq:simple}  
   \begin{aligned}
@@ -338,9 +363,15 @@ Por otro lado, los sistemas din\'amicos previamente presentados producen formas 
   \label{fg:sistdin2}
 \end{figure*}
 
-En los ejemplos se eligen posiciones aleatorias y luego el sistema se resuelve por medio de un {\em solver} Runge-Kutta de cuarto orden, el cual permite conocer la direcci\'on a tomar en cada punto por la trayectoria (en las im\'agenes se computaron trayectorias hacia adelante y hacia atrás en el tiempo para lograr una mejor visualizaci\'on). La imagen de la izquierda muestra un atractor y un repeledor claramente visibles. El centro de la espiral m\'as a la izquierda es un atractor (a medida que $t$ avanza, las trayectorias convergen hacia el punto), mientras que el otro centro es un repeledor. Los atractores pueden no ser puntuales, como muestran las restantes dos im\'agenes. La imagen de la derecha muestra atractores en forma de c\'irculos (las trayectorias ciclan por el c\'irculo).
+En los ejemplos se eligen posiciones aleatorias y luego el sistema se resuelve por medio de un {\em solver} Runge-Kutta de cuarto orden, el cual permite conocer la direcci\'on a tomar en cada punto por la trayectoria (en las im\'agenes se computaron trayectorias hacia adelante y hacia atrás en el tiempo para lograr una mejor visualizaci\'on).
+La imagen de la izquierda muestra un atractor y un repeledor claramente visibles.
+El centro de la espiral m\'as a la izquierda es un atractor (a medida que $t$ avanza, las trayectorias convergen hacia el punto), mientras que el otro centro es un repeledor.
+Los atractores pueden no ser puntuales, como muestran las restantes dos im\'agenes.
+La imagen de la derecha muestra atractores en forma de c\'irculos (las trayectorias ciclan por el c\'irculo).
 
-Las part\'iculas producen distintos patrones al seguir las trayectorias definidas en el plano y el espacio. Esto se logra resolviendo num\'ericamente el sistema din\'amico en la posici\'on agregada a la part\'icula, seleccionando como siguiente posici\'on de crecimiento aquella posici\'on del contorno que mejor aproxima la soluci\'on del sistema din\'amico (para esto, sólo se agrega al contorno esa posición). El Algoritmo $2$ muestra cómo se modifica el algoritmo de modelado para incluir este comportamiento.
+Las part\'iculas producen distintos patrones al seguir las trayectorias definidas en el plano y el espacio.
+Esto se logra resolviendo num\'ericamente el sistema din\'amico en la posici\'on agregada a la part\'icula, seleccionando como siguiente posici\'on de crecimiento aquella posici\'on del contorno que mejor aproxima la soluci\'on del sistema din\'amico (para esto, sólo se agrega al contorno esa posición).
+El Algoritmo $2$ muestra cómo se modifica el algoritmo de modelado para incluir este comportamiento.
 
 \begin{algorithm}[h!]
 \caption{Modificación del algoritmo de modelado por medio de sistemas dinámicos}
@@ -369,7 +400,10 @@ Las part\'iculas producen distintos patrones al seguir las trayectorias definida
 \end{algorithmic}
 \end{algorithm}
 
-Las part\'iculas se deforman de forma global en un patr\'on que es visualmente similar a las trayectorias que produce el sistema (ver Fig.~\ref{fg:sistdin3}). En las im\'agenes, de izquierda a derecha se decrementa la {\em aleatoriedad} de las trayectorias. El par\'ametro aleatoriedad seteado a $0.1$ genera la imagen de la derecha, lo cual significa que las burbujas eligen como siguiente posición de crecimiento la que mejor se acopla al sistema con una probabilidad de $0.9$. La probabilidad se define como $1-aleatoriedad$, donde $0 \leq aleatoriedad \leq 1$. Las ecuaciones del sistema son las mismas que las de la imagen derecha mostrada en la Fig.~\ref{fg:sistdin2}. Estos patrones pueden ser utilizados adem\'as en otros materiales cocidos, variando el par\'ametro de aleatoriedad. Distintos sistemas de ecuaciones pueden utilizarse para definir distintos patrones.
+Las part\'iculas se deforman de forma global en un patr\'on que es visualmente similar a las trayectorias que produce el sistema (ver Fig.~\ref{fg:sistdin3}).
+En las im\'agenes, de izquierda a derecha se decrementa la {\em aleatoriedad} de las trayectorias.
+El par\'ametro aleatoriedad seteado a $0.1$ genera la imagen de la derecha, lo cual significa que las burbujas eligen como siguiente posición de crecimiento la que mejor se acopla al sistema con una probabilidad de $0.9$.
+La probabilidad se define como $1-aleatoriedad$, donde $0 \leq aleatoriedad \leq 1$. Las ecuaciones del sistema son las mismas que las de la imagen derecha mostrada en la Fig.~\ref{fg:sistdin2}.
 
 \begin{figure*}[htb!]
   \centerline{\includegraphics[width=13cm]{sistdin3}}
@@ -392,6 +426,8 @@ Las Figs.~\ref{fg:crumb} y \ref{fg:results2} muestran imágenes renderizadas uti
   \caption{Miga de pan sintetizada, vista desde distintos ángulos (con corteza agregada).}
   \label{fg:results2}
 \end{figure}
+
+Estos patrones pueden ser utilizados adem\'as en otros materiales cocidos, variando el par\'ametro de aleatoriedad. Distintos sistemas de ecuaciones pueden utilizarse para definir distintos patrones.
 
 Si bien es posible la obtención de distintas geometrías de manera sencilla y prácticamente de manera automática, todavía existen limitaciones en cuanto a la flexibilidad de los tipos de pan a producir.
 Se depende de un sistema dinámico para producir la forma global de la deformación, pero este sistema es difícil de controlar.
@@ -418,9 +454,9 @@ En primer lugar, reveeremos el estado del arte del proceso de fabricación del p
 Luego presentaremos los procesos de modelado, que junto con el modelo de iluminación del siguiente capítulo, permiten obtener imágenes foto realistas de distintos tipos de pan.
 
 \subsection{Trabajo Previo}
-El modelado procedimental de geometría reduce fuertemente la necesidad de intervención artística en dominios o situaciones donde la utilización de supervisión repetitiva del proceso se torna impráctica, por ejemplo al modelar ciudades \cite{Parish2001}, planetas \cite{Ebert2002}, edificios \cite{Muller2006}, y plantas \cite{Prusinkiewicz1990}. 
-Algunos métodos procedimentales utilizan gramáticas para definir descripciones matemáticas, representando relaciones espaciales entre las primitivas, por ejemplo cubos, cilindros o líneas.
-Las estructuras finales usualmente emergen utilizando recursión sobre elementos gramaticales.
+%El modelado procedimental de geometría reduce fuertemente la necesidad de intervención artística en dominios o situaciones donde la utilización de supervisión repetitiva del proceso se torna impráctica, por ejemplo al modelar ciudades \cite{Parish2001}, planetas \cite{Ebert2002}, edificios \cite{Muller2006}, y plantas \cite{Prusinkiewicz1990}. 
+%Algunos métodos procedimentales utilizan gramáticas para definir descripciones matemáticas, representando relaciones espaciales entre las primitivas, por ejemplo cubos, cilindros o líneas.
+%Las estructuras finales usualmente emergen utilizando recursión sobre elementos gramaticales.
 
 Si bien existen algunos ejemplos en la literatura sobre modelado y renderizado de la estructura de migas de pan \cite{Tong2005,Xenakis2007}, los mismos ignoran casi por completo el proceso real de formación.
 Algunos trabajos pioneros aplicaron modelos físicos de cocción a determinados tipos de pan para su renderizado, buscando obtener animaciones ({\em e.g.} \cite{Rodriguez-Arenas2011}), pero el modelado de la geometría de las burbujas de la miga del pan no fue tenido en cuenta.
@@ -442,7 +478,7 @@ En años recientes, la tecnología GPGPU \cite{Owens2007} permitió la posibilid
 A pesar de todos estos avances, el modelado y visualización foto-realista de panes y materiales porosos todavía presenta diversos retos.
 Además de un modelo geométrico realista, el renderizado requiere que se represente de manera adecuada los fenómenos de transporte de la luz, incluyendo auto-oclusión, auto-sombreado, transmitancia, translucencia, transparencia, entre otras.
 Solamente unas pocas publicaciones proponen atacar ambos problemas, pero utilizando consideraciones artísticas \cite{Xenakis2007}.
-Además, estos autores no dan suficientes detalles del modelado y renderización ya que existen derechos de propiedad intelectual, limitando enormemente la reproducción de dichas imágenes.
+Además, estos autores no liberaron suficientes detalles del modelado y renderización ya que existen derechos de propiedad intelectual, limitando enormemente la reproducción de dichas imágenes.
 
 Por otro lado, la comunidad artística usualmente produce imágenes realistas de pan utilizando fotografías de los mismos, y definiendo geometrías a partir de ellas, junto a la utilización de materiales translúcidos\footnote{http://www.blenderguru.com/tutorials/how-to-create-realistic-bread} y otras consideraciones {\em ad-hoc}\footnote{http://design.tutsplus.com/tutorials/create-a-realistic-loaf-of-bread-in-photoshop--psd-10555}.
 Si bien los resultados obtenidos son buenos, los procesos son tediosos y demandan horas.
@@ -451,10 +487,11 @@ Existen numerosas desventajas además de esta.
 Por ejemplo, no es posible obtener cortes arbitrarios del material resultante.
 
 
-\subsection{Visión global del Proceso}
+\subsection{Visión Global del Proceso}
 La Fig.~\ref{FigPipeline} muestra el proceso completo de formación de geometrías sintéticas de pan.
 Todos los pasos se aplican sobre campos escalares.
 Los usuarios pueden proveer el sistema con un modelo de tres dimensiones de su preferencia, o dejar que el sistema provea un pan de forma estándar ({\em croissants}, {\em baguettes}, etc.).
+
 La geometría introducida se voxeliza para proceder a las siguientes etapas.
 En la simulación del proceso de leudado, el usuario puede parametrizar la textura del pan (cantidad y tamaño de las burbujas y su distribución), o nuevamente dejar que el sistema provea parámetros estándar que producen tipos de pan conocidos.
 La masa cruda será intersectada con la geometría voxelizada para obtener un campo escalar, el cual tiene la forma externa que provee el usuario (o el sistema), con el interior de la misma compuesta de las burbujas procedentes de los parámetros establecidos (ver Sección~\ref{breadprov}).
@@ -466,7 +503,7 @@ El último paso aplica renderizado directo de volúmenes (direct volume renderin
 \subsection{Voxelización de la Geometría}
 
 En nuestro modelo es posible generar panes con geometrías arbitrarias, supliendo un modelo de triángulos en algún formato estándar.
-El modelo consta de un conjunto de pasos. El primer paso de la secuencia voxeliza un modelo provisto por un usuario con la utilidad de código abierto {\tt binvox} \footnote{http://www.cs.princeton.edu/~min/binvox/} \cite{Nooruddin2003}.
+El modelo consta de una serie de pasos. El primer paso de la secuencia voxeliza un modelo provisto por el usuario con la utilidad de código abierto {\tt binvox} \footnote{http://www.cs.princeton.edu/$\sim$min/binvox/} \cite{Nooruddin2003}.
 La voxelización genera un campo escalar binario, con $1$ representando que el voxel dado está dentro de la geometría, y $0$ significando que el voxel está fuera de la geometría.
 El paso de leudado (siguiente subsección) genera la textura del material que se ubica dentro de esta geometría voxelizada.
 Esto permite generar panes con formas arbitrarias, tales como {\em baguettes}, {\em croissants}, {\em lactal}, u otros menos comunes (una tetera o un conejo).
