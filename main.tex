@@ -12,6 +12,11 @@
 
 
 \usepackage{emptypage}
+\usepackage[acronym,shortcuts,xindy]{glossaries}
+
+\makeglossaries
+
+\input{acronimos}
 
 \lhead[]{\rightmark}
 \chead[]{}
@@ -54,6 +59,7 @@ Una bonita historia
 \addcontentsline{toc}{chapter}{Índice de tablas} % para que aparezca en el indice de contenidos
 \listoftables % indice de tablas
 
+\printglossary[type=\acronymtype,style=list, title=Acrónimos]
 
 % pagina en blanco
 \newpage

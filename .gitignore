@@ -8,3 +8,9 @@ main.pdf
 *.lot
 *.lof
 *.bak
+*.xdy
+*.ist
+*.glo
+*.alg
+*.acn
+*.acr
