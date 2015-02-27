@@ -65,7 +65,7 @@ En dichas imágenes se observa un crecimiento pseudo-aleatorio de burbujas atrap
 El resultado final es un conjunto de burbujas de distintos tamaños.
 
 La implementación de este método es el motivo de esta sección.
-Si bien el objetivo del mismo es la producción de geometrías, como subproducto, surgen imágenes o geometrías que recuerdan apariencias típicas de otros materiales.
+Si bien el objetivo del mismo es la producción de geometrías, como sub-producto, surgen imágenes o geometrías que recuerdan apariencias típicas de otros materiales.
 Al asignárseles colores, permiten obtener imágenes aceptables de los mismos.
 
 Presentamos entonces un método procedimental de generación de texturas de materiales en dos dimensiones, basado en el crecimiento de partículas.
@@ -511,7 +511,7 @@ Esto permite generar panes con formas arbitrarias, tales como {\em baguettes}, {
 Un sub-producto importante de la matriz de geometría es un campo escalar secundario que puede ser obtenido por medio de una transformación de distancia.
 La transformación de distancia genera una matriz $n$-dimensional con las mismas dimensiones que la matriz que se transforma \cite{osh03}.
 La transformación computa, para cada entrada distinta de cero en la matriz, la distancia más cercana a una entrada nula de dicha matriz.
-Dada una matríz $n$-dimensional $M$, el algoritmo genera una matriz a valores reales $DF_{M}[i]$ con las mismas dimensiones que $M$,
+Dada una matríz $n$-dimensional $M$, el algoritmo genera una matriz a valores reales $DF_{M}$ con las mismas dimensiones que $M$,
 
 
 $$  DF_{M}[i] = \min \bigg\{ \delta(i,j): M[j] = 0 \bigg\},$$
@@ -522,26 +522,34 @@ $$  DF_{M}[i] = \min \bigg\{ \delta(i,j): M[j] = 0 \bigg\},$$
 %\end{align*}
 
 \noindent
-donde $\delta(i,j)$ podría ser la distancia de Manhattan o la distancia Euclideana en un espacio $n$ dimensional.
-Las entradas de la matriz lejanas a los bordes del objeto tomar valores más altos que aquellas cercanas a los mismos.
+donde $\delta(i,j)$ podría ser la distancia de Manhattan o la distancia Euclideana en un espacio $n$ dimensional, e $i$ y $j$ son vectores de $n$ dimensiones.
+Las entradas de la matriz lejanas a los bordes del objeto tomar valores mayores que aquellas cercanas a los mismos.
 De esta manera se obtiene un mapa de la distancia de cada voxel a las superficies tridimensionales del objeto.
 Este campo escalar de distancias será requerido en etapas posteriores del proceso.
+La Fig.\ref{fg:distance} muestra un ejemplo de un mapa de distancias.
+
+\begin{figure*}
+\includegraphics[width=13cm]{figures/distance}
+\caption[Mapa de distancias de una matriz bidimensional]{Mapa de distancias de una matriz bidimensional. A la izquierda se observa la matriz original, y a la derecha su mapa de distancias. Se observa que en los bordes, el valor del mapa es mínimo, aumentando hacia el centro.}
+\label{fg:distance}
+\end{figure*}
 
 
 \subsection{Simulación del Leudado}
 \label{breadprov}
 Como fue establecido, la textura observable en la masa cruda del pan está compuesta de burbujas, cuya distribución exacta es el resultado de procesos complejos, entre ellos, reacciones químicas, y deformaciones físicas de la masa.
-El paso de leudado consta en primera instancia del crecimiento libre de las burbujas, producido por seres vivos, la levadura.
+El paso de leudado consta en primera instancia del crecimiento libre de las burbujas, producido por la interacción de seres vivos (levadura) con la masa, la cual libera $CO_{2}$, resultando éste atrapado dentro de la masa.
 Luego, el cocinero interviene la masa deformándola de diversas maneras.
 Finalmente el paso de cocción produce la textura y distribución de burbujas finales.
-Los estudios fenomenológicos de estas texturas utilizan tomografía de rayos X y extracción de características sobre las mismas \cite{Gonzales2008,Babin2006,VanDyck2014}.
-Buscando obtener una variabilidad similar, en esta tesis generamos distribuciones de burbujas con un modelo basado en fractales, inspirado en las distribuciones de burbujas presentes en el queso, y la textura inducida por los cráteres lunares, propuesto en \cite{Mandelbrot1983}.
-Luego validamos los mismos utilizando el método multifractal denominado {\em Sandbox} (caja de arena, ya que realiza cálculos sobre una distribución de puntos aleatoria en la geometría).
-Esto será explicado en profundidad en el capítulo de validación.
 
-La textura de la masa es creada procedimentalmente en un campo escalar separado, definido en una matriz de tres dimensiones, de una manera similar a la matriz de geometría en la Subsección arriba.
-Cada voxel es iniciado a $1$ (significando que el material aún no tiene burbujas).
-El proceso comienza substrayendo esferas de radio $r_{min}$ posicionadas arbitrariamente en el campo escalar (esto se logra seteando a $0$ las celdas respectivas).
+Debido a la extrema complejidad de los pasos involucrados, las distribuciones exactas de burbujas carecen aún de explicación, por lo tanto existen estudios fenomenológicos sobre estas texturas, las cuales utilizan tomografía de rayos X y extracción de características sobre las mismas \cite{Babin2006,Gonzales2008,VanDyck2014}.
+Buscando obtener una variabilidad similar, en esta tesis generamos distribuciones de burbujas con un modelo basado en fractales, inspirado en las distribuciones de burbujas presentes en el queso, y la textura inducida por los cráteres lunares, propuesto en \cite{Mandelbrot1983}.
+Luego validamos los mismos utilizando el método multifractal denominado {\em Sandbox} (caja de arena, ya que realiza cálculos sobre una distribución de puntos que asemeja a arena dispersa de manera aleatoria en la geometría).
+Esto será explicado en profundidad en el siguiente capítulo (validación).
+
+La textura de la masa es creada procedimentalmente en un campo escalar separado, definido en una matriz de tres dimensiones, de una manera similar a la matriz de geometría en la Subsección anterior.
+Cada voxel es inicializado a $1$ (significando que el material aún no tiene burbujas).
+El proceso comienza sustrayendo esferas de radio $r_{min}$ posicionadas arbitrariamente en el campo escalar (esto se logra seteando a $0$ las celdas respectivas).
 Luego, substraemos esferas de radio mayor, nuevamente en posiciones arbitrarias, hasta un radio máximo $r_{max}$.
 La relación entre el número de esferas $N_{s}$ a ser sustraídas en cada paso, y sus respectivos radios $r$, está dada por la ley fractal,
 
@@ -575,6 +583,10 @@ P_{2} = P_{1} * G,
 donde $P_{1}$ es el campo $3D$ (matriz) que contiene las burbujas del leudado, y $G$ es el campo escalar que representa a la geometría voxelizada.
 
 La Fig.~\ref{fg:intersectProblem} muestra una versión renderizada de esta intersección.
+Si bien los resultados pueden parecer realistas, en panes reales, no es habitual que las burbujas sean visibles en la superficie, debido al leudado y cocción reales.
+Para solucionar este problema, utilizamos el campo escalar de distancias que computamos previamente, para deshabilitar la generación de burbujas en zonas cercanas a los bordes de la geometría, de acuerdo a cierto valor umbral, el cual será un parámetro.
+%El campo escalar binario resultante se computa de la siguiente manera,
+
 
 \begin{figure*}
 \includegraphics[width=13cm]{figures/intersectProblem}
@@ -582,9 +594,6 @@ La Fig.~\ref{fg:intersectProblem} muestra una versión renderizada de esta inter
 \label{fg:intersectProblem}
 \end{figure*}
 
-Si bien los resultados pueden parecer realistas, en panes reales, no es habitual que las burbujas sean visibles en la superficie, debido al leudado y cocción reales.
-Para solucionar este problema, utilizamos el campo escalar de distancias que computamos previamente, para deshabilitar la generación de burbujas en zonas cercanas a los bordes de la geometría, de acuerdo a cierto valor umbral, el cual será un parámetro.
-El campo escalar binario resultante se computa de la siguiente manera,
 
 %\begin{align*}
 %DF    &= distField(G),\\
@@ -623,10 +632,10 @@ Por lo tanto, los modelos antes citados incluyen sólo una simplificación de la
 Los resultados más relevantes en la literatura sugieren que un modelo unidimensional de la cocción puede ser suficiente para la mayoría de los casos prácticos.
 Por ejemplo, Purlis~\cite{Purlis2011} modela la cocción del pan como un problema unidimensional, representando la geometría como un cilindro infinito.
 Otros trabajos asumen sólo una coordenada radial, resultando también en modelos $1D$~\cite{Powathil2004, Thorvaldsson1999}.
-Estos trabajos muestran que utilizar una representación de una única dimensión produce resultados casi idénticos a aquellos que se obtienen utilizando un mayor número de dimensiones, ya que el efecto de la cocción en las burbujas es la menos importante en el proceso de fabricación del pan.
+Estos trabajos muestran que utilizar una representación de una única dimensión produce resultados casi idénticos a aquellos que se obtienen utilizando un mayor número de dimensiones, ya que el efecto de la cocción en las burbujas es la de menor impacto en el proceso de fabricación del pan.
 
 La simulación numérica que implementamos está basada en el esquema de diferencias finitas propuesto por Powathil~\cite{Powathil2004}, y Thorvaldsson y Janestead~\cite{Thorvaldsson1999}. 
-El sistema presentado consiste de un conjunto de tres ecuaciones acopladas que describen transferencia de calor, difusión de varpor de agua y difusión de agua líquida.
+El sistema presentado consiste de un conjunto de tres ecuaciones acopladas que describen transferencia de calor, difusión de vapor de agua y difusión de agua líquida.
 En nuestro algoritmo, sólo utilizamos las temperaturas ($T$) como entrada para las siguientes etapas de la formación del pan.
 La Ec.~\ref{Eq:heat} modela transferencia de calor en la masa del pan, tomando en consideración el balance de energía y evaporación del agua debido a la temperatura~\cite{Thorvaldsson1999},
 %
@@ -647,7 +656,7 @@ y las condiciones de borde (continuidad y suavidad) definen el modelo,
 -k \left ( \frac{\partial T}{\partial x} \right )_{x=0} &= h_{r}(T_{r}-T_{s}) + h_{c}(T_{air}-T_{s}) - \lambda \rho D_{w} \left (\frac{\partial W}{\partial x} \right )_{x=0}
 \end{align*}
 %
-donde $h_{r}$ y $h_{c}$ son subtérminos del coeficiente de transferencia de calor ($h = h_{r}+h_{c}$), $T_{air}$, $T_{s}$, $T_{r}$ son temperaturas en el aire circundante, en la superficie del pan, y en la fuente de radiación, respectivamente, $L$ es el alto del pan($x = L/2$ es el centro del pan y $x = 0$ es el contorno del mismo), $D_{w}$ representa la difusividad del agua líquida, y $T_{0}$ la temperatura inicial. 
+donde $h_{r}$ y $h_{c}$ son sub-términos del coeficiente de transferencia de calor ($h = h_{r}+h_{c}$), $T_{air}$, $T_{s}$, $T_{r}$ son temperaturas en el aire circundante, en la superficie del pan, y en la fuente de radiación, respectivamente, $L$ es el diámetro del pan ($x = L/2$ es el centro del pan y $x = 0$ es el contorno del mismo), $D_{w}$ representa la difusividad del agua líquida, y $T_{0}$ la temperatura inicial. 
 Las temperaturas están expresadas en Kelvin ($K$). 
 El modelo consta de ecuaciones similares para la difusión del vapor de agua ($W$) y difusión de agua líquida ($V$).
 Otros detalles del modelo pueden ser consultados en \cite{Thorvaldsson1999}.
@@ -665,11 +674,11 @@ Esto permite definir temperaturas en el campo escalar de forma compatible a una 
 Basados en estos razonamientos, mapeamos el vector de temperaturas $Temp$ en $3D$ de la siguiente manera,
 
 \begin{equation*}
-\displaystyle R(x,y,z) = Temp[ round( DF(x,y,z) ) ], 
+\displaystyle R[(x,y,z)] = Temp[ round( DF_{G}[(x,y,z)] ) ], 
 \end{equation*}
 %
-donde $R$ es el campo escalar resultante del mapeo, y $x$, $y$ y $z$ son coordenadas $3D$ en $R$. Cuando $DF(x,y,z) = 0$, la posición actual $3D$ se encuentra en la superficie de la geometría, y $Temp[0]$ se mapea $R(x,y,z)$.
-Cuando $DF(x,y,z) > 0$, mapeamos una temperatura menor a $R$, ya que la posición actual se encuentra en el interior de la geometría.
+donde $R$ es el campo escalar resultante del mapeo, y $x$, $y$ y $z$ son coordenadas $3D$ en $R$. Cuando $DF[(x,y,z)] = 0$, la posición actual $3D$ se encuentra en la superficie de la geometría, y $Temp[0]$ se mapea $R[(x,y,z)]$.
+Cuando $DF[(x,y,z)] > 0$, mapeamos una temperatura menor a $R$, ya que la posición actual se encuentra en el interior de la geometría.
 La Fig.~\ref{fg:baking} muestra cortes del resultado de este mapeo ($R$), usando temperaturas resultantes de un tiempo arbitrario de cocción, en los tres planos Cartesianos. 
 Las imágenes son casi idénticas a lo que se obtendría con una simulación $3D$~\cite{Purlis2010}.
 
@@ -711,27 +720,27 @@ La imagen también muestra que el método deforma más pronunciadamente las burb
 
 \subsection{Formación de la Corteza}
 El modelo de cocción que hemos introducido no incluye detalles precisos de la formación de la corteza.
-En estas ecuaciones, la corteza se asume es producida en la superficie del material, a determinada temperatura, pero esta simplificación está lejana a lo que ocurre actualmente en el proceso real de cocción.
+En estas ecuaciones, la corteza se asume es producida en la superficie del material, a determinada temperatura, pero esta simplificación es sólo una aproximación cruda a lo que ocurre en el proceso real de cocción.
 La literatura de ingeniería de los alimentos define la corteza como una interfase que emerge entre la masa y el aire.
 Entre sus principales características se encuentra la formación de un material más denso en la superficie, y una diferenciación de color.
-Sin embargo, los detalles precisos acerca de cómo esto ocurre se desconocen, por lo tanto, la apariencia exacta de la misma, está lejos de ser comprendida en los modelos presentes acutalmente.
+Sin embargo, los detalles precisos acerca de cómo esto ocurre se desconocen, por lo tanto, la apariencia exacta de la misma, está lejos de ser comprendida en los modelos presentes actualmente.
 
 Debido a esto, y basados en la aproximación inicial asumida, utilizamos el campo escalar de distancias computado previamente para definir una región de corteza.
 Esta elección está fundada en el hecho de que la corteza está mayormente determinada por un frente de evaporación que resulta de la temperatura \cite{Jefferson2007}.
 En otras palabras, obtenemos las posiciones utilizando el campo escalar mencionado, ya que hemos definido una relación entre la temperatura y la distancia a la superficie.
 Además, obtenemos diferentes apariencias de pan utilizando un parámetro de distancia que determina diferentes anchos de corteza.
+Por completitud presentaremos además otro método, basado en morfología matemática, para calcular la misma.
 
-También, por completitud, presentamos otro método para calcular la misma.
+\subsection{Determinación de la corteza utilizando morfología matemática}
+Debido a que es difícil o imposible definir funciones matemáticas algebraicas que se adapten a cualquier forma, proponemos un método automático para determinar regiones exteriores de volúmenes utilizando el formalismo conocido como morfología matemática \cite{Gonzalez2001}.
 
-\paragraph{Determinación de la corteza utilizando morfología matemática}
-Debido a que es difícil o imposible definir funciones matemáticas algebraicas que se adapten a cualquier forma, proponemos un método automático para determinar regiones del volumen utilizando el formalismo conocido como morfología matemática \cite{Gonzalez2001}.
-
-Con esto, se presente obtener una región que se ajuste a los bordes del campo escalar.
+Con esto se pretende obtener una región que se ajuste a los bordes del campo escalar.
 Para esto se utilizarán técnicas simples conocidas como apertura, cierre, erosión y dilatación.
 
 Las operaciones las definiremos en campos escalares tridimensionales.
 Un elemento estructurante $E$ es un campo escalar binario que representa una forma particular (cubo, esfera, etc.).
 Los elementos estructurantes son utilizados en la definición de las operaciones antes mencionadas.
+
 La operación de erosión se utiliza para reducir el tamaño total del campo escalar.
 La erosión de un campo escalar $A$ utilizando un elemento estructurante $B$ es definida de la siguiente manera,
 
@@ -739,10 +748,10 @@ La erosión de un campo escalar $A$ utilizando un elemento estructurante $B$ es 
 A \ominus B = \{z\in \mathbb{Z}^3 | B_{z} \subseteq A\},
 \end{equation}
 
-\noindent donde $B_{z}$ es la traslación de $B$ por el vector tridimensional$z$.
+\noindent donde $B_{z}$ es la traslación de $B$ por el vector tridimensional $z$.
 
-La dilatación es una operación utilizada para aumentar el tamaño total del campo escalar, siguiendo sus bordes.
-La dilatción de un campo escalar $A$ utilizando el elemento estructurante $E$ es definida como sigue,
+La dilatación es una operación utilizada para aumentar el tamaño total del campo escalar, preservando en cierta manera la forma de sus bordes.
+La dilatación de un campo escalar $A$ utilizando el elemento estructurante $E$ es definida como sigue,
 
 \begin{equation}
 A  \oplus E = \bigcup_{e\in E} A_e.
@@ -759,7 +768,7 @@ ver \cite{Gonzalez2001} para obtener mayores detalles.
 
 Para obtener la región externa de la geometría representada en el campo escalar, hay que eliminar los agujeros internos que representan las burbujas y luego computar el borde.
 Para esto, el primer paso produce un cierre $c$ del campo escalar utilizando un cubo (elemento estructurante de radio $r$), causando el cierre de las burbujas internas.
-Llamaremos $d$ a la dilatación de $c$ con un elemento esférico de radio $r_{2}$ y $e$ a la erosión $d$ utilizando un elemento estructurante esférico con un radio ligeramente menor($r_{3}$).
+Llamaremos $d$ a la dilatación de $c$ con un elemento esférico de radio $r_{2}$ ($d = c \oplus E_{r_{2}}$) y $e$ a la erosión de $d$ utilizando un elemento estructurante esférico con un radio ligeramente menor ($r_{3}$), $e = d \oplus E_{r_{3}}$.
 La diferencia entre $d$ y $e$ ($d-e$) se encuentra en el borde del campo escalar, por lo cual puede utilizarse como corteza.
 Para eliminar posibles imperfecciones en los pasos anteriores, se suaviza el campo escalar por medio de un cierre de $d-e$ y una dilatación del resultado, obteniendo la corteza final.
 
@@ -799,10 +808,10 @@ Es importante mencionar que la mayor parte del tiempo de cómputo en la cocción
 Debido a los costos computacionales en resoluciones superiores, el usuario puede generar vistas previas de los panes utilizando campos escalares con menores resoluciones.
 
 
-\section{Resultados}
-En esta sección presentamos imágenes renderizadas de geometrías de pan obtenidas utilizando nuestro modelo.
+\subsection{Resultados}
+En esta sección presentamos imágenes de geometrías de pan obtenidas utilizando nuestro modelo, renderizadas con el método presentado en el siguiente capítulo.
 
-Las Figs.~\ref{fg:renders}, \ref{fg:renders2}, y ~\ref{fg:renders3} muestran imágenes renderizadas de panes obtenidos en este trabajo.
+Las Figs.~\ref{fg:renders}, \ref{fg:renders2}, y ~\ref{fg:renders3} muestran imágenes renderizadas de panes obtenidos con el método presentado en esta sección.
 Las Figs.~\ref{fg:renders} y ~\ref{fg:renders2} marcan las diferencias en realismo entre resoluciones del campo escalar de ($256^{3}$) y  ($512^{3}$) respectivamente.
 La Fig.~\ref{fg:renders3} muestra versiones de alta resolución en el campo escalar de otras geometrías, incluyendo panes con formas de conejos.
 La Fig.~\ref{fg:croissant} muestra un pan con forma de {\em croissant} en el cual se han hechos distintos cortes, los cuales demuestran que el método permite obtener imágenes de partes arbitrarias del material.
@@ -810,6 +819,10 @@ Las Figs.~\ref{fg:bigalveoli} y ~\ref{fg:bakedbunny} muestran un pan típico y u
 Además se cambió el color de la miga.
 
 Los colores de corteza y miga son parámetros definibles por el usuario. Los cortes en la miga son fácilmente producidos cambiando a $0$ las regiones deseadas en el campo escalar luego de la cocción, y antes del renderizado.
+
+Respecto de la sección anterior, puede observarse una forma más suave en las burbujas resultantes, junto con la capacidad de modelar tipos arbitrarios de panes.
+Además, como el proceso está basado en la secuencia real de pasos de la fabricación del pan, es posible obtener imágenes en distintos momentos del mismo.
+
 
 \begin{figure*}[!ht]
 \begin{center}
@@ -904,91 +917,6 @@ Los colores de corteza y miga son parámetros definibles por el usuario. Los cor
 %The paper defines the geometry as a prism of dimensions $12\times12\times2~cm^{3}$, with  $x$ (the shortest side) as the coordinate of interest.
 
 
-%La siguiente ecuación modela la transferencia de calor en la masa de pan a través de un balance de energía y de evaporación de agua debido a la temperatura~\cite{Thorvaldsson1999}:
-%
-%\begin{equation}
-%\frac{\partial T}{\partial t} = \frac{1}{\rho C_{p}} \frac{\partial}{\partial x} \left ( k \frac{\partial T}{\partial x} \right ) + \frac{\lambda}{C_{p}} \frac{\partial W}{\partial t}+\frac{\lambda W}{ C_{p} \rho}\frac{\partial \rho}{\partial t}
-%\end{equation}
-%
-%donde $T$ es la temperatura, $x$ ies la coordenada radial, $C_{p}$ es calor específico, $\rho$ es la densidad, $k$ es la conductividad térmica, $\lambda$ es el calor latente de evaporación de agua, y  $W(x;t)$ es el contenido de agua líquida. Las condiciones iniciales:
-%
-%\begin{align}
-%T(x,0) &= T_{0}(x), 0\le x \le L/2
-%\end{align}
-%y las condiciones de borde completan el modelo:
-%\begin{align}
-%\left ( \frac{\partial T}{\partial x} \right )_{x=L/2} &= 0 , t > 0 \\
-%-k \left ( \frac{\partial T}{\partial x} \right )_{x=0} &= h_{r}(T_{r}-T_{s}) + h_{c}(T_{air}-T_{s}) - \lambda \rho D_{w} \left (\frac{\partial W}{\partial x} \right )_{x=0}
-%\end{align}
-%
-%donde $h_{r}$ y $h_{c}$ son subtérminos del coeficiente de transferencia de calor ($h = h_{r}+h_{c}$), $T_{air}$, $T_{s}$, $T_{r}$ son las temperaturas en el aire, en la superficie del pan y en la fuente de radiación, respectivamente, $L$ es la altura del pan ($x = L/2$ es el centro del pan y $x = 0$ es el borde del pan), y $T_{0}$ es la temperatura inicial. Las temperaturas se expresan en Kelvin ($K$).  Además el modelo presenta ecuaciones similares para la difusión de vapor de agua ($W$) y la difusión de agua líquida ($V$). Más detalles del modelo pueden ser encontrados en \cite{Thorvaldsson1999}.
-
-%Utilizamos este modelo para obtener un mapa de temperaturas sobre el volumen del pan al final del proceso de cocción. Estas temperaturas se utilizarán para deformar la geometría de las burbujas resultantes del proceso de leudado.
-
-
-
-%El modelo matemático del proceso de cocción es un modelo $3D$ que, en su versión más simple involucra transferencia de calor y de masa.
-
-%El proceso de creación de pan real sitúa a la cocción luego de la deformación de la masa. Esto supone geometría arbitraria en los bordes de la masa. El proceso de cocción debe amoldarse a estas condiciones arbitrarias, lo cual hace que el modelo resulte complejo. Para simplificar esto, proponemos aplicar la cocción antes de deformar la masa original. Esta simplificación resulta adecuada para nuestros propósitos y es validada posteriormente.
-
-
-%Además, para nuestros propósitos la inclusión de un modelo completo $3D$ resulta excesiva dado su costo computacional y el limitado impacto final sobre la estructura que pretendemos modelar. Por estas razones elegimos un modelo cilíndrico unidimensional, el cual se extiende fácilmente a $3$ dimensiones. A pesar de esta simplificación, la literatura muestra que el modelo captura los detalles esenciales en la transferencia de calor y masa \cite{Purlis2010,Powathil2004}.
-
-%La implementación numérica del modelo está descrita en \cite{Powathil2004}. La misma usa el esquema de diferencias finitas. El horno en el cual se sitúa el pan se establece a $210  ^{\circ}C$ y el tiempo es discretizado en intervalos de tiempo de duración $\Delta t = 0.05s$. El algoritmo devuelve un arreglo $Temp$ de $N_{grid}$ valores de temperatura. Cada valor representa una posición en la masa luego de $M$ pasos temporales. Por cuestiones de estabilidad definimos el tamaño de la grilla como $N_{grid}=32$ e interpolamos los valores de temperatura para obtener mayores resoluciones ($N_{im}$).
-
-%El vector obtenido presenta temperaturas decrecientes de $R = 0$ a $R = L/2$, debido a que el centro del pan presenta las menores temperaturas ($R=L/2$), a diferencia de los bordes ($R=0$) los cuales poseen una distancia menor a la fuente de calor. De esta manera, $Temp[L/2]$ corresponde a $x = N_{im}/2, y=N_{im}/2$ y $Temp[0]$ corresponde a los $(x,y)$ lejos del centro del cilindro. 
-
-%Luego de interpolar las temperaturas traducimos el vector $Temp_{int}$ a coordenadas $2D$ mediante las siguientes relaciones:
-%\begin{align}
-%\displaystyle I(\frac{N_{im}}{2}-i,\frac{N_{im}}{2}-j) &= Temp_{int}[L/2-R], \\
-%R &= \sqrt{i^{2}+ j^{2}}, \\
-%i, j &\in [-\frac{N_{im}}{2},\frac{N_{im}}{2}],
-%\end{align}
-
-
-%\noindent donde $R$ es el índice del vector, y $x$ e $y$ son coordenadas $2D$ en la imagen de destino, en otras palabras, el píxel $I(N_{im}/2-i,N_{im}/2-j)$ es seteado con el valor $Temp_{int}[L/2-R]$. Finalmente obtenemos una imagen cuadrada de lado $N_{im}$. La figura ~\ref{FigBakingVectorField} muestra un ejemplo de dicha imagen.
-
-%A partir de esta imagen obtenemos su gradiente \cite{Gonzalez2006} para  computar un campo vectorial $[g_{x},g_{y}]$, utilizándolo para deformar posteriormente la textura volumétrica de la siguiente manera:
-
-%\begin{align}
-%\displaystyle u = x+p*dist_{xy}*g_{x}[x,y],\\
-%v = y+p*dist_{xy}*g_{y}[x,y],
-%\end{align}
-%\noindent donde $(u,v)$ son las coordenadas en el volumen deformado, ($x,y$) son las coordenadas originales, $p$ es parámetro real positivo que sirve para modular el efecto del campo en el volumen, y $dist_{xy}$ es la distancia euclídea de $(x,y)$ al centro del cilindro ($\sqrt((x-N_{x}/2)^{2}+(y-N_{y}/2)^{2})$). 
-
-
-%El parámetro distancia al centro es útil para remarcar las diferencias existentes en el efecto que produce el proceso de cocción sobre las burbujas en distintas zonas de la masa.
-%La Figura~\ref{FigBakingVectorField} muestra además el vector gradiente superimpuesto sobre la imagen. En nuestros experimentos encontramos que $p=10$ es suficiente para producir un efecto apreciable sobre las burbujas.
-%El procedimiento de cocción reduce aproximadamente a la mitad el tamaño total de la imagen.
-
-
-
-%\begin{figure}
-%\centering
-%\includegraphics[scale=0.58]{vfield.png}
-%\caption{Temperaturas obtenidas sin interpolar a partir del modelo matemático de cocción del pan y vector gradiente superimpuesto}
-%\label{FigBakingVectorField}
-%\end{figure}
-
-%El largo de las flechas indica el módulo del vector. La imagen muestra que la influencia del campo es mayor cerca de la corteza del pan, lo cual se condice con el efecto observable en panes reales. El proceso de cocción elonga paralelamente a la corteza las burbujas del material \cite{Scanlon2001} (siguiendo las isotermas).
-
-%Siguiendo el modelo cilíndrico, cada rodaja (representada por un volumen de altura $1$ vóxel) es deformado independientemente utilizando el mismo procedimiento. La Figura~\ref{FigBaking} muestra un ejemplo de rodaja luego de la cocción digital.
-
-%Cabe mencionar que se intentó interpolar la imagen resultante en lugar del vector original de temperaturas, pero el campo vectorial resultante tenía vectores de módulos cercanos a cero.
-
-%\begin{figure}
-%\begin{center}
-%\includegraphics[scale=0.8]{baking.png}
-%\caption{Corte del volumen luego de la cocción. Las burbujas siguen un campo vectorial concéntrico.}
-%\label{FigBaking}
-%\end{center}
-%\end{figure}
-
-
-%\subsection{Intervención Humana en el Proceso}
-
-%\subsubsection{Mean Value Coordinates}
-
 %Para permitir una interacción con el modelado del pan sintético, se definen puntos de control que el usuario puede mover a voluntad para deformar localmente la masa. Para esto se utiliza Mean Value Coordinates (MVC), el cual es un método poderoso en animación \cite{Floater2003,Floater2005,Ju2005}.
 %Este método computa coordenadas baricéntricas a partir de los puntos de control sin deformar (una caja que rodea al objeto) con las cuales calcula las posiciones destino de los puntos de interés en el dominio (en nuestro caso, cada pixel de la imagen es un punto de interés).
 
@@ -1024,7 +952,7 @@ Los colores de corteza y miga son parámetros definibles por el usuario. Los cor
 
 %This method also warps the bubbles' shape. The deformed bubbles have a natural appearance in concordance with real bread bubbles. 
 \section{Conclusiones}
-En este Cap\'itulo hemos introducido diversos algoritmos para subsanar la falta de procedimientos flexibles e intuitivos para modelar determinados materiales, entre ellos materiales porosos como el pan. Además, como subproducto de la investigación, se obtuvieron representaciones bidimensionales de madera, granito, mármol y otros materiales comunes en la literatura.
+En este Cap\'itulo hemos introducido diversos algoritmos para subsanar la falta de procedimientos flexibles e intuitivos para modelar determinados materiales, entre ellos materiales porosos como el pan. Además, como sub-producto de la investigación, se obtuvieron representaciones bidimensionales de madera, granito, mármol y otros materiales comunes en la literatura.
 Hemos demostrado visualmente la capacidad de los métodos.
 
 El primer aporte es un algoritmo que produce texturas bidimensionales de materiales conocidos como madera y granito, utilizando sistemas de partículas, el cual fue presentado en una conferencia local \cite{Baravalle2011}.
