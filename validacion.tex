@@ -91,7 +91,7 @@ Las imágenes demuestran que este método presenta buenos resultados, incluso co
 \begin{figure}[h!]
 \centering
 \includegraphics[width=13cm]{binarizaciones}
-\caption{Imágenes de distintos tipos de pan tomadas con un escáner. {\em Baguette}, {\em lactal}, {\em salvado} y {\em sandwich} (primera fila) con sus correspondientes binarizaciones utilizando umbralamiento local (segunda fila).}
+\caption[Imágenes de distintos tipos de pan tomadas con un escáner.]{Imágenes de distintos tipos de pan tomadas con un escáner. {\em Baguette}, {\em lactal}, {\em salvado} y {\em sandwich} (primera fila) con sus correspondientes binarizaciones utilizando umbralamiento local (segunda fila).}
 \label{fig:bread}
 \end{figure}
 
@@ -217,7 +217,7 @@ En esta sección comparamos los MFS de distintos tipos de panes con otras caract
 Además, se comparan las características fractales obtenidas con el estado del arte en extracción de características para clasificación de texturas.
 Los resultados de este procedimiento de extracción de características muestran que el clasificador es robusto y presenta buenas propiedades de discriminación que le permiten distinguir entre diferentes tipos de panes y también la distinción de pan de imágenes de otros objetos.
 
-\subsection{Teoría del Análisis Multifractal}
+\subsection{Teoría del Análisis Multifractal de Imágenes}
 %\label{sec:4}
 
 La idea del análisis multifractal es examinar el límite en el comportamiento local de una medida $\mu$ en cada punto del conjunto en estudio.
@@ -255,7 +255,7 @@ f(\alpha) = \lim_{\varepsilon\to0}{f_{\varepsilon}(\alpha)}.
 \label{eq:mfs}
 \end{equation}
 
-\subsubsection{Procedimiento práctico para computar el MFS}
+\subsubsection{Procedimiento práctico para computar el MFS en imágenes}
 Existen diversas maneras, descriptas en la literatura, para obtener el MFS.
 Las mismas obtienen diferentes representaciones de la información multifractal presente en la estructura.
 El método de momentos es el más utilizado \cite{Mendoza2010,Serrano2012}, pero el mismo produce un vector de características que no es siempre adecuado para realizar tareas de clasificación.
@@ -278,7 +278,7 @@ El resultado de este proceso es un vector de características finito, el cual se
 La cantidad de DFs del vector a utilizar será analizada posteriormente.
 
 
-\subsubsection{Medidas Multifractales}
+\subsubsection{Medidas Multifractales en imágenes}
 \label{sec:mfsmeasures}
 Las funciones $\mu$ son definidas intentando capturar determinadas características de las imágenes.
 El primer ejemplo consiste en definir $\mu$ en el dominio de intensidades de la imagen (I), es decir

@@ -40,7 +40,7 @@ El concepto central que permite entender el modelado procedimental utilizando si
 La reescritura consiste en una aplicación sucesiva de reglas que reemplazan determinadas partes en una descripción matemática por otras.
 En un sistema-L, una cadena de caracteres representa la estructura de la planta.
 
-Por medio de un proceso repetitivo de reescritura, una cadena de caracteres inicial se transforma, por medio de ciertas reglas que deben proveerse, en una cadena final, la cual será interpretada por el algoritmo de la tortuga previamente descripto, produciendo una geometría que asemeja a una planta.
+Por medio de un proceso repetitivo de reescritura, una cadena de caracteres inicial se transforma, a través de ciertas reglas que deben proveerse, en una cadena final, la cual será interpretada por el algoritmo de la tortuga previamente descripto, produciendo una geometría que asemeja a una planta.
 
 \subsubsection{Definición de sistema-L}
 Sea $V$ un alfabeto (conjunto de caracteres), $V^{*}$ el conjunto de todas las palabras que se pueden formar con $V$ y $V^{+}$ el conjunto de todas las palabras que se pueden formar con $V$ y no son vacías.
@@ -53,9 +53,9 @@ Si no se especifica ninguna producción para $a$, se asume $a \rightarrow a \in 
 Sea $\mu = a_{1}, \dots, a_{m}$ una palabra en $V$.
 Se dice que la palabra $\eta = \mu_{1}, \dots, \mu_{m}$ es {\em derivada directamente} de $\mu$, y se nota $\mu \Rightarrow \eta$,  si y sólo si $a_{i} \rightarrow \mu_{i}, \forall i = 1, \dots, m$.
 
-Una palabra $\eta$ es generada por $G$ si existe una secuencia de cadenas que conducen a $\eta$ desde el axioma, es decir, $\beta_{1},\dots,\beta_{n}$, de tal forma que $\beta_{1} = \omega$ y $\beta_{n} = \eta$ y $\beta_{1} \Rightarrow \dots  \Rightarrow \beta_{n}$.
+Una palabra $\eta$ es generada por $G$ si existe una secuencia de cadenas que conducen a $\eta$ desde el axioma, es decir, $\beta_{1},\dots,\beta_{n}$, de tal forma que $\beta_{1} = \omega$, $\beta_{n} = \eta$ y $\beta_{1} \Rightarrow \dots  \Rightarrow \beta_{n}$.
 
-Un ejemplo de esto es expuesto a continuación.
+Exponemos un ejemplo de generación a continuación.
 Si el axioma es $\omega = a$, y las reglas de producción son:
 \begin{align*}
 p1 &: a \rightarrow b,\\
@@ -131,21 +131,21 @@ Por ejemplo, podría diseñarse una flor como un conjunto de líneas con forma d
 Cuando se desea que se vea una flor, se aplica esta regla.
 
 
-Entre las derivaciones encontramos sistemas-L estocásticos, los cuales eligen reglas de reescritura de acuerdo a una probabilidad asignada a cada regla, sistemas-L paramétricos, los cuales hacen variar el ángulo y el paso a dibujar dependiendo de la posición de la cadena donde se encuentran, entre otros.
+Entre las especializaciones encontramos sistemas-L estocásticos, los cuales eligen reglas de reescritura de acuerdo a una probabilidad asignada a cada regla, sistemas-L paramétricos, los cuales varían el ángulo y el paso a dibujar dependiendo de la posición de la cadena donde se encuentran, entre otros.
 Además, el método es fácilmente generalizable en tres dimensiones, ver Fig.~\ref{fg:sistemasL3D}.
 La generalización se realiza por medio de la utilización de matrices de rotación, con un número agregado de operaciones de giro, ver \cite{Prusinkiewicz1990} para obtener mayores detalles.
 
 \begin{figure}
 \center
 \includegraphics[width=11cm]{figures/3dlsystem}
-\caption[Generalización de Sistema-L en tres dimensiones.]{Generalización de Sistema-L en tres dimensiones.}
+\caption[Sistema-L en tres dimensiones.]{Planta generada por un sistema-L en tres dimensiones.}
 \label{fg:sistemasL3D}
 \end{figure}
 
 \subsection{Edificios y Ciudades}
 Como fue comentado, una de las ventajas del modelado procedimental es la capacidad de realizar el proceso automáticamente, ahorrando costos y tiempos de diseño.
-Un modelado procedimental de edificios puede observarse en \cite{Wonka2003}
-Dicho trabajo presenta un proceso automático que genera, de manera casi instantánea, edificios arquitectónicamente coherentes, es decir, con ciertas características estructurales que deben ser respetadas.
+Un modelado procedimental de edificios puede observarse en \cite{Wonka2003}.
+Dicho trabajo presenta un proceso automático que genera de manera casi instantánea edificios arquitectónicamente coherentes, es decir, con ciertas características estructurales que deben ser respetadas.
 
 La diferencia principal a la hora de utilizar sistemas-L para modelar edificios, es que los mismos no pueden ser modelados como una estructura que crece, sino que deben tratarse como conjuntos de objetos con una disposición específica.
 
@@ -155,7 +155,7 @@ Para lograr esto, en \cite{Wonka2003} se proponen varias definiciones, entre las
 
 Una gramática puede ser definida de manera general como un álgebra de objetos $(U,+,-,F,\leq)$, cerrada bajo las operaciones $+$ y $-$, junto a un conjunto de operaciones $F$, de tal forma que si $u$ y $v$ son miembros de $U$, entonces $u+f(v)$ y $u-f(v)$ lo son, donde $f \in F$.
 
-Una gramática $G=(N,T,R,I)$ es una tupla que consta de cuatro elementos, donde $N \subset U$ representa los nodos no terminales, $T \subset U$ los terminales, $I \subset N$ un conjunto de objetos iniciales y $R \subseteq U \times U$ un conjunto de producciones.
+Una gramática $G=(N,T,R,I)$ es una tupla que consta de cuatro elementos, donde $N \subset U$ representa los nodos no terminales (es decir que se pueden seguir realizando divisiones), $T \subset U$ los terminales (no se pueden dividir), $I \subset N$ un conjunto de objetos iniciales y $R \subseteq U \times U$ un conjunto de producciones.
 
 %Para comprender mejor estos conceptos, definimos una gramática de conjuntos.
 %Este tipo de gramáticas 
@@ -165,7 +165,7 @@ Una {\em forma} es un conjunto de líneas rectas en el espacio.
 Las gramáticas de división seleccionan reglas para subdividir formas en formas más básicas (cubos, cilindros, etc.).
 
 La Fig.~\ref{fg:splitgrammar} muestra un ejemplo del proceso involucrado en una gramática {\em de división}, en la cual una {\em forma} es dividida en otras, utilizando reglas definidas por dicha gramática, en este caso formando una secuencia de ventanas.
-Como puede observarse, una gramática de este tipo divide de forma completa el espacio de las formas padre, en formas hijas de la misma.
+Como puede observarse, una gramática de este tipo divide de forma completa el espacio de cada forma, en sub-formas de la misma.
 
 Cuando el proceso llega a su fin, es decir, no existen nodos no terminales ($N$) en el desarrollo, entonces lo que se tiene es un {\em diseño} final.
 La principal diferencia con los sistemas-L se basa en que en aquellos, las reescrituras no necesariamente ocupaban el mismo volumen, como sí debe ocurrir en estas gramáticas.
@@ -306,7 +306,7 @@ Se puede observar que a medida que $H$ es mayor, el terreno es más suave.
 Si bien los resultados obtenidos por los modelos presentados hasta ahora son muy satisfactorios, existe aún la necesidad de no depender de parámetros ad-hoc, además de aumentar el realismo de las imágenes resultantes.
 Hasta aquí, la utilización de los modelos se basa casi exclusivamente en su {\em parecido visual} a los objetos que se intentan modelar.
 
-Para poder mejorar esto es necesario utilizar los procesos físicos de formación o comportamiento de los materiales (movimiento de partículas, deformaciones, cambios químicos, etc.), lo cual permitiría definir parámetros más intuitivos que tienen su correlación en la realidad, logrando además una representación más exacta de la misma.
+Para poder obtener una representación más ajustada a la geometría real de los materiales, es necesario utilizar los procesos físicos de formación o comportamiento de los materiales (movimiento de partículas, deformaciones, cambios químicos, etc.), lo cual permitiría definir parámetros más intuitivos que tienen su correlación en la realidad, logrando además una representación más exacta de la misma.
 La desventaja de utilizar modelos físicos o matemáticos, recae sobre los tiempos de cómputo y la dificultad de diseño de éstos.
 
 Sin embargo, desde el surgimiento del área, estos modelos han ido evolucionando gracias al incremento en el poder de cómputo del hardware gráfico disponible. A pesar de esto, aún nos encontramos en los comienzos de la utilización masiva de los mismos, por lo cual existen sólo unos pocos casos en los que se utilizan modelos de primeros principios.
@@ -314,7 +314,7 @@ En esta sección presentamos un ejemplo de esto, lo cual ejemplifica la capacida
 
 \subsection{Fluidos}
 Entre los primeros intentos por utilizar procesos físicos para modelar la apariencia de los materiales, encontramos ecuaciones que describen fluidos.
-Las ecuaciones de Navier-Stokes describen un fluído incompresible cuya temperatura es prácticamente constante por medio de un campo vectorial de velocidades $\bold{u}$ y un campo de presiones $p$.
+Las ecuaciones de Navier-Stokes describen un fluído cuya temperatura es prácticamente constante, por medio de un campo vectorial de velocidades $\bold{u}$ y un campo de presiones $p$.
 
 Dadas condiciones iniciales para $\bold{u}$ y $p$ cuando $t = 0$, la evolución de las cantidades puede describirse como sigue, independientemente del número de dimensiones,
 
@@ -329,10 +329,10 @@ Las ecuaciones modelan la conservación de masa (\ref{eq:eq1}) y de momento (\re
 Además, deben tenerse en cuenta condiciones de borde.
 Las mismas pueden variar en complejidad.
 Por ejemplo, una implementación sencilla puede darse utilizando condiciones de borde periódicas, es decir, sin la existencia de {\em paredes} (el fluido se repite indefinidamente, este es el caso utilizado en el trabajo descripto aquí).
-Un caso más complicado es una condición diferencial que describe el intercambio de masa con el ambiente.
+Un caso más realista lo constituye una condición diferencial que describe el intercambio de masa con el ambiente.
 
 Es posible combinar ambas ecuaciones para obtener una única ecuación de la velocidad.
-Para esto, utilizaremos la descomposición de Helmholtz-Hodge \cite{Chorin1990}, la cual establece que un campo vectorial $\bold{w}$ puede descomponerse como sigue, 
+Para esto, se utiliza la descomposición de Helmholtz-Hodge \cite{Chorin1990}, la cual establece que un campo vectorial $\bold{w}$ puede descomponerse como sigue, 
 
 \begin{equation}
 \label{eq:eq3}
@@ -340,7 +340,7 @@ Para esto, utilizaremos la descomposición de Helmholtz-Hodge \cite{Chorin1990},
 \end{equation}
 
 donde $\bold{u}$ tiene divergencia $0$, es decir $\nabla\cdot\bold{u} = 0$.
-Entonces, podemos definir un operador $\bold{P}$, el cual proyecta un campo vectorial $\bold{w}$ en su componente de divergencia $0$, $\bold{u} = \bold{P}\bold{w}$.
+Entonces, se puede definir un operador $\bold{P}$, el cual proyecta un campo vectorial $\bold{w}$ en su componente de divergencia $0$, $\bold{u} = \bold{P}\bold{w}$.
 Dicho operador se puede definir implícitamente multiplicando $\nabla$ en ambos términos en la ecuación (\ref{eq:eq3}),
 
 \begin{equation}
@@ -355,14 +355,14 @@ Una solución a esta ecuación está dada por
 \bold{u} = \bold{P}\bold{w} = \bold{w} - \nabla q,
 \end{equation}
 
-Si aplicamos el operador $\bold{P}$ en ambos lados de la ecuación (\ref{eq:eq2}), obtenemos una ecuación única para la velocidad,
+Aplicando el operador $\bold{P}$ en ambos lados de la ecuación (\ref{eq:eq2}), se obtiene una ecuación única para la velocidad,
 
 \begin{equation}
 \frac{\partial \bold{u} }{\partial t} = \bold{P} (- (\bold{u} \cdot \nabla) \bold{u} + \nu \nabla^{2} \bold{u} + \bold{f}) \label{eq:eq6},
 \end{equation}
 
 ya que $\bold{P}\bold{u} = \bold{u}$ y $\bold{P}\nabla p = 0$.
-Esta ecuación es utilizada para derivar un algoritmo práctico para implementar apariencia de fluídos \cite{Stam1999}.
+Esta ecuación es utilizada en la derivación de un algoritmo práctico que implementa apariencia de fluídos \cite{Stam1999}.
 En la ecuación pueden verse un paso difusivo $\nu \nabla^{2} \bold{u}$, un paso de advección $- (\bold{u} \cdot \nabla) \bold{u}$ y una fuerza final aplicada $\bold{f}$.
 Estos términos pueden resolverse por medio de la aplicación de métodos numéricos clásicos (por ejemplo diferencias finitas), por lo cual la solución final consiste en aplicar sucesivamente cada paso para obtener soluciones al campo vectorial $u$ en cada instante de tiempo $t$, finalmente proyectando el resultado con $P$.
 El paso más complicado es el paso de proyección $P$, el cual se resuelve por medio de sistemas lineales, teniendo en cuenta que es una ecuación de Poisson.
@@ -372,8 +372,8 @@ De esta forma se podrá proceder a su renderizado.
 
 Este método se utiliza para modelar el comportamiento de agua y otros líquidos, además de algunos gases, nubes y humo, ver Figs.~\ref{fg:fluidos1},\ref{fg:fluidos2}.
 
-La utilización de los procesos físicos subyacentes produce mayor realismo en el resultado que utilizar métodos heurísticos y fenomenológicos.
-Desafortunadamente muchas veces este enfoque resulta prohibitivo, no solo por costos computacionales, sino también por la complejidad en el diseño de los métodos, ya que se requiere muchas veces la participación de personas idóneas en la física utilizada.
+La utilización de los procesos físicos subyacentes produce mayor realismo en las imágenes resultantes sobre la utilización de métodos heurísticos y fenomenológicos.
+Desafortunadamente, muchas veces este enfoque resulta prohibitivo, no solo debido a costos computacionales, sino también por la complejidad presente en el diseño de los métodos, ya que se requiere muchas veces la participación de personas provinientes de áreas científicas afines a la física utilizada.
 
 
 \begin{figure}
@@ -394,23 +394,26 @@ Desafortunadamente muchas veces este enfoque resulta prohibitivo, no solo por co
 
 \section{Representación Visual (Renderizado)}
 
-Además de presentar una geometría compleja, los materiales exhiben también fenómenos particulares de interacción con la luz, entre los cuales se observan translucencia, reflectancia, absorción, etc.
+Además de presentar una geometría compleja, los materiales exhiben fenómenos particulares en su interacción con la luz, entre los cuales se observan translucencia, reflectancia, absorción, etc.
 Cada fenómeno puede determinar de forma inequívoca la apariencia de un material determinado.
-Debido a esto, en las primeras décadas del nacimiento de la rama científica, se desarrollaron distintas técnicas, inpiradas en determinadas ecuaciones físicas que fueron simplificadas y aproximadas para ser implementadas en computación gráfica, permitiendo modelar la apariencia de una gran variedad de materiales.
+Debido a esto, en las décadas posteriores al nacimiento de la informática gráfica, se desarrollaron distintas técnicas, inpiradas en determinadas ecuaciones físicas que fueron simplificadas y aproximadas para ser implementadas por medio de una computadora, permitiendo modelar la apariencia de una gran variedad de materiales.
 
 \subsection{Ecuación del Renderizado}
 
 Esta ecuación modela el comportamiento de la luz en una escena y su interacción con distintos tipos de superficies \cite{Kajiya1986},
 
 \begin{equation}
-I(x,x') =  g(x,x')  \left[ \epsilon(x,x') + \int_{s}{\rho(x,x',x'')I(x,x'') dx''} \right],
+L(x' \rightarrow x) =  g(x'  \rightarrow x)  \left[ \epsilon(x'  \rightarrow x) + \int_{s}{\rho(x''  \rightarrow x'  \rightarrow x)L(x''  \rightarrow x) dx''} \right],
 \end{equation}
-donde $I(x,x')$ es la intensidad de la luz que viaja de los puntos $x'$ a $x$ (sin oclusiones), $g(x,x')$ es un termino geométrico que modela la oclusión que podría existir entre $x$ y $x'$, $\epsilon(x,x')$ es la intensidad de la luz emitida desde $x'$ a $x$, $\rho(x,x',x'')$ es la intensidad de la luz emitida de $x''$ a $x$ por medio de una superficie en $x'$ (esta cantidad será llamada función bidireccional de distribución de reflectancia, \acrshort{BRDF}, en una sección posterior), y $S=\bigcup{s_{i}}$ es la unión de todas las superficies $s_{i}$ de la escena.
+donde $L(x' \rightarrow x)$ es la intensidad de la luz que viaja del punto tridimensional $x'$ al punto $x$ (sin oclusiones), $g(x' \rightarrow x)$ es un termino geométrico que modela la oclusión que podría existir entre $x$ y $x'$, $\epsilon(x' \rightarrow x)$ es la intensidad de la luz emitida desde $x'$ a $x$, $\rho(x''  \rightarrow x'  \rightarrow x)$ es la intensidad de la luz emitida de $x''$ a $x$ por medio de una superficie en $x'$ (esta cantidad será llamada función bidireccional de distribución de reflectancia, \acrshort{BRDF}, en una sección posterior), y $S=\bigcup{s_{i}}$ es la unión de todas las superficies $s_{i}$ de la escena.
+
+
+Puede observarse que la ecuación presenta una definición recursiva, ya que la energía radiante saliente de un punto $x'$ depende de la energía radiante que llega desde todos los puntos de todas las superficies a ese punto.
 De esta forma, $x$,$x'$ y $x''$ varían sobre todas las superficies de la escena.
 Además se asume una superficie $S_{0}$, la cual es un semi-hemisferio que engloba a toda la escena.
 
 La ecuación es una aproximación óptico-geométrica a las ecuaciones del electromagnetismo de Maxwell.
-$I(x,x')$ significa la radiación de energía por unidad de tiempo por unidad de superficie de destino por unidad de superficie de origen ($joule/m^{4} s$).
+$L$ representa la radiación de energía por unidad de tiempo por unidad de superficie de destino por unidad de superficie de origen ($joule/m^{4} s$).
 El término geométrico se hace $0$ si los puntos en consideración no son mutuamente visibles.
 
 Por medio del modelado de cada término de forma separada, es posible visualizar fielmente una gran cantidad de superficies.
@@ -426,7 +429,7 @@ Un esquema de esta ecuación puede observarse en la Fig. \ref{fg:rendequation}.
 \begin{figure}
 \center
 \includegraphics[width=8cm]{figures/rendequation}
-\caption[Interpretación visual de la ecuación del renderizado]{Interpretación visual de la ecuación del renderizado. La ecuación modela la distribución de radiancia en una escena, considerando todas las superficies intervinientes. La imagen muestra además los vectores normales a las superficies.}
+\caption[Interpretación visual de la ecuación del renderizado]{Interpretación visual de la ecuación del renderizado (término $L(x''  \rightarrow x) $). La ecuación modela la distribución de radiancia en una escena, considerando todas las superficies intervinientes. La imagen muestra además los vectores normales a las superficies.}
 \label{fg:rendequation}
 \end{figure}
 
@@ -434,7 +437,8 @@ Si lo que se pretende modelar son fenómenos volumétricos, entonces debe atende
 
 \subsection{Ecuación del Renderizado de Volúmenes}
 
-En esta sección denotaremos como $L(\bold{x} \rightarrow \vec{\omega})$ a la energía radiante o {\em radiancia} que parte desde un punto del espacio $\bold{x}$ en la dirección $\vec{\omega}$ ($L(x \rightarrow \vec{xx'}) = I(x,x' )$).
+En esta sección denotaremos como $L(\bold{x} \rightarrow \vec{\omega})$ a la energía radiante o {\em radiancia} que parte desde un punto del espacio $\bold{x}$ en la dirección $\vec{\omega}$.
+Siguiendo la notación de la sección anterior, existe un punto $y$ tal que $L(\bold{x} \rightarrow \vec{\omega}) = L(x \rightarrow y )$.
 
 La luz es modelizada por medio de partículas denominadas {\em fotones}. Cuando un fotón de un rayo de luz atraviesa un medio en una dirección dada, pueden ocurrir una serie de eventos, de los cuales dos corresponden a fenómenos de extinción: el fotón es absorbido, o bien es redirigido en otra dirección, lo cual depende del coeficiente de absorción del medio $\sigma_{a}$ y el coeficiente de dispersión $\sigma_{s}$.
 La suma de ambos se denota como el coeficiente de extinción $\sigma_{t}$.
