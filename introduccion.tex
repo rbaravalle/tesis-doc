@@ -1,24 +1,29 @@
 \chapter{Introducción}
-El renderizado en computación gráfica es el conjunto de métodos empleados para producir imágenes que representan una escena tridimensional, la cual está compuesta por medio de primitivas matemáticas como puntos, líneas, cubos, etc.
+El renderizado en computación gráfica es el área que estudia métodos para producir imágenes que representan una escena tridimensional, la cual está compuesta por medio de primitivas matemáticas como puntos, líneas, cubos, etc.
 
 En los últimos años, el avance en el campo del renderizado de escenas ha sido muy notorio. 
-El nivel de realismo presente en las imágenes obtenidas ha ido en aumento hasta el punto de ser de difícil distinción para un ser humano.
-Dichos avances han sido, en gran parte, debido al desarrollo de dispositivos de hardware gráficos más poderosos, ya que la teoría matemática que describe el comportamiento de la luz en escenas estuvo presente desde hace varias décadas mediante la denominada Ecuación del Renderizado \cite{Kajiya1986}.
+El nivel de realismo presente en las imágenes obtenidas ha ido en aumento hasta el punto de ser de difícil distinción, para un ser humano, si una imagen renderizada es real o sintética.
+Dichos avances han sido debidos en gran medida al desarrollo de dispositivos de hardware gráficos más poderosos, ya que la aproximación matemática a la teoría física que describe el comportamiento de la luz en escenas estuvo presente desde hace varias décadas mediante la denominada Ecuación del Renderizado \cite{Kajiya1986}.
 
-La ecuación constituye una aproximación, un modelo físico que intenta describir los aspectos más relevantes en el fenómeno de interacción de la luz con diversos objetos en una escena.
+La ecuación constituye una aproximación a un fenómeno físico que intenta describir los aspectos más relevantes en el comportamiento de interacción de la luz con diversos objetos en una escena.
 
-Lamentablemente, la ecuación es, en términos teóricos, no computable.
-Sin embargo, el estudio a lo largo de los años de técnicas que permitan aproximarla ha dado sus frutos y ha permitido la obtención de imágenes de un realismo asombroso.
+Lamentablemente, la ecuación resulta en términos teóricos (debido a la presencia de integrales), no computable.
+Sin embargo, el estudio a lo largo de los años de técnicas que permitan aproximarla ha rendido sus frutos y ha sido determinante en la obtención de imágenes con un realismo asombroso.
 
-A pesar de estos increíbles avances en un corto período de tiempo, el renderizado de una escena es un problema que involucra otros inconvenientes. El más notorio de ellos, es que la ecuación del rendering no tiene en cuenta qué {\em materiales} componen los objetos que definen la escena. En otras palabras, un objeto compuesto por madera no lucirá exactamente igual que uno compuesto por metales, ni por un material orgánico compuesto de tejidos. A la par del desarrollo de técnicas de iluminación global, han surgido técnicas que han intentado abordar materiales específicos y familias de materiales.
+A pesar de estos increíbles avances en un corto período de tiempo, el renderizado de una escena es un problema que involucra otros inconvenientes. El más notorio de ellos, es que la ecuación del renderizado no tiene en cuenta {\em cuáles} {\em materiales} componen los objetos que definen la escena. En otras palabras, un objeto compuesto por madera no lucirá exactamente igual que uno compuesto por metales, ni por un material orgánico compuesto de tejidos. A la par del desarrollo de técnicas de iluminación global, han surgido técnicas que han intentado abordar materiales específicos y familias de materiales.
 
-Estas técnicas buscan capturar la intrincada geometría propia de cada material. Diferentes estructuras microscópicas producen distintas apariencias, reflejando la luz de distinta manera, hecho que es interpretado por la percepción humana como diferentes materiales. Por ejemplo: una superficie metálica tiene un gran componente reflexivo, emitiendo luz en direcciones bien definidas, a diferencia de una superficie más opaca como un plástico. Dado que la ecuación del renderizado usa los materiales como {\em caja negra}, los mismos deben ser modelados de una manera adecuada para ser integrados en las distintas técnicas de renderizado global.
+Estas técnicas buscan capturar la intrincada geometría propia de cada material.
+Diferentes estructuras microscópicas producen distintas apariencias, reflejando la luz de distinta manera, hecho que es interpretado por la percepción humana como diferentes materiales.
+Por ejemplo: una superficie metálica tiene un gran componente reflexivo, emitiendo gran parte de su energía en direcciones específicas, a diferencia de una superficie más opaca como un plástico, la cual no presenta direcciones principales de emisión de radiancia.
+Dado que la ecuación del renderizado utiliza a los materiales como {\em caja negra}, los mismos deben ser modelados de una manera adecuada para ser integrados en las distintas técnicas de renderizado global.
 
 Determinados materiales han recibido mayor atención debido a su ubicuidad en escenas de películas y video juegos, o a la facilidad de su diseño: agua, fuego, aire, humo, piel humana, madera, etc. Por esta razón, las imágenes sintéticas obtenidas presentan cierta asimetría en la calidad de los distintos materiales. En contraste, otros materiales han recibido menor atención, la cual puede atribuirse a una menor presencia en escenas o a una dificultad en el modelado y visualización, la cual ha resistido las técnicas más simples.
 
-Entre estos materiales, aquellos sometidos a un proceso de cocción han permanecido entre los más dificultosos por su compleja geometría y los fenómenos lumínicos involucrados. Tal vez el caso más emblemático de los materiales cocidos es el pan, debido a su importancia en la vida cotidiana. Como nota de color, un reconocido  científico del área, Alain Fournier, pronunció en 2001 la frase "la Computación Gráfica todavía no ha sido capaz de renderizar de manera convincente una feta de pan". En las siguientes secciones mostraremos que unos pocos intentos por abordar el problema fueron realizados pocos años después.
+Entre estos materiales, aquellos sometidos a un proceso de cocción han permanecido entre los más dificultosos por su compleja geometría y los fenómenos lumínicos involucrados.
+Tal vez el caso más emblemático de los materiales cocidos es el pan, debido a su importancia en la vida cotidiana.
+Como nota de color, un reconocido  científico del área, Alain Fournier, pronunció en 2001 la frase "la Computación Gráfica todavía no ha sido capaz de renderizar de manera convincente una feta de pan".
+En las siguientes secciones mostraremos que unos pocos intentos por abordar el problema fueron llevados a cabo pocos años después de la emisión de dicho comentario.
 
-\section{Motivación}
 \section{Alcances y Objetivos}
 \section{Resultados Originales Presentados}
 

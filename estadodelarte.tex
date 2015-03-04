@@ -400,17 +400,19 @@ Debido a esto, en las décadas posteriores al nacimiento de la informática grá
 
 \subsection{Ecuación del Renderizado}
 
-Esta ecuación modela el comportamiento de la luz en una escena y su interacción con distintos tipos de superficies \cite{Kajiya1986},
+Esta ecuación modela el comportamiento de la luz en una escena y su interacción con distintos tipos de superficies \cite{Kajiya1986}.
+La misma se basa en el principio de la conservación de la energía, el cual establece que la energía saliente debe ser igual a la energía entrante, más la energía emitida, menos la energía absorbida.
+La ecuación presenta la siguiente definición:
 
 \begin{equation}
-L(x' \rightarrow x) =  g(x'  \rightarrow x)  \left[ \epsilon(x'  \rightarrow x) + \int_{s}{\rho(x''  \rightarrow x'  \rightarrow x)L(x''  \rightarrow x) dx''} \right],
+L(\bold{x'} \rightarrow \bold{x}) =  g(\bold{x'}  \rightarrow \bold{x})  \left[ \epsilon(\bold{x'}  \rightarrow \bold{x}) + \int_{s}{\rho(\bold{x''}  \rightarrow \bold{x'}  \rightarrow \bold{x})L(\bold{x''}  \rightarrow \bold{x}) d\bold{x''}} \right],
 \end{equation}
-donde $L(x' \rightarrow x)$ es la intensidad de la luz que viaja del punto tridimensional $x'$ al punto $x$ (sin oclusiones), $g(x' \rightarrow x)$ es un termino geométrico que modela la oclusión que podría existir entre $x$ y $x'$, $\epsilon(x' \rightarrow x)$ es la intensidad de la luz emitida desde $x'$ a $x$, $\rho(x''  \rightarrow x'  \rightarrow x)$ es la intensidad de la luz emitida de $x''$ a $x$ por medio de una superficie en $x'$ (esta cantidad será llamada función bidireccional de distribución de reflectancia, \acrshort{BRDF}, en una sección posterior), y $S=\bigcup{s_{i}}$ es la unión de todas las superficies $s_{i}$ de la escena.
+donde $L(\bold{x'} \rightarrow \bold{x})$ es la intensidad de la luz que viaja del punto tridimensional $\bold{x'}$ al punto $\bold{x}$ (sin oclusiones), $g(\bold{x'} \rightarrow \bold{x})$ es un termino geométrico que modela la oclusión que podría existir entre $\bold{x}$ y $\bold{x'}$, $\epsilon(\bold{x'} \rightarrow \bold{x})$ es la intensidad de la luz emitida desde $\bold{x'}$ a $\bold{x}$, $\rho(\bold{x''}  \rightarrow \bold{x'}  \rightarrow \bold{x})$ es la intensidad de la luz emitida de $\bold{x''}$ a $\bold{x}$ por medio de una superficie en $\bold{x'}$ (esta cantidad será llamada función bidireccional de distribución de reflectancia, \acrshort{BRDF}, en una sección posterior), y $S=\bigcup{s_{i}}$ es la unión de todas las superficies $s_{i}$ de la escena.
 
 
 Puede observarse que la ecuación presenta una definición recursiva, ya que la energía radiante saliente de un punto $x'$ depende de la energía radiante que llega desde todos los puntos de todas las superficies a ese punto.
-De esta forma, $x$,$x'$ y $x''$ varían sobre todas las superficies de la escena.
-Además se asume una superficie $S_{0}$, la cual es un semi-hemisferio que engloba a toda la escena.
+De esta forma, $\bold{x}$,$\bold{x'}$ y $\bold{x''}$ varían sobre todas las superficies de la escena.
+Además se asume una superficie $S_{0}$, la cual se modela como un semi-hemisferio que engloba a toda la escena.
 
 La ecuación es una aproximación óptico-geométrica a las ecuaciones del electromagnetismo de Maxwell.
 $L$ representa la radiación de energía por unidad de tiempo por unidad de superficie de destino por unidad de superficie de origen ($joule/m^{4} s$).
@@ -418,45 +420,46 @@ El término geométrico se hace $0$ si los puntos en consideración no son mutua
 
 Por medio del modelado de cada término de forma separada, es posible visualizar fielmente una gran cantidad de superficies.
 Trabajos previos a la aparición de la ecuación del renderizado habían alcanzado resultados parciales, pero no habían logrado sintetizar un único método que englobe todos los fenómenos en investigación hasta ese entonces.
-Entre los casos particulares de la ecuación del renderizado, encontramos el trazado de rayos y la radiosidad.
-El primero es un método adecuado para renderizar superficies especulares (la luz se refleja en las superficies en una dirección específica), mientras que la radiosidad es un método útil para simular superficies con geometrías microscópicas que provocan el reflejo de la luz en todas direcciones, produciendo una apariencia difusa.
+Entre los casos particulares de la ecuación del renderizado, los más emblemáticos han sido el trazado de rayos \cite{Whitted1980} y la radiosidad \cite{Goral1984}.
+El primero es un método adecuado para renderizar superficies especulares (la luz se refleja en las superficies en direcciones específicas), mientras que la radiosidad es un método diseñado para simular superficies cuyas geometrías microscópicas provocan la distribución de la luz reflejada de manera equitativa, produciendo una apariencia difusa.
 
 Fuera de la ecuación quedan efectos más complejos, como la difracción y la polarización.
-De esta forma, la ecuación modela el comportamiento de la luz entre las superficies de la escena.
 Más detalles de la misma pueden ser consultados en \cite{Kajiya1986}.
 Un esquema de esta ecuación puede observarse en la Fig. \ref{fg:rendequation}.
 
 \begin{figure}
 \center
 \includegraphics[width=8cm]{figures/rendequation}
-\caption[Interpretación visual de la ecuación del renderizado]{Interpretación visual de la ecuación del renderizado (término $L(x''  \rightarrow x) $). La ecuación modela la distribución de radiancia en una escena, considerando todas las superficies intervinientes. La imagen muestra además los vectores normales a las superficies.}
+\caption[Interpretación visual de la ecuación del renderizado]{Interpretación visual de la ecuación del renderizado (término $L(\bold{x''}  \rightarrow \bold{x}) $). La ecuación modela la distribución de radiancia en una escena, considerando todas las superficies intervinientes. La imagen muestra además los vectores normales a las superficies.}
 \label{fg:rendequation}
 \end{figure}
 
-Si lo que se pretende modelar son fenómenos volumétricos, entonces debe atenderse a ciertas generalizaciones de la ecuación, como se ve en la siguiente sub-sección.
+La ecuación presentada modela correctamente el comportamiento de la energía radiante en superficies en una escena tridimensional.
+Si lo que se pretende modelar son fenómenos volumétricos, como partículas en el ambiente, o materiales transparentes, entre otros ejemplos, entonces deben atenderse ciertas generalizaciones de la ecuación, como se desarrolla en la siguiente sub-sección.
 
 \subsection{Ecuación del Renderizado de Volúmenes}
 
 En esta sección denotaremos como $L(\bold{x} \rightarrow \vec{\omega})$ a la energía radiante o {\em radiancia} que parte desde un punto del espacio $\bold{x}$ en la dirección $\vec{\omega}$.
-Siguiendo la notación de la sección anterior, existe un punto $y$ tal que $L(\bold{x} \rightarrow \vec{\omega}) = L(x \rightarrow y )$.
+Siguiendo la notación de la sección anterior, para cada vector en el espacio $\vec{\omega}$, existe un punto tridimensional $\bold{y}$ tal que $L(\bold{x} \rightarrow \vec{\omega}) = L(\bold{x} \rightarrow \bold{y})$.
 
-La luz es modelizada por medio de partículas denominadas {\em fotones}. Cuando un fotón de un rayo de luz atraviesa un medio en una dirección dada, pueden ocurrir una serie de eventos, de los cuales dos corresponden a fenómenos de extinción: el fotón es absorbido, o bien es redirigido en otra dirección, lo cual depende del coeficiente de absorción del medio $\sigma_{a}$ y el coeficiente de dispersión $\sigma_{s}$.
+La luz es modelizada por medio de partículas denominadas {\em fotones}. Cuando un fotón de un rayo de luz atraviesa un medio en una dirección dada, pueden ocurrir una serie de eventos, de los cuales dos corresponden a fenómenos de extinción: la absorción y la redirección del mismo en otra dirección.
+Estos fenómenos dependen del coeficiente de absorción del medio $\sigma_{a}$ y el coeficiente de dispersión $\sigma_{s}$.
 La suma de ambos se denota como el coeficiente de extinción $\sigma_{t}$.
 
-El coeficiente de absorción en el segmento es $\sigma_{a}(\bold{x} + t\vec{\omega})$.
-La fracción de fotones absorbidos en un segmento de recta es notada como $\sigma_{a}(\bold{x} + t\vec{\omega}) \Delta t$.
+El coeficiente de absorción en un segmento de recta se denota como $\sigma_{a}(\bold{x} + t\vec{\omega})$.
+La fracción de fotones absorbidos en ese segmento de recta es notada como $\sigma_{a}(\bold{x} + t\vec{\omega}) \Delta t$.
 Consecuentemente la fracción de fotones que escapa a la absorción en ese segmento de recta resulta $(1-\sigma_{a}(\bold{x} + t\vec{\omega}) \Delta t)$.
-Finalmente, podemos escribir la radiancia que escapa al medio en dirección $\vec{\omega}$ como,
+Finalmente, podemos escribir la radiancia que {\em escapa} del medio en dirección $\vec{\omega}$ como,
 
 $$L((\bold{x}+t\vec{\omega}) \rightarrow \vec{\omega}) = L(\bold{x} \rightarrow \vec{\omega}) (1-\sigma_{a}(\bold{x} + t\vec{\omega}) \Delta t),$$
 
 o, de otra forma:
 
-$$\frac{L((\bold{x}+t\vec{\omega}) \rightarrow \vec{\omega}) - L(\bold{x} \rightarrow \vec{\omega}) }{ \Delta t } = - L(\bold{x} \rightarrow \vec{\omega}) \sigma_{a}(\bold{x} + t\vec{\omega}).$$
+$$\frac{L((\bold{x}+t\vec{\omega}) \rightarrow \vec{\omega}) - L(\bold{x} \rightarrow \vec{\omega}) }{ \Delta t } = - \sigma_{a}(\bold{x} + t\vec{\omega}) L(\bold{x} \rightarrow \vec{\omega}).$$
 
 Tomando el límite cuando $\Delta t \rightarrow 0$ se obtiene la derivada, es decir, el cambio diferencial en radiancia dado por la absorción del medio,
 
-$$\lim_{\Delta t \rightarrow 0} \frac{L((\bold{x}+t\vec{\omega}) \rightarrow \vec{\omega}) - L(\bold{x} \rightarrow \vec{\omega}) }{ \Delta t } = - \sigma_{a}(\bold{x}) L(\bold{x} \rightarrow \vec{\omega})  = -(\vec{\omega} \cdot \nabla_{a}) L(\bold{x} \rightarrow \vec{\omega}),$$
+$$\lim_{\Delta t \rightarrow 0} \frac{L((\bold{x}+t\vec{\omega}) \rightarrow \vec{\omega}) - L(\bold{x} \rightarrow \vec{\omega}) }{ \Delta t } = (\vec{\omega} \cdot \nabla_{a}) L(\bold{x} \rightarrow \vec{\omega}) = - \sigma_{a}(\bold{x}) L(\bold{x} \rightarrow \vec{\omega}),$$
 
 donde $\nabla_{a}$ denota el gradiente dado por la absorción y $ \vec{\omega} \cdot \nabla_{a}$ expresa la derivada direccional de la absorción del medio en dirección $\vec{\omega}$.
 
@@ -469,7 +472,7 @@ de esta forma se pueden aunar ambos términos para expresar el cambio en radianc
 $$(\vec{\omega} \cdot \nabla_{t}) L(\bold{x} \rightarrow \vec{\omega}) = -(\sigma_{a}(\bold{x})+\sigma_{s}(\bold{x})) L(\bold{x} \rightarrow \vec{\omega}) = -\sigma_{t}(\bold{x}) L(\bold{x} \rightarrow \vec{\omega}).$$
 
 Gracias a esta expresión se puede calcular una cantidad de interés, llamada {\em Transmitancia}, $T_{r}$, la cual describe la cantidad de fotones que pueden viajar sin obstrucciones entre dos puntos en un medio (en línea recta).
-Integrando la ecuación anterior se obtiene,
+Integrando la ecuación anterior es posible obtener una expresión para la transmitancia,
 
 $$T_{r}(\bold{x'} \leftrightarrow \bold{x}) = e^{-\tau(\bold{x'} \leftrightarrow \bold{x})},$$
 
@@ -482,13 +485,13 @@ La ecuación es el resultado de integrar la extinción a lo largo del segmento d
 
 
 Hasta ahora se describió la pérdida de fotones a medida que un rayo de luz viaja por un medio.
-Similarmente existen dos fenómenos que provocan que fotones que previamente no estaban presentes en el rayo de luz se sumen al mismo.
+Similarmente existen dos fenómenos que provocan el desvío de fotones hacia la dirección $\vec{\omega}$.
 El primero es llamado dispersión entrante, y consiste en el rebote de fotones que provocan que los mismos adopten la dirección del rayo actual.
 Su expresión matemática es
 
 $$ (\vec{\omega} \cdot \nabla_{i}) L(\bold{x} \rightarrow \vec{\omega}) = \sigma_{s}(\bold{x}) L_{i}(\bold{x} \rightarrow \vec{\omega}).$$
 
-El último fenómeno aparece en medios que transforman otras formas de energía como el calor, en luz visible, y se llama emisión, con expresión
+El último fenómeno ocurre en medios que transforman otras formas de energía como el calor, en luz visible, y se llama emisión, con expresión
 
 $$ (\vec{\omega} \cdot \nabla_{e}) L(\bold{x} \rightarrow \vec{\omega}) = \sigma_{a}(\bold{x}) L_{e}(\bold{x} \rightarrow \vec{\omega}).$$
 
@@ -515,16 +518,17 @@ L(\bold{x} \leftarrow \vec{\omega}) = T_{r}(\bold{x} \leftrightarrow \bold{x_{s}
 \label{eq:rteintegral}
 \end{equation}
 
-donde $L(\bold{x} \leftarrow \vec{\omega})$ describe la radiancia que llega a $\bold{x}$ desde $\bold{\omega}$ (este es el caso inverso a $L(\bold{x} \rightarrow {\vec{\omega}})$, el cual resulta útil en el diseño de algoritmos que implementan esta ecuación), $s$ es el ancho del medio desde $\bold{x}$ en dirección $\vec{\omega}$, $\bold{x_{t}} = \bold{x} + t\vec{\omega}$ con $t \in (0,s)$ y $\bold{x_{s}} = \bold{x}+ s\vec{\omega}$ es un punto en una superficie cercana y visible desde el medio, ver Fig.~\ref{fg:rte}.
+donde $L(\bold{x} \leftarrow \vec{\omega})$ describe la radiancia que llega a $\bold{x}$ desde $\bold{\omega}$ (este es el caso inverso a $L(\bold{x} \rightarrow {\vec{\omega}})$, el cual resulta útil en el diseño de algoritmos que implementan esta ecuación), $s$ es la profundidad del medio desde $\bold{x}$ en dirección $\vec{\omega}$, $\bold{x_{t}} = \bold{x} + t\vec{\omega}$ con $t \in (0,s)$ y $\bold{x_{s}} = \bold{x}+ s\vec{\omega}$ es un punto en una superficie cercana y visible desde el medio, ver Fig.~\ref{fg:rte}.
 El primer término de la ecuación representa radiancia entrando por detrás del medio.
 El segundo, la emisión de radiancia en el medio.
 El último, la acumulación de radiancia entrante al medio. 
+Esta forma integral de la ecuación RTE recibe el nombre {\em Ecuación del Renderizado de Volúmenes}.
 
 Esta ecuación es aún más compleja que la ecuación del renderizado presentada en la sección anterior.
 Cada punto del medio depende de {\em todos} los demás puntos del medio, por lo que deben desarrollarse métodos que permitan computar aproximaciones adecuadas de la misma.
 Simplificaciones usuales incluyen ignorar el término de emisión, y asumir un medio isotrópico u homogéneo.
 
-Diversos algoritmos específicos surgieron con anterioridad a estas ecuaciones generales, y sin saberlo, formaban parte de un mismo marco teórico, las cuales hoy por hoy son algoritmos especializados para ciertos tipos de materiales y situaciones, entre ellos se encuentran el trazado de rayos \cite{Whitted1980} y radiosidad \cite{Goral1984}.
+Como fue aclarado, diversos algoritmos específicos surgieron con anterioridad a estas ecuaciones generales, y sin saberlo, formaban parte de un mismo marco teórico, las cuales hoy por hoy son algoritmos especializados para ciertos tipos de materiales y situaciones.
 
 
 
@@ -545,13 +549,13 @@ Diversos algoritmos específicos surgieron con anterioridad a estas ecuaciones g
 
 %\section{Simplificaciones a las Ecuaciones de Renderizado}
 \section{Funciones de Distribución de Reflectancia (BRDFs)}
-En la ecuación del renderizado se introdujo un término llamado BRDF, el cual es una función que modela el comportamiento de la luz en relación con una superficie determinada.
-Dada una dirección de entrada y una de salida de un rayo de luz que impacta una superficie, la función devuelve la cantidad de radiancia que emite la superficie en la dirección saliente al recibir energía radiante en su dirección entrante, como se muestra en la Fig. \ref{fg:brdf}.
+En la ecuación del renderizado se introdujo un término llamado BRDF, el cual representa una función que modela el comportamiento de la luz en relación con una superficie determinada.
+Dada una dirección de entrada y una de salida de un rayo de luz que impacta una superficie, la función devuelve la cantidad de radiancia que emite la superficie en la dirección saliente al recibir energía radiante en su dirección entrante.
 
 \begin{figure}
 \center
 \includegraphics[width=9cm]{figures/brdf}
-\caption[Esquema gráfico de la función bidireccional de distribución de reflectancia]{Esquema gráfico de la función bidireccional de distribución de reflectancia (BRDF). El par de ángulos de entrada ($\theta_{i},\phi_{i}$) define la dirección del rayo entrante, similarmente ($\theta_{r},\phi_{r}$) representan la dirección del rayo saliente. La función calcula la cantidad de radiancia emitida en la dirección del rayo saliente.}
+\caption[Esquema gráfico de la función bidireccional de distribución de reflectancia]{Esquema gráfico de la función bidireccional de distribución de reflectancia (BRDF). El par de ángulos de entrada ($\theta_{i},\phi_{i}$) define la dirección del rayo entrante, similarmente ($\theta_{r},\phi_{r}$) representan la dirección del rayo saliente. La función calcula la cantidad de radiancia emitida en la dirección del rayo saliente, a partir de la dirección del rayo entrante.}
 \label{fg:brdf}
 \end{figure}
 
@@ -559,8 +563,8 @@ Diversos fenómenos tienen lugar cuando un rayo de luz impacta una superficie de
 De esta forma sería posible modelar fenómenos tan complejos como la fosforescencia y la polarización.
 
 Una complejidad tal no resulta práctica en computación gráfica, por lo cual deben realizarse simplificaciones sobre los materiales subyacentes.
-Una simplificación muy común de esta función consiste en ignorar los fenómenos anteriores y limitar la definición de la BRDF a un par de ángulos de entrada y de salida, para cada punto de la superficie.
-De cualquier manera, esta simplificación es todavía una función de {\em seis} variables, que incluye los cuatro números que definen las direcciones de entrada y de salida, y los dos que se corresponden a una representación paramétrica de una superficie.
+Una simplificación muy común de esta función consiste en ignorar los fenómenos anteriores y limitar la definición de la BRDF a un par de ángulos de entrada y de salida, para cada punto de la superficie, como se muestra en la Fig. \ref{fg:brdf}.
+De cualquier manera, esta simplificación es todavía una función de {\em seis} variables, que incluye las cuatro dimensiones definidas por las direcciones de entrada y de salida, y las dos que se corresponden a una representación paramétrica de una superficie.
 
 Debido a la prohibitiva complejidad aún presente en estas simplificaciones, los primeros modelos utilizados en computación gráfica eran funciones analíticas \cite{Phong1975,Blinn1977}, es decir, una función simple que no requería almacenamiento de datos (ya que el valor se calcula en el momento de llamar a la función).
 De esta manera fue posible representar diversos materiales sencillos, sobre todo metales y objetos con una marcada reflectancia.
@@ -573,8 +577,8 @@ En otras palabras, la inclusión de no linealidad otorga un mayor realismo.
 Otros trabajos \cite{Dana1999,Matusik2003} realizaron mediciones de la reflectancia de materiales por medio de dispositivos de captura (goniorreflectómetros), lo cual constituye una solución de fuerza bruta, pero adecuada en algunos casos.
 Los datos de las mediciones del material generalmente son publicados para uso de la comunidad gráfica y científica.
 
-Finalmente, es posible intentar representar los datos mesurados en materiales reales con modelos matemáticos, buscando reducir costos de almacenamiento \cite{Ngan2005}.
-En estos casos, los datos obtenidos en las medidas se buscan explicar por medio de modelos conocidos de BRDF o por una combinación de los mismos, con lo cual no es necesario almacenar la información capturada, sino que la misma se calcula a partir de la definición del nuevo modelo.
+Finalmente, se ha intentado representar los datos mesurados en materiales reales con modelos matemáticos, buscando reducir costos de almacenamiento \cite{Ngan2005}.
+En estos casos, por medio de modelos estándar de BRDFs, o por una combinación de los mismos, se buscan explicar los datos obtenidos en las medidas, con lo cual no es necesario almacenar la información capturada, sino que la misma se calcula a partir de la definición del nuevo modelo.
 Si bien no es posible explicar {\em la totalidad} de los datos obtenidos, generalmente se obtienen buenas aproximaciones por medio de estos métodos, las cuales explican gran parte de los datos observados.
 
 \subsection{Definición}
@@ -583,7 +587,7 @@ Una forma equivalente consiste en definir, para cada punto de una superficie, el
 
 $$\rho(\theta_{i},\phi_{i},\theta_{r},\phi_{r}) = \frac{dL_{r}(\theta_{r},\phi_{r})}{dE_{i}(\theta_{i},\phi_{i})},$$
 
-donde $E$ es la {\em irradiancia}, que se define como flujo incidente sobre unidad de área, y $L$ es la radiancia reflejada.
+donde $E_{i}$ es la {\em irradiancia} entrante, que se define como flujo incidente sobre unidad de área, y $L_{r}$ es la radiancia reflejada.
 Intuitivamente, la BRDF mide la cantidad de luz reflejada a partir de la cantidad de energía incidente en la superficie, para cada ángulo de entrada y de salida.
 
 Muchas BRDF modelan por separado determinadas características comunes en materiales.
@@ -592,7 +596,7 @@ La primera produce diferencias visibles en superficies, siendo característica l
 
 La Fig.~\ref{fg:contribuciones} muestra ejemplos de estos rebotes.
 Las direcciones de reflejo suelen formar patrones llamados lóbulos, los cuales permiten entender intuitivamente el comportamiento de la BRDF (a simple vista, es posible saber la dirección donde se dirigirán más rayos y por lo tanto, mayor radiancia).
-Si el observador se coloca en la dirección de reflejo de estos lóbulos, verá mayor radiancia que en otras direcciones.
+Si el observador se coloca en la dirección de reflejo de estos lóbulos, observará mayor radiancia que en otras direcciones.
 
 \begin{figure}
 \center
@@ -621,8 +625,7 @@ Un ejemplo muy común de BRDF analítica es el modelo de Phong, ver Fig~\ref{fg:
 
 $$\rho_{phong}(-L,V) =  k_{a} I_{a} + k_{d} max((N \cdot L),0) + k_{s} (R \cdot V)^{\alpha},$$
 
-donde $k_{a}$, $k_{d}$ y $k_{s}$ son coeficientes de iluminación ambiente, difusa y especular, el vector $N$ es el normal a la superficie, $R$, el reflejado (en un rebote especular), $V$ el vector  que se forma desde la superficie hacia la posición del observador y $L$ el vector desde la superficie hacia la fuente de luz (por lo que debe tomarse su opuesto, $-L$, para hacer la definición compatible con la definición de BRDF), y $\alpha$ es un parámetro que determina el brillo final de los reflejos del material, ver Fig.~\ref{fg:phongparametros}.
-Si bien el modelo es completamente fenomenológico, el mismo es flexible y obtiene buenos resultados para materiales simples.
+donde $k_{a}$, $k_{d}$ y $k_{s}$ son coeficientes de iluminación ambiente, difusa y especular, el vector $N$ es el normal a la superficie, $R$, el reflejado (en un rebote especular), $V$ el vector  que se forma desde la superficie hacia la posición del observador y $L$ el vector desde la superficie hacia la fuente de luz (por lo que debe tomarse su opuesto, $-L$, para hacer la definición compatible con la definición de BRDF), y $\alpha$ es un parámetro que determina el brillo final de los reflejos del material (llamado {\em glossiness}), ver Fig.~\ref{fg:phongparametros}.
 
 
 \begin{figure}
@@ -632,10 +635,25 @@ Si bien el modelo es completamente fenomenológico, el mismo es flexible y obtie
 \label{fg:phongVecs}
 \end{figure}
 
+El término ambiente en la ecuación, representa una aproximación a la radiancia dispersa por toda la escena, y está definido por una constante.
+
+El término difuso de la BRDF del material no cambia respecto de la posición del observador.
+La misma es resultado de la normal a la superficie y la posición de la fuente de luz.
+En un extremo, el término difuso se hace cero cuando la luz incide perpendicularmente a la superficie.
+El otro extremo se da cuando la normal coincide con la fuente de luz, en cuyo caso el término difuso es máximo.
+
+El único cambio que puede percibir un observador al moverse, en la apariencia de una superficie que utiliza la BRDF de Phong, está dado en el término especular.
+Intuitivamente, a medida que el observador en $V$ se posiciona más cerca de la dirección del rayo reflejado $R$, ocurre que $R$ es más parecido a $V$, llegando en el límite a $R = V$
+y por lo tanto $R \cdot V$ es máximo.
+A medida que el observador en $V$ se aleja de $R$, el producto escalar tiende a cero, y la reflectancia se percibe en menor medida.
+
+Si bien el modelo es mayormente fenomenológico, el mismo es flexible e intuitivo.
+Además, obtiene buenos resultados en superficies opacas de marcada especularidad, como metales y plásticos, entre otros.
+
 \begin{figure}
 \center
 \includegraphics[width=9cm]{figures/phongparametros}
-\caption[Diferentes Parámetros en el modelo de Phong]{Diferentes Parámetros en el modelo de Phong. De izquierda a derecha $k_{s}$ varía de $0$ a $1$. De arriba hacia abajo, $\alpha$ varía de $50$ a $1$.}
+\caption[Diferentes apariencias en el modelo de Phong]{Diferentes apariencias obtenidas en una esfera, cambiando parámetros en el modelo de Phong, para un observador y una fuente de luz fijos. De izquierda a derecha $k_{s}$ varía de $0$ a $1$. De arriba hacia abajo, $\alpha$ varía de $50$ a $1$.}
 \label{fg:phongparametros}
 \end{figure}
 
@@ -647,22 +665,29 @@ Si bien el modelo es completamente fenomenológico, el mismo es flexible y obtie
 %\subsection{Photon Mapping}
 
 \section{Materiales específicos}
-Debido a la necesidad creciente en el modelado realista de materiales, se desarrollaron técnicas específicas para materiales determinados, ya que los mismos no encajaban en el marco global de las técnicas desarrolladas a partir de las ecuaciones del renderizado.
+Debido a la necesidad creciente en el modelado y renderizado realista de materiales, el diseño de BRDFs y métodos derivados de las ecuaciones del renderizado, y del renderizado de volúmenes, evolucionaron hacia representaciones más complejas, permitiendo representar una mayor cantidad de apariencias y materiales.
+Además, y debido a las características particulares de determinados materiales, los métodos mencionados resultaron inadecuados de ser aplicados de manera directa.
+Esto provocó que se desarrollaran técnicas específicas para materiales determinados.
 
-Si bien las ecuaciones presentadas proveen un marco teórico general de los fenómenos que ocurren entre la luz y los materiales en una escena, los detalles de la implementación computacional muchas veces hacen imposible una utilización directa de las mismas.
+En otras palabras, si bien las ecuaciones presentadas proveen un marco teórico general de los fenómenos que ocurren entre la energía radiante y los materiales en una escena, los detalles de implementación computacional (representación como superficie o volumen, escala de representación, consideraciones de almacenamiento, etc.) muchas veces hacen imposible una utilización directa de las mismas, debiendo diseñarse soluciones particulares que atiendan a los requerimientos específicos de cada material.
+Por ejemplo, la BRDF no siempre resulta ser la solución adecuada para modelar todas las superficies, prefiriéndose una BSSRDF o una BTF en algunos casos.
 
-Debido a esto han surgido técnicas que buscando lograr un renderizado realista, han optado por modelizar el proceso de fabricación del material (por ejemplo en telas), o el diseño de las microgeometrías presentes en sus superficies (cerámicos).
+Debido a esto han surgido técnicas que han considerado distintos aspectos a la hora de obtener un renderizado realista.
+Algunas han optado por sintetizar modelos de primeros principios. 
+Entre ellas se encuentran modelar el proceso de fabricación del material (por ejemplo en telas), o modelizar el comportamiento químico de determinados componentes que forman el material (piel).
+Otras metodologías utilizaron un enfoque fenomenológico para la obtención de un modelo.
+Entre estas técnicas encontramos el diseño de las microgeometrías presentes en superficies de materiales (cerámicos), y el uso de dispositivos de captura de determinadas propiedades del material (pinturas de autos). 
 
 
-Esta sección muestra distintos ejemplos de diseño de materiales en computación gráfica con diversas metodologías.
+Esta sección presenta distintos ejemplos de diseño de materiales en computación gráfica con diversas metodologías.
 Se desprende que el modelado y renderizado de materiales es aún un tema abierto, del cual sólo algunos ejemplos han sido desarrollados \cite{Dorsey2007}.
 Existe aún un amplio abanico de materiales que requieren tratamiento.
 Dependiendo del nivel de realismo deseado, es posible aplicar diversas metodologías al diseño de los mismos.
 
 
 \subsection{Piel}
-Comenzaremos con un material extremadamente complejo y necesario en computación gráfica: la piel humana.
-Debido a su ubicuidad, existen para este material un importante número de trabajos científicos, los cuales varían en complejidad, presentando diversos enfoques a la hora de realizar su modelado.
+Comenzaremos con un material extremadamente complejo y ubicuo en computación gráfica: la piel humana.
+Debido a su extenso uso en aplicaciones gráficas, existen para este material un importante número de trabajos científicos, los cuales varían en complejidad, presentando diversos enfoques a la hora de realizar su modelado.
 Un modelo poco preciso de la piel puede ser fácilmente detectado por humanos, por lo cual un diseño cuidado es necesario para alcanzar un realismo aceptable.
 
 
@@ -670,16 +695,16 @@ La composición de la piel está fuertemente estudiada en medicina.
 Debido a esto, existen trabajos muy completos sobre su estructura y propiedades \cite{Walters2002}.
 La piel está compuesta por diversas capas como la epidermis, la dermis y la hipodermis.
 La más exterior es la epidermis, compuesta por células muertas.
-La siguiente capa en profundidad es la dermis, la cual es más ancha y posee vasos sanguíneos (lo cual afecta el color final de la piel).
+La siguiente capa en profundidad es la dermis, la cual es más ancha y posee vasos sanguíneos (lo cual afecta, entre otras consideraciones, el color final de la piel).
 La hipodermis es la capa más interna y conecta la piel con el cuerpo.
 Todas estas capas presentan una estructura muy compleja.
 Este material es muy dinámico, y puede ser afectado por diversos factores, como el sol, lastimaduras, y cambios en el torrente sanguíneo.
-Su estructura geométrica también es compleja, presentando poros y por ejemplo, patrones característicos (por ejemplo las huellas digitales).
+Su estructura geométrica también es compleja, presentando poros y por ejemplo, patrones característicos que varían para cada persona (por ejemplo las huellas dactilares).
 
-La estructura de capas fue imitada en computación gráfica, realizando simplificaciones.
+La estructura de capas fue imitada en computación gráfica realizando abruptas simplificaciones.
 De esta forma, se diseñó un modelo de reflectancia para su superficie (BRDF) y un modelo de dispersión debajo de la superficie (\acrshort{BSSRDF}) en una segunda capa, junto con un modelo microgeométrico de la superficie.
 
-Un ejemplo es \cite{Marschner2000}, el cual utiliza una BRDF de Lafortune (la cual es una generalización de la BRDF de Phong, definida como la suma de más de un lóbulo) para la reflectancia superficial, junto con texturas que se mapean sobre una geometría de la cara de una persona.
+Un ejemplo es \cite{Marschner2000}, el cual utiliza una BRDF de Lafortune (la cual es una generalización de la BRDF de Phong con varios lóbulos) para la reflectancia superficial, junto con texturas que se mapean sobre una geometría de la cara de una persona.
 En otro trabajo se utilizó además información proveniente de moldes de polímeros presionados sobre la cara de personas \cite{Haro2001}, con el fin de capturar detalles finos de la geometría, utilizando además algoritmos de síntesis de imágenes para generar muestras más grandes que las medidas, ver Fig.~\ref{fg:piel}.
 
 \begin{figure}
@@ -690,35 +715,47 @@ En otro trabajo se utilizó además información proveniente de moldes de polím
 \end{figure}
 
 Un modelo basado en primeros principios puede verse en \cite{Krishnaswamy2004}.
-En ese trabajo se definen geometrías precisas para la dermis y epidermis, a partir de la cual se realizan simulaciones físicas de rebote de la luz (simulaciones Monte Carlo), gracias a las cuales es posible reconstruir una BRDF.
-El modelo incluye muchos otros detalles de los procesos físicos intervinientes, como la melanina, bilirrubina, absorción, pigmentación, etc.
+En dicho trabajo se definen geometrías precisas para la dermis y epidermis, a partir de la cual se realizan simulaciones físicas estocásticas de rebote de la luz (simulaciones Monte Carlo), gracias a las cuales es posible reconstruir una BRDF.
+El modelo incluye muchos otros detalles de los procesos físicos intervinientes, como la intervención de la melanina y la bilirrubina, además de consideraciones de absorción, pigmentación, etc.
 
 Existen trabajos que abordan otros aspectos del modelado de la apariencia de la piel.
 El estudio de los patrones que produce el envejecimiento es sujeto de estudio en \cite{Boissieux2000}.
 Los mismos fueron medidos en muestras reales de una empresa cosmética.
 También es posible obtener información geométrica fina a partir de imágenes \cite{Golovinskiy2006}.
 
-\subsection{Materiales Porosos}
-Realizar una simulación por medio de superficies puede ser una limitación a la hora de modelar un material.
-En el caso de los materiales porosos, existen micro-poros en la geometría, los cuales interaccionan con la luz, que hacen que los enfoques clásicos no sean adecuados.
-Los poros mencionados son más pequeños que los poros de la piel humana.
-Si bien son más grandes que la longitud de onda de la luz, los mismos no son visibles al ojo humano.
+Este ejemplo muestra con claridad que un mismo material puede presentar una amplia gama de modelos que simulan su apariencia, dependiendo de la aplicación específica y los detalles que se buscan representar.
 
-Entre los pocos trabajos sobre estos materiales, se encuentra \cite{Merillou2000}.
-En dicho trabajo la definición estándar de BRDF es modificada para incluir comportamiento de materiales porosos.
-Para esto, se realizan simulaciones Monte Carlo sobre posibles configuraciones microscópicas de poros bajo ciertas asunciones.
-Un ejemplo típico de poro puede verse en la Fig.~\ref{fg:poro}.
-Se simula el rebote de la luz en la geometría sintetizada, computándose las distribuciones de reflectancia para poros con distintas formas, utilizando un máximo en el número de rebotes.
+\subsection{Materiales Porosos}
+
+Determinados materiales porosos presentan micro-poros en la geometría de sus superficies.
+Estos poros afectan de manera directa la noción de superficie contínua, asumida al modelar un material como una superficie y representar su comportamiento con la energía radiante por medio de una BRDF.
+
+Estos poros microscópicos son aún más pequeños que los poros presentes en la piel humana.
+Si bien su tamaño es mayor que la longitud de onda de la luz, los mismos no son visibles al ojo humano.
+
+Entre los pocos trabajos sobre estos materiales, se encuentra el de Merillou \cite{Merillou2000}.
+En dicho trabajo la definición estándar de BRDF es modificada para incluir términos matemáticos que representan la estructura y el comportamiento de materiales porosos.
+Para esto se modifican los coeficientes especular ($k_{s}$) y difuso ($k_{d}$) de la BRDF, transformándolos en una {\em función} dependiente del ángulo de entrada y la posición del observador.
+
+La idea intuitiva detrás de estas modificaciones es profundizar el modelo sobre dichos coeficientes, teniendo en cuenta el efecto de los poros sobre los mismos, debido a que la existencia de éstos puede modificar el comportamiento de los rayos de luz.
+Por ejemplo, un rayo de luz que se comporta de forma especular, podría ser desviado por un poro y resultar en energía difusa.
+Esto se traduce en la dirección del rayo de rebote, ya que la presencia del poro provoca que el rayo que sería especular obtenga una dirección de salida posiblemente arbitraria.
+Matemáticamente, el coeficiente difuso toma una parte del coeficiente especular.
+
+Para obtener una distribución estadística de las geometrías de los poros presentes en una superficie, se deben modelizar los mismos.
+El modelado de los poros se lleva a cabo por medio de simulaciones estocásticas Monte Carlo sobre posibles geometrías microscópicas de poros bajo ciertas asunciones.
+Dos ejemplos diferentes de poros pueden observarse en la Fig.~\ref{fg:poro}.
+Se simula el rebote de rayos de luz sobre la geometría sintetizada, computándose las distribuciones de reflectancia para poros con distintas formas, utilizando un máximo en el número de rebotes.
 También es posible tener en cuenta un factor de absorción en cada rebote, lo cual disminuye la radiancia del rayo siendo computado.
 El proceso se repite para distintas simulaciones estocásticas de la geometría de los poros.
 
-Con esto se modifican los coeficientes especular y difuso de la BRDF.
-En la Fig.~\ref{fg:ceramico} podemos observar una imagen de una maceta renderizada con una BRDF tradicional, y a la derecha, la misma imagen utilizando este método.
+
+En la Fig.~\ref{fg:ceramico} podemos observar una imagen de una maceta renderizada con una BRDF tradicional, y a la derecha, la misma imagen utilizando la BRDF modificada por este método.
 
 \begin{figure}
 \center
 \includegraphics[width=8cm]{figures/poro}
-\caption[Poros sinterizados]{Ejemplo de poros sintetizados utilizando el método de \cite{Merillou2000}.}
+\caption[Poros sinterizados]{Ejemplo de poros sintetizados utilizando el método desarrollado en \cite{Merillou2000}.}
 \label{fg:poro}
 \end{figure}
 
@@ -734,7 +771,7 @@ A diferencia de los cerámicos, los poros son visibles por el ojo humano.
 
 \subsection{Pelo}
 Al igual que con los cerámicos y la piel, el modelado del pelo debe tener en cuenta su estructura interna.
-Una muestra de pelo consiste de tres partes principales: una médula central, el córtex y una cutícula exterior.
+Cada pelo individual consiste de tres partes principales: una médula central, el córtex y una cutícula exterior.
 Su color está dado por gránulos de melanina en el córtex.
 Cuando no están presentes estos gránulos se observa un color blanco.
 
@@ -764,7 +801,7 @@ Los componentes difuso y especular del modelo son,
 
 donde $\theta_{i}$ es el ángulo entre la luz y la tangente al pelo, y $\theta_{r}$ es el ángulo entre la tangente al pelo y el observador.
 
-Luego, para calcular el color final de un pixel visto desde el observador en pantalla, se recorren en línea recta, desde $t_{near}$ a $t_{far}$ según corresponda a ese pixel, los texels necesarios,
+Luego, para calcular el color final de un pixel en pantalla, desde el punto de vista del observador, se recorren en línea recta, desde $t_{near}$ a $t_{far}$ según corresponda a ese pixel, los texels necesarios,
 
 $$L = \sum_{t=t_{near}}^{t=t_{far}} {e^{-\tau \sum_{u=t_{near}}^{u=t} \rho(u)} \rho(t) \sum_{i} L_{i}(t) \bold{\psi}(t)},$$
 
@@ -788,7 +825,7 @@ Puede verse un estudio más completo de la literatura sobre renderizado de pelo 
 \subsection{Telas}
 Las telas son un material similar al pelo en cuanto a su composición, ya que están formadas por un conjunto de fibras.
 Las fibras de telas presentan diferentes {\em tinturas}.
-Es importante tener en cuenta las tinturas para entender la apariencia de una tela cuando es vista desde distintos ángulos.
+Es importante considerar las tinturas que componen una fibra para entender la apariencia de una tela cuando es vista desde distintos ángulos.
 Por ejemplo, determinadas fibras de telas presentan más de una tintura, como muestra la Fig.~\ref{fg:fibra}.
 En este caso, los rayos de luz que llegan desde distintas posiciones atraviesan distintas longitudes sobre las tinturas, produciendo iridiscencia, es decir, cambio de color visible dependiendo del ángulo de visión.
 
@@ -817,13 +854,13 @@ Para esto se utilizan curvas $3D$ construídas a partir de los puntos de control
 \subsection{Pinturas de autos}
 Determinadas marcas de automotores han expuesto la necesidad de una correcta visualización de las pinturas aplicadas sobre la superficie exterior de los mismos.
 Los modelos desarrollados se han utlizado para presentar al público nuevos productos de estas fábricas, permitiendo a los posibles compradores configurar los colores y características deseadas en las pinturas.
-Debido a esto, es deseable un buen modelo del material en computación gráfica, que permita luego una reproducción lo más fiel posible del mismo en la realidad.
+Debido a esto, es deseable un buen modelo del material en computación gráfica, que permita luego una reproducción lo más fiel posible al mismo, en un automóvil real.
 
 Se han desarrollado principalmente dos categorías de métodos para obtener un material con la apariencia de pintura de automóviles: aquellos basados en primeros principios \cite{Ershov2001}, y los basados en capturas de características de pinturas reales.
 
 En el primero se realiza un modelo por capas, donde cada capa contiene partículas de pigmentos como en las pinturas reales.
-El modelo de dos capas presentados asume una capa con partículas que reflejan la luz como un espejo, y la otra con una pintura opaca.
-Tomando en consideración parámetros como la densidad, la distrbución de las orientaciones de las partículas, la transmitancia y la reflectancia, derivan una compleja BRDF parametrizada y analítica que permite definir distintos tipos de pinturas, ver Fig.~\ref{fg:pinturaauto}.
+El modelo de dos capas presentado asume una capa con partículas que reflejan la luz especularmente, y la otra con una pintura opaca.
+Tomando en consideración parámetros como la densidad, la distribución de las orientaciones de las partículas, la transmitancia y la reflectancia, derivan una compleja BRDF parametrizada y analítica que permite definir distintos tipos de pinturas, ver Fig.~\ref{fg:pinturaauto}.
 
 En el caso de datos mesurados, es posible utilizar distintas tomas de la radiancia saliente de la pintura de autos para combinarlas en un modelo.
 En \cite{Dumont2001} además se utilizan texturas que representan la microgeometría de las pinturas También se utilizó ruido para producir efectos como el denominado {\em brillo} (sparkle).
@@ -842,5 +879,13 @@ La elección final se hace en base a la complejidad de la captura, costos comput
 \section{Conclusiones}
 En este capítulo presentamos un resumen del estado del arte en modelado y renderizado de materiales en computación gráfica.
 Del capítulo se desprende que para lograr un modelo realista de un material dado, es necesario modelizar tanto su geometría como su interacción con la luz, de la manera más realista posible.
-En los capítulos que siguen, mostraremos como el diseño de ambos aspectos fue clave para lograr un renderizado realista de la miga y corteza de diferentes tipos de panes.
+Además, deben tenerse en cuenta los costos computacionales, la escala de la representación buscada, y el método utilizado para el renderizado del mismo (utilizar la ecuación del renderizado, modelando el material como una superficie, o diseñar el mismo como un volumen).
+
+El pan ha sido un material elusivo en computación gráfica.
+Se cuenta con un único trabajo en el tópico \cite{Tong2005}.
+El enfoque utilizado es la fuerza bruta, es decir, capturas de reflectancia e imágenes de la miga de pan desde un punto de vista puramente fenomenológico.
+Además, no se realizan consideraciones sobre la geometría del mismo.
+Estas y otras limitaciones severas del método fueron superadas en la presente tesis.
+
+En los capítulos que siguen, mostraremos como el diseño de la geometría y la interacción lumínica, fueron claves para lograr un renderizado realista de la miga y corteza de diferentes tipos de panes.
 
