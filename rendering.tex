@@ -1,20 +1,19 @@
 
 \chapter[Renderización de la geometría de Panes]{Renderización de la geometría de Panes y otros Materiales Porosos}
 \section{Introducción}
-Debido a las limitaciones existentes actualmente en el renderizado realista de pan, nos proponemos en este capítulo estudiar la utilización de renderizado directo de volúmenes aplicado a un campo escalar representando la geometría de la miga de pan. 
+Debido a las limitaciones existentes actualmente en el renderizado realista de pan, nos proponemos en este capítulo estudiar la utilización de renderizado directo de volúmenes (Direct Volume Rendering, \acrshort{DVR} \cite{Kratz2006}), aplicado a un campo escalar representando la geometría de la miga de pan. 
 Los resultados obtenidos son realistas y se renderizan en tiempo real. La misma evita el uso de estructuras intermedias, simplificando el desarrollo y reduciendo los costos computacionales.
 
-El renderizado foto-realístico de materiales con una estructura interna compleja presenta grandes retos en computación gráfica.
+El renderizado foto-realísta de materiales con una estructura interna compleja presenta grandes retos en computación gráfica.
 En particular, las migas de panes son un material translúcido complejo, con una estructura porosa, que presenta detalles dispares en distintas escalas, todos igualmente necesarios de ser tenidos en cuenta para lograr una correcta visualización.
 El renderizado realista de estos materiales debe simular correctamente diversos fenómenos como translucencia, auto-sombreado, auto-oclusión, reflectancia, y absorción, entre otros.
 
 Las técnicas del estado del arte en renderizado de migas de panes tratan el material como una superficie, seteando un complejo procedimiento de captura, en el cual la luz reflejada por el material es fotografiada en distintos ángulos.
 Luego, la información es procesada y reconstruída para formar un modelo del material.
-Si bien esta solución es capaz de capturar los fenómenos lumínicos previamente discutidos, también es cierto que la practicidad del método está severamente comprometida, ya que presenta un costo computacional alto, un procedimiento de captura muy limitado y la imposibilidad de obtener más de una apariencia con una única captura.
+Si bien esta solución es capaz de capturar los fenómenos lumínicos previamente discutidos, también es cierto que la practicidad del método está severamente comprometida, ya que presenta un elevado costo computacional, un procedimiento de captura muy limitado y la imposibilidad de obtener más de una apariencia con una única captura.
 
-En un intento por superar estas limitaciones del renderizado, proponemos, en conjunción con el capítulo anterior de modelado de la geometría, utilizar un modelo volumétrico del pan.
-Para esto utilizamos la técnica de renderizado directo de volúmenes, la cual implementamos en \acrshort{GPU}.
-La técnica permite renderizar los campos escalares del capítulo anterior sin utilizar estructuras intermedias.
+En un intento por superar estas limitaciones en el renderizado de panes, proponemos utilizar la técnica de DVR, la cual implementamos en \acrshort{GPU}, utilizando el lenguaje de shader GLSL (ver Apéndice A).
+La técnica permite renderizar los campos escalares computados en capítulo anterior sin utilizar estructuras intermedias.
 Las imágenes obtenidas son promisorias, y se computan en tiempo real gracias al poder de las placas gráficas actuales.
 
 %La inmensa variedad de materiales y su compleja interacción con la luz han sido un tópico central en computación gráfica por décadas.
@@ -36,8 +35,8 @@ Debido a su compleja geometría y fenómenos lumínicos involucrados, esto conti
 Hasta hace pocos años, el costo computacional de renderizar modelos físicos de estos materiales resultaba prohibitivo si el tiempo real era un requerimiento.
 De todas formas, el crecimiento notable en poder de cómputo debido al diseño masivamente paralelo de las placas gráficas \cite{Yeo09,Harris06}, está permitiendo la simulación de fenómenos complejos de interacción de la energía radiante con materiales en tiempos de cómputo aceptables.
 
-Simular un modelo geométrico aceptable representa un reto adicional, como fue visto en el capítulo anterior.
-El pan y otras estructuras porosas con el resultado de mecanismos complejos que involucran deformaciones físicas, transferencia de masa y calor durante la cocción, y distintas reacciones químicas.
+%Simular un modelo geométrico aceptable representa un reto adicional, como fue visto en el capítulo anterior.
+%El pan y otras estructuras porosas son el resultado de mecanismos complejos que involucran deformaciones físicas, transferencia de masa y calor durante la cocción, y distintas reacciones químicas.
 
 Estudios recientes utilizan consideraciones fenomenológicas sobre panes reales, pero la geometría es invariable ({\em i.e.}, no es procedimental) \cite{VanDyck2014}: una geometría fija no permite obtener diferentes tipos de pan fácilmente, ya que requiere un procedimiento de captura para cada uno de ellos.
 Adicionalmente, las distribuciones de burbujas no pueden ser controladas.
@@ -57,18 +56,18 @@ Una publicación intenta resolver las limitaciones \cite{Tong2005}, pero las des
 
 \section{Renderizado Directo de Volúmenes (DVR)}
 
-La técnica de renderizado directo de volúmenes (DVR) \cite{Kratz2006} genera imágenes bidimensionales computando la interacción de la luz con un medio semi-transparente, el cual es representado con un campo escalar discreto.
+La técnica de DVR genera imágenes bidimensionales computando la interacción de la luz con un medio semi-transparente, el cual es representado con un campo escalar discreto.
 Este campo describe la densidad del medio en cada celda discretizada.
-Para cada píxel en la imagen final, se computa un rayo desde la posición de la cámara en el espacio virtual, y la radiancia que alcanza la cámara desde esa dirección es computada aproximando la ecuación del transporte radiativo (RTE en inglés).
+Para cada píxel en la imagen final, se computa un rayo desde la posición de la cámara en el espacio virtual, y la radiancia que alcanza la cámara desde esa dirección es computada aproximando la RTE en su forma integral, ec. (\ref{eq:rteintegral}).
 Esta ecuación describe el cambio en radiancia a medida que el rayo atraviesa el medio no transparente.
 
-En su forma completa, la RTE incorpora muchas propiedades ópiticas y efectos.
+En su forma completa, la RTE incorpora muchas propiedades ópticas y efectos.
 Para aproximar el resultado de la RTE en tiempo real, este capítulo utiliza una versión simplificada de la ecuación que sólo toma en consideración algunos de los fenómenos ópticos que ocurren en la realidad.
 
-Existen tres fenómenos ópticos importantes que afectan la propagación de la luz a través de un medio en un punto dado del espacio: emisión, absorción, y dispersión.
+Como fue explicado en el Capítulo $2$, existen tres fenómenos ópticos importantes que afectan la propagación de la luz a través de un medio en un punto dado del espacio: emisión, absorción, y dispersión.
+
 Emisión es la generación de energía radiante en una dirección dada.
 La absorción ocurre cuando una fracción o toda la energía radiante en el rayo de luz se topa con un objeto opaco y es transformada en otras formas de energía.
-
 Finalmente, la dispersión produce cambios de dirección en los fotones.
 Aquellos eventos que provocan que los fotones cambien su dirección a otra distinta a la dirección del rayo, son llamados de dispersión saliente. Del mismo modo, los eventos que provocan que los fotones cambien su dirección por la del rayo actual se llaman dispersión entrante.
 
@@ -76,7 +75,7 @@ Aquellos eventos que provocan que los fotones cambien su dirección a otra disti
 La contribución de la dispersión entrante en la radiancia es computada a partir de una única dirección, la cual corresponde a la principal fuente de luz de la escena.
 Esto aproxima la energía radiativa que llega a un punto desde la fuente de luz, haciendo rebotar a las partículas en el medio hacia ese punto y luego viajando a lo largo de una dirección dada. 
 
-La RTE puede reescribirse a partir de la ecuación \ref{eq:rteintegral}, para ser utilizada en DVR como sigue,
+La RTE puede reescribirse a partir de la ecuación (\ref{eq:rteintegral}), para ser utilizada en DVR como sigue,
 
 \begin{equation} \label{eq:general_radiance}  
   L(p_n) = L_b + \int_{p_0}^{p_n} \frac{\partial L(t)}{\partial p} \, dt,
@@ -117,50 +116,8 @@ La computación reemplaza la suma integral por una suma discreta sobre el rayo i
 \end{equation}
 
 Es posible tener en cuenta otros efectos, aumentando la fidelidad de la imagen final, así como los costos computacionales de la técnica.
-La base de nuestro algoritmo de renderizado utiliza un modelo simplificado que sólo tiene en cuenta transmitancia y emisión, junto con ciertas consideraciones artísticas, para alcanzar tasas de refresco de tiempo real.
+La base de nuestro algoritmo de renderizado utiliza un modelo simplificado que sólo tiene en cuenta transmitancia $T$, emisión constante y dispersión entrante $\rho$ (aproximada a través del cómputo de la radiancia desde cada punto hacia la luz), junto con ciertas consideraciones artísticas, para alcanzar tasas de refresco de tiempo real.
 Describiremos el algoritmo de renderizado en detalle en una sección posterior.
-
-%~\ref{sec:rendering}.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%La técnica de DVR tiene como objetivo crear una representación bidimensional de un volumen
-%definido por una función de densidad tridimensiopocnal. Para ello, se emiten rayos desde el punto de vista de una cámara en una escena virtual y se utiliza la función de densidad para calcular la cantidad de luz que la cámara recibe en la dirección del rayo. Para esto se evalúa la función de densidad en el camino del rayo y se usan los valores adquiridos para aproximar el efecto de varios fenómenos lumínicos, como pueden ser la extinción, transmitancia, o dispersión lumínica, entre otros. La información obtenida de procesar todos los rayos se utiliza para definir el color de los pixeles en la imagen final.
-
-%La radiancia es la cantidad de luz que pasa, o es emitida, desde un punto y atraviesa un determinado ángulo sólido. En el contexto de DVR, el medio que los rayos atraviesan, y que es definido por una función de densidad, es considerado como emisivo. Por lo tanto, cuando se busca calcular la cantidad de luz recibida en la dirección de un rayo, lo que se hace es aproximar la radiancia recibida de un punto distante siguiendo la dirección del rayo. El valor de la radiancia es aproximado como la suma de una radiancia de fondo y la radiancia emitida por el medio por el cuál se mueve el rayo \cite{Kratz2006} :
-
-%\begin{equation} \label{eq:general_radiance}  
-%  L(p_n) = L_b + \int_{p_0}^{p_n} \frac{\partial L(t)}{\partial p} \, dt,
-%\end{equation}
-
-%\noindent donde $L_b$ es la radiancia de fondo, $p_0$ y $p_n$ son los puntos inspeccionados en la dirección del rayo más cercano y más lejano respectivamente, $L(t)$ es la radiancia evaluada en el punto $t$, y $\partial p$ es la distancia entre puntos evaluados. En el momento de calcular $L(p_n)$, la integral es aproximada por una suma.
-
-%La extinción es la pérdida de fotones en un haz de luz debido a la absorción en el medio que atraviesa y la dispersión hacia otras direcciones. Algunos de los fotones colisionarán con particulas del medio y serán absorbidas y transformadas en otras formas de energía, mayormente calor. Otras rebotarán y pasarán a moverse en otras direcciones. Estos fenómenos se aproximan usando un coeficiente de absorción para el medio, $k_a$ y un coeficiente de dispersión $k_s$. Si el efecto de dispersión es ignorado, la fórmula que define la cantidad de radiancia absorbida en el largo de un segmento de rayo
-%es: 
-
-%\begin{equation} \label{eq:radiance_absorption}  
-%    L_b \ e^{- \textstyle  \int_{p_0}^{p_n} k_a(t) \, dt}.
-%\end{equation}
-
-%El valor $\int_{p_i}^{p_j} k_a(t) \, dt$ es llamado coeficiente de absorción y se referenciar\'a como $\tau_{(p_i, p_j)}$.
-
-%La transmitancia es un concepto complementario a la extinción y describe la cantidad de luz que pasa por un medio en una dirección determinada. El valor de transmitancia entre dos puntos $p_i$ y $p_j$
-%es:
-
-%\begin{equation} \label{eq:general_radiance}  
-%  T(p_i,p_j) = e^{- \textstyle \tau_{(p_i, p_j)}}.
-%\end{equation}
-
-%Si la emisión de luz se asume como un término constante ($\rho$) para todos los puntos del medio, la fórmula inicial de radiancia queda:
-
-%\begin{equation} \label{eq:ray_radiance}  
-%  L(p_n) = L_b \ e^{-\tau(p_0, p_n)} + \int_{p_0}^{p_n} \rho \ e^{-\tau(t,p_n)} \, dt.
-%\end{equation}
-
-%Esto significa que la radiancia entre los puntos $p_0$ y $p_n$ se puede calcular como la radiancia de fondo restante luego de la atenuación del medio sumada a la emisión, también atenuada, en todos los puntos del medio que atraviesa el rayo.
-
-%La técnica de DVR define un volumen donde una función de densidad se evalúa en intervalos regulares y utiliza esa información para aproximar la transmitancia en esos puntos y de esa manera aproximar la cantidad de luz que llega a la cámara. La suma integral descrita anteriormente se reemplaza por una suma discreta de los puntos evaluados de un rayo donde \'este intersecta al volumen que interesa representar. 
-
-%Otros efectos lumínicos pueden ser aproximados. Esto aumenta la fidelidad de la imagen final pero también aumenta el costo de cómputo de la técnica. Algunos de estos efectos son el cálculo de fase, el c\'alculo de luz entrante por dispersión o luz extinguida por dispersión, entre otros. Dado que el objetivo de este trabajo es lograr un renderizado en tiempo real, el algoritmo implementado usa como base el modelo de cálculo de radiancia simplificado que toma en cuenta sólo la
-%transmitancia del medio.
 
 \section{Implementación}
 
@@ -180,12 +137,12 @@ Un cubo que corresponde a esta textura es renderizado en la escena.
 El material utilizado para renderizar el cubo consta de un shader de vértices muy simple, y un shader de fragmentos, el cual implementa el algoritmo de DVR.
 Para cada fragmento, el shader computa un rayo con origen en la posición de la cámara y con la dirección del fragmento que debe ser coloreado.
 El procedimiento muestrea la textura volumétrica a intervalos regulares sobre la intersección del rayo y el cubo.
-Estos valores muestreados son luego utilizados como entrada de un algoritmo que implementa una versión simplificada de la RTE, ecuación (\ref{eq:ray_radiance}), computando el color del píxel resultante de la manera descrita en secciones previas.
+Estos valores muestreados son luego utilizados como entrada de un algoritmo que implementa la Ec. (\ref{eq:ray_radiance}), computando el color del píxel resultante de la manera descrita en secciones previas.
 
-En la implementación, estas ecuaciones acumulan la transmitancia del rayo y la contribución de radiancia en cada punto muestreado.
-La computación termina si el valor de la transmitancia está por debajo de un umbral (lo cual significa que el medio no dejará pasar más radiancia) o si el rayo sale del cubo.
+La implementación acumula la transmitancia a lo largo del rayo y la contribución de radiancia en cada punto muestreado.
+La computación termina si el valor de la transmitancia acumulada está por debajo de un umbral (lo cual significa que no escaparán más fotones en el rayo) o si el rayo sale del cubo.
 
-La dispersión entrante, simplificada, se computa a través de un rayo secundario, para cada punto muestreado, en dirección a la fuente de luz.
+La dispersión entrante ($\rho$), simplificada, se computa a través de un rayo secundario, para cada punto muestreado, en dirección a la fuente de luz.
 Este rayo secundario es luego muestreado para determinar la cantidad de luz que llega al punto.
 Esta técnica permite obtener sombras naturales dentro del volumen.
 
@@ -200,7 +157,7 @@ El vector normal usado en este cálculo es el gradiente de la textura volumétri
 
 La demo presentada provee al usuario la habilidad de modificar parámetros como el coeficiente de absorción, el umbral de transmitancia, el color asignado a la miga y la visibilidad de los reflejos especulares.
 Con la modificación de estos parámetros, el usuario puede producir imágenes que semejan otros materiales porosos como las esponjas.
-La Fig. \ref{fg:fragmentshaderrte} muestra un esquema del shader de fragmentos implementado, donde se computa la ecuación (\ref{eq:ray_radiance}).
+La Fig. \ref{fg:fragmentshaderrte} muestra un esquema del shader de fragmentos implementado, donde se computa la Ec. (\ref{eq:ray_radiance}).
 
 \begin{figure}[htb!]
 \centerline{\includegraphics[width=12cm]{fragmentshader}}
@@ -211,14 +168,15 @@ La Fig. \ref{fg:fragmentshaderrte} muestra un esquema del shader de fragmentos i
 
 \subsection{Oclusión Ambiente}
 
-La aproximación a la RTE introducida ignoraba fenómenos como la dispersión entrante y la dispersión saliente.
-Sin embargo, un aspecto clave para resaltar la apariencia de la imagen final está basada en las contribuciones locales debido a características microscópicas propias del material.
-Es posible aproximar estos fenómenos por medio del agregado de la oclusión ambiente.
-La literatura muestra que considerar la oclusión del ambiente puede producir imágenes más realistas \cite{Hernell2010}.
+La aproximación introducida a la RTE no tiene en cuenta fenómenos clave en la obtención de imágenes realistas, como la dispersión entrante y la dispersión saliente.
+Sin embargo, un aspecto clave para resaltar la apariencia de la imagen final está basada en las contribuciones locales de radiancia debido a características microscópicas propias del material.
+Hasta ahora, la dispersión entrante, simple, era aproximada por medio del cómputo de la radiancia entrante en el punto desde la fuente de luz.
+Es posible lograr una mejor aproximación teniendo en cuenta además la dispersión entrante al punto desde el medio, por medio del agregado de la oclusión ambiente.
+La literatura muestra que considerarla produce imágenes de mayor realismo \cite{Hernell2010}.
 
 Debido a estas consideraciones proponemos computar la dispersión entrante, múltiple, calculando de manera offline un término de oclusión del ambiente para cada voxel en el campo escalar y guardándolo como una textura volumétrica extra, la cual es pasada al shader de fragmentos, permitiendo así mantener los tiempos computacionales en tasas razonables.
 
-Para cada voxel, en la textura volumétrica resultante de alguno de los métodos del capítulo anterior, el cómputo de dicho término define un radio $r$ y guarda el valor medio de los vóxeles vecinos dentro de una esfera que contiene ese radio.
+Para cada voxel en la textura volumétrica resultante de alguno de los métodos del capítulo anterior, el cómputo de dicho término define un radio $r$, almacenando el valor medio de los vóxeles vecinos dentro de una esfera que contiene ese radio.
 Luego, este valor se utiliza para modular la contribución de cada paso del rayo.
 Experimentalmente encontramos que el valor $r$ resulta visualmente indistinguible al variarlo, por lo cual cualquier valor mayor que $0$ puede utilizarse para el cómputo.
 
