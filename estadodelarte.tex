@@ -4,12 +4,71 @@
 
 En este capítulo se presenta el estado del arte en modelado y renderización de materiales en computación gráfica, junto a un resumen de los aspectos más preponderantes que se deben considerar a la hora de diseñar modelos de los mismos: la geometría a distintas escalas y la  interacción de éstas con fenómenos lumínicos.
 
-En cada sección se muestra un ejemplo de material cuya síntesis se ajusta al método 
-siendo descripto.
-Se comienza presentando modelos de la geometría de distintos materiales, desde un punto de vista puramente fenomenológico.
+Se comienza presentando el marco conceptual sobre la apariencia de los materiales en computación gráfica.
+Luego se presentan modelos de la geometría de distintos materiales, desde un punto de vista puramente fenomenológico.
 Seguidamente incorporaremos comportamiento físico relacionado al comportamiento o formación del material en consideración.
 Luego presentaremos las ecuaciones fundamentales del renderizado, las cuales modelan la interacción entre la energía radiante de la luz en una escena y los materiales que se buscan renderizar.
 Finalmente, explicaremos brevemente casos particulares de la ecuación del renderizado que han sido utilizados como estándar en la síntesis de la apariencia de los materiales, y presentaremos ejemplos de algunos materiales que, debido a diversos factores, deben considerar otros métodos menos tradicionales para lograr un renderizado adecuado.
+Se muestran ejemplos de materiales cuya síntesis se ajustan a los métodos 
+siendo descriptos.
+
+\section{Apariencia de los Materiales}
+Entendemos por {\em apariencia} de un material a la percepción del mismo por parte de una persona.
+En computación gráfica, se pretende simular de la manera más realista posible las diferentes apariencias.
+La apariencia de un material se codifica en aplicaciones gráficas por medio de datos, estructuras de datos y algoritmos, los cuales permiten representar las mismas.
+
+La idea subyacente en la producción de modelos sintéticos de materiales está representada por la síntesis de imágenes capaces de generar el mismo efecto producido por la observación directa de los materiales.
+Entre los fenómenos intervinientes en los procesos descriptos, se encuentran la física de la luz y la percepción humana, la cual depende de varios factores.
+La consideración de la percepción en el diseño de la apariencia de los materiales ayuda a perfeccionar los modelos existentes, siendo útil para focalizar los esfuerzos de diseño en los elementos más preponderantes intervinientes en dicho fenómeno.
+ 
+
+
+\subsection{Escenas y materiales}
+Una escena es {\em renderizada} en una computadora por medio de una imagen.
+Las dificultades involucradas en el renderizado pueden entenderse mejor si se consideran los cómputos que deben llevarse a cabo.
+Típicamente la apariencia de cada punto en una escena depende de objetos que se encuentran a todas las distancias, desde grandes distancias (por ejemplo el Sol), hasta objetos dentro de una misma habitación.
+
+Una imagen sintética se construye discretizando en cada píxel la radiancia proveniente en dirección al observador.
+La luz que viaja desde un objeto hacia el observador depende fuertemente del objeto sobre el que la observación sea realizada.
+Las propiedades claves del objeto, que determinan la energía lumínica que llega a la cámara, son la {\em forma} y el {\em material} del objeto.
+
+La forma del objeto refiere a su geometría macroscópica.
+Las pequeñas imperfecciones de esta geometría también deben ser modeladas para alcanzar una imagen sintética realista.
+
+El material que define el objeto debe modelarse a diferentes escalas y debe poseer determinadas propiedades.
+Entre los atributos que componen un material encontramos su color, su función de distribución de energía lumínica, sus texturas, etc.
+
+Existe un compromiso en la elección del modelado de la microgeometría de un material.
+Es decir, la elección responde a si se utiliza el modelado geométrico directo (es decir como parte de su forma global), o el modelado de las mismas se incorpora a su material.
+La respuesta final depende del material, ya que para algunos de ellos resulta más adecuado modelar la geometría, mientras que la complejidad en la superficie de determinados materiales hacen prohibitivo este enfoque.
+Si las micro-geometrías se diseñan en el material, la teoría óptico-geométrica puede ser reemplazada por modelos más precisos (cuánticas, de ondas), posiblemente con consideraciones estadísticas, buscando obtener una aproximación más adecuada a su comportamiento.
+Dicho comportamiento se encapsulará en una función de distribución de radiancia sobre la superficie del objeto.
+
+
+
+\subsection{Luz}%, complejidad de una escena y percepción.}
+La comprensión del fenómeno denominado {\em luz} ha evolucionado a lo largo de la historia humana.
+Existen diversos modelos, los cuales atienden a distintas manifestaciones de la misma.
+A pesar de los esfuerzos dedicados a lo largo de siglos, la naturaleza de la misma aún no es comprendida en su totalidad, acuñándose el término {\em dualidad onda-partícula} para describirla, debido a que en determinados experimentos la misma parece mostrar propiedades características y concluyentes que permiten catalogarla como una partícula (fotón), mientras que en otros se comporta como una onda.
+
+La luz visible es el sub-fenómeno de la luz que interviene mayormente en la apariencia de los materiales, dado que, debido a limitaciones del sistema de visión, los humanos sólo percibimos los efectos del sub-fenómeno mencionado.
+Formalmente la luz visible se define como el rango del espectro de radiación electromagnética entre los  $380${\em nm} y los $780${\em nm}.
+
+Debido al comportamiento dispar del fenómeno lumínico a distintas escalas, debe limitarse el modelado de la misma en una escena, al menos como primera aproximación, a la escala humana.
+En dicha escala, la teoría geométrico-óptica de la luz es la que mejor explica el comportamiento de la misma.
+En esta representación la luz viaja en línea recta, líneas que son llamadas rayos, los cuales interaccionan con los objetos de una escena, antes de arribar al observador.
+La interacción de los rayos con otros objetos produce además rayos secundarios (de refracción, entre otros).
+
+\subsection{Percepción y Color}
+El {\em color} de un objeto representa una distribución de radiación electromagnética en el rango de la luz visible.
+Una representación realista del color de un material debe modelar al mismo en todas las frecuencias electromagnéticas de la luz visible.
+Sin embargo, estudios sobre la formación del color en la visión humana demuestran que el mismo detecta colores gracias a tres canales principales, y la combinación de éstos.
+En computación gráfica este conocimiento es tomado en consideración, y aproximado por medio de modelos de espacios cromáticos de tres dimensiones, como por ejemplo \acrshort{RGB}, \acrshort{HSV}, CIELab, etc.
+
+Es de mayor importancia también considerar cuáles aspectos afectan la percepción de un determinado material.
+Se habla de materiales {\em rugosos}, {\em brillantes}, {\em opacos}, {\em transparentes}, {\em texturados}, etc.
+Estas apariencias responden a estructuras subyacentes en los mismos.
+Utilizando estas categorías, previamente definidas por las personas, es posible obtener métodos adecuados para familias de materiales específicos.
 
 \section{Modelos de Geometría de Materiales}
 En esta sección presentaremos distintos modelos geométricos de materiales que han hecho su aparición a lo largo de los años en computación gráfica.
