@@ -4,21 +4,22 @@
 La constante demanda de poder en las aplicaciones gr\'aficas, motivada sobre todo por el auge de los videojuegos y las películas de animación, han provocado que el poder de cómputo de las unidades de hardware paralelo haya sufrido una marcada evoluci\'on desde su aparici\'on.
 Dicha evoluci\'on ha tenido como consecuencia la rivalizaci\'on y posterior superaci\'on por parte de las GPUs al poder de procesamiento con el que cuentan las CPUs tradicionales \cite{Harris06}.
 
-En la siguiente sección se resume la historia de la programación de las placas gráficas, desde las primeras placas configurables, las cuales sólo permitían controlar superficialmente su comportamiento, hasta las placas que permiten una programación de propósito general en ellas.
+En la siguiente sección se resume la historia de la programación de las placas gráficas, desde las primeras placas configurables, las cuales sólo permitían controlar superficialmente su comportamiento, hasta las placas que permiten una programación de propósito general sobre ellas.
 
 \section{Historia del Shader Programable}
 Las placas gráficas o GPUs son microprocesadores, y por lo tanto tienen su propio lenguaje assembler, el cual puede programarse para realizar una tarea específica.
 A diferencia de las CPUs, las GPUs no son herramientas de propósito general, sino que son microprocesadores adaptados a realizar tareas gráficas, como manejar triángulos, líneas y puntos.
 Estos microprocesadores han ido evolucionando a lo largo de los años, donde distintas compañías han hecho su aparición.
 Debido a esto, existen (al igual que ocurre con las CPUs) distintos lenguajes assembler, y distintas arquitecturas de GPUs.
-Por lo cual, cada placa debe programarse bajo su propio lenguaje.
-El diseño orientado a elementos repetitivos e independientes como píxels, triángulos y vértices en los que se descompone una escena en computación gráfica ha resultado en un diseño {\em paralelo} de las mismas.
-Actualmente, las placas gráficas cuentan con miles de procesadores (aunque más limitados que un microprocesador CPU), los cuales realizan tareas como actualizar un píxel, o establecer la proyección perspectiva de un vértice en pantalla.
-Este procesamiento se hace en paralelo ya que la computación es independiente para cada elemento.
+Esto implica que cada placa debe programarse bajo su propio lenguaje.
+
+El diseño orientado a elementos repetitivos e independientes como píxels, triángulos y vértices en los que se descompone una escena en computación gráfica, ha resultado en un diseño {\em paralelo} de las mismas.
+Actualmente, las placas gráficas cuentan con miles de procesadores (aunque con capacidades más limitados que un microprocesador CPU), los cuales realizan tareas como actualizar un píxel, o establecer la proyección perspectiva de un vértice en pantalla.
+Este procesamiento se realiza en paralelo ya que la computación es independiente para cada elemento.
 
 En un principio, la placa gráfica funcionaba como una caja gris o negra, la cual podía ser configurada únicamente, para producir resultados limitados sobre algunos tipos de efectos, como el color final de un píxel.
-En la década de $1980$ comenzaron a surgir las placas gráficas programables, donde era posible modificar el assembler de determinados procesos de las mismas, logrando efectos personalizados.
-El assembler de estas placas no resultaba nada amigable al programador, el cual además era diferente para cada placa.
+En la década de $1980$ comenzaron a surgir las placas gráficas programables, las cuales permitían modificar el assembler de determinados procesos internos a las mismas, logrando efectos personalizados.
+El assembler de estas placas no resultaba nada amigable al programador, el cual además difería para cada placa.
 Debido a esto, un programador debía distribuir código assembler para cada placa donde pretendía correr su programa.
 
 Similarmente a lo acaecido con la aparición de los lenguajes de programación de propósito general como C, COBOL o Lisp, comenzaron a surgir aproximadamente en el año $2000$ lenguajes más amigables para el programador, los cuales generaban código para el assembler específico de cada GPU.
@@ -28,10 +29,10 @@ De ellos, el primero es el único que compila para diferentes plataformas, ya qu
 Los lenguajes de shading probaron ser una herramienta flexible y poderosa para controlar el comportamiento y apariencia de objetos en una escena.
 Se han codificado algoritmos de iluminación, sombreado, de generación de vértices, superficies y un largo etc. en shaders, lo cual significó un gran trasvasamiento de cómputos del CPU al GPU.
 
-A medida que las placas se hicieron más poderosas, resultó evidente la posibilidad de utilizar las mismas como unidad de propósito general.
-El modelo de computación paralelo con el que cuentan las mismas hizo surgir herramientas que permiten derivar todo el cálculo hacia el hardware secundario, conoci\'endose este modelo de computaci\'on como {\em computación de propósito general en unidades de procesamiento gráfico} (General-Purpose Computing on Graphics Processing Units, {\em \acrshort{GPGPU}}.
+A medida que las placas se volvieron más poderosas, resultó evidente la posibilidad de utilizar las mismas como unidad de propósito general.
+El modelo de computación paralelo con el que cuentan provocó el surgimiento de herramientas que permiten derivar todo el cálculo hacia el hardware secundario, conoci\'endose este modelo de computaci\'on como {\em computación de propósito general en unidades de procesamiento gráfico} (General-Purpose Computing on Graphics Processing Units, {\em \acrshort{GPGPU}}).
 
-El cómputo GPGPU cuenta a grandes rasgos con la siguiente secuencia de pasos: 
+El cómputo GPGPU consta, a grandes rasgos, con la siguiente secuencia de pasos: 
 
 \begin{itemize}
 \item copia de memoria y datos desde el CPU al GPU,
@@ -39,11 +40,11 @@ El cómputo GPGPU cuenta a grandes rasgos con la siguiente secuencia de pasos:
 \item copia de los resultados desde el GPU al CPU (posiblemente modificando datos y memoria).
 \end{itemize}
 
-Es decir, la GPU sólo estaría {\em prestando} su funcionamiento al CPU, para un propósito para el que no fue diseñada (realizar cómputos generales en paralelo).
+Es decir, la GPU {\em presta} sus capacidades de cómputo al CPU, atendiendo un propósito para el que no fue diseñada (realizar cómputos generales en paralelo).
 
-Debido a que los CPUs encontraron un límite físico en la velocidad que podían alcanzar (unos cuantos gigahertz o GHz), la aparición de las GPUs permitió, en el ámbito hogareño y empresarial (entre otros) seguir incrementando los TeraFlops\footnote{Unidad de medida, 1 TeraFlop = $10^{12}$ intrucciones de coma flotante por segundo.}, de manera similar a la utilización de un cluster o de microprocesadores de varios núcleos, aunque estos últimos no han podido alcanzar la velocidad de las GPUs modernas.
+Debido a que los CPUs encontraron un límite físico en la velocidad que podían alcanzar (unos cuantos gigahertz o GHz), la aparición de las GPUs permitió, en el ámbito hogareño y empresarial (entre otros), seguir incrementando los TeraFlops\footnote{Unidad de medida, 1 TeraFlop = $10^{12}$ intrucciones de coma flotante por segundo.}, de manera similar a la utilización de un clúster o de microprocesadores de varios núcleos, aunque estos últimos no han podido alcanzar la velocidad de las GPUs modernas.
 
-El principal problema de la metodología GPGPU es la copia de memoria desde y hacia la placa, lo cual puede resultar muy costoso.
+El principal inconveniente de la metodología GPGPU constituye la copia de memoria desde y hacia la placa, lo cual puede resultar muy costoso.
 Debido a esto, en los últimos años se han desarrollado modelos de memoria unificada, donde la CPU y la GPU compartirán la memoria.
 
 
@@ -51,16 +52,15 @@ Debido a esto, en los últimos años se han desarrollado modelos de memoria unif
 % En primer lugar se discute el lenguaje de shading utilizado en el framework. En segundo lugar se muestra un ejemplo de una biblioteca de GPGPU muy conocida hoy en d\'ia, la cual fue utilizada para el c\'alculo de texturas offline.
 
 \section{El lenguaje GLSL}
-%La palabra Cg significa ``C para gr\'aficos'', en alusi\'on al bien conocido lenguaje de programaci\'on C. Esto implica que Cg es un lenguaje tambi\'en, siendo su principal novedad que el mismo est\'a dise\~nado para producir c\'odigo {\em Assembler} de la placa gr\'afica de la computadora (GPU). El mismo nos permite controlar la apariencia, movimiento y forma de los objetos dibujados usando la GPU \cite{Randima03}. Cg no es un lenguaje de prop\'osito general, sino que est\'a completamente orientado a trabajar sobre elementos gr\'aficos como v\'ertices, p\'ixeles, l\'ineas, pol\'igonos, vectores, etc.; su nombre est\'a basado en C s\'olo por su sintaxis, lo cual le otorga un parecido al mismo. Este tipo particular de lenguajes reciben el nombre de {\em Shading languages} (lenguajes de Shading), aunque como se ver\'a m\'as adelante, el lenguaje permite realizar otras clases de operaciones.
-
-La principal ventaja en la utilización de la GPU por sobre la CPU tradicional está constituída por la {\em velocidad}.
-La CPU delega las operaciones gr\'aficas hacia el hardware gr\'afico programable, el cual realizar\'a el procesamiento en un marco especializado, quedando as\'i liberado el primero para realizar tareas m\'as acordes con el procesamiento general de los programas
+La principal ventaja en la utilización de la GPU por sobre la CPU tradicional en aplicaciones gráficas, está constituída por la {\em velocidad}.
+La CPU delega las operaciones gr\'aficas hacia el hardware gr\'afico programable, el cual realizar\'a el procesamiento en un marco especializado, quedando as\'i liberado el primero para realizar tareas m\'as acordes con el procesamiento general de los programas.
 Esto implica entonces una tarea conjunta entre CPU y GPU.
 
 
 \subsection{El pipeline Gr\'afico y GLSL}
-As\'i como en la CPU, la GPU posee un {\em pipeline}, esto es, una secuencia ordenada de pasos por cada instrucci\'on de procesamiento.
-En primer lugar, es la CPU quién se comunica con la GPU para enviarle la información gráfica a ser procesada, esto consiste generalmente de una escena descompuesta en triángulos, pero además existen otros datos como las texturas a ser aplicadas, los cuales también son provistos.
+As\'i como la CPU, la GPU posee un {\em pipeline}, esto es, una secuencia ordenada de pasos que debe cumplir cada instrucci\'on de procesamiento.
+En primer lugar, la CPU se comunica con la GPU enviándole información gráfica para ser procesada.
+Esto consiste generalmente de una escena descompuesta en triángulos, pero además existen otros datos como las texturas a ser aplicadas, los cuales también son provistos.
 En la GPU, de manera análoga a la CPU, se cuenta con una unidad de procesamiento y una unidad de memoria.
 A diferencia del CPU, la arquitectura de la misma presenta una memoria estratificada, y un diseño paralelo de la unidad de procesamiento.
 
