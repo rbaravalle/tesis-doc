@@ -174,7 +174,7 @@ Hasta ahora, la dispersión entrante, simple, era aproximada por medio del cómp
 Es posible lograr una mejor aproximación teniendo en cuenta además la dispersión entrante al punto desde el medio, por medio del agregado de la oclusión ambiente.
 La literatura muestra que considerarla produce imágenes de mayor realismo \cite{Hernell2010}.
 
-Debido a estas consideraciones proponemos computar la dispersión entrante, múltiple, calculando de manera offline un término de oclusión del ambiente para cada voxel en el campo escalar y guardándolo como una textura volumétrica extra, la cual es pasada al shader de fragmentos, permitiendo así mantener los tiempos computacionales en tasas razonables.
+Debido a estas consideraciones proponemos computar la dispersión entrante, múltiple, calculando de manera offline un término de oclusión del ambiente para cada voxel en el campo escalar y almacenándolo como una textura volumétrica extra, la cual es pasada al shader de fragmentos, permitiendo así mantener los tiempos computacionales en tasas razonables.
 
 Para cada voxel en la textura volumétrica resultante de alguno de los métodos del capítulo anterior, el cómputo de dicho término define un radio $r$, almacenando el valor medio de los vóxeles vecinos dentro de una esfera que contiene ese radio.
 Luego, este valor se utiliza para modular la contribución de cada paso del rayo.
@@ -186,7 +186,7 @@ La Fig.~\ref{fg:occlusion} muestra que el realce que produce este concepto no es
 
 \begin{figure}
 \centerline{\includegraphics[width=13cm]{figures/occlusion}}
-  \caption[Pan renderizado sin y con oclusión de ambiente]{Pan sin (izquierda) y con (derecha) oclusión de ambiente. La apariencia final se mejora notablemente, mostrando una apariencia más natural.}
+  \caption[Pan renderizado sin y con oclusión de ambiente]{Pan sin (izquierda) y con (derecha) oclusión de ambiente. La imagen final es mejorada notablemente, apreciándose una apariencia más natural.}
   \label{fg:occlusion}
 \end{figure}
  
@@ -197,28 +197,37 @@ El gradiente en el punto será utilizado luego para computar el vector normal, e
 
 \begin{equation}
 \begin{aligned}
-x &= tex(pos+(1,0,0)) - tex(pos)\\
-y &= tex(pos+(0,1,0)) - tex(pos)\\
-z &= tex(pos+(0,0,1)) - tex(pos) \\
+x &= tex(pos+\vec{i}) - tex(pos)\\
+y &= tex(pos+\vec{j}) - tex(pos)\\
+z &= tex(pos+\vec{k}) - tex(pos) \\
 N &= normalizar([x,y,z])
 \end{aligned}
 \end{equation}
 
-Las normales y el vector que representa la luz permiten determinar la contribución especular en el punto, aplicando un modelo de Phong con un exponente suave, y estableciendo un parámetro que permite al usuario especificar el impacto deseado para la componente especular.
+\noindent donde $\vec{i}$, $\vec{j}$ y $\vec{k}$ son los vectores unitarios que forman una base en $\mathbb{R}^{3}$
+
+La normal y el vector que representa la fuente de luz permiten determinar la contribución especular en el punto, aplicando un modelo de Phong con un exponente suave, y estableciendo un parámetro que permite al usuario especificar el impacto deseado para la componente especular.
 Se han testeado otros modelos especulares más complejos, pero no se encontró diferencia apreciable en la apariencia final de la textura de pan.
 
 \subsection{Cómputo de Sombras}
 La técnica de DVR puede ser utilizada para computar sombras realistas, desde el objeto renderizado hacia la escena en la que se encuentra, por medio de mapas de sombras \cite{Williams1978}.
-Durante la generación del mapa de sombras, renderizamos nuevamente un cubo representando la geometría.
+Durante la generación del mapa de sombras renderizamos nuevamente un cubo representando la geometría, pero esta vez los cómputos se realizan desde la posición de la fuente de luz.
 El shader de fragmentos para ese cubo utiliza el mismo método de rayos explicado, pero solo computa la transmitancia en el rayo.
-Si la transmitancia en ese rayo está por encima de un umbral al finalizar el cómputo, luego el fragmento no corresponde a un oclusor, y su profundidad se setea en infinito.
+Si la transmitancia en ese rayo está por encima de un umbral al finalizar el cómputo (lo cual significa que cierta cantidad de fotones logran escapar al medio), luego el fragmento no corresponde a un oclusor, y su profundidad se setea en infinito.
 Si durante el cómputo de la transmitancia, la misma cae por debajo del umbral, la profundidad del fragmento se establece en la profundidad alcanzada por el rayo en ese momento.
-Esta técnica se utiliza junto a un filtrado de porcentaje de cercanía, para generar sombras realísticas en nuestra aplicación.
+
+A partir de este cómputo obtenemos un mapa de sombras, el cual puede almacenarse como una textura.
+Luego se computa DVR normalmente (desde el punto de vista del observador).
+En este paso debe mapearse cada texel del mapa de sombras con una posición en el espacio, para determinar si el punto está en sombra o no.
+
+Esta técnica se utiliza junto a un filtrado de porcentaje de cercanía, para generar sombras realístas en nuestra aplicación.
+Casi todas las imágenes presentadas muestran el uso de esta técnica en nuestra aplicación.
 
 
 \subsection{Corteza}
-Es posible proveer al sistema con una función que indique si la posición es parte de la corteza o la miga, u otras consideraciones en otros materiales (por ejemplo, si el color de la sección de una esponja debe ser amarillo u verde).
+Es posible proveer al sistema con una función que indique si la posición es parte de la corteza o la miga, u otras consideraciones en otros materiales (por ejemplo, si el color de la sección de una esponja debe ser amarillo o verde).
 Por ejemplo, una función puede definir una corteza cilíndrica asignando la etiqueta de miga a aquellas posiciones cercanas al eje del cilindro, y corteza a las restantes.
+
 También se provee otra función que establece si la posición debe ser considerada aire.
 Esto permite definir, de una manera intuitiva, la corteza y cortes en el volumen (ver Figs.~\ref{fg:breadsnooc} y \ref{fg:breads}).
 
@@ -317,11 +326,12 @@ La Tabla \ref{tab:rayossecundarios} muestra que los rayos secundarios constituye
 En las regiones con corteza, la velocidad del método es mayor, ya que con un coeficiente de absorción mayor es posible obtener la apariencia deseada, es decir, los rayos necesitan menos pasos para alcanzar el umbral inferior de transmitancia que en otras regiones.
 
 \subsection{Otros Materiales y Efectos}
-Es posible obtener otros materiales (ver Fig.~\ref{fg:fig6}).
+Es posible obtener imágenes que asemejan otros materiales (ver Fig.~\ref{fg:fig6}).
 Estos son el resultado de la variación de parámetros técnicos y artísticos del modelo.
 En las imágenes de prueba pueden distinguirse un budín (izquierda), un pedazo de torta (medio) y una esponja (derecha).
 En el caso de la esponja se modificaron los parámetros que definen la función de densidad.
 Cuando no hay levadura en el proceso de creación puede utilizarse una textura volumétrica cuyos valores provienen de una función aleatoria.
+
 En la Fig.~\ref{fg:sponges} puede observarse que la utilización de oclusión de ambiente produce imágenes de esponja más realistas que las obtenidas sin su aplicación.
 La retroiluminación es también aproximada con este modelo (ver Fig. \ref{fg:fig7}).
 En esa imagen puede apreciarse una esponja retroiluminada junto con la propagación de luz a través del volumen que representa.
@@ -336,7 +346,7 @@ Este efecto es una consecuencia natural del algoritmo volumétrico basado en RTE
 
 \begin{figure*}[htb!]
   \centerline{\includegraphics[width=8cm]{fig7}}
-  \caption{Esponja retroiluminada.}
+  \caption[Esponja retroiluminada.]{Esponja renderizada en tiempo real mostrando retroiluminación. La misma es consecuencia directa de la utilización de un modelo volumétrico de propagación de la energía radiante, sobre medios semi-transparentes.}
   \label{fg:fig7}
 \end{figure*}
 
@@ -368,8 +378,7 @@ Además, nuestra representación volumétrica permite realizar cortes en tiempo 
 Esto puede resultar de gran ayuda en diversas aplicaciones, entre las cuales encontramos video juegos.
 
 Respecto al modelo de iluminación, el éxito visual obtenido por el método a la hora de obtener una apariencia que semeja al pan en tiempo real, parece estar dado por la utilización de oclusión ambiente, además de los agregados discutidos sobre el algoritmo básico de DVR.
-
-Debemos destacar que el mayor incremento en el realismo final en las imágenes fue dado a la inclusión del término de oclusión de ambiente, el cual proporcionó una textura mucho más detallada, mostrando una mayor complejidad y riqueza subyacente.
+El término de oclusión de ambiente proporcionó una textura mucho más detallada, mostrando una mayor complejidad y riqueza subyacente.
 Otros efectos introducidos, como el reflejo especular de Phong, también incidieron sobre el realismo final.
 Sin embargo, métodos especulares más sofisticados (por ejemplo, el modelo de Cook-Torrance \cite{Cook1982}) no mejoraron de manera apreciable las imágenes.
 
