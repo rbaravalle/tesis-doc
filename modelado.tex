@@ -10,7 +10,7 @@ La misma se desarrolla en un ambiente de cocina, y por lo tanto existen alimento
 Debido a la inexistencia de modelos estándar de determinados materiales en la literatura de computación gráfica (comestibles), los artistas y programadores encargados de llevar a cabo la producción visual de la película debieron crear técnicas {\em ad-hoc} para lograr un renderizado realista de los diferentes materiales.
 Sin embargo, el éxito visual obtenido no se vio acompañado de una liberación del código que producía dichas imágenes, por lo cual la técnica permaneció para uso privado de la compañía productora, resultando en una difícil reproducción de dichos materiales por parte de terceros.
 
-En este capítulo se busca introducir soluciones a estas problemáticas: por un lado, la falta de modelos fenomenologicos documentados y por lo tanto reproducibles, sobre geometría de migas de panes y otros materiales porosos, y por otro, la utilización de modelos físicos basados en los procesos reales de formación de dichos materiales, los cuales provocan que el resultado sintético posea una mayor similitud visual y estructural a los materiales que se pretenden representar, como se demuestra en el capítulo de validación.
+En este capítulo se busca introducir soluciones a estas problemáticas: por un lado, la falta de modelos fenomenologicos documentados y por lo tanto reproducibles, sobre geometría de migas de panes y otros materiales porosos, y por otro, la utilización de modelos físicos basados en los procesos reales de formación de dichos materiales, los cuales provocan que el resultado sintético posea una mayor similitud visual y estructural a los materiales que se pretenden representar.
 
 En este capítulo presentamos modelos procedimentales que permiten realizar simulaciones de la geometría de la miga de pan.
 Como sub-producto presentamos un algoritmo que produce imágenes de texturas bidimensionales de materiales estocásticos como granito y mármol, y otros más estructurados como la madera.
@@ -19,7 +19,7 @@ Como sub-producto presentamos un algoritmo que produce imágenes de texturas bid
 Como fue discutido en el capítulo anterior, la inmensa variedad de materiales, y sus complejas interacciones con la energía radiante que incide sobre los mismos, han sido un tópico central de investigación en las últimas décadas en Computación Gráfica.
 El modelado de la naturaleza en física ha demostrado capturar de manera muy precisa fenómenos de transporte de la luz.
 Las aproximaciones computacionales a estos modelos son una de las ramas más investigadas en el renderizado de materiales.
-El modelado geométrico de materiales sigue una estrategia de investigación similar. Primero se construye un modelo físico del material, el cual luego es aproximado computacionalmente.
+El modelado geométrico de materiales sigue una estrategia de investigación similar. Primero se construye un modelo físico del material, el cual luego se aproxima computacionalmente.
 
 La elección del modelo geométrico depende de cada material, y de la escala de representación buscada.
 Esta elección influencia fuertemente el algoritmo de renderizado. 
@@ -29,55 +29,51 @@ Esta elección influencia fuertemente el algoritmo de renderizado.
 %Por un lado, la ecuación del rendering \cite{Kajiya1986} captura la microgeometría de los materiales y su interacción con la luz en superficies.
 %Por otro, la ecuación del rendering de volúmenes \cite{Kajiya1984} modela fenómenos volúmetricos como la transmitancia, la extinción, etc., debido a propiedades del medio (o material).
 
-Si el material a representar es homogéneo (metales, plásticos, y similares), la elección típica es utilizar una superficie para representar el mismo \cite{Neumann1999}.
-Esta elección modela la superficie del material asumiendo distribuciones estadísticas en su microgeometría.
-Para lograr capturar detalles mesoscópicos, por ejemplo en el caso de maderas o ladrillos \cite{Lefebvre2000}, una técnica usual es precomputar dichas características en texturas, las cuales luego son mapeadas en la superficie.
-La utilización de superficies es usualmente menos costosa computacionalmente, pero por otro lado impone limitaciones al realismo que se puede alcanzar, sobre todo en aquellos detalles que son propios de la estructura a nivel mesoscópico y la interacción de la misma con la luz (por ejemplo luz que pasa a través de agujeros en una superficie).
+Si el material a representar presenta características homogéneas (metales, plásticos, y similares), típicamente se lo modela por medio de una superficie \cite{Neumann1999}.
+Esta estrategia modela la superficie del material asumiendo distribuciones estadísticas en su microgeometría.
+Para lograr capturar detalles mesoscópicos, por ejemplo en el caso de maderas o ladrillos \cite{Lefebvre2000}, una técnica usual consiste en precomputar dichas características en texturas, las cuales luego son mapeadas en la superficie.
+La utilización de superficies constituye un enfoque menos costoso computacionalmente, pero por otro lado impone limitaciones al realismo que se puede alcanzar, sobre todo en aquellos detalles que son propios de la estructura a nivel mesoscópico y la interacción de la misma con la luz (por ejemplo luz que pasa a través de agujeros en una superficie).
 
-Siguiendo este razonamiento, la miga del pan es un material extremadamente complejo de capturar, modelar y renderizar, debido a la geometría a distintos niveles (microscópico y mesoscópico) y su resultante interacción con la energía radiante.
+Siguiendo este razonamiento, la miga del pan constituye un material extremadamente complejo de capturar, modelar y renderizar, debido a la geometría a distintos niveles (microscópico y mesoscópico) y su resultante interacción con la energía radiante.
 De esta forma, la utilización de superficies no resulta adecuada, ya que la textura del pan debe su apariencia en gran medida a los fenómenos previamente explicados.
-Si bien es cierto que existen métodos en la literatura que utilizan superficies para representar características mesoscópicas de los materiales como funciones bidireccionales de texturas (bidirectional texture functions, \acrshort{BTF}) \cite{Tong2002}, las mismas no manejan adecuadamente la interacción lumínica antes mencionada.
+Si bien existen métodos en la literatura que utilizan superficies para representar características mesoscópicas de los materiales como funciones bidireccionales de texturas (bidirectional texture functions, \acrshort{BTF}) \cite{Tong2002}, las mismas no manejan adecuadamente la interacción lumínica antes mencionada.
 Existe un intento en la literatura por suprimir esta falta \cite{Tong2005}.
 El método produce imágenes realistas, pero existen muchas dificultades prácticas en la captura, el cómputo y el renderizado.
 Estas limitaciones provocan que la utilización de dicho método no sea práctica por el momento.
-Además, el método resulta inflexible dado que para cada imagen del material es necesario repetir todo el proceso (dos imágenes distintas del material requieren dos capturas).
-Tampoco es posible obtener cortes del mismo, dada la naturaleza de superficie del método.
+Además, el método resulta inflexible dado que para cada imagen del material se requiere repetir todo el proceso (dos imágenes distintas del material requieren dos capturas).
+Tampoco se pueden obtener cortes del mismo, dada la naturaleza de superficie del método.
 
 Por otro lado, existen numerosas publicaciones que tratan el modelado de materiales mejor adaptados a una representación volumétrica (por ejemplo humo o nubes) \cite{Chentanez2011,Zhou2008}.
-La utilización de volúmenes es costosa computacionalmente pero presenta varias ventajas. Una de ellas es que no depende de una malla de triángulos, como en el caso de las superficies, y por lo tanto no presenta las desventajas mencionadas para las mismas.
+La utilización de volúmenes resulta costosa computacionalmente pero presenta varias ventajas.
+Una de ellas radica en su independencia de mallas de triángulos, a diferencia de las superficies, evitando las desventajas mencionadas para las mismas.
 
-Finalmente, existe un compromiso al momento de modelar materiales complejos y elegir una representación adecuada.
-Donde se requiere simplicidad y velocidad (posiblemente tiempo real), se utilizan superficies, en cambio, si el foto-realismo es el objetivo final, es más adecuado optar por una representación volumétrica.
+Finalmente, existe un compromiso al momento de modelar materiales complejos y elegir una representación plausible.
+Donde se requiere simplicidad y velocidad (posiblemente tiempo real), se utilizan generalmente superficies, en cambio, si el foto-realismo constituye el objetivo final, resulta más adecuado optar por una representación volumétrica.
 En los últimos años esta elección se ve perturbada por la aparición de hardware paralelo de alta velocidad (placas gráficas o GPUs), ya que un diseño adecuado podría alcanzar imágenes foto-realistas utilizando volúmenes en tiempos interactivos.
-%Esto es lo que presentaremos a continuación.
-
 
 En este capítulo proponemos una representación volumétrica para la geometría de la miga de pan.
 Existe una metodología volumétrica que simula geometrías estocásticas \cite{Perlin1989}, utilizando funciones algebraicas para construir la geometría.
-Sin embargo, la utilización de funciones algebraicas es impráctica para el caso de materiales porosos estocásticos.
+Sin embargo, la utilización de funciones algebraicas resulta impráctica en el caso de materiales porosos estocásticos, como el pan.
 
 \section[Síntesis de Texturas de Materiales]{Un Framework para la Síntesis de Texturas de Materiales}
 
-La textura característica de la miga de pan es el resultado de numerosos procesos.
-Una de las principales transformaciones es producida por el crecimiento de la levadura en la masa cruda del pan.
+La textura característica de la miga de pan emerge como resultado de numerosos procesos.
+El crecimiento de la levadura en la masa cruda del pan produce una de las principales transformaciones texturales.
 Este proceso atañe la mayor responsabilidad en la formación de la geometría porosa macroscópica del material.
 La observación detallada de binarizaciones de fotografías de cortes en la masa cruda, durante distintas etapas del proceso de leudado y cocción del pan \cite{Scanlon2001}, permite sentar las bases de un algoritmo fenomenológico que responde a este comportamiento.
 En dichas imágenes se observa un crecimiento pseudo-aleatorio de burbujas atrapadas en la masa.
-El resultado final es un conjunto de burbujas de distintos tamaños.
+La textura final debe su apariencia a un aglomerado de burbujas interconectadas con distintos tamaños y formas.
 
-La implementación de este método es el motivo de esta sección.
-Si bien el objetivo del mismo es la producción de geometrías, como sub-producto, surgen imágenes o geometrías que recuerdan apariencias típicas de otros materiales.
+La implementación de este método constituye el principal motivo de esta sección.
+Si bien el objetivo del mismo radica en la producción de geometrías, como sub-producto surgen imágenes o geometrías que recuerdan apariencias típicas de otros materiales.
 Al asignárseles colores, permiten obtener imágenes aceptables de los mismos.
 
 Presentamos entonces un método procedimental de generación de texturas de materiales en dos dimensiones, basado en el crecimiento de partículas.
-Una textura es una imagen. o arreglo bidimensional, con múltiples usos que almacena información sobre un fenómeno determinado.
+Se define una textura como una imagen. o arreglo bidimensional de múltiples usos que almacena información sobre un fenómeno determinado.
 En este caso, una textura representará el material directamente, a nivel macroscópico (es decir una imagen del mismo).
 La simulación de imágenes de materiales usualmente se presenta en publicaciones separadas en la literatura, dado que los procedimientos que producen distintos materiales se basan en metodologías dispares.
 
-El algoritmo introducido será especializado en la siguiente sección para obtener geometrías de la miga de pan y otros materiales porosos.
-
-%Una vez establecidas las texturas en computación gráfica como un método simple y eficiente de representar materiales, se idearon técnicas automáticas para generarlas.
-%De esta forma, no se depende exclusivamente de imágenes para obtener las mismas.
+El algoritmo introducido será especializado en la siguiente sección en la obtención de geometrías de la miga de pan y otros materiales porosos.
 
 \subsection{Sistemas de Partículas}
 Un sistema de partículas está compuesto por abstracciones denominadas {\em partículas}, las cuales coexisten en un mismo ambiente.
@@ -85,13 +81,13 @@ En un sistema de part\'iculas \cite{Reeves1983} las part\'iculas nacen, se desar
 
 Se propone utilizar estos sistemas como generadores procedimentales de texturas. Un enfoque similar puede observarse en \cite{Kranidotis98}, aunque el mismo no fue desarrollado en profundidad.
 Aquí se sigue una linea de investigaci\'on similar, presentando un sistema de part\'iculas que est\'a caracterizado por el crecimiento de las mismas en cada iteraci\'on, las cuales ocupan texels (elemento individual de una textura bidimensional, correspondiente a una posición $(u,v)$ dentro de la misma) asign\'andoles colores, pudi\'endose detener al mismo en una iteración arbitraria, obteni\'endose una textura.
-Debido a la utilización de una selección aleatoria de los texels vecinos donde crece cada partícula, las im\'agenes resultantes presentan apariencia estocástica, lo cual es deseable en materiales naturales.
+Debido a la utilización de una selección aleatoria de los texels vecinos, donde crece cada partícula, las im\'agenes resultantes presentan apariencia estocástica, símilarmente a materiales naturales.
 A trav\'es de la direcci\'on de crecimiento de las part\'iculas se producen distintos patrones visuales.
 
 Es posible representar materiales cl\'asicos como madera, granito y m\'armol, pero tambi\'en otros como mosaicos, pinturas, vegetaci\'on, entre muchos otros.
 Un ejemplo de generación procedimental de texturas puede observarse en \cite{Baravalle2010}.
-La principal diferencia con este trabajo radica en el mecanismo de generaci\'on, dado que con esta nueva propuesta es un {\em proceso temporal} el que produce los resultados, con lo cual puede representarse todo el proceso de formaci\'on de un material.
-Adem\'as, cada corrida del algoritmo produce una textura distinta utilizando los mismos par\'ametros, debido a la naturaleza aleatoria de la generaci\'on (aunque el uso de semillas permite repetir texturas en el caso de requerirse, por ejemplo para generar baldosas id\'enticas).
+La diferencia principal con el enfoque presentado en este trabajo radica en el mecanismo de generaci\'on, dado que con esta nueva propuesta un {\em proceso temporal} produce los resultados, pudiendo representarse todo el proceso de formaci\'on de un material.
+Adem\'as, cada ejecución del algoritmo produce una textura diferente, utilizando los mismos par\'ametros, debido a la naturaleza aleatoria de la generaci\'on (aunque el uso de semillas permite repetir texturas en el caso de requerirse, por ejemplo para generar baldosas id\'enticas).
 
 Se utiliza como plataforma de implementaci\'on a WebGL\footnote{\em http://www.khronos.org/webgl/}, recientemente propuesta por el Khronos Group (Open Standars for Media Authoring and Acceleration), dado que la misma otorga portabilidad al modelo (es posible ejecutarlo en una gran variedad de navegadores independientemente de la plataforma en la que se encuentre la computadora). 
 La implementación desarrollada permite incluirlo en aplicaciones gr\'aficas.
@@ -131,7 +127,7 @@ color_{i} = col_{h} + rand * varcolor,
 \end{equation}
 
 \noindent
-y donde rand es un n\'umero pseudo-aleatorio uniformemente distribuido entre $-1$ y $1$, $varcolor$ un parámetro en los reales y $col_{h} \in cols$.
+y donde rand constituye un n\'umero pseudo-aleatorio uniformemente distribuido entre $-1$ y $1$, $varcolor$ un parámetro en los reales y $col_{h} \in cols$.
 Cada $t \in T_{i}$ tiene asociado un color que var\'ia con respecto a $color_{i}$, de similar manera a la ecuaci\'on (\ref{eqColor}).
 
 El {\em contorno} de una part\'icula determina los texels que la misma puede incorporar. 
@@ -150,7 +146,7 @@ Al morir, la part\'icula deja asociados los colores de su conjunto $T_{i}$ en $B
 
 %Podemos intentar aplicar estas técnicas al modelado procedimental de texturas. 
 En la Fig. \ref{resultados} se observan algunas im\'agenes sintetizadas con esta metodología.
-En la primera fila, la primera y cuarta textura muestran patrones con direcci\'on vertical, direcci\'on elegida para hacer crecer a las part\'iculas.
+En la primera fila, la primera y cuarta textura muestran patrones con direcci\'on vertical, direcci\'on elegida para evolucionar las part\'iculas.
 La \'ultima figura de la segunda fila, muestra part\'iculas que crecen en 3 direcciones posibles: aleatorio ($50\%$), vertical ($25\%$) y horizontal ($25\%$), lo cual demuestra que se posee un control preciso sobre las formas resultantes en las texturas.
 
 En la Fig. \ref{sintesis} se observa un ejemplo de s\'intesis.
@@ -212,13 +208,13 @@ Para esto, se generalizarán los resultados a tres dimensiones.
 
 
 Utilizamos los sistemas de partículas previamente mencionados, en un cubo (tres dimensiones), pero reemplazando las direcciones de crecimiento por sistemas dinámicos \cite{Strogatz2001}, para evolucionar al sistema, produciendo patrones con formas geométricas naturales.
-Este es un intento por simular el efecto de la levadura en la masa cruda del pan.
+Este constituye un intento por simular el efecto de la levadura en la masa cruda del pan.
 Estos procedimientos producen distribuciones de burbujas de distintos tamaños, resultando en un mecanismo controlable, que presenta propiedades estadísticas.
 
 Si bien la metodología introducida no está basada en primeros principios, la misma constituye un paso previo que permite sentar las bases de un modelo inspirado físicamente, el cual se presentará en la siguiente sección.
 
 \section{Sistemas Dinámicos como Modelo de Miga de Pan}
-El propósito de este algoritmo es producir una geometría, la cual se renderizará posteriormente.
+El propósito de este algoritmo constituye producir una geometría, la cual se renderizará posteriormente.
 Por lo tanto, en lugar de devolver el color de una posici\'on espec\'ifica, el algoritmo genera un campo escalar compuesto de $0$s y $1$s ($0$ si la posici\'on contiene aire, $1$ si la misma contiene masa).
 %Esta representaci\'on resulta adecuada para ser renderizada utilizando DVR.
 
@@ -228,7 +224,7 @@ Similarmente al caso de generación de texturas, el sistema consta de un conjunt
   P = \{p_{1}, ... , p_{n}\}, n  \in \mathbb{N},
 \end{equation}
 
-\noindent una grilla $L_{N\times N \times N}, N \in \mathbb{N} $ (inicialmente $L_{xyz}=1$) de masa y aire como fue descripto previamente, y otra grilla $L^{2}_{N\times N \times N}$, (inicialmente $L^{2}_{xyz}=-1$) de posiciones donde cada celda almacena un único entero que indica qu\'e part\'icula es due\~na de la misma ($i$ si el elemento de la grilla pertenece al contorno o interior de la part\'icula $i$).
+\noindent una grilla $L_{N\times N \times N}, N \in \mathbb{N} $ (inicialmente $L_{xyz}=1$) de masa y aire como fue descripto previamente, y otra grilla $L^{2}_{N\times N \times N}$, (inicialmente $L^{2}_{xyz}=-1$) de posiciones donde cada celda almacena un único entero que indica qu\'e part\'icula adue\~na la misma ($i$ si el elemento de la grilla pertenece al contorno o interior de la part\'icula $i$).
 
 Cada elemento en $P$ posee las siguientes propiedades:
 
@@ -297,7 +293,14 @@ El procedimiento se describe, simplificadamente, en el Algoritmo $1$.
 \end{algorithmic}
 \end{algorithm}
 
-Cuando $t = 0$, un conjunto de part\'iculas iniciales toman posiciones aleatorias en la grilla. Para cada partícula, la posici\'on elegida es la primera posici\'on ocupada en $O$, adem\'as, el vecindario de $O$ es agregado a $C$. Cada part\'icula evoluciona en un intento por extender sus posiciones ocupadas ($O$), marcando posiciones en $L$. Las posiciones se toman de $C$. Cuando una part\'icula ocupa una posici\'on, la misma se elimina de $C$ y se agrega a $O$. Luego el vecindario de esa posici\'on se agrega a $C$ (es decir las posiciones que rodean inmediatamente a la posici\'on tomada). Las grillas se actualizan de la siguiente manera: $L$ se setea a $0$ en la posici\'on y $L^{2}$ se setea con el valor $i$ en las posiciones que se agregan a $C$. Las part\'iculas s\'olo pueden crecer si el valor encontrado en $L^{2}$ no pertenece a otra part\'icula. El tama\~no del vecindario es un par\'ametro que define la distancia entre part\'iculas. Si el vector $C$ est\'a vac\'io, la part\'icula {\em muere} ya que no puede continuar creciendo.
+Cuando $t = 0$, un conjunto de part\'iculas iniciales toman posiciones aleatorias en la grilla.
+Para cada partícula, la posici\'on elegida resulta la primera posici\'on ocupada en $O$, adem\'as, el vecindario de $O$ se agrega a $C$.
+Cada part\'icula evoluciona en un intento por extender sus posiciones ocupadas ($O$), marcando posiciones en $L$. Las posiciones se toman de $C$.
+Cuando una part\'icula ocupa una posici\'on, la misma se elimina de $C$ y se agrega a $O$.
+Luego el vecindario de esa posici\'on se agrega a $C$ (es decir las posiciones que rodean inmediatamente a la posici\'on tomada).
+Las grillas se actualizan de la siguiente manera: $L$ se setea a $0$ en la posici\'on y $L^{2}$ se setea con el valor $i$ en las posiciones que se agregan a $C$. Las part\'iculas s\'olo pueden crecer si el valor encontrado en $L^{2}$ no pertenece a otra part\'icula.
+El tama\~no del vecindario se par\'ametriza, definiendo la distancia entre part\'iculas.
+Si el vector $C$ est\'a vac\'io, la part\'icula {\em muere} ya que no puede continuar creciendo.
 
 
 El algoritmo puede ser terminado en cualquier $t$ deseado. El mismo puede finalizar su c\'omputo ante determinados eventos, por ejemplo, cuando todas las posiciones de $L^{2}$ fueron tomadas por part\'iculas, ya que no pueden realizarse progresos.
@@ -315,10 +318,11 @@ Finalmente, el algoritmo devuelve la grilla $L$, la cual ser\'a renderizada post
 
 \subsection{Sistemas Din\'amicos}
 
-Las ecuaciones diferenciales tienen como prop\'osito tratar con la dificultad (o imposibilidad) de hallar soluciones anal\'iticas en procesos din\'amicos. En primer lugar, se define un modelo matem\'atico del problema, del cual luego se obtienen 
+Las ecuaciones diferenciales tienen como prop\'osito tratar con la dificultad (o imposibilidad) de hallar soluciones anal\'iticas en procesos din\'amicos.
+En primer lugar, se define un modelo matem\'atico del fenómeno, del cual luego se obtienen 
 las ecuaciones diferenciales asociadas. Las mismas se resuelven por medio de aproximaciones num\'ericas en cada instante de tiempo.
 
-Los costos computacionales de estas soluciones dependen de la complejidad del problema y el n\'umero de ecuaciones del sistema. En este trabajo proponemos utilizar una sub-\'area de ecuaciones diferenciales llamada ecuaciones diferenciales ordinarias (ODE). En esta representaci\'on, el tiempo es tratado como la \'unica variable independiente.
+Los costos computacionales de estas soluciones dependen de la complejidad del fenómeno y el n\'umero de ecuaciones del sistema. En este trabajo proponemos utilizar una sub-\'area de ecuaciones diferenciales llamada ecuaciones diferenciales ordinarias (ODE). En esta representaci\'on, el tiempo se trata como la \'unica variable independiente.
 
 
 De manera general, las ODEs se representan utilizando el siguiente sistema de ecuaciones:
@@ -331,13 +335,17 @@ De manera general, las ODEs se representan utilizando el siguiente sistema de ec
 \end{equation}
 
 \noindent donde $\dot{x_{i}}$ representa la derivada de $x_{i}$ con respecto
-a $t$. Las variables $x_{i}$ y las funciones $f_{i}$ se definen de manera diferente para cada problema. En este caso, cada variable representa una coordenada cartesiana en el espacio, $x_{1}$ es $x$, $x_{2}$ es $y$ y $x_{3}$ es $z$. El conjunto de $f_{i}$ ser\'a definido tratando de capturar la estructura interna del pan. La siguiente secci\'on muestra cómo estos sistemas pueden describir la evoluci\'on de los sistemas de part\'iculas.
+a $t$.
+Las variables $x_{i}$ y las funciones $f_{i}$ se definen de manera diferente en cada modelo.
+En este caso, cada variable representa una coordenada cartesiana en el espacio, $x_{1}$ es $x$, $x_{2}$ es $y$ y $x_{3}$ es $z$.
+El conjunto de $f_{i}$ ser\'a definido tratando de capturar la estructura interna del pan. 
+La siguiente secci\'on muestra cómo estos sistemas pueden describir la evoluci\'on de los sistemas de part\'iculas.
 
 \subsection{Evoluci\'on de sistemas de part\'iculas utilizando sistemas din\'amicos}
 
 La percepci\'on humana puede detectar patrones en la estructura de la miga de pan. Distintas observaciones pueden realizarse sobre la distribuci\'on de las burbujas en la misma (ver Fig.~\ref{fg:panreal}).
-Primero, la forma de las burbujas cercanas a la corteza tiende a estirarse paralelamente a la misma.
-Esto es resultado de la acci\'on de las elevadas temperaturas durante la cocci\'on de la masa. Tambi\'en resulta evidente que la estructura completa es similar a un fluido con la forma de la corteza.
+Primero, la forma de las burbujas cercanas a la corteza tiende a estirarse paralelamente a la misma, como resultado de la acci\'on de las elevadas temperaturas durante la cocci\'on de la masa.
+Tambi\'en resulta evidente que la estructura completa posee la apariencia de un fluido con la forma de la corteza.
 
 
 \begin{figure*}[htb!]
@@ -349,7 +357,8 @@ Esto es resultado de la acci\'on de las elevadas temperaturas durante la cocci\'
 Por otro lado, los sistemas din\'amicos previamente presentados producen formas naturales (ver Fig.~\ref{fg:sistdin2}).
 En las im\'agenes pueden observarse c\'irculos y espirales, entre otras formas.
 Las im\'agenes se obtuvieron dibujando trayectorias sobre un plano, siguiendo distintas ODEs.
-Tres ODEs describen las din\'amicas presentes en las im\'agenes. A modo de ejemplo, la imagen de la izquierda es el resultado del siguiente conjunto de ecuaciones:
+Tres ODEs describen las din\'amicas presentes en las im\'agenes.
+A modo de ejemplo, el siguiente conjunto de ecuaciones produce la imagen a la izquierda:
 
 \begin{equation} \label{eq:simple}  
   \begin{aligned}
@@ -365,14 +374,14 @@ Tres ODEs describen las din\'amicas presentes en las im\'agenes. A modo de ejemp
   \label{fg:sistdin2}
 \end{figure*}
 
-En los ejemplos se eligen posiciones aleatorias y luego el sistema se resuelve por medio de un {\em solver} Runge-Kutta de cuarto orden, el cual permite conocer la direcci\'on a tomar en cada punto por la trayectoria (en las im\'agenes se computaron trayectorias hacia adelante y hacia atrás en el tiempo para lograr una mejor visualizaci\'on).
+En los ejemplos se eligen posiciones aleatorias y luego el sistema se resuelve por medio de un {\em solver} Runge-Kutta de cuarto orden, el cual permite conocer la direcci\'on a tomar en cada punto por la trayectoria (en las im\'agenes se computaron trayectorias hacia adelante y hacia atrás en el tiempo para lograr una visualizaci\'on más clara).
 La imagen de la izquierda muestra un atractor y un repeledor claramente visibles.
-El centro de la espiral m\'as a la izquierda es un atractor (a medida que $t$ avanza, las trayectorias convergen hacia el punto), mientras que el otro centro es un repeledor.
+El centro de la espiral m\'as a la izquierda constituye un atractor (a medida que $t$ avanza, las trayectorias convergen hacia el punto), mientras que el otro centro representa un repeledor.
 Los atractores pueden no ser puntuales, como muestran las restantes dos im\'agenes.
 La imagen de la derecha muestra atractores en forma de c\'irculos (las trayectorias ciclan por el c\'irculo).
 
 Las part\'iculas producen distintos patrones al seguir las trayectorias definidas en el plano y el espacio.
-Esto se logra resolviendo num\'ericamente el sistema din\'amico en la posici\'on agregada a la part\'icula, seleccionando como siguiente posici\'on de crecimiento aquella posici\'on del contorno que mejor aproxima la soluci\'on del sistema din\'amico (para esto, sólo se agrega al contorno esa posición).
+Esto se logra resolviendo num\'ericamente el sistema din\'amico en la posici\'on agregada a la part\'icula, seleccionando como siguiente posici\'on de crecimiento aquella posici\'on del contorno que aproxima con mayor precisión la soluci\'on del sistema din\'amico (para esto, sólo se agrega al contorno esa posición).
 El Algoritmo $2$ muestra cómo se modifica el algoritmo de modelado para incluir este comportamiento.
 
 \begin{algorithm}[h!]
@@ -402,7 +411,7 @@ El Algoritmo $2$ muestra cómo se modifica el algoritmo de modelado para incluir
 \end{algorithmic}
 \end{algorithm}
 
-Las part\'iculas se deforman de forma global en un patr\'on que es visualmente similar a las trayectorias que produce el sistema (ver Fig.~\ref{fg:sistdin3}).
+Las part\'iculas se deforman globalmente en un patr\'on visualmente similar a las trayectorias que produce el sistema (ver Fig.~\ref{fg:sistdin3}).
 En las im\'agenes, de izquierda a derecha se decrementa la {\em aleatoriedad} de las trayectorias.
 El par\'ametro aleatoriedad seteado a $0.1$ genera la imagen de la derecha, lo cual significa que las burbujas eligen como siguiente posición de crecimiento la que mejor se acopla al sistema con una probabilidad de $0.9$.
 La probabilidad se define como $1-aleatoriedad$, donde $0 \leq aleatoriedad \leq 1$.
@@ -434,14 +443,14 @@ Las imágenes muestran un objeto cuyo material asemeja al de la miga del pan.
 Estos patrones pueden ser utilizados adem\'as en otros materiales cocidos, variando el par\'ametro de aleatoriedad.
 Distintos sistemas de ecuaciones pueden utilizarse para definir distintos patrones.
 
-Si bien es posible la obtención de distintas geometrías de manera sencilla y prácticamente de manera automática, todavía existen limitaciones de flexibilidad en los tipos de pan que se pueden sintetizar.
-Se depende de un sistema dinámico para producir la forma global de la deformación, pero este sistema es difícil de controlar.
+Si bien se pueden generar distintas geometrías de manera sencilla y prácticamente automática, todavía existen limitaciones de flexibilidad en los tipos de pan que se pueden sintetizar.
+Existe una dependencia sobre un sistema dinámico para producir la forma global de la deformación, siendo el sistema difícilmente controlable.
 Además, no siempre se adapta de manera sencilla a la forma exterior del material.
 Debido a esto, en la siguiente sección presentamos un algoritmo que permite superar estas deficiencias.
 El mismo continúa la idea de una modelización volumétrica del material, pero el mismo está basado en modelos físicos del proceso de fabricado del pan, extraído directamente de la literatura de ingeniería de los alimentos.
 
 \section{Modelado del Pan desde su Proceso de Fabricación}
-Para lograr un modelado realista de la geometría de la miga de pan es necesario comprender su proceso físico de formación.
+La obtención de geometrías realistas de la miga de pan requiere comprender su proceso físico de formación.
 
 \begin{figure*}
 \includegraphics[width=13cm]{figures/pipeline}
@@ -462,8 +471,8 @@ Luego presentaremos los procesos de modelado, que junto con el modelo de ilumina
 Si bien existen algunos ejemplos en la literatura sobre modelado y renderizado de la estructura de migas de pan \cite{Tong2005,Xenakis2007}, los mismos ignoran casi por completo el proceso real de formación.
 Algunos trabajos pioneros aplicaron modelos físicos de cocción a determinados tipos de pan para su renderizado, buscando obtener animaciones (por ejemplo \cite{Rodriguez-Arenas2011}), pero el modelado de la geometría de las burbujas de la miga del pan no fue tenido en cuenta.
 
-Por otro lado, el modelado procedimental de panes es un tópico multidisciplinario de investigación.
-La ingeniería de los alimentos lleva varias décadas de publicaciones en el área, tratando de desarrollar un mejor entendimiento del proceso de formación del pan.
+Por otro lado, el modelado procedimental de panes resulta un tópico multidisciplinario de investigación.
+La ingeniería de los alimentos lleva varias décadas de publicaciones en el área, tratando de desarrollar una mayor comprensión del proceso de formación del pan.
 Esta rama de la ciencia muestra que el leudado determina fuertemente las características presentes en la miga de pan, particularmente las burbujas \cite{Babin2006}.
 La interacción entre la levadura y algunos nutrientes presentes en la masa produce {\em $CO_{2}$}. 
 El diámetro de las burbujas (asumiendo una burbuja esférica) y sus distribuciones espaciales muestran estructuras con características fractales, exhibiendo autosimilaridad estadística en diferentes escalas de medición.
@@ -478,14 +487,14 @@ En años recientes, la tecnología GPGPU \cite{Owens2007} permitió la posibilid
 
 A pesar de todos estos avances, el modelado y visualización foto-realista de panes y materiales porosos todavía presenta diversos retos.
 Además de un modelo geométrico realista, el renderizado requiere que se represente de manera adecuada los fenómenos de transporte de la luz, incluyendo auto-oclusión, auto-sombreado, transmitancia, translucencia, transparencia, entre otras.
-Solamente unas pocas publicaciones proponen atacar ambos problemas, pero utilizando consideraciones artísticas \cite{Xenakis2007}.
+Solamente unas pocas publicaciones proponen atacar ambos aspectos, pero utilizando consideraciones artísticas \cite{Xenakis2007}.
 Además, estos autores no liberaron suficientes detalles del modelado y renderización ya que existen derechos de propiedad intelectual, limitando enormemente la reproducción de dichas imágenes.
 
 Por otro lado, la comunidad artística usualmente produce imágenes realistas de pan utilizando fotografías de los mismos, y definiendo geometrías a partir de ellas, junto a la utilización de materiales translúcidos\footnote{http://www.blenderguru.com/tutorials/how-to-create-realistic-bread} y otras consideraciones {\em ad-hoc}\footnote{http://design.tutsplus.com/tutorials/create-a-realistic-loaf-of-bread-in-photoshop--psd-10555}.
-Si bien los resultados obtenidos son buenos, los procesos son tediosos y demandan horas.
-Además, si se requiere más de una imagen, es necesario repetir todo el proceso desde el principio, lo que torna al mismo muy poco práctico.
+Si bien los resultados obtenidos son buenos, los procesos son tediosos y demandan horas de trabajo.
+Además, la obtención de una nueva imagen requiere repetir todo el proceso desde el principio, lo que torna al mismo muy poco práctico.
 Existen numerosas desventajas además de esta.
-Por ejemplo, no es posible obtener cortes arbitrarios del material resultante.
+Por ejemplo, no se contempla la obtención de cortes arbitrarios del material resultante.
 
 
 \subsection{Visión Global del Proceso}
@@ -503,13 +512,13 @@ El último paso aplica renderizado directo de volúmenes (direct volume renderin
 
 \subsection{Voxelización de la Geometría}
 
-En el modelo es posible generar panes con geometrías arbitrarias, supliendo un modelo de triángulos en algún formato estándar.
+El modelo permite generar panes con geometrías arbitrarias, supliendo un modelo de triángulos en algún formato estándar.
 El modelo consta de una serie de pasos. El primer paso de la secuencia voxeliza un modelo provisto por el usuario con la utilidad de código abierto {\tt binvox} \footnote{http://www.cs.princeton.edu/$\sim$min/binvox/} \cite{Nooruddin2003}.
 La voxelización genera un campo escalar binario, con $1$ representando que el voxel dado está dentro de la geometría, y $0$ significando que el voxel está fuera de la geometría.
 El paso de leudado (siguiente subsección) genera la textura del material que se ubica dentro de esta geometría voxelizada.
 Esto permite generar panes con formas arbitrarias, tales como {\em baguettes}, {\em croissants}, pan {\em lactal}, u otros menos comunes (una tetera o un conejo).
 
-Un sub-producto importante de la matriz que representa la geometría es un campo escalar secundario que puede ser obtenido por medio de una transformación de distancia.
+Un sub-producto importante de la matriz que representa la geometría está dado por un campo escalar secundario que se obtiene por medio de una transformación de distancia.
 La transformación de distancia genera una matriz $n$-dimensional con las mismas dimensiones que la matriz que se transforma \cite{osh03}.
 La transformación computa, para cada entrada distinta de cero en la matriz, la distancia más cercana a una entrada nula de dicha matriz.
 Dada una matríz $n$-dimensional $M$, el algoritmo genera una matriz a valores reales $DF_{M}$ con las mismas dimensiones que $M$,
@@ -531,17 +540,17 @@ La Fig.\ref{fg:distance} muestra un ejemplo de un mapa de distancias.
 
 \begin{figure*}
 \includegraphics[width=13cm]{figures/distance}
-\caption[Mapa de distancias de una matriz bidimensional]{Mapa de distancias de una matriz bidimensional. A la izquierda se observa la matriz original, y a la derecha su mapa de distancias. Se observa que en los bordes el valor del mapa es mínimo, y aumenta hacia el centro.}
+\caption[Mapa de distancias de una matriz bidimensional]{Mapa de distancias de una matriz bidimensional. A la izquierda se observa la matriz original, y a la derecha su mapa de distancias. Se observa que en los bordes el valor del mapa resulta mínimo, aumentando hacia el centro.}
 \label{fg:distance}
 \end{figure*}
 
 
 \subsection{Simulación del Leudado}
 \label{breadprov}
-Como fue discutido, la textura observable en la masa cruda del pan está compuesta de burbujas, cuya distribución exacta es el resultado de procesos complejos, entre ellos, reacciones químicas, y deformaciones físicas de la masa.
+Como fue discutido, la textura observable en la masa cruda del pan está compuesta de burbujas, cuya distribución exacta resulta de procesos complejos, entre ellos, reacciones químicas, y deformaciones físicas de la masa.
 El paso de leudado consta en primera instancia del crecimiento libre de las burbujas, producido por la interacción de seres vivos (levadura) con la masa, la cual libera $CO_{2}$, resultando éste atrapado dentro de la masa.
 Luego, el cocinero interviene la masa deformándola de diversas maneras.
-Un segundo leudado es generalmente efectuado.
+En este paso, la masa se deja reposar, efectuándose un segundo leudado.
 Finalmente el paso de cocción produce la textura y distribución de burbujas finales.
 
 Debido a la extrema complejidad de los pasos involucrados, las distribuciones exactas de burbujas carecen aún de explicación, por lo tanto existen estudios fenomenológicos sobre estas texturas, las cuales utilizan tomografía de rayos X y extracción de características sobre las mismas \cite{Babin2006,Gonzales2008,VanDyck2014}.
@@ -549,8 +558,8 @@ Buscando obtener una variabilidad similar, en esta tesis generamos distribucione
 Luego validamos los mismos utilizando el método multifractal denominado {\em Sandbox} (caja de arena, ya que realiza cálculos sobre una distribución de puntos que asemeja a arena dispersa de manera aleatoria en la geometría).
 Esto será explicado en profundidad en el siguiente capítulo (validación).
 
-La textura de la masa es creada procedimentalmente en un campo escalar separado, definido en una matriz de tres dimensiones.
-Las dimensiones son las mismas de la matriz de geometría definida en la subsección anterior, donde cada voxel es inicializado a $1$ (significando que el material aún no tiene burbujas).
+La textura de la masa se genera procedimentalmente en un campo escalar separado, definido en una matriz de tres dimensiones.
+Las dimensiones son las mismas de la matriz de geometría definida en la subsección anterior, donde cada voxel se inicializa a $1$ (significando que el material aún no tiene burbujas).
 El proceso comienza sustrayendo esferas de radio $r_{min}$ posicionadas arbitrariamente en el campo escalar (esto se logra seteando a $0$ las celdas respectivas).
 Luego, substraemos esferas de radio mayor, nuevamente en posiciones arbitrarias, hasta un radio máximo $r_{max}$.
 La relación entre el número de esferas $N_{s}$ a ser sustraídas en cada paso, y sus respectivos radios $r$, está dada por la ley fractal
@@ -560,7 +569,7 @@ La relación entre el número de esferas $N_{s}$ a ser sustraídas en cada paso,
 N_{s} = \frac{k}{r^{d}},
 \end{equation*}
 
-donde $d$ es el exponente fractal que modela la ocurrencia de esferas en relación con su radio, y $k$ controla la cantidad de esferas para cada radio.
+donde $d$ constituye el exponente fractal que modela la ocurrencia de esferas en relación con su radio, y $k$ controla la cantidad de esferas para cada radio.
 Con estos simples parámetros basta para modelar una gran cantidad de texturas en general, particularmente pan.
 
 La Fig.~\ref{FigProving} muestra un ejemplo de un corte en dos dimensiones de este modelo.
@@ -582,11 +591,11 @@ Para esto, intersectamos ambos campos escalares utilizando un simple producto pu
 P_{2} = P_{1} * G,
 \end{equation*}
 %
-donde $P_{1}$ es el campo $3D$ (matriz) que contiene las burbujas del leudado, y $G$ es el campo escalar que representa a la geometría voxelizada.
+donde $P_{1}$ nota el campo $3D$ (matriz) que contiene las burbujas del leudado, y $G$ el campo escalar que representa a la geometría voxelizada.
 
 La Fig.~\ref{fg:intersectProblem} muestra una versión renderizada de esta intersección.
-Si bien los resultados pueden parecer realistas, en panes reales, no es habitual que las burbujas sean visibles en la superficie, debido al leudado y cocción reales.
-Para solucionar este problema, utilizamos el campo escalar de distancias que computamos previamente, para deshabilitar la generación de burbujas en zonas cercanas a los bordes de la geometría, de acuerdo a cierto valor umbral, el cual será un parámetro.
+Si bien los resultados pueden parecer realistas, en panes reales no resulta habitual la visualización de burbujas en la superficie, debido al leudado y cocción reales.
+Para solucionar este inconveniente, utilizamos el campo escalar de distancias que computamos previamente, para deshabilitar la generación de burbujas en zonas cercanas a los bordes de la geometría, de acuerdo a cierto valor umbral, el cual será un parámetro.
 %El campo escalar binario resultante se computa de la siguiente manera,
 
 
@@ -597,17 +606,9 @@ Para solucionar este problema, utilizamos el campo escalar de distancias que com
 \end{figure*}
 
 
-%\begin{align*}
-%DF    &= distField(G),\\
-%interior &= DF > umbral,\\
-%masa &= G - interior*(1-P_{2}),
-%\end{align*}
-%
-%donde $DF$ es el campo escalar de distancias a la superficie, computado a partir de la geometría de entrada, voxelizada, y $umbral$ es un parámetro que determina el ancho de la región exterior, donde no pueden crearse burbujas.
-%Computamos la masa final substrayendo las burbujas ($1-P_{2}$) de la geometría original, pero limitada a la región {\em interior} que acabamos de definir.
 Las Figs.~\ref{fg:proving} y \ref{fg:provingBunny} muestran resultados de limitar las interacciones de burbujas a la región interior de la geometría original, donde se observa que no existen burbujas en la superficie de la masa, como ocurre en masas reales.
-Las imágenes muestran que el método definido es capaz de producir imágenes realistas de panes crudos con formas arbitrarias.
-Cabe remarcar que el modelo es lo suficientemente flexible como para permitir renderizar el material en cualquier etapa de su proceso de fabricación, además de poder realizar cortes arbitrarios del mismo.
+Las imágenes muestran que el método definido permite la producción de imágenes realistas de panes crudos con formas arbitrarias.
+Cabe remarcar que el modelo resulta suficientemente flexible, permitiendo renderizar el material en cualquier etapa de su proceso de fabricación, además de permitir la posibilidad de realizar cortes arbitrarios sobre el mismo.
 
 \begin{figure*}
 \includegraphics[width=13cm]{figures/prebakebread}
@@ -632,10 +633,9 @@ La corteza, por otro lado, aún carece de una definición formal~\cite{Vanin2009
 Por lo tanto, los modelos antes citados incluyen sólo una simplificación de la formación de la misma, muy lejos de lo que ocurre en la cocción real.
 
 Los resultados más relevantes en la literatura sugieren que un modelo unidimensional de la cocción puede ser suficiente para la mayoría de los casos prácticos.
-Por ejemplo, Purlis~\cite{Purlis2011} modela la cocción del pan como un problema unidimensional, representando la geometría como un cilindro infinito.
+Por ejemplo, Purlis~\cite{Purlis2011} modela la cocción del pan como un fenómeno unidimensional, representando la geometría como un cilindro infinito.
 Otros trabajos asumen sólo una coordenada radial, resultando también en modelos $1D$~\cite{Powathil2004, Thorvaldsson1999}.
 Estos trabajos muestran que utilizar una representación de una única dimensión produce resultados casi idénticos a aquellos que se obtienen utilizando un mayor número de dimensiones.
-%, ya que el efecto de la cocción en las burbujas es la de menor impacto en el proceso de fabricación del pan.
 
 La simulación numérica que implementamos está basada en el esquema de diferencias finitas propuesto por Powathil~\cite{Powathil2004}, y Thorvaldsson y Janestead~\cite{Thorvaldsson1999}. 
 El sistema presentado consiste de un conjunto de tres ecuaciones acopladas que describen transferencia de calor, difusión de vapor de agua y difusión de agua líquida.
@@ -647,7 +647,7 @@ La Ec.~\ref{Eq:heat} modela transferencia de calor en la masa del pan, tomando e
 \frac{\partial T}{\partial t} = \frac{1}{\rho C_{p}} \frac{\partial}{\partial x} \left ( k \frac{\partial T}{\partial x} \right ) + \frac{\lambda}{C_{p}} \frac{\partial W}{\partial t}+\frac{\lambda W}{ \rho C_{p} }\frac{\partial \rho}{\partial t},
 \end{equation}
 %
-donde $T$ es la temperatura, $x$ es la coordenada radial, $t$ es el tiempo, $C_{p}$ el calor específico, $\rho$ la densidad, $k$ la conductividad térmica, $\lambda$ es el calor latente de la evaporación de agua, y $W(x,t)$ es el contenido de agua líquida. 
+donde $T$ representa la temperatura, $x$ es la coordenada radial, $t$ es el tiempo, $C_{p}$ el calor específico, $\rho$ la densidad, $k$ la conductividad térmica, $\lambda$ es el calor latente de la evaporación de agua, y $W(x,t)$ es el contenido de agua líquida. 
 Las condiciones iniciales
 %
 \begin{align*}
@@ -659,7 +659,7 @@ y las condiciones de borde (continuidad y suavidad) definen el modelo,
 -k \left ( \frac{\partial T}{\partial x} \right )_{x=0} &= h_{r}(T_{r}-T_{s}) + h_{c}(T_{air}-T_{s}) - \lambda \rho D_{w} \left (\frac{\partial W}{\partial x} \right )_{x=0}
 \end{align*}
 %
-donde $h_{r}$ y $h_{c}$ son sub-términos del coeficiente de transferencia de calor ($h = h_{r}+h_{c}$), $T_{air}$, $T_{s}$, $T_{r}$ son temperaturas en el aire circundante, en la superficie del pan, y en la fuente de radiación, respectivamente, $L$ es el diámetro del pan ($x = L/2$ es el centro del pan y $x = 0$ es el contorno del mismo), $D_{w}$ representa la difusividad del agua líquida, y $T_{0}$ la temperatura inicial. 
+donde $h_{r}$ y $h_{c}$ son sub-términos del coeficiente de transferencia de calor ($h = h_{r}+h_{c}$), $T_{air}$, $T_{s}$, $T_{r}$ son temperaturas en el aire circundante, en la superficie del pan, y en la fuente de radiación, respectivamente, $L$ es el diámetro del pan ($x = L/2$ se ubica en el centro del pan y $x = 0$ en el contorno del mismo), $D_{w}$ representa la difusividad del agua líquida, y $T_{0}$ la temperatura inicial. 
 Las temperaturas están expresadas en Kelvin ($K$). 
 El modelo consta de ecuaciones similares para la difusión del vapor de agua ($W$) y difusión de agua líquida ($V$).
 Otros detalles del modelo pueden ser consultados en \cite{Thorvaldsson1999}.
@@ -687,7 +687,7 @@ Las imágenes son casi idénticas a lo que se obtendría con una simulación $3D
 
 \begin{figure*}
 \includegraphics[width=13cm]{figures/tempsbunny}
-\caption[Temperaturas unidimensionales mapeadas a un campo escalar tridimensional con forma de conejo]{Temperaturas unidimensionales mapeadas a un campo escalar tridimensional con forma de conejo. Las imágenes muestran que la distribución de temperaturas es similar a una simulación en tres dimensiones.}
+\caption[Temperaturas unidimensionales mapeadas a un campo escalar tridimensional con forma de conejo]{Temperaturas unidimensionales mapeadas a un campo escalar tridimensional con forma de conejo. Las imágenes muestran que la distribución de temperaturas arroja resultados similares a una simulación en tres dimensiones.}
 \label{fg:baking}
 \end{figure*}
 
@@ -722,8 +722,8 @@ La imagen también muestra que el método deforma más pronunciadamente las burb
 
 
 \subsection{Formación de la Corteza}
-El modelo de cocción que hemos introducido no incluye detalles precisos de la formación de la corteza.
-En estas ecuaciones, la corteza se asume es producida en la superficie del material, a determinada temperatura, pero esta simplificación es sólo una aproximación cruda a lo que ocurre en el proceso real de cocción.
+El modelo de cocción introducido no incluye detalles precisos de la formación de la corteza.
+En estas ecuaciones, esta se asume como un sub-producto que se produce en la superficie del material, a determinada temperatura, pero esta simplificación constituye sólo una cruda aproximación al fenómeno en el proceso real de cocción.
 La literatura de ingeniería de los alimentos define la corteza como una interfase que emerge entre la masa y el aire.
 Entre sus principales características se encuentra la formación de un material más denso en la superficie, y una diferenciación de color.
 Sin embargo, los detalles precisos acerca de cómo esto ocurre se desconocen, por lo tanto, la apariencia exacta de la misma, está lejos de ser comprendida en los modelos presentes actualmente.
@@ -735,17 +735,17 @@ Además, obtenemos diferentes apariencias de pan utilizando un parámetro de dis
 Por completitud presentaremos además otro método, basado en morfología matemática, para calcular la misma.
 
 \subsection{Determinación de la corteza utilizando morfología matemática}
-Debido a que es difícil o imposible definir funciones matemáticas algebraicas que se adapten a cualquier forma, proponemos un método automático para determinar regiones exteriores de volúmenes utilizando el formalismo conocido como morfología matemática \cite{Gonzalez2001}.
+Debido a que resulta difícil o imposible definir funciones matemáticas algebraicas que se adapten a cualquier forma, proponemos un método automático para determinar regiones exteriores de volúmenes utilizando el formalismo conocido como morfología matemática \cite{Gonzalez2001}.
 
 Con esto se pretende obtener una región que se ajuste a los bordes de un campo escalar.
 Para esto se utilizarán técnicas simples conocidas como apertura, cierre, erosión y dilatación.
 Las operaciones las definiremos en campos escalares tridimensionales.
 
-Un elemento estructurante $E$ es un campo escalar binario que representa una forma particular (cubo, esfera, etc.).
+Un elemento estructurante $E$ denota un campo escalar binario que representa una forma particular (cubo, esfera, etc.).
 Los elementos estructurantes son utilizados en la definición de las operaciones antes mencionadas.
 
 La operación de erosión se utiliza para reducir el tamaño total del campo escalar.
-La erosión de un campo escalar $A$ utilizando un elemento estructurante $B$ es definida de la siguiente manera,
+La erosión de un campo escalar $A$ utilizando un elemento estructurante $B$ se define de la siguiente manera,
 
 \begin{equation}
 A \ominus B = \{z\in \mathbb{Z}^3 | B_{z} \subseteq A\},
@@ -753,15 +753,15 @@ A \ominus B = \{z\in \mathbb{Z}^3 | B_{z} \subseteq A\},
 
 \noindent donde $B_{z}$ es la traslación de $B$ por el vector tridimensional $z$.
 
-La dilatación es una operación utilizada para aumentar el tamaño total del campo escalar, preservando en cierta manera la forma de sus bordes.
-La dilatación de un campo escalar $A$ utilizando el elemento estructurante $E$ es definida como sigue,
+La dilatación aumenta el tamaño total del campo escalar, preservando en cierta manera la forma de sus bordes.
+La dilatación de un campo escalar $A$ utilizando el elemento estructurante $E$ se define como sigue,
 
 \begin{equation}
 A  \oplus E = \bigcup_{e\in E} A_e.
 \end{equation}
 
-La operación de cierre es utilizada para cerrar {\em agujeros} en el campo escalar.
-El cierre de un campo $B$ utilizando un elemento estructurante $E$ es definido como una dilatación seguida de una erosión,
+La operación de cierre se emplea para {\em cerrar agujeros} en el campo escalar.
+El cierre de un campo $B$ utilizando un elemento estructurante $E$ se define como una dilatación seguida de una erosión,
 
 \begin{equation}
 B \bullet E = (B \oplus E) \ominus E,
@@ -769,7 +769,7 @@ B \bullet E = (B \oplus E) \ominus E,
 
 \noindent ver \cite{Gonzalez2001} para obtener mayores detalles.
 
-Para obtener la región externa de la geometría representada en el campo escalar, es necesario eliminar los agujeros internos que representan las burbujas y luego computar el borde.
+Para obtener la región externa de la geometría representada en el campo escalar, se necesitan eliminar los agujeros internos que representan las burbujas.
 Para esto, el primer paso produce un cierre $c$ del campo escalar utilizando un cubo (elemento estructurante de radio $r$), causando el cierre de las burbujas internas.
 Llamaremos $d$ a la dilatación de $c$ con un elemento esférico de radio $r_{2}$ ($d = c \oplus E_{r_{2}}$) y $e$ a la erosión de $d$ utilizando un elemento estructurante esférico con un radio ligeramente menor ($r_{3}$), $e = d \oplus E_{r_{3}}$.
 La diferencia entre $d$ y $e$ ($d-e$) se encuentra en el borde del campo escalar, por lo cual puede utilizarse como corteza.
@@ -821,12 +821,12 @@ Las Figs.~\ref{fg:renders} y ~\ref{fg:renders2} marcan las diferencias en realis
 La Fig.~\ref{fg:renders3} muestra versiones de alta resolución en el campo escalar de otras geometrías, incluyendo panes con formas de conejos.
 La Fig.~\ref{fg:croissant} muestra un pan con forma de {\em croissant} en el cual se han hechos distintos cortes, los cuales demuestran que el método permite obtener imágenes de partes arbitrarias del material.
 Las Figs.~\ref{fg:bigalveoli} y ~\ref{fg:bakedbunny} muestran un pan típico y uno con forma de conejo, mostrando burbujas grandes y las burbujas deformadas como resultado del proceso de cocción.
-Además se cambió el color de la miga.
+Además se modificó el color de la miga.
 
-Los colores de corteza y miga son parámetros definibles por el usuario. Los cortes en la miga son fácilmente producidos cambiando a $0$ las regiones deseadas en el campo escalar luego de la cocción, y antes del renderizado.
+Los colores de corteza y miga son parámetros definibles por el usuario. Los cortes en la miga son fácilmente producidos anulando las regiones deseadas en el campo escalar luego de la cocción, y antes del renderizado.
 
 Respecto de la sección anterior, puede observarse una forma más suave en las burbujas resultantes, junto con la capacidad de modelar tipos arbitrarios de panes.
-Además, como el proceso está basado en la secuencia real de pasos de la fabricación del pan, es posible obtener imágenes en distintos momentos del mismo.
+Además, el proceso está basado en la secuencia real de pasos de la fabricación del pan, permitiendo la obtención de imágenes en distintos momentos del mismo.
 
 
 \begin{figure*}[!ht]
@@ -864,7 +864,7 @@ Además, como el proceso está basado en la secuencia real de pasos de la fabric
 \begin{figure*}[!ht]
 \begin{center}
 \includegraphics[width=13cm]{figures/baked}
-\caption[Cortes de pan luego de la cocción, con burbujas de mayor tamaño]{Cortes de pan luego de la cocción, con burbujas de mayor tamaño, como es típico en determinados panes reales.}
+\caption[Cortes de pan luego de la cocción, con burbujas de mayor tamaño]{Cortes de pan luego de la cocción, con burbujas de mayor tamaño, usual en panes reales.}
 \label{fg:bigalveoli}
 \end{center}
 \end{figure*}
@@ -877,90 +877,11 @@ Además, como el proceso está basado en la secuencia real de pasos de la fabric
 \end{center}
 \end{figure*}
 
-%Images show realistic bread appearances, suitable for photo-realistic rendering and serious ga\-mes \cite{Susi2007}. 
-
-
-%This is illustrated in Figure~, where arrow lengths indicate vector modulus. The image shows that the field's influence is higher near the crust, mostly deforming outer bubbles. This behavior is consistent with real bread crumbs: baking influences the outer bubbles' shape, elongating them parallel to the crust \cite{Scanlon2001}, in other words, following its isotherms.
-
-
-%\subsection{Leudado}
-%El leudado es el principal responsable de la apariencia visual de las burbujas en la miga de pan \cite{}.
-
-%Los patrones observados en la distribución de las burbujas son resultado de procesos complejos, entre los que encontramos reacciones químicas y deformaciones físicas. Este paso en la fabricación consiste en un crecimiento libre de las burbujas, producido por organismos vivos (levadura) en la masa sin cocción del pan.
-
-%Diferentes estudios fenomenológicos de la distribución de burbujas aparecen en la literatura. Los mismos utilizan tomografía de rayos X y extracción de características sobre imágenes para obtener una imagen y modelar las mismas \cite{Babin2006,Gonzales2008,VanDyck2014}.
-
-%El modelo utilizado está inspirado en un modelo propuesto en \cite{Mandelbrot1983}, el cual intenta modelar quesos y distribuciones de cráteres en cuerpos celestes. Validaremos la distribución obtenida utilizando una métrica multi-fractal basada en el espectro multifractal Sandbox.
-
-%Se comienza con una esfera de radio $v = 1$ voxels. Este radio es incrementado en cada iteración. En cada paso, se extraen un número de esferas proporcional al radio:
-
-
-%\begin{equation}
-%N_{esferas} = \frac{k}{r^{d}},
-%\end{equation}
-
-%\noindent donde $k$ y $d$ son parámetros con valores reales, y $r$ es el radio de la esfera.
-
-%La Figura~\ref{FigProving} muestra un ejemplo en dos dimensiones de este proceso, donde $d$ controla la relación existente entre los radios de las esferas y $k$ el número de esferas que extraemos en cada paso.
-
-%Las imágenes muestran una apariencia similar a las que pueden observarse en diferentes espumas (café, jabón, cerveza), y en particular a la que muestra el leudado del pan \cite{Babin2006}. 
-
-%\begin{figure}
-%\includegraphics[scale=0.28]{bubbles.png}
-%\caption{Fractal bread proving simulation.}
-%\label{FigProving}
-%\end{figure}
-
-%En la sección de validación ajustaremos los parámetros para adecuarlos a los de imágenes de migas reales de pan.
-
-%\subsection{Cocción}
-%\subsubsection{Modelo Matemático}
-
-%El modelo matemático del proceso de cocción simula la transferencia de calor y masa en diversos alimentos, entre ellos el pan.  En esta tesis utilizaremos modelos de una dimensión~\cite{Thorvaldsson1999,Purlis2010}. Por ejemplo, Purlis~\cite{Purlis2010} modela la geometría del pan como un cilindro infinito.
-
-%Utilizaremos la solución numérica presente en {Thorvaldsson and Janestead \cite{Thorvaldsson1999} and Powathil~\cite{Powathil2004}. La misma modela el problema como un conjunto de tres ecuaciones diferenciales acopladas que describen transferencia de calor, difusión de vapor de agua y difusión de agua. Sólo será tenida en cuenta la temperatura ($T$) como entrada en el pipeline de generación de pan.
-%The paper defines the geometry as a prism of dimensions $12\times12\times2~cm^{3}$, with  $x$ (the shortest side) as the coordinate of interest.
-
-
-%Para permitir una interacción con el modelado del pan sintético, se definen puntos de control que el usuario puede mover a voluntad para deformar localmente la masa. Para esto se utiliza Mean Value Coordinates (MVC), el cual es un método poderoso en animación \cite{Floater2003,Floater2005,Ju2005}.
-%Este método computa coordenadas baricéntricas a partir de los puntos de control sin deformar (una caja que rodea al objeto) con las cuales calcula las posiciones destino de los puntos de interés en el dominio (en nuestro caso, cada pixel de la imagen es un punto de interés).
-
-%El método usa dos conjuntos de puntos de control para realizar la deformación. El primero ($cageOrig$) es un conjunto de puntos que se sitúa en el borde de la imagen original. Cada texel computa su coordenada baricéntrica con respecto a estos puntos. Cuando movemos estos puntos formamos el vector $cageNew$. Para cada píxel $(x,y)$ el método computa las coordenadas baricéntricas del mismo con respecto a la caja original, multiplicando las mismas con los puntos de control deformados. El resultado $(u,v)$ se utiliza como coordenadas en la imagen original para setear el valor que debe tomar el píxel actual:
-%\begin{align}
-%barycoords &= bary([x,y],cageOrig),\\
-%(u,v) &= \sum_{i} {barycoords_{i} * cageNew_{i}}, \\
-%T_{new}(x,y) &= T_{orig}(u,v).
-%\end{align}
-%As the reader will see in next sections, this method produces realistic-looking deformations.
-
-%====================================================================
-
-%Durante el proceso de fabricación del pan, la masa sufre transformaciones que incluyen la intervención del ser humano, el cual busca distribuir la levadura de manera homogénea por medio de deformaciones.
-
-%En nuestro modelo, permitimos que un artista pueda definir puntos de control en una imagen para modificar la silueta externa de la masa. Siguiendo el modelo cilíndrico, la deformación en esta etapa se aplica a cada corte $2D$ del volumen.
-
-%La Figura~\ref{FigMVC} muestra un ejemplo de deformación utilizando Mean Value Coordinates. En este caso se necesitaron solamente $11$ puntos de control (rojo) para aproximar la silueta de la corteza. La FIgura~\ref{FigMVCpoints} muestra los puntos de control y la caja deformada En el ejemplo definimos un mayor número de puntos de control en la región de interés (derecha) para producir una silueta más controlada.
-
-%\begin{figure}[!ht]
-%\includegraphics[scale=0.65]{warping.png}
-%\caption{Comparación entre pan real (izquierda) y sintético utilizando la deformación por MVC (derecha).}
-%\label{FigMVC}
-%\end{figure}
-
-
-%\begin{figure}[!ht]
-%\includegraphics[scale=1.35]{warppoints.png}
-%\caption{Imagen deformada utilizando MVC: puntos de control sin modificar (verde) puntos de control modificados (rojo). Otras líneas indican desplazamiento de puntos. }
-%\label{FigMVCpoints}
-%\end{figure}
-
-
-%This method also warps the bubbles' shape. The deformed bubbles have a natural appearance in concordance with real bread bubbles. 
 \section{Conclusiones}
 En este Cap\'itulo hemos introducido diversos algoritmos para subsanar la falta de procedimientos flexibles e intuitivos para modelar determinados materiales, entre ellos materiales porosos como el pan. Además, como sub-producto de la investigación, se obtuvieron representaciones bidimensionales de madera, granito, mármol y otros materiales comunes en la literatura.
 Hemos demostrado visualmente la capacidad de los métodos.
 
-El primer aporte es un algoritmo que produce texturas bidimensionales de materiales conocidos como madera y granito, utilizando sistemas de partículas, el cual fue presentado en una conferencia local \cite{Baravalle2011}.
+El primer aporte constituye un algoritmo que produce texturas bidimensionales de materiales conocidos como madera y granito, utilizando sistemas de partículas, el cual fue presentado en una conferencia local \cite{Baravalle2011}.
 
 Haciendo hincapié en materiales porosos, particularmente el pan, diseñamos algoritmos que utilizan sistemas de partículas en conjunción con Sistemas Dinámicos para producir texturas que representan de manera realista geometrías de pan, el cual fue presentado en un congreso y revista nacionales \cite{Baravalle2014}.
 
@@ -971,7 +892,7 @@ Luego aplicamos una simulación física de la cocción, la cual se utilizó para
 Finalmente, la corteza fue generada sobre la superficie del material.
 El algoritmo de renderizado utilizado será explicado en el siguiente capítulo, el mismo produjo imágenes realistas de diversos tipos de pan, en varias etapas del proceso de formación del mismo.
 
-El modelo introducido es más flexible y poderoso que el estado del arte actual en modelado de geometría de materiales porosos y panes.
+El modelo introducido resulta más flexible y poderoso que aquéllos del estado del arte actual en modelado de geometría de materiales porosos y panes.
 
 En un capítulo posterior, y con intención de validar el procedimiento, mostraremos que las geometrías obtenidas por el método inspirado en el proceso de formación del pan, arrojan distribuciones de burbujas coincidentes con panes reales.
 
