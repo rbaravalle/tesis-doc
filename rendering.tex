@@ -8,9 +8,9 @@ El renderizado foto-realísta de materiales con una estructura interna compleja 
 En particular, las migas de panes son un material translúcido complejo, con una estructura porosa, que presenta detalles dispares en distintas escalas, todos igualmente necesarios de ser tenidos en cuenta para lograr una correcta visualización.
 El renderizado realista de estos materiales debe simular correctamente diversos fenómenos como translucencia, auto-sombreado, auto-oclusión, reflectancia, y absorción, entre otros.
 
-Las técnicas del estado del arte en renderizado de migas de panes tratan el material como una superficie, seteando un complejo procedimiento de captura, en el cual la luz reflejada por el material es fotografiada en distintos ángulos.
-Luego, la información es procesada y reconstruída para formar un modelo del material.
-Si bien esta solución es capaz de capturar los fenómenos lumínicos previamente discutidos, también es cierto que la practicidad del método está severamente comprometida, ya que presenta un elevado costo computacional, un procedimiento de captura muy limitado y la imposibilidad de obtener más de una apariencia con una única captura.
+Las técnicas del estado del arte en renderizado de migas de panes tratan el material como una superficie, seteando un complejo procedimiento de captura, en el cual la luz reflejada por el material se fotografía desde distintos ángulos.
+Posteriormente la información se procesa y reconstruye para formar un modelo del material.
+Si bien esta solución captura adecuadamente los fenómenos lumínicos previamente discutidos, también es cierto que la practicidad del método se encuentra severamente comprometida, presentando un elevado costo computacional, un procedimiento de captura muy limitado y la imposibilidad de obtener más de una apariencia con una única captura.
 
 En un intento por superar estas limitaciones en el renderizado de panes, proponemos utilizar la técnica de DVR, la cual implementamos en \acrshort{GPU}, utilizando el lenguaje de shader GLSL (ver Apéndice A).
 La técnica permite renderizar los campos escalares computados en capítulo anterior sin utilizar estructuras intermedias.
@@ -29,50 +29,42 @@ Las imágenes obtenidas son promisorias, y se computan en tiempo real gracias al
 \section{Trabajo Previo}
 El tópico de renderizado foto-realista de materiales, y su modelado, atrajo un interés creciente en la literatura científica.
 La mayoría de los esfuerzos están focalizados en materiales complejos de frecuente aparición como el agua \cite{Schechter2012}, la piel humana \cite{Donner2006}, metales, plásticos \cite{Kurt2010}, etc.
-La comunidad de investigadores, sin embargo, ha tenido grandes dificultades para simular adecuadamente la apariencia de otros materiales, como es el caso de materiales cocidos ({\em e.g.}, pizza, galletitas).
+La comunidad de investigadores, sin embargo, ha tenido grandes dificultades para simular adecuadamente la apariencia de otros materiales, como en el caso de materiales cocidos ({\em e.g.}, pizza, galletitas).
 Debido a su compleja geometría y fenómenos lumínicos involucrados, esto continúa siendo un problema abierto \cite{Voglsam2013}.
 
-Hasta hace pocos años, el costo computacional de renderizar modelos físicos de estos materiales resultaba prohibitivo si el tiempo real era un requerimiento.
+En los últimos años, el costo computacional de renderizar modelos físicos de estos materiales resultaba prohibitivo si el tiempo real era un requerimiento.
 De todas formas, el crecimiento notable en poder de cómputo debido al diseño masivamente paralelo de las placas gráficas \cite{Yeo09,Harris06}, está permitiendo la simulación de fenómenos complejos de interacción de la energía radiante con materiales en tiempos de cómputo aceptables.
 
 %Simular un modelo geométrico aceptable representa un reto adicional, como fue visto en el capítulo anterior.
 %El pan y otras estructuras porosas son el resultado de mecanismos complejos que involucran deformaciones físicas, transferencia de masa y calor durante la cocción, y distintas reacciones químicas.
 
-Estudios recientes utilizan consideraciones fenomenológicas sobre panes reales, pero la geometría es invariable ({\em i.e.}, no es procedimental) \cite{VanDyck2014}: una geometría fija no permite obtener diferentes tipos de pan fácilmente, ya que requiere un procedimiento de captura para cada uno de ellos.
+Estudios recientes utilizan consideraciones fenomenológicas sobre panes reales, pero la geometría resulta invariable (es decir, no procedimental) \cite{VanDyck2014}: una geometría fija no permite obtener diferentes tipos de pan fácilmente, ya que requiere un procedimiento de captura para cada uno de ellos.
 Adicionalmente, las distribuciones de burbujas no pueden ser controladas.
 
-La presencia de mesoestructuras (burbujas con formas complejas) hacen del pan un material {\em quasi-homogéneo} \cite{Tong2005}. 
+La presencia de mesoestructuras (burbujas con formas complejas) provocan una clasificación del pan como un material {\em quasi-homogéneo} \cite{Tong2005}. 
 Por esta razón, modelar al material como una superficie no resulta adecuado.
 Técnicas típicas como BRDFs, BSSRDFs \cite{Donner2009} y BTFs, no resultan satisfactorias.
 Una publicación intenta resolver las limitaciones \cite{Tong2005}, pero las desventajas que acarrea (proceso de captura muy complejo, altos costos computacionales, invariabilidad geométrica), resultan en un proceso basado en fuerza bruta y muy poco práctico.
 
-%Por otro lado, es común encontrar procesos físicamente inspirados sobre modelado de distintas etapas del proceso de formación del pan en la literatura de ingeniería de los alimentos.
-%Estos trabajos modelan las distribuciones de calor y masa en panes durante la cocción, entre otros fenómenos.
-%Recientemente, determinados resultados sugieren que estos objetivos pueden ser alcanzados utilizando modelos unidimensionales.
-%Por ejemplo, modelar la geometría como un cilindro infinito, o asumir una única coordenada radial \cite{Purlis2012, Thorvaldsson1999}.
-
-%Estos y otros resultados en la industria de los alimentos tienen cierta significancia en el modelado y la renderización de geometrías de panes, y pueden ser usado como base para futuros modelos computacionales de la cocción del pan.
-
-
 \section{Renderizado Directo de Volúmenes (DVR)}
 
-La técnica de DVR genera imágenes bidimensionales computando la interacción de la luz con un medio semi-transparente, el cual es representado con un campo escalar discreto.
+La técnica de DVR genera imágenes bidimensionales computando la interacción de la luz con un medio semi-transparente, el cual se representa a través de un campo escalar discreto.
 Este campo describe la densidad del medio en cada celda discretizada.
-Para cada píxel en la imagen final, se computa un rayo desde la posición de la cámara en el espacio virtual, y la radiancia que alcanza la cámara desde esa dirección es computada aproximando la RTE en su forma integral, ec. (\ref{eq:rteintegral}).
-Esta ecuación describe el cambio en radiancia a medida que el rayo atraviesa el medio no transparente.
+Para cada píxel en la imagen final, se computa un rayo desde la posición de la cámara en el espacio virtual, y la radiancia que alcanza la cámara desde esa dirección se computa aproximando la RTE en su forma integral, ec. (\ref{eq:rteintegral}).
+Esta ecuación describe la modificación de radiancia a medida que el rayo atraviesa el medio no transparente.
 
 En su forma completa, la RTE incorpora muchas propiedades ópticas y efectos.
 Para aproximar el resultado de la RTE en tiempo real, este capítulo utiliza una versión simplificada de la ecuación que sólo toma en consideración algunos de los fenómenos ópticos que ocurren en la realidad.
 
 Como fue explicado en el Capítulo $2$, existen tres fenómenos ópticos importantes que afectan la propagación de la luz a través de un medio en un punto dado del espacio: emisión, absorción, y dispersión.
 
-Emisión es la generación de energía radiante en una dirección dada.
-La absorción ocurre cuando una fracción o toda la energía radiante en el rayo de luz se topa con un objeto opaco y es transformada en otras formas de energía.
-Finalmente, la dispersión produce cambios de dirección en los fotones.
-Aquellos eventos que provocan que los fotones cambien su dirección a otra distinta a la dirección del rayo, son llamados de dispersión saliente. Del mismo modo, los eventos que provocan que los fotones cambien su dirección por la del rayo actual se llaman dispersión entrante.
+La emisión se define como la generación de energía radiante en una dirección dada.
+La absorción ocurre cuando una fracción o toda la energía radiante en el rayo de luz se topa con un objeto opaco transformándose en otras formas de energía.
+Finalmente, la dispersión produce modificaciones de dirección en los fotones.
+Aquellos eventos que provocan que los fotones modifiquen su dirección a otra distinta a la dirección del rayo, son llamados de dispersión saliente. Del mismo modo, los eventos que provocan que los fotones modifiquen su dirección por la del rayo actual se llaman dispersión entrante.
 
 %
-La contribución de la dispersión entrante en la radiancia es computada a partir de una única dirección, la cual corresponde a la principal fuente de luz de la escena.
+La contribución de la dispersión entrante en la radiancia se computa a partir de una única dirección, la cual corresponde a la principal fuente de luz de la escena.
 Esto aproxima la energía radiativa que llega a un punto desde la fuente de luz, haciendo rebotar a las partículas en el medio hacia ese punto y luego viajando a lo largo de una dirección dada. 
 
 La RTE puede reescribirse a partir de la ecuación (\ref{eq:rteintegral}), para ser utilizada en DVR como sigue,
@@ -82,9 +74,9 @@ La RTE puede reescribirse a partir de la ecuación (\ref{eq:rteintegral}), para 
 \end{equation}
 
 \noindent donde $L_b$ es la radiancia de fondo, y $p_0$, $p_n$ son los puntos visibles más cercano y más lejano en la dirección del rayo, respectivamente, $L(t)$  es la radiancia en el punto $t$, y $\partial p$ es la distancia entre puntos consecutivos muestreados. 
-Debido a que la entrada del algoritmo de DVR es un conjunto de datos discreto, para computar $L(p_n)$ la integral es aproximada por una suma.
+Debido a que la entrada del algoritmo de DVR constituye un conjunto de datos discreto, la integral en $L(p_n)$ se aproxima por una suma.
 
-La extinción es el descenso en radiancia en un rayo debido a absorción y dispersión saliente.
+La extinción constituye el descenso de radiancia en un rayo debido a absorción y dispersión saliente.
 Podemos aproximar este efecto definiendo un coeficiente de absorción para el medio, $k_a$ y un coeficiente de dispersión saliente $k_s$. 
 Si descartamos el efecto de dispersión saliente, la fórmula que describe la radiancia alcanzando un punto luego de atravesar un segmento de un rayo es:
 
@@ -93,14 +85,14 @@ Si descartamos el efecto de dispersión saliente, la fórmula que describe la ra
 \end{equation}
 
 Introducimos el valor $\int_{p_i}^{p_j} k_a(t) \, dt$, el coeficiente de absorción, el cual referiremos como $\tau_{(p_i, p_j)}$. 
-La transmitancia es el concepto complementario a la extinción. Describe la cantidad de luz que pasa a través de un medio en una dirección dada.
+La transmitancia representa el concepto complementario a la extinción, describiendo la cantidad de luz que escapa a un medio en una dirección dada.
 Por lo tanto, el valor de la transmitancia entre dos puntos $p_i$ y $p_j$ es:
 
 \begin{equation} \label{eq:transmittance}  
   T(p_i,p_j) = e^{- \textstyle \tau_{(p_i, p_j)}}.
 \end{equation}
 
-Si asumimos que en cada punto del rayo dentro del volumen existe un incremento en la radiancia, dada por la dispersión entrante y fenómenos de emisión ($\rho$), luego nuestra estimación inicial de radiancia resulta,
+Asumiendo un incremento en la radiancia en cada punto del rayo dentro del volumen, dada por la dispersión entrante y fenómenos de emisión ($\rho$), luego nuestra estimación inicial de radiancia resulta,
 
 \begin{equation} \label{eq:ray_radiance}  
   L(p_n) = L_b \ e^{-\tau(p_0, p_n)} + \int_{p_0}^{p_n} \rho \ e^{-\tau(t,p_n)} \, dt.
@@ -132,8 +124,7 @@ La Fig.~\ref{fg:application} muestra la aplicación desarrollada, con un pan ren
 \end{figure}
 
 
-En la demo se produce una textura volumétrica.
-Un cubo que corresponde a esta textura es renderizado en la escena.
+En la demo se produce una textura volumétrica, renderizando un cubo que corresponde a esta textura en la escena.
 El material utilizado para renderizar el cubo consta de un shader de vértices muy simple, y un shader de fragmentos, el cual implementa el algoritmo de DVR.
 Para cada fragmento, el shader computa un rayo con origen en la posición de la cámara y con la dirección del fragmento que debe ser coloreado.
 El procedimiento muestrea la textura volumétrica a intervalos regulares sobre la intersección del rayo y el cubo.
@@ -143,17 +134,17 @@ La implementación acumula la transmitancia a lo largo del rayo y la contribuci�
 La computación termina si el valor de la transmitancia acumulada está por debajo de un umbral (lo cual significa que no escaparán más fotones en el rayo) o si el rayo sale del cubo.
 
 La dispersión entrante ($\rho$), simplificada, se computa a través de un rayo secundario, para cada punto muestreado, en dirección a la fuente de luz.
-Este rayo secundario es luego muestreado para determinar la cantidad de luz que llega al punto.
+Este rayo secundario se muestrea para determinar la cantidad de luz que llega al punto.
 Esta técnica permite obtener sombras naturales dentro del volumen.
 
-El píxel es sombreado utilizando la información de transmitancia del rayo primario y los secundarios en cada punto.
+El píxel se sombrea utilizando la información de transmitancia del rayo primario y los secundarios en cada punto.
 En este punto, diferentes consideraciones artísticas pueden ser aplicadas para obtener diferentes materiales con distintos aspectos.
 Por ejemplo, podemos diferenciar miga de corteza asignando un coeficiente de extinción mayor y un color más oscuro a las regiones de corteza.
-En nuestro caso, un color amarillo suave es aplicado en ciertas regiones, otorgándoles una apariencia de miga.
+En nuestro caso, se aplica un color amarillo suave en ciertas regiones, otorgándoles una apariencia de miga.
 Adicionalmente se puede agregar una sutil reflexión especular.
-Para esto, es necesario computar la primera intersección entre el rayo y la geometría.
+Para esto, se necesita computar la primera intersección entre el rayo y la geometría.
 Gracias a esto se puede incrementar ligeramente el realismo final de la imagen.
-El vector normal usado en este cálculo es el gradiente de la textura volumétrica en ese punto.
+El vector normal usado en este cálculo está dado por el gradiente de la textura volumétrica en ese punto.
 
 La demo presentada provee al usuario la habilidad de modificar parámetros como el coeficiente de absorción, el umbral de transmitancia, el color asignado a la miga y la visibilidad de los reflejos especulares.
 Con la modificación de estos parámetros, el usuario puede producir imágenes que semejan otros materiales porosos como las esponjas.
@@ -171,28 +162,28 @@ La Fig. \ref{fg:fragmentshaderrte} muestra un esquema del shader de fragmentos i
 La aproximación introducida a la RTE no tiene en cuenta fenómenos clave en la obtención de imágenes realistas, como la dispersión entrante y la dispersión saliente.
 Sin embargo, un aspecto clave para resaltar la apariencia de la imagen final está basada en las contribuciones locales de radiancia debido a características microscópicas propias del material.
 Hasta ahora, la dispersión entrante, simple, era aproximada por medio del cómputo de la radiancia entrante en el punto desde la fuente de luz.
-Es posible lograr una mejor aproximación teniendo en cuenta además la dispersión entrante al punto desde el medio, por medio del agregado de la oclusión ambiente.
+Es posible lograr aproximaciones más precisas tomando en consideración además la dispersión entrante al punto desde el medio, por medio del agregado de la oclusión ambiente.
 La literatura muestra que considerarla produce imágenes de mayor realismo \cite{Hernell2010}.
 
-Debido a estas consideraciones proponemos computar la dispersión entrante, múltiple, calculando de manera offline un término de oclusión del ambiente para cada voxel en el campo escalar y almacenándolo como una textura volumétrica extra, la cual es pasada al shader de fragmentos, permitiendo así mantener los tiempos computacionales en tasas razonables.
+Debido a estas consideraciones proponemos computar la dispersión entrante, múltiple, calculando de manera offline un término de oclusión del ambiente para cada voxel en el campo escalar y almacenándolo como una textura volumétrica extra, la cual se suple al shader de fragmentos, permitiendo así mantener los tiempos computacionales en tasas razonables.
 
 Para cada voxel en la textura volumétrica resultante de alguno de los métodos del capítulo anterior, el cómputo de dicho término define un radio $r$, almacenando el valor medio de los vóxeles vecinos dentro de una esfera que contiene ese radio.
 Luego, este valor se utiliza para modular la contribución de cada paso del rayo.
 Experimentalmente encontramos que el valor $r$ resulta visualmente indistinguible al variarlo, por lo cual cualquier valor mayor que $0$ puede utilizarse para el cómputo.
 
-La Fig.~\ref{fg:occlusion} muestra que el realce que produce este concepto no es despreciable, resultando en un aspecto clave de nuestra implementación, a la hora de producir imágenes creíbles de migas de pan. 
+La Fig.~\ref{fg:occlusion} muestra el realce que produce este concepto, resultando en un aspecto clave de nuestra implementación, a la hora de producir imágenes creíbles de migas de pan. 
 
 
 
 \begin{figure}
 \centerline{\includegraphics[width=13cm]{figures/occlusion}}
-  \caption[Pan renderizado sin y con oclusión de ambiente]{Pan sin (izquierda) y con (derecha) oclusión de ambiente. La imagen final es mejorada notablemente, apreciándose una apariencia más natural.}
+  \caption[Pan renderizado sin y con oclusión de ambiente]{Pan sin (izquierda) y con (derecha) oclusión de ambiente. La imagen final se realza notablemente, apreciándose una apariencia más natural.}
   \label{fg:occlusion}
 \end{figure}
  
 \subsection{Cómputo de las Normales}
 Utilizamos un esquema {\em hacia adelante} en el cómputo de diferencias finitas del gradiente.
-El gradiente en el punto será utilizado luego para computar el vector normal, el cual es resultado de la diferencia normalizada, entre la posición {\em hacia adelante} y la posición actual del campo escalar,
+El gradiente en el punto será utilizado para computar el vector normal, el cual resulta de la diferencia normalizada, entre la posición {\em hacia adelante} y la posición actual del campo escalar,
 
 
 \begin{equation}
@@ -225,7 +216,7 @@ Casi todas las imágenes presentadas muestran el uso de esta técnica en nuestra
 
 
 \subsection{Corteza}
-Es posible proveer al sistema con una función que indique si la posición es parte de la corteza o la miga, u otras consideraciones en otros materiales (por ejemplo, si el color de la sección de una esponja debe ser amarillo o verde).
+Se puede proveer al sistema con una función que indique si la posición es parte de la corteza o la miga, u otras consideraciones en otros materiales (por ejemplo, si el color de la sección de una esponja debe ser amarillo o verde).
 Por ejemplo, una función puede definir una corteza cilíndrica asignando la etiqueta de miga a aquellas posiciones cercanas al eje del cilindro, y corteza a las restantes.
 
 También se provee otra función que establece si la posición debe ser considerada aire.
@@ -234,16 +225,8 @@ Esto permite definir, de una manera intuitiva, la corteza y cortes en el volumen
 Los métodos para definir la misma fueron explicados en el capítulo anterior, utilizando un mapa de distancias o bien morfología matemática.
 
 
-%%%%%%%%%%%%%%%
-
-%Dentro del shader de fragmentos la primera operaci\'on es calcular la geometría de un rayo cuyo origen es la cámara de la escena y cuya dirección lo lleva hacia el fragmento siendo calculado. Este rayo es recorrido en intervalos regulares, evaluando la textura volumétrica para obtener la densidad del pan en esos puntos. Este valor se utiliza para calcular la transmitancia acumulada desde la cámara hasta el punto evaluado. Una vez que la transmitancia es menor que un valor preestablecido o el rayo sale del cubo que define el volumen, el cómputo termina.
-
-%En cada punto evaluado también se computa la transmitancia dentro del volumen desde el punto hacia la fuente de luz en la escena. Esto se hace emitiendo un rayo desde el punto con dirección a la luz y nuevamente calculando la densidad en varios puntos del rayo. Con esta nueva información se aproxima la cantidad de luz que llega directamente al punto considerado, y permite representar sombras dentro del volumen.
-
-%La información de transmitancia de los puntos evaluados del rayo principal y desde estos puntos hacia la luz se utilizan para calcular el color final del fragmento. A partir de esta información y tomando diferentes consideraciones artísticas pueden lograrse representaciones realísticas de diferentes materiales. En el caso de las imágenes de muestra presentadas en este trabajo el color del fragmento será más oscuro para areas del volumen que se consideran dentro de la corteza del pan y será de un color amarillo claro para la miga. También se usa un componente especular tenue. La información de transmitancia entre los puntos evaluados y la luz ayuda a proveer detalles de la estructura del pan. La Fig~\ref{fg:fragmentshader} muestra un esquema del cálculo del color final del pixel.
-
 \section{Resultados}
-Las imágenes obtenidas a partir del método descrito en la sección anterior fueron renderizadas en una computadora con una placa gráfica nVidia GTX 480 ($480$ cores), la cual es normalmente de uso hogareño.
+Las imágenes obtenidas a partir del método descrito en la sección anterior fueron renderizadas en una computadora con una placa gráfica nVidia GTX 480 ($480$ cores), la cual normalmente se utiliza en hogares.
 La CPU fue una Intel(R) Core(TM) i5-2300 CPU (cuatro procesadores).
 La resolución de las imágenes es de $1440\times990$ pixels. 
 
@@ -251,7 +234,7 @@ Se obtuvieron diferentes imágenes que semejan materiales horneados.
 Diferentes tipos de pan pueden ser representados variando los parámetros de transmitancia y colores utilizados (ver Fig.~\ref{fg:breadsnooc}).
 En esa imagen mostramos panes donde no se aplica oclusión de ambiente.
 En la imagen central los patrones producidos por los sistemas de partículas descritos en el capítulo anterior son claramente visibles.
-En ese caso, el tiempo de vida de las partículas es diferente para cada una y de esa manera se obtienen burbujas de diferentes tamaños.
+En ese caso, el tiempo de vida de las partículas difiere para cada una y de esa manera se obtienen burbujas de diferentes tamaños.
 
 \begin{figure*}[htb!]
   \centerline{\includegraphics[width=13cm]{fig5}}
@@ -273,8 +256,8 @@ Puede observarse que los panes con este efecto muestran un grado de realismo sup
 \subsection*{Tiempos de Cómputo}
 
 Todas las imágenes fueron obtenidas en tasas de refresco de tiempo real (cuadros por segundo o \acrshort{FPS} mayor que $30$), ver Tabla \ref{tab:tiemposrenderizado}.
-La eficiencia del proceso se resiente cuando el coeficiente de absorción es muy bajo, lo cual provoca que el material renderizado sea casi transparente, necesitándose evaluar más puntos en los rayos a recorrer antes de llegar al límite inferior de transmitancia.
-Otro parámetro importante es la cantidad de puntos a evaluar, ya que para cada paso computamos la transmitancia hacia la luz por medio de un rayo secundario.
+La eficiencia del proceso se resiente cuando el coeficiente de absorción resulta muy bajo, lo cual provoca que el material renderizado sea casi transparente, necesitándose evaluar más puntos en los rayos a recorrer antes de llegar al límite inferior de transmitancia.
+Otro parámetro importante está dado por la cantidad de puntos a evaluar, ya que para cada paso computamos la transmitancia hacia la luz por medio de un rayo secundario.
 Experimentalmente encontramos que utilizar $140$ o más pasos produce imágenes razonables para esponjas, pero se necesitan $300$ o más pasos para obtener imágenes razonables de panes, ver Fig.~\ref{fg:stepcount}.
 
 
@@ -284,7 +267,7 @@ Experimentalmente encontramos que utilizar $140$ o más pasos produce imágenes 
   \label{fg:stepcount}
 \end{figure}
 
-La Tabla \ref{tab:rayossecundarios} muestra que los rayos secundarios constituyen el principal cuello de botella, lo cual es lógico, dado que a cada paso del rayo principal, el mismo computa un rayo secundario hacia la luz, mostrando tiempo cuadrático respecto a la cantidad de pasos.
+La Tabla \ref{tab:rayossecundarios} muestra que los rayos secundarios constituyen el principal cuello de botella, lo cual resulta lógico, dado que a cada paso del rayo principal, el mismo computa un rayo secundario hacia la luz, mostrando tiempo cuadrático respecto a la cantidad de pasos.
 
 
 \begin{table}[htb]
@@ -323,7 +306,7 @@ La Tabla \ref{tab:rayossecundarios} muestra que los rayos secundarios constituye
 \end{table}
 
 
-En las regiones con corteza, la velocidad del método es mayor, ya que con un coeficiente de absorción mayor es posible obtener la apariencia deseada, es decir, los rayos necesitan menos pasos para alcanzar el umbral inferior de transmitancia que en otras regiones.
+En regiones con corteza, la velocidad del método resulta superior, ya que se puede obtener la apariencia deseada con un coeficiente de absorción mayor, es decir, los rayos necesitarán menos pasos para alcanzar el umbral inferior de transmitancia.
 
 \subsection{Otros Materiales y Efectos}
 Es posible obtener imágenes que asemejan otros materiales (ver Fig.~\ref{fg:fig6}).
@@ -333,9 +316,9 @@ En el caso de la esponja se modificaron los parámetros que definen la función 
 Cuando no hay levadura en el proceso de creación puede utilizarse una textura volumétrica cuyos valores provienen de una función aleatoria.
 
 En la Fig.~\ref{fg:sponges} puede observarse que la utilización de oclusión de ambiente produce imágenes de esponja más realistas que las obtenidas sin su aplicación.
-La retroiluminación es también aproximada con este modelo (ver Fig. \ref{fg:fig7}).
+La retroiluminación también se aproxima en este modelo (ver Fig. \ref{fg:fig7}).
 En esa imagen puede apreciarse una esponja retroiluminada junto con la propagación de luz a través del volumen que representa.
-Este efecto es una consecuencia natural del algoritmo volumétrico basado en RTE utilizado en este capítulo.
+Este efecto surge como una consecuencia natural del algoritmo volumétrico basado en RTE utilizado en este capítulo.
 
 \begin{figure*}[htb!]
   \centerline{\includegraphics[width=13cm]{fig6}}
@@ -346,7 +329,7 @@ Este efecto es una consecuencia natural del algoritmo volumétrico basado en RTE
 
 \begin{figure*}[htb!]
   \centerline{\includegraphics[width=8cm]{fig7}}
-  \caption[Esponja retroiluminada.]{Esponja renderizada en tiempo real mostrando retroiluminación. La misma es consecuencia directa de la utilización de un modelo volumétrico de propagación de la energía radiante, sobre medios semi-transparentes.}
+  \caption[Esponja retroiluminada.]{Esponja renderizada en tiempo real mostrando retroiluminación. La misma resulta consecuencia directa de la utilización de un modelo volumétrico de propagación de la energía radiante, sobre medios semi-transparentes.}
   \label{fg:fig7}
 \end{figure*}
 
@@ -361,16 +344,16 @@ Este efecto es una consecuencia natural del algoritmo volumétrico basado en RTE
 
 %1)En primer lugar, un resumen de lo que hicimos en el paper y por qué es importante/novedoso
 
-Hasta donde podemos observar en la literatura, en el renderizado de panes y otros materiales porosos, este es el primer trabajo que involucra tasas de refresco de tiempo real, sin la utilización de estructuras intermedias, procesos de captura onerosos, o post-procesamientos.
+Hasta donde podemos observar en la literatura, en el renderizado de panes y otros materiales porosos, este constituye el primer trabajo que involucra tasas de refresco de tiempo real, sin la utilización de estructuras intermedias, procesos de captura onerosos, o post-procesamientos.
 
 La literatura previa incluye pocos trabajos, como por ejemplo \cite{Cho2007}, pero las comparaciones con este método no son posibles, ya que los detalles claves del desarrollo no fueron explicados (tiempos de cómputo, método de renderización).
-El método propuesto es compatible con el renderizado de ráster en tiempo real disponible en las GPUs actuales, contando con la capacidad de producir un material realista.
+El método propuesto resulta compatible con el renderizado de ráster en tiempo real disponible en las GPUs actuales, contando con la capacidad de producir un material realista.
 El método puede ser integrado con facilidad en cualquier motor $3D$ basado en shaders.
 Además, la técnica de mapeo de sombras permite integrar el material en escenas de una manera natural.
 
 %3) Recordamos que las imagenes obtenidas fueron buenas, y que obtuvimos otros materiales cambiando pocos parametros
 
-El algoritmo de renderizado es lo suficientemente flexible como para modelar diferentes materiales, como pan, esponjas, y tortas, cambiando unos pocos parámetros.
+El algoritmo de renderizado resulta lo suficientemente flexible, modelando diferentes materiales, como pan, esponjas, y tortas, modificando unos pocos parámetros.
 Otros materiales porosos como pizzas, quesos, y otros, pueden ser fácilmente obtenidos definiendo geometrías adecuadas y parámetros de transmitancia y cantidad de pasos.
 Es decir, se pueden obtener diversos materiales con el mismo método.
 
@@ -380,7 +363,7 @@ Esto puede resultar de gran ayuda en diversas aplicaciones, entre las cuales enc
 Respecto al modelo de iluminación, el éxito visual obtenido por el método a la hora de obtener una apariencia que semeja al pan en tiempo real, parece estar dado por la utilización de oclusión ambiente, además de los agregados discutidos sobre el algoritmo básico de DVR.
 El término de oclusión de ambiente proporcionó una textura mucho más detallada, mostrando una mayor complejidad y riqueza subyacente.
 Otros efectos introducidos, como el reflejo especular de Phong, también incidieron sobre el realismo final.
-Sin embargo, métodos especulares más sofisticados (por ejemplo, el modelo de Cook-Torrance \cite{Cook1982}) no mejoraron de manera apreciable las imágenes.
+Sin embargo, métodos especulares más sofisticados (por ejemplo, Cook-Torrance \cite{Cook1982}) no aportaron mayores detalles sobre la apariencia las imágenes.
 
 %5)Tiempos de cómputo (muy importante en este paper!)
 
@@ -391,7 +374,7 @@ Los únicos casos que no lograron dichos tiempos ocurrieron cuando el objeto a s
 Los tiempos de cómputo finales dependen de la cantidad de pasos utilizados, el coeficiente de absorción y el umbral inferior de transmitancia.
 
 Adicionalmente, diferentes materiales cuentan con diferentes tiempos de cómputo para su renderización.
-Por ejemplo, un tiempo de cómputo adecuado para simular esponjas es más bajo que aquél que se necesita para modelar migas de panes.
+Por ejemplo, un tiempo de cómputo adecuado para simular esponjas resulta más bajo que aquél que se necesita para modelar migas de panes.
 Esto se debe al hecho de que el método necesita más pasos para capturar las burbujas macroscópicas del pan.
 
 Las GPUs actuales poseen límites en las dimensiones de las texturas volumétricas que pueden soportar.
@@ -399,7 +382,7 @@ Esto limita la calidad de las imágenes que podemos obtener, ya que a mayor reso
 Por lo tanto, las aplicaciones en tiempo real deben limitar la resolución de la textura que se carga en la GPU.
 En otras palabras, acercamientos extremos a la estructura a ser renderizada puede dar lugar áreas homogéneas (sin detalle).
 Esta limitación está relacionada al tamaño de textura de la GPU, y será eventualmente superado con la mejora del hardware de la próxima generación de GPUs.
-En aplicaciones donde el tiempo de cómputo no es un factor crucial, es posible utilizar texturas lo suficientemente grandes que dan lugar a imágenes foto-realísticas.
+En aplicaciones donde el tiempo de cómputo constituye un factor crucial, se permite la utilización de texturas lo suficientemente grandes para dar lugar a imágenes foto-realísticas.
 
 \section{Conclusiones}
 
@@ -415,7 +398,7 @@ El método presenta aplicaciones en diversas áreas, como video juegos, juegos s
 Estas técnicas son mucho más simples y no presentan las desventajas de otros métodos, como procesos de captura, generación de mallas o post-procesos.
 Las mismas fueron presentadas en un congreso y revista nacionales \cite{Baravalle2014}.
 
-Estos resultados demuestran que la elección de una representación volumétrica es la adecuada para estos materiales porosos.
+Estos resultados demuestran que la elección de una representación volumétrica resulta adecuada para estos materiales porosos.
 
 
 
