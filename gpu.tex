@@ -15,16 +15,16 @@ Esto implica que cada placa debe programarse bajo su propio lenguaje.
 
 El diseño orientado a elementos repetitivos e independientes como píxels, triángulos y vértices en los que se descompone una escena en computación gráfica, ha resultado en un diseño {\em paralelo} de las mismas.
 Actualmente, las placas gráficas cuentan con miles de procesadores (aunque con capacidades más limitados que un microprocesador CPU), los cuales realizan tareas como actualizar un píxel, o establecer la proyección perspectiva de un vértice en pantalla.
-Este procesamiento se realiza en paralelo ya que la computación es independiente para cada elemento.
+Este procesamiento se realiza en paralelo ya que la computación resulta independiente para cada elemento.
 
-En un principio, la placa gráfica funcionaba como una caja gris o negra, la cual podía ser configurada únicamente, para producir resultados limitados sobre algunos tipos de efectos, como el color final de un píxel.
+En un principio, la placa gráfica interactuaba como una caja gris o negra, la cual podía ser configurada únicamente, para producir resultados limitados sobre algunos tipos de efectos, como el color final de un píxel.
 En la década de $1980$ comenzaron a surgir las placas gráficas programables, las cuales permitían modificar el assembler de determinados procesos internos a las mismas, logrando efectos personalizados.
 El assembler de estas placas no resultaba nada amigable al programador, el cual además difería para cada placa.
 Debido a esto, un programador debía distribuir código assembler para cada placa donde pretendía correr su programa.
 
 Similarmente a lo acaecido con la aparición de los lenguajes de programación de propósito general como C, COBOL o Lisp, comenzaron a surgir aproximadamente en el año $2000$ lenguajes más amigables para el programador, los cuales generaban código para el assembler específico de cada GPU.
 De esta forma surgieron GLSL\footnote{OpenGL Shading Language} (OpenGL, libre), HLSL (Microsoft) y Cg (nVidia).
-De ellos, el primero es el único que compila para diferentes plataformas, ya que los otros dos están orientados a dispositivos de sus respectivas empresas (por ejemplo, Cg no se puede utilizar en placas ATI).
+De ellos, el primero constituye el único que compila para diferentes plataformas, ya que los otros dos están orientados a dispositivos de sus respectivas empresas (por ejemplo, Cg no se puede utilizar en placas ATI).
 
 Los lenguajes de shading probaron ser una herramienta flexible y poderosa para controlar el comportamiento y apariencia de objetos en una escena.
 Se han codificado algoritmos de iluminación, sombreado, de generación de vértices, superficies y un largo etc. en shaders, lo cual significó un gran trasvasamiento de cómputos del CPU al GPU.
@@ -75,7 +75,7 @@ El procesamiento debe transformar la información tridimensional en información
 La secuencia t\'ipica de procesamiento de la GPU est\'a ordenada de la siguiente manera:
 \begin{itemize}
 \item Procesamiento de V\'ertices: los v\'ertices de los objetos de una escena son transformados (rotación, desplazamiento, escala, etc.).
-En este punto es posible programar el comportamiento de las transformaciones, por medio de un programa denominado shader de vértices.
+En este punto se permite programar el comportamiento de las transformaciones, por medio de un programa denominado shader de vértices.
 \item Ensamblamiento (generación de primitivas): los v\'ertices transformados se unen para formar primitivas: l\'ineas, tri\'angulos, etc., mediante la informaci\'on que aporta la CPU.
 Además, se realizan los procesos de {\em clipping}: eliminaci\'on de partes de objetos que por su posici\'on no aparecer\'an en pantalla; y {\em culling}: eliminaci\'on de superficies no visibles, puesto que est\'an detr\'as de otras superficies desde el punto de vista de la c\'amara.
 \item Rasterización e Interpolaci\'on: se {\em rasterizan} (se {\em asocian} a posiciones en pantalla) y se {\em interpolan} los diferentes atributos de las primitivas, en el sub-espacio de clipping, generadas en la etapa previa (por ejemplo el color, la posición, etc.).
@@ -98,7 +98,7 @@ En la GPU existen dos componentes llamados {\em procesador de v\'ertices program
 \label{fg:pipelinegrafico}
 \end{figure}
 
-Finalizados los cómputos, se vuelcan los resultados en una memoria especial de la GPU, denominada {\em framebuffer}, el cual es el dispositivo mediador entre la placa de video y el monitor.
+Finalizados los cómputos, se vuelcan los resultados en una memoria especial de la GPU, denominada {\em framebuffer}, el cual constituye el dispositivo mediador entre la placa de video y el monitor.
 
 La secuencia explicada constituye el escenario típico de procesamiento de una GPU, excepto en los casos de GPGPU, donde la placa se utiliza para otros propósitos.
 De hecho, los resultados de GPGPU no son imágenes, como se explicará más adelante.
@@ -111,8 +111,9 @@ Como fue previamente mencionado, existen dos tipos de programas en GLSL, siendo 
 La especificación de las primitivas a dibujar, dentro del pipeline de OpenGL 2.0+, se define por medio de {\em atributos} de vértices y {\em elementos}. 
 
 
-Los \emph{atributos} son, como su nombre lo indica, atributos o propiedades de un vértice. El significado se los dará el uso.
-Un atributo a considerar es la posición de cada vértice.
+Los \emph{atributos} son, como su nombre lo indica, atributos o propiedades de un vértice.
+El significado se los dará el uso.
+Un atributo a considerar consiste en la posición de cada vértice.
 Otros atributos comunes están representados por las normales, los colores y las coordenadas de texturas.
 
 Los \emph{elementos} son figuras geométricas (lineas, triángulos, cuadrados) que se forman a partir de unir los vértices definidos por los atributos, ver Fig.~\ref{fg:atributos}.
@@ -132,9 +133,9 @@ Estos programas reciben los atributos como entrada, asi como otras constantes ll
 Los valores \emph{uniformes} pueden ser por ejemplo las matrices de proyección y del modelo o matrices de transformación de normales. 
 
 La Fig.~\ref{fg:vertexshader} muestra un ejemplo de un shader de vértices junto a atributos de ejemplo.
-El programa de la figura transforma vértices de manera estándar utilizando las matriz {\em modelviewproj} (modelo, vista, proyección), la cual es provista como dos uniformes desde la CPU (uPMatrix y uMVMatrix, las cuales se multiplican).
+El programa de la figura transforma vértices de manera estándar utilizando las matriz {\em modelviewproj} (modelo, vista, proyección), la cual se provee como dos uniformes desde la CPU (uPMatrix y uMVMatrix, las cuales se multiplican).
 Los atributos intervinientes son el color y la posición del vértice.
-La imagen muestra además que la variable gl\_Position es la salida del programa, la cual posee coordenadas en el espacio de clipping (entre $[-1,-1,-1]$ y $[1,1,1]$).
+La imagen muestra además que la variable gl\_Position representa la salida del programa, la cual posee coordenadas en el espacio de clipping (entre $[-1,-1,-1]$ y $[1,1,1]$).
 
 \begin{figure}[h]
 \begin{center}
@@ -146,14 +147,14 @@ La imagen muestra además que la variable gl\_Position es la salida del programa
 
 Una vez que todos los shaders de vértices realizaron sus cómputos, debe procederse a la rasterización, es decir se calcula su posición final en la pantalla a partir de la información del tamaño de la imagen final requerida.
 Cada elemento (triángulo, linea, cuadrado) se convierte en una grupo de pixeles (llamado fragmento) que posiblemente se dibujará en la pantalla.
-Este proceso puede observarse en la Fig.~\ref{fg:raster}, y a diferencia del shader de vértices, no es programable.
+Este proceso puede observarse en la Fig.~\ref{fg:raster}, y a diferencia del shader de vértices, no se permite su programación.
 
 
 \begin{figure}[h]
 \begin{center}
 \includegraphics[width=13cm]{figures/raster}
 \end{center}
-\caption[Proceso de rasterización en la placa gráfica]{Proceso de rasterización en la placa gráfica. En la imagen, un triángulo es convertido al conjunto de las posiciones de los píxeles que representará en la pantalla.}
+\caption[Proceso de rasterización en la placa gráfica]{Proceso de rasterización en la placa gráfica. En la imagen, un triángulo se convierte en el conjunto de las posiciones de los píxeles que representará en la pantalla.}
 \label{fg:raster}
 \end{figure}
 
@@ -194,7 +195,7 @@ Como posible limitación, debe tenerse en cuenta la capacidad de la placa donde 
 Debido a limitaciones de hardware, determinadas placas no permiten bucles en el shader de fragmentos, o tienen un límite en el número de texturas que soportan.
 Para agrupar distintas categorías de placas (o capacidades de cómputo), se definieron {\em versiones}.
 
-Las versiones establecen limitaciones a lo que es posible lograr con un programa GLSL.
+Las versiones establecen limitaciones a las operaciones en un programa GLSL.
 Es as\'i que un código GLSL en una versión determinada debe tener en cuenta las restricciones del mismo.
 Sin embargo, la r\'apida evoluci\'on del hardware gr\'afico provoca que las restricciones sean cada vez menores.
 
@@ -228,7 +229,7 @@ Se presenta a continuaci\'on el cómputo de prop\'osito general en la GPU, GPGPU
 Como fue discutido, la capacidad de procesamiento de las placas gr\'aficas evolucionó de manera vertiginosa.
 La velocidad de transmisi\'on de datos en su memoria interna tambi\'en sufrió una marcada aceleración, superando a memorias tradicionales CPU.
 Esto ocurre porque la CPU debe dedicar parte de su poder a control de flujo y {\em cacheo} de datos.
-En contraposici\'on, la GPU est\'a dise\~nada para resolver problemas en paralelo; se debe aplicar el mismo programa a cada dato (instrucción simple, múltiples datos; Single Instruction, Multiple Data o \acrshort{SIMD}) por lo cual el control de flujo resulta menos necesario.
+En contraposici\'on, la GPU est\'a dise\~nada para computar en paralelo; se debe aplicar el mismo programa a cada dato (instrucción simple, múltiples datos; Single Instruction, Multiple Data o \acrshort{SIMD}) por lo cual el control de flujo resulta menos necesario.
 
 Debido a estas consideraciones, determinadas compañías decidieron aprovechar la misma como un dispositivo de procesamiento general, más económico que otras soluciones de alto desempeño (por ejemplo, clústers).
 
@@ -240,14 +241,14 @@ El mismo representa un intento de apertura de la computación paralela de propó
 \subsection{Paradigma de Programación OpenCL}
 Deben tenerse en cuenta ciertas consideraciones al implementar algoritmos en OpenCL y CUDA.
 En primer lugar, asistimos a un paradigma diferente al usual, ya que el cómputo se realiza en paralelo, a diferencia del computo secuencial tradicional de la máquina de Von Neumann.
-Esto implica diversos cambios en la forma de programar una solución a un problema dado.
+Esto implica diversas modificaciones en la forma de programar una solución a un problema dado.
 
-En su versión más simple, un programa secuencial es {\em trivialmente} paralelizable, si el cómputo es independiente para cada unidad del programa a ejecutar en cada procesador.
+En su versión más simple, un programa secuencial es {\em trivialmente} paralelizable, si el cómputo resulta independiente para cada unidad del programa a ejecutar en cada procesador.
 De esta forma, sólo debe chequearse la coherencia de los resultados, en otras palabras, si por ejemplo sumamos dos arreglos, los índices en los arreglos de entrada que se suman se correspondan a los índices correctos en el arreglo de salida.
 Para esto, las bibliotecas mencionadas tienen mecanismos de identificación global para cada hilo en ejecución.
 Entre los algoritmos trivialmente paralelizables encontramos aquellos que utilizan shaders (cómputos sobre vértices y píxeles independientes), suma de vectores y matrices, etc.
 
-Sin embargo, la programación paralela trae aparejados problemas que fueron resueltos en el paradigma secuencial hace tiempo, y parcialmente olvidados por la historia de la computación con el paso de los años.
+Sin embargo, la programación paralela trae aparejados inconvenientes que fueron resueltos en el paradigma secuencial en el pasado, y parcialmente olvidados por la historia de la computación con el paso de los años.
 Entre ellos encontramos a los problemas de concurrencia.
 Cuando diferentes procesadores trabajan sobre la misma memoria, deben programarse coherentemente los pasos, garantizando que el resultado sea el esperado.
 Los inconvenientes debidos a regiones críticas (elementos de memoria que pueden ser modificados por más de una línea de trabajo) se multiplican en la programación paralela, debido al número de procesos intervinientes.
@@ -261,9 +262,9 @@ Es por esto que muchas veces la programación debe ser modificada para atender e
 
 Otras limitaciones tienen su causa en el estado actual del hardware gráfico.
 Por ejemplo, la recursión aún no se permite en OpenCL, debido al posible consumo de memoria y registros en los procesadores, los cuales aún son limitados.
-Debido a la misma causa, otro problema lo constituye la imposibilidad de solicitar memoria de la placa en tiempo de ejecución.
+Debido a la misma causa, otro inconveniente lo constituye la imposibilidad de solicitar memoria de la placa en tiempo de ejecución.
 
-Por todos estos factores, la programación paralela en placas gráficas es aún dificultosa.
+Por todos estos factores, la programación paralela en placas gráficas resulta aún dificultosa.
 La elección de implementación de un algoritmo en GPU debe atender a la necesidad de un marcado crecimiento en la velocidad de ejecución del algoritmo en cuestión, y debe ser tomada teniendo en consideración todo lo expuesto aquí.
 
 \subsection{Comparación GPU-CPU}
@@ -271,14 +272,14 @@ El paradigma de programación introducido en este apéndice ha demostrado un cre
 La Fig.~\ref{fg:cpugpu} muestra curvas con la evolución de las capacidades de cómputo, en número de operaciones flotantes por segundo, de las CPU y las GPU.
 Puede observarse que las GPUs superan por mucho el poder computacional de sus CPUs contemporáneas.
 Esto debe ser tenido en cuenta en aplicaciones donde los tiempos de cómputo resulten críticos.
-Actualmente es imposible realizar una implementación de determinadas aplicaciones de tiempo real sin la tecnología GPU, y es por eso que en nuestra tesis hemos hecho hincapíé en esta tecnología.
+Actualmente resulta imposible proveer una implementación de determinadas aplicaciones de tiempo real sin la tecnología GPU, por lo que en la presente tesis se hizo hincapíé en esta tecnología.
 La implementación del modelo de iluminación DVR del capítulo de renderizado está basada en shaders, donde el cómputo resultó trivialmente paralelizable, resultando en un algoritmo de tiempo real.
 
 \begin{figure}[h]
 \begin{center}
 \includegraphics[width=12cm]{figures/cpugpu}
 \end{center}
-\caption[Comparación de velocidades de cómputo de la CPU y la GPU]{Comparación de velocidades de cómputo de la CPU y la GPU por medio del número de operaciones de punto flotante por segundo (FLOPS, fuente nVidia). La líneas verdes hacen referencia a las GPUs.}
+\caption[Comparación de velocidades de cómputo de la CPU y la GPU]{Comparación de velocidades de cómputo de la CPU y la GPU por medio del número de operaciones de punto flotante por segundo (FLOPS, fuente nVidia). La líneas verdes referencian las GPUs.}
 \label{fg:cpugpu}
 \end{figure}
 
@@ -290,8 +291,8 @@ Los hilos son l\'ogicamente agrupados en {\em bloques} y son enumerados con un \
 Los hilos dentro de un bloque se ejecutan en el mismo procesador.
 La cantidad de hilos en un bloque queda limitada por los recursos de memoria del procesador de la GPU. Los bloques presentan la misma organizaci\'on, siendo categorizados en {\em grillas}. 
 Por lo tanto se habla del bloque $j$ de una determinada grilla.
-La memoria total de la GPU es llamada memoria global. Cada hilo tiene su memoria local, s\'olo visible en ese thread.
-A su vez, un bloque tiene su memoria local, la cual es compartida por todos los hilos del mismo.
+La memoria total de la GPU se denomina memoria global. Cada hilo tiene su memoria local, s\'olo visible en ese thread.
+A su vez, un bloque tiene su memoria local, la cual se comparte por todos los hilos del mismo.
 Por \'ultimo, todos los hilos tienen acceso a la memoria {\em global} de la grilla.
 Adem\'as, est\'an presentes la memoria de texturas y la memoria constante, las cuales son de s\'olo lectura.
 Estas dos y la memoria global se preservan entre llamadas a {\em kernels} (ver siguiente secci\'on).
@@ -312,8 +313,8 @@ En un futuro otros lenguajes como {\em C++} y {\em FORTRAN} tambi\'en ser\'an so
 Existen dos formas de escribir programas CUDA: {\em C para CUDA} y la {\em API del driver de CUDA}.
 En el primer caso, se presenta como una extensi\'on a dicho lenguaje junto con un {\em runtime}.
 El programador debe escribir funciones a ser ejecutadas en la GPU llamadas {\em kernels}. 
-La principal diferencia con una funci\'on C convencional es que en lugar de ejecutarse secuencialmente, existen N hilos paralelos ejecutando N instancias de dicha funci\'on. 
-El creador del programa debe razonar el mismo como varios procesos a ejecutar en paralelo, los cuales unidos resuelven el problema.
+La principal diferencia con una funci\'on C convencional radica en el mecanismo de ejecución, ya que que en lugar de ejecutarse secuencialmente, existen N hilos paralelos ejecutando N instancias de dicha funci\'on. 
+El programador debe razonar la solución como varios procesos a ejecutarse en paralelo, los cuales unidos resuelven el problema.
 
 He aqu\'i un ejemplo de un kernel, el cual suma dos vectores:
 
@@ -328,7 +329,7 @@ __global__ void VecAdd(float* A, float* B, float* C)
 donde \_\_global\_\_ se usa para definir el kernel y denota el car\'acter global del mismo.
 La variable reservada threadIdx contiene el ID del thread dentro del bloque que ejecuta la operaci\'on actual, la misma puede tener m\'as de una dimensi\'on, aunque en este caso tiene una sola y por lo tanto se accede al miembro x de la misma.
 Para comprender el kernel, debe observarse que cada thread sumar\'a un s\'olo elemento del vector final.
-Ejecutar este kernel es tan sencillo como una llamada en C, con una salvedad: debe especificarse la cantidad de bloques por grilla (A) y la de hilos por bloque (B), bajo la sintaxis:
+Ejecutar este kernel resulta tan sencillo como una llamada en C, con una salvedad: debe especificarse la cantidad de bloques por grilla (A) y la de hilos por bloque (B), bajo la sintaxis:
 $$<<<A , B >>>$$
 
 \begin{verbatim}
@@ -343,11 +344,11 @@ int main() {
 \end{verbatim}
 
 
-El driver de CUDA es una API de un nivel de abstracci\'on m\'as bajo que el runtime.
+El driver de CUDA constituye una API de un nivel de abstracci\'on m\'as bajo que el runtime.
 De hecho, el runtime est\'a escrito sobre este API.
 Su idea principal consiste en utilizar assembler o c\'odigo binario CUDA en la placa, y poder ejecutarlo.
 Este c\'odigo se obtiene compilando un kernel.
-En este modo tenemos m\'as control sobre lo que ocurre en la GPU, pero tambi\'en es m\'as dificultosa la programaci\'on y el {\em debug} del c\'odigo.
+En este modo tenemos m\'as control sobre lo que ocurre en la GPU, pero tambi\'en resulta m\'as dificultosa la programaci\'on y el {\em debug} del c\'odigo.
 Ambos modos proveen m\'etodos para alojar memoria en la GPU, transferirla al CPU, manejar m\'ultiples GPU's, etc.
 C para CUDA tiene la opci\'on de emular dispositivos f\'isicos en ausencia de ellos, lo cual puede resultar \'util en caso de no estar los mismos presentes.
 
@@ -360,12 +361,12 @@ Por lo tanto, el esquema normal de trabajo del compilador consiste en separar c\
 El c\'odigo del host encontrado en este proceso debe luego ser compilado con un compilador C o bien nvcc puede invocar al mismo y luego producir c\'odigo objeto directamente.
 
 \paragraph{Bibliotecas: cuFFT, cuBLAS}
-nVidia ha desarrollado una serie de bibliotecas de uso general para acelerar los cómputos de problemas habituales.
+nVidia ha desarrollado una serie de bibliotecas de uso general para acelerar los cómputos de algoritmos habituales.
 
 La biblioteca cuFFT implementa algoritmos que permiten aplicar la transformada de Fourier directa e inversa a im\'agenes de una o m\'as dimensiones.
 Como su nombre lo indica, la biblioteca utiliza el algoritmo {\em fft}, fast fourier transform, útil en aplicaciones de procesamiento de imágenes.
 
-La biblioteca cuBLAS es una implementación en GPU de la biblioteca BLAS para cálculos de álgebra lineal.
+La biblioteca cuBLAS constituye una implementación en GPU de la biblioteca BLAS para cálculos de álgebra lineal.
 
 
 \subsection{OpenCL}
@@ -375,7 +376,7 @@ En primer lugar, debe considerarse que, a pesar que la creación de OpenCL está
 Es decir que OpenCL también puede ejecutarse en la CPU, por ejemplo.
 
 Debido a esto, los términos equivalentes a aquellos de CUDA, poseen nombres más abstractos.
-Cada procesador o placa gráfica que implementa el estándar es llamada {\em dispositivo} o device OpenCL. Cada dispositivo expone una cantidad de {\em unidades de cómputo}, o compute units. Estas unidades de cómputo son grupos de uno o más procesadores.
+Cada procesador o placa gráfica que implementa el estándar se denomina {\em dispositivo} o device OpenCL. Cada dispositivo expone una cantidad de {\em unidades de cómputo}, o compute units. Estas unidades de cómputo son grupos de uno o más procesadores.
 Los procesadores que forman parte de una unidad de cómputo son llamados {\em elementos
 de procesamiento} o processing elements.
 Todos los elementos de procesamiento dentro de una misma unidad de cómputo comparten recursos, como memoria y cache.
@@ -386,8 +387,8 @@ La memoria en OpenCL se organiza similarmente a la de CUDA, con tres niveles de 
 El término {\em kernel} refiere al trozo de código a ser ejecutado por una unidad de procesamiento, el cual está escrito en un lenguaje parecido a {\em C}.
 
 Cada kernel será ejecutado en un elemento de procesamiento.
-Un conjunto de kernels es agrupado en un grupo de trabajo, el cual es ejecutado en una {\em unidad de cómputo}.
-Dado que el código que se escribe es el mismo para todos los kernels, la diferenciación entre kernels se lleva a cabo por medio de las función reservada $get\_global\_id(0)$, la cual devuelve el kernel actual dentro de todos los kernels.
+Un conjunto de kernels se agrupa en un grupo de trabajo, el cual se ejecuta en una {\em unidad de cómputo}.
+Dado que el código que se escribe resulta el mismo para todos los kernels, la diferenciación entre kernels se lleva a cabo por medio de las función reservada $get\_global\_id(0)$, la cual devuelve el kernel actual dentro de todos los kernels.
 Existe un límite a la cantidad de kernels dentro de las unidades de trabajo, pero no a la cantidad de kernels total a ejecutarse.
 En caso de que la cantidad total de kernels exceda la capacidad de la GPU, ésta dividirá el trabajo, comenzando a ejecutar algunos grupos de ellos (grupos de trabajo), y una vez terminado esto, ejecutará los siguientes grupos.
 
@@ -411,9 +412,9 @@ cl.enqueue_read_buffer(queue, dest_buf, buf).wait()
 \end{verbatim}
 
 donde $kernel\_code$ es un código arbitrario OpenCL.
-Un ejemplo de código real OpenCL puede verse a continuación, donde se suman dos arreglos aleatorios $a\_{np}$ y $b\_{np}$. El resultado final es copiado al arreglo en CPU $res\_np$ y mostrado por pantalla en la última línea de código.
+Un ejemplo de código real OpenCL puede verse a continuación, donde se suman dos arreglos aleatorios $a\_{np}$ y $b\_{np}$. El resultado final se copia al arreglo en CPU $res\_np$ y mostrado por pantalla en la última línea de código.
 Los kernels que se ejecutan en la GPU, en paralelo, toman dos arreglos globales de entrada $a\_g$ y $b\_g$, y un arreglo global con el resultado $res\_g$.
-Utilizando el identificador global $gid$, es posible diferenciar el kernel ejecutándose, y por lo tanto el identificador se utiliza como índice en el arreglo resultante, y en los arreglos de entrada, garantizando que a la misma posición en el arreglo de entrada le corresponde la de salida.
+El identificador global $gid$ permite diferenciar el kernel ejecutándose, por lo cual el identificador se utiliza como índice en el arreglo resultante, y en los arreglos de entrada, garantizando que las posiciones en el arreglo de entrada y salida son las mismas.
 El orden exacto de ejecución corresponde a la GPU, y el programador no debe preocuparse.
 Sólo debe tenerse en cuenta la consideración previa, es decir, garantizar la coherencia de los resultados.
 
@@ -463,7 +464,7 @@ Como fue demostrado, además de su utilización en la producción de películas,
 Este es el caso de física, finanzas, procesamiento de audio y video, astronomía y determinadas ramas de la computación (por ejemplo aprendizaje automatizado, o big data), donde complejas simulaciones tienen lugar en tiempos más acotados gracias a esta nueva herramienta.
 
 En la presente tesis, el poder de la placa gráfica se ha utilizado sobre todo en el cómputo de la aproximación de la ecuación RTE, obteniendo tasas de refresco en tiempo real.
-No sólo su utilización fue de gran ayuda, sino que es indispensable para cualquier algoritmo gráfico moderno el poder ejecutarse en las mismas si se pretenden alcanzar tiempos interactivos.
+No sólo su utilización fue de gran ayuda, sino que resulta indispensable para cualquier algoritmo gráfico moderno el poder ejecutarse en las mismas si se pretenden alcanzar tiempos interactivos.
 
 Además, se presentó la librería {\em imfractal} en \cite{Baravalle2013}, donde se aceleraron en GPU algunos de los algoritmos útiles para el cómputo de DFs.
 Finalmente, se utilizó la GPU para realizar comparaciones en el trabajo presentado en \cite{Baravalle2014_2}
