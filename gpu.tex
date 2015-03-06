@@ -44,8 +44,8 @@ Es decir, la GPU {\em presta} sus capacidades de cómputo al CPU, atendiendo un 
 
 Debido a que los CPUs encontraron un límite físico en la velocidad que podían alcanzar (unos cuantos gigahertz o GHz), la aparición de las GPUs permitió, en el ámbito hogareño y empresarial (entre otros), seguir incrementando los TeraFlops\footnote{Unidad de medida, 1 TeraFlop = $10^{12}$ intrucciones de coma flotante por segundo.}, de manera similar a la utilización de un clúster o de microprocesadores de varios núcleos, aunque estos últimos no han podido alcanzar la velocidad de las GPUs modernas.
 
-El principal inconveniente de la metodología GPGPU constituye la copia de memoria desde y hacia la placa, lo cual puede resultar muy costoso.
-Debido a esto, en los últimos años se han desarrollado modelos de memoria unificada, donde la CPU y la GPU compartirán la memoria.
+El principal inconveniente de la metodología GPGPU lo constituye la copia de memoria desde y hacia la placa, lo cual puede resultar muy costoso.
+Debido a esto, en los últimos años se han desarrollado modelos GPGPU de memoria unificada, donde la CPU y la GPU comparten la memoria.
 
 
 % las placas gr\'aficas acabar\'an por reemplazar a los CPU's existentes hoy en d\'ia. A continuaci\'on se presentan dos ejemplos de las tecnolog\'ias mencionadas.
@@ -53,16 +53,16 @@ Debido a esto, en los últimos años se han desarrollado modelos de memoria unif
 
 \section{El lenguaje GLSL}
 La principal ventaja en la utilización de la GPU por sobre la CPU tradicional en aplicaciones gráficas, está constituída por la {\em velocidad}.
-La CPU delega las operaciones gr\'aficas hacia el hardware gr\'afico programable, el cual realizar\'a el procesamiento en un marco especializado, quedando as\'i liberado el primero para realizar tareas m\'as acordes con el procesamiento general de los programas.
-Esto implica entonces una tarea conjunta entre CPU y GPU.
+La CPU delega las operaciones gr\'aficas hacia el hardware secundario programable, el cual realizar\'a el procesamiento en un marco especializado, liberándose el primero para realizar tareas de cómputo general.
+Esto implica entonces una labor conjunta entre CPU y GPU.
 
 
-\subsection{El pipeline Gr\'afico y GLSL}
-As\'i como la CPU, la GPU posee un {\em pipeline}, esto es, una secuencia ordenada de pasos que debe cumplir cada instrucci\'on de procesamiento.
-En primer lugar, la CPU se comunica con la GPU enviándole información gráfica para ser procesada.
-Esto consiste generalmente de una escena descompuesta en triángulos, pero además existen otros datos como las texturas a ser aplicadas, los cuales también son provistos.
-En la GPU, de manera análoga a la CPU, se cuenta con una unidad de procesamiento y una unidad de memoria.
-A diferencia del CPU, la arquitectura de la misma presenta una memoria estratificada, y un diseño paralelo de la unidad de procesamiento.
+\subsection{El pipeline Gráfico y GLSL}
+La GPU presenta un {\em pipeline} de ejecución (al igual que la CPU), esto es, una secuencia ordenada de pasos que debe cumplir cada instrucci\'on de procesamiento.
+En primer lugar, la CPU se comunica con la GPU enviándole información de una escena para ser procesada.
+La misma está constituída generalmente por triángulos, pero además existen otros datos como las texturas de los materiales, y datos del entorno (color y posición de las fuentes de luz, etc.).
+La GPU cuenta, de manera análoga a la CPU, con una unidad de procesamiento y una unidad de memoria.
+A diferencia de la CPU, la arquitectura de la misma presenta una memoria estratificada, y un diseño paralelo de la unidad de procesamiento.
 
 Cada procesador en la GPU cuenta con una memoria propia (local).
 Los procesadores se organizan en grupos, los cuales contienen una memoria para el grupo.
@@ -70,16 +70,22 @@ Finalmente, existe una memoria global, la cual permite la comunicación entre to
 Los accesos a las distintas memorias tienen distintos costos.
 La memoria global es la más costosa, computacionalmente, siendo la memoria propia de cada procesador la más rápida.
 
-La GPU recibe los datos desde la CPU y comienza su procesamiento.
-Luego del procesamiento, los resultados son volcados en una memoria especial del GPU, denominada {\em framebuffer}, el cual es el puente entre la placa de video y el monitor.
-Este es el escenario típico, excepto en los casos de GPGPU, donde la placa se utiliza para otros propósitos, y por lo tanto los resultados no son imágenes.
-Una vez que se cuenta con los vértices, líneas, triángulos, texturas, etc. a ser renderizados, debe transformarse la información tridimensional en información bidimensional para ser representada en la pantalla del monitor.
+La GPU comienza el procesamiento una vez recibidos los datos: vértices, líneas, triángulos, texturas, etc. a ser renderizados.
+El procesamiento debe transformar la información tridimensional en información bidimensional para ser representada en la pantalla del monitor.
 La secuencia t\'ipica de procesamiento de la GPU est\'a ordenada de la siguiente manera:
 \begin{itemize}
-\item Procesamiento de V\'ertices: los v\'ertices de los objetos de una escena llegan desde el programa. Este es el primer momento en el que interviene GLSL. Se da lugar entonces a la transformaci\'on personalizada por el programador sobre los mismos. Este tipo de transformaciones son las usuales sobre los v\'ertices: rotaci\'on, desplazamiento, etc.
-\item Ensamblamiento (generación de primitivas): en este paso estos v\'ertices transformados son unidos para formar l\'ineas, puntos y tri\'angulos, mediante la informaci\'on que llega desde el programa junto con los v\'ertices. Luego, se realizan los procesos de {\em clipping}: eliminaci\'on de partes de objetos que por su posici\'on no aparecer\'an en pantalla; y {\em culling}: eliminaci\'on de superficies no visibles, puesto que est\'an detr\'as de otras superficies desde el punto de vista de la c\'amara. Aquellas partes que pasan estos filtros, son luego {\em rasterizadas}, esto es, {\em asociadas} a posiciones en pantalla; puntos, l\'ineas y tri\'angulos pasan entonces a tener una posici\'on determinada, este proceso se conoce como {\em conversi\'on scan}. Es as\'i que se generan los denominados {\em fragmentos}, los cuales pueden definirse como ``candidatos a ser p\'ixeles'': aquellos fragmentos que pasen filtros posteriores se convertir\'an en p\'ixeles que ser\'an representados en pantalla. Puede haber numerosos fragmentos que compitan por ser un p\'ixel. Es en este momento que GLSL hace su segunda aparici\'on, el programador decide entonces c\'omo quiere generar los fragmentos.
-\item Rasterización e Interpolaci\'on: en esta etapa, los diferentes atributos de los fragmentos generados en la etapa previa son {\em interpolados} (por ejemplo el color, la posición, etc.).
-\item Pruebas y combinación: en esta \'ultima etapa se llevan a cabo una serie de pruebas sobre cada fragmento. Si alguno falla, el fragmento es descartado, de lo contrario el color del fragmento actualizar\'a el color del p\'ixel correspondiente. Un fragmento podr\'ia no sobrevivir a esta etapa porque debido a su profundidad queda detr\'as de otro fragmento.
+\item Procesamiento de V\'ertices: los v\'ertices de los objetos de una escena son transformados (rotación, desplazamiento, escala, etc.).
+En este punto es posible programar el comportamiento de las transformaciones, por medio de un programa denominado shader de vértices.
+\item Ensamblamiento (generación de primitivas): los v\'ertices transformados se unen para formar primitivas: l\'ineas, tri\'angulos, etc., mediante la informaci\'on que aporta la CPU.
+Además, se realizan los procesos de {\em clipping}: eliminaci\'on de partes de objetos que por su posici\'on no aparecer\'an en pantalla; y {\em culling}: eliminaci\'on de superficies no visibles, puesto que est\'an detr\'as de otras superficies desde el punto de vista de la c\'amara.
+\item Rasterización e Interpolaci\'on: se {\em rasterizan} (se {\em asocian} a posiciones en pantalla) y se {\em interpolan} los diferentes atributos de las primitivas, en el sub-espacio de clipping, generadas en la etapa previa (por ejemplo el color, la posición, etc.).
+Este proceso se conoce como {\em conversi\'on scan}.
+Durante la misma se generan {\em fragmentos}, los cuales pueden definirse informalmente como ``candidatos a ser p\'ixeles'', debido a que una posición en pantalla puede asociarse a más de un fragmento.
+\item Procesamiento de Fragmentos: en este punto se aporta un programa que indica cómo deben procesarse los fragmentos.
+Es posible realizar diversas tareas: cómputos de iluminación, sombras, etc.
+\item Pruebas y combinación: en esta \'ultima etapa se llevan a cabo una serie de pruebas sobre cada fragmento procesado.
+Si el fragmento las supera, el color de éste actualizará el color del píxel correspondiente en pantalla.
+Un fragmento podría ser descartado en esta etapa debido, por ejemplo, a que su profundidad queda detrás de otro fragmento.
 \end{itemize}
 
 En la GPU existen dos componentes llamados {\em procesador de v\'ertices programable} y {\em procesador de fragmentos programable}, los cuales se encargan de ejecutar los programas GLSL escritos por el programador, respectivamente llamados {\em Vertex Shader} y {\em Fragment Shader}.
@@ -92,31 +98,23 @@ En la GPU existen dos componentes llamados {\em procesador de v\'ertices program
 \label{fg:pipelinegrafico}
 \end{figure}
 
+Finalizados los cómputos, se vuelcan los resultados en una memoria especial de la GPU, denominada {\em framebuffer}, el cual es el dispositivo mediador entre la placa de video y el monitor.
 
-\subsection{C\'omo usar GLSL en aplicaciones gr\'aficas}
-%Cg ofrece una biblioteca conocida como su {\em runtime}. Bibliotecas como {\em OpenGL} o {\em Direct3D} deben comunicarse con el mismo para obtener los servicios que necesitan. Como componente del runtime, Cg posee un {\em compilador}, el cual traduce el c\'odigo Cg a alguno de los {\em Perfiles} existentes.
-OpenGL incluye desde su versión $2.0$ una integración directa con el lenguaje, por lo que es posible programar los distintos shaders de manera transparente, es decir, sin necesidad de compilar o enlazar el código resultante, como sí ocurre en lenguajes rivales como Cg.
+La secuencia explicada constituye el escenario típico de procesamiento de una GPU, excepto en los casos de GPGPU, donde la placa se utiliza para otros propósitos.
+De hecho, los resultados de GPGPU no son imágenes, como se explicará más adelante.
 
-Como posible limitación, debe tenerse en cuenta la capacidad de la placa donde se correrá el programa.
-Por ejemplo, determinadas placas no permiten bucles en el shader de fragmentos, o tienen un límite en el número de texturas que soportan, debido a limitaciones de hardware.
-Para agrupar distintas tecnologías en un estándar, se definieron {\em perfiles}.
 
-Un perfil es una combinaci\'on de las capacidades que otorgan la biblioteca y la GPU que poseemos para ejecutar los programas. Los perfiles en definitiva establecen limitaciones a lo que podemos lograr con un programa GLSL. Es as\'i que al compilar para un perfil determinado debemos tener en cuenta las restricciones del mismo. Sin embargo, la r\'apida evoluci\'on del hardware gr\'afico hace que las restricciones sean cada vez menores.
-
-%Existen adem\'as dos bibliotecas que se encargan de tomar el programa traducido por el compilador Cg y pasarlo a la biblioteca gr\'afica que estamos utilizando: {\em cgGL} (OpenGL) y {\em cgD3D} (Direct3D). Este c\'odigo traducido es tomado por alguna biblioteca gr\'afica la cual luego se encargar\'a de que el mismo corra en la GPU.
-
-%Antes de la aparici\'on de lenguajes como GLSL, el programador que pretend\'ia tener un cierto control sobre c\'omo renderizar una escena, deb\'ia programar directamente el assembler de la placa gr\'afica correspondiente. Esto supone una p\'erdida de generalidad, puesto que debe hacerse un programa distinto para cada placa que pretenda usarse, adem\'as de un conocimiento preciso sobre el juego de instrucciones y el funcionamiento de cada placa. Con Cg, el programador se abstrae de todo esto. 
-
-\subsection{Caracter\'isticas de GLSL - Generalidades}
+\subsection{Características de GLSL}
 Presentamos un breve resumen de las pricipales caracter\'isticas del lenguaje.
 Como fue previamente mencionado, existen dos tipos de programas en GLSL, siendo sus nombres {\em Shader de Vértices} y {\em Shader de Fragmentos} respectivamente.
 
-La manera de definir qué se dibujará en pantalla dentro del pipeline de OpenGL 2.0+  es a través de atributos de vértices y elementos. 
+La especificación de las primitivas a dibujar, dentro del pipeline de OpenGL 2.0+, se define por medio de {\em atributos} de vértices y {\em elementos}. 
 
 
 Los \emph{atributos} son, como su nombre lo indica, atributos o propiedades de un vértice. El significado se los dará el uso.
 Un atributo a considerar es la posición de cada vértice.
-Otros atributos comunes serán : normales, colores y coordenadas de texturas.
+Otros atributos comunes están representados por las normales, los colores y las coordenadas de texturas.
+
 Los \emph{elementos} son figuras geométricas (lineas, triángulos, cuadrados) que se forman a partir de unir los vértices definidos por los atributos, ver Fig.~\ref{fg:atributos}.
 
 \begin{figure}[h]
@@ -127,29 +125,28 @@ Los \emph{elementos} son figuras geométricas (lineas, triángulos, cuadrados) q
 \label{fg:atributos}
 \end{figure}
 
-La funci\'on del shader de vértices es tomar los v\'ertices que llegan desde la aplicaci\'on gr\'afica, transformarlos y pasarlos al siguiente eslab\'on del procesamiento.
+Como fue previamente explicado, la funci\'on del shader de vértices es transformar los v\'ertices de la escena.
 De manera simplificada, este shader recibe como entrada la posici\'on del v\'ertice en la escena, y terminada la ejecuci\'on devolver\'a el v\'ertice con su posici\'on modificada.
-Tambi\'en podr\'ia devolver el color y otros valores \'utiles que se puedan necesitar m\'as adelante.
-Estos programas usan los atributos como entrada, asi como otras constantes llamadas \emph{uniformes} para definir la posición final en espacio de clipping (el sub-espacio, proyectado, que dibujará la GPU) de cada vértice.
+Tambi\'en podr\'ia devolver el color y otros valores \'utiles que se puedan necesitar en otros pasos de la secuencia de ejecución.
+Estos programas reciben los atributos como entrada, asi como otras constantes llamadas \emph{uniformes}, para definir la posición final en espacio de clipping (el sub-espacio, proyectado, que dibujará la GPU) de cada vértice.
 Los valores \emph{uniformes} pueden ser por ejemplo las matrices de proyección y del modelo o matrices de transformación de normales. 
 
 La Fig.~\ref{fg:vertexshader} muestra un ejemplo de un shader de vértices junto a atributos de ejemplo.
-El programa que puede observarse en la figura transforma el vértice de manera estándar utilizando las matriz de modelviewproj (modelo, vista, proyección), la cual es provista como un uniforme desde la CPU.
+El programa de la figura transforma vértices de manera estándar utilizando las matriz {\em modelviewproj} (modelo, vista, proyección), la cual es provista como dos uniformes desde la CPU (uPMatrix y uMVMatrix, las cuales se multiplican).
 Los atributos intervinientes son el color y la posición del vértice.
-La imagen muestra además que la variable gl\_Position es la salida del programa, la cual tiene coordenadas del espacio de clipping (entre $[-1,-1,-1]$ y $[1,1,1]$).
+La imagen muestra además que la variable gl\_Position es la salida del programa, la cual posee coordenadas en el espacio de clipping (entre $[-1,-1,-1]$ y $[1,1,1]$).
 
 \begin{figure}[h]
 \begin{center}
 \includegraphics[width=13cm]{figures/vertexshader}
 \end{center}
-\caption{Atributos y elementos, junto a un ejemplo de shader de vértices en GLSL.}
+\caption[Atributos y elementos, junto a un ejemplo de shader de vértices en GLSL.]{Atributos y elementos, junto a un ejemplo de shader de vértices en GLSL. Este shader de vértices transforma los vértices en el espacio al espacio del objeto y luego del observador (uMVMatrix). Finalmente realiza una proyección de los mismos sobre el espacio de clipping (uPMatrix).}
 \label{fg:vertexshader}
 \end{figure}
 
 Una vez que todos los shaders de vértices realizaron sus cómputos, debe procederse a la rasterización, es decir se calcula su posición final en la pantalla a partir de la información del tamaño de la imagen final requerida.
-Cada elemento (triángulo, linea, cuadrado) se convierte en una grupo de pixeles (llamado fragmento) que posiblemente se pintará en la pantalla.
+Cada elemento (triángulo, linea, cuadrado) se convierte en una grupo de pixeles (llamado fragmento) que posiblemente se dibujará en la pantalla.
 Este proceso puede observarse en la Fig.~\ref{fg:raster}, y a diferencia del shader de vértices, no es programable.
-Es decir que está implementado en hardware por la placa gráfica y no es posible su modificación.
 
 
 \begin{figure}[h]
@@ -160,115 +157,85 @@ Es decir que está implementado en hardware por la placa gráfica y no es posibl
 \label{fg:raster}
 \end{figure}
 
-Finalmente, para calcular el color de cada pixel en pantalla, se le pasa al pipeline un pequeño programa llamado \emph{shader de fragmentos} que calcula el color de cada pixel (o fragmento) que ocupa un elemento (triángulo, linea, cuadrado) individualmente.
-Para computar el color final de cada píxel, se pueden pasar \emph{uniformes} al igual que a los \emph{shaders de vértices} y también se pueden pasar valores de un \emph{shader de vértices} a un \emph{shader de fragmentos}.
-Los valores calculados para cada vértice se interpolan de acuerdo a la distancia al vértice del pixel cuyo color se está calculando.
-Estos valores que pasan de un \emph{shader} a otro se declaran como \emph{varying} dentro de ambos.
+Finalmente, para calcular el color de cada pixel en pantalla, se utiliza un programa llamado \emph{shader de fragmentos} que calcula el color de cada pixel (o fragmento) que ocupa un elemento (triángulo, linea, cuadrado) individualmente.
+Para computar el color final de cada píxel se utilizan \emph{uniformes}, y valores interpolados desde un \emph{shader de vértices}.
+Los valores que el programador especifica para ser interpolados se declaran como \emph{varying} en el código de ambos shaders.
 La Fig.~\ref{fg:fragmentshader} muestra un ejemplo de la utilización de un varying para computar el color interpolado de un triángulo.
+La Fig.~\ref{fg:interpolation} muestra el resultado de esta operación.
 
 
 \begin{figure}[h]
 \begin{center}
 \includegraphics[width=13cm]{figures/fragmentshader}
 \end{center}
-\caption{Ejemplo de paso de datos del shader de vértices al shader de fragmentos.}
+\caption{Ejemplo de comunicación de datos del shader de vértices al shader de fragmentos. El valor vColor se interpola entre los vértices para producir valores para los fragmentos.}
 \label{fg:fragmentshader}
 \end{figure}
-
-La Fig.~\ref{fg:interpolation} muestra el resultado de esta operación.
 
 \begin{figure}[h]
 \begin{center}
 \includegraphics[width=8cm]{figures/interpolation}
 \end{center}
-\caption{Interpolación automática de colores en la GPU.}
+\caption[Interpolación automática de colores en la GPU.]{Interpolación automática de colores en la GPU. En la imagen se observan tres vértices de diferente color, junto con el resultado de la rasterización e interpolación de los mismos.}
 \label{fg:interpolation}
 \end{figure}
 
-
-
-%Aquella informaci\'on que reciba como entrada debe presentar una {\em sem\'antica} asociada.
-%Las {\em sem\'anticas} hacen que un elemento del programa cobre una significaci\'on especial, como puede ser la posici\'on, el color o una coordenada de una textura.
-%Un ejemplo de código GLSL definiento un atributo es: 
-%\begin{verbatim}
-%attribute vec3 aVertexPosition;
-%\end{verbatim}
-%Indicando en este caso que la variable aVertexPosition hace referencia al atributo de posición en el espacio del vértice procesado.
-
-%La sem\'antica es la palabra en may\'usculas que aparece despu\'es de los dos puntos. Aquella informaci\'on que devuelva el programa debe llevar la palabra clave {\em out}, la cual representa tambi\'en una sem\'antica. Es as\'i que {\em out} indica que ese elemento representa una salida del programa. He aqu\'i un ejemplo:
-
-%\begin{verbatim}
-%out float4 oPosition     : POSITION,
-%\end{verbatim}
-
 Similarmente, el shader de fragmentos tene par\'ametros de entrada y salida.
-Generalmente recibe el color interpolado por la etapa previa, tambi\'en puede recibir informaci\'on sobre texturas, codificada como coordenadas en las mismas. 
-
-%Aqu\'i se presenta un ejemplo de las sem\'anticas:
-
-%\begin{verbatim}
-%float4 color 	 : COLOR
-%float2 texCoord  : TEXCOORD0
-%\end{verbatim}
-
-%Indicando que las variables {\em color} y {\em texCoord} son par\'ametros de entrada. El cero al final del nombre de la segunda sem\'antica indica que nos referimos al primer par de coordenadas que se pueden recibir. Existen varios m\'as, dependiendo del perfil para el que se compile. 
+Generalmente recibe el color interpolado por la etapa previa, pero tambi\'en puede recibir informaci\'on sobre texturas. 
 
 A diferencia del shader de vértices, el shader de fragmentos devuelve un único elemento luego de realizar el procesamiento: el {\em color} (excepto en algunos casos específicos, como devolver la profundidad del objeto para cálculo de sombras).
 Esta salida representa el color que, de pasar las diversas pruebas, tomar\'a el p\'ixel en pantalla.
 
-Como fue dicho, existe otro tipo de objetos de entrada, los cuales llevan la palabra {\em uniform}. Los mismos representan objetos que son recibidos por el shader desde la aplicaci\'on.
-%El principal atractivo de este tipo de objetos es hacer interactivos a los shaders, es decir, que desde la aplicaci\'on el usuario puede configurar valores que ser\'an utilizados en los shaders.
+\subsection{M\'as sobre el lenguaje}
+\paragraph{Integración}
+OpenGL incluye desde su versión 2.0 una integración directa con el lenguaje, por lo que es posible programar los distintos shaders de manera transparente, es decir, sin necesidad de compilar o enlazar el código resultante, como sí ocurre en lenguajes rivales como Cg.
 
-%\subsubsection{Tipos de Datos}
-%Presentes en Cg est\'an los tipos de datos conocidos: {\em int}, {\em float}, y otros menos conocidos como {\em half} (punto flotante de menor precisi\'on, el cual es usado por eficiencia, puesto que requiere menor cantidad de recursos), as\'i como {\em arreglos}.
+Como posible limitación, debe tenerse en cuenta la capacidad de la placa donde se correrá el programa.
+Debido a limitaciones de hardware, determinadas placas no permiten bucles en el shader de fragmentos, o tienen un límite en el número de texturas que soportan.
+Para agrupar distintas categorías de placas (o capacidades de cómputo), se definieron {\em versiones}.
 
-Al tener un enfoque gr\'afico, el lenguaje presenta tipos de datos de primer orden diferentes de lenguajes como C. Ejemplo de esto son los {\em vectores} y las {\em matrices}. Como se ha visto, GLSL tiene palabras reservadas para estos tipos de datos.
+Las versiones establecen limitaciones a lo que es posible lograr con un programa GLSL.
+Es as\'i que un código GLSL en una versión determinada debe tener en cuenta las restricciones del mismo.
+Sin embargo, la r\'apida evoluci\'on del hardware gr\'afico provoca que las restricciones sean cada vez menores.
+
+\paragraph{Tipos de datos}
+Al tener un enfoque gr\'afico, el lenguaje presenta tipos de datos de primer orden diferentes de lenguajes como C. Ejemplo de esto son los {\em vectores} y las {\em matrices}.
+GLSL tiene palabras reservadas para estos tipos de datos.
 \begin{verbatim}
 float f;
 int a[4];
 float2 v;
 mat4 m;
 \end{verbatim}
-Aqu\'i se definen un flotante (f), un array de cuatro elementos enteros (a), un vector con dos componentes flotantes (v) y una matriz de 16 elementos de tipo flotante (m).
+Aqu\'i se definen un flotante (f), un arreglo de cuatro elementos enteros (a), un vector con dos componentes flotantes (v) y una matriz de 16 elementos de tipo flotante (m).
 La diferencia entre un arreglo y un vector generalmente responde a la eficiencia.
 
-Otros tipos de datos son los llamados {\em samplers}. Estos representan objetos externos a GLSL, como por ejemplo una textura.
+Otros tipos de datos son los llamados {\em samplers}, los cuales se especifican como {\em uniforms}. Estos representan objetos externos a GLSL, como por ejemplo una textura.
 Existen distintos tipos de samplers: {\em sampler1D}, {\em sampler2D} y {\em sampler3D}, representando respectivamente, objetos de una, dos y tres dimensiones. Tambi\'en tipos especiales como {\em samplerCUBE} (utilizado para t\'ecnicas como mapeo de entornos, {\em environment mapping}) y {\em samplerRECT} (permite dimensiones de samplers que no son potencias de dos).
 
-%Un ejemplo de uso es el siguiente:
-
-%\begin{verbatim}
-%function f(	float2 texCoord : TEXCOORD0, uniform sampler2D decal)
-%{
-%    tex2D(decal, texCoord);
-%}
-%\end{verbatim}
-
-%La rutina tex2D consulta el objeto decal, en las coordenadas especificadas en texCoord, las cuales llegan como par\'ametro al programa. Este constituye un ejemplo t\'ipico de {\em texture mapping}.
-
-\subsection{M\'as sobre el lenguaje}
-Existe una biblioteca est\'andar que contiene funciones muy \'utiles para el programador. La misma presenta funciones para realizar c\'alculos usuales como m\'aximos, m\'inimos, redondeos, seno, coseno, valores absolutos; y se le suman funciones para el trabajo con vectores, matrices y texturas, como {\em producto escalar}, {\em producto vectorial}, multiplicaci\'on de matrices, multiplicaci\'on de matriz y vector (y viceversa), obtenci\'on del valor de {\em texels} (como se ha visto).
+Existe una biblioteca est\'andar que contiene funciones muy \'utiles para el programador. La misma presenta funciones para realizar c\'alculos usuales como m\'aximos, m\'inimos, redondeos, seno, coseno, valores absolutos; y se le suman funciones para el trabajo con vectores, matrices y texturas, como {\em producto escalar}, {\em producto vectorial}, multiplicaci\'on de matrices, multiplicaci\'on de matriz y vector (y viceversa), etc.
 
 El lenguaje utiliza {\em funciones} de la manera usual y con sintaxis similar a C.
 Tambi\'en posee una funci\'on {\em principal} que se comporta como {\em main} en C.
 La misma se especifica en la aplicaci\'on gr\'afica al crear una instancia de un programa GLSL, la cual entonces representa el punto de entrada al programa.
-Tambi\'en se tienen estructuras de control usuales, como bucles {\em for} y {\em while}, aunque con determinadas restricciones dependiendo del perfil.
+Se cuenta con estructuras de control usuales, como bucles {\em for} y {\em while}, aunque con determinadas restricciones dependiendo de la versión.
 
-Se presentan a continuaci\'on las bases del c\'alculo de prop\'osito general en la GPU, a diferencia de los lenguajes de shader, que est\'an dise\~nados para utilizarse \'unicamente con fines gr\'aficos.
+Se presenta a continuaci\'on el cómputo de prop\'osito general en la GPU, GPGPU, el cual difiere de los lenguajes de shader, ya que éstos est\'an dise\~nados para utilizarse \'unicamente con fines gr\'aficos.
 
 \section{GPGPU: CUDA y OpenCL}
 
 \subsection{Introducción}
-Como fue discutido, la capacidad de procesamiento de las placas gr\'aficas ha ido evolucionado de manera vertiginosa, disponiendo de un n\'umero de procesadores en aumento.
-Adem\'as, la velocidad de transmisi\'on de datos en su propia memoria tambi\'en es mucho mayor a la de un CPU tradicional.
+Como fue discutido, la capacidad de procesamiento de las placas gr\'aficas evolucionó de manera vertiginosa.
+La velocidad de transmisi\'on de datos en su memoria interna tambi\'en sufrió una marcada aceleración, superando a memorias tradicionales CPU.
 Esto ocurre porque la CPU debe dedicar parte de su poder a control de flujo y {\em cacheo} de datos.
-En contraposici\'on la GPU est\'a dise\~nada para resolver problemas en paralelo; se debe aplicar el mismo programa a cada dato (instrucción simple, múltiples datos; Single Instruction, Multiple Data o \acrshort{SIMD}) por lo cual el control de flujo es menos necesario.
-Por estas razones, no es descabellado comenzar a pensar en utilizar la misma ya no como un dispositivo orientado \'unicamente a procesamiento de gr\'aficos, sino uno de procesamiento general.
+En contraposici\'on, la GPU est\'a dise\~nada para resolver problemas en paralelo; se debe aplicar el mismo programa a cada dato (instrucción simple, múltiples datos; Single Instruction, Multiple Data o \acrshort{SIMD}) por lo cual el control de flujo resulta menos necesario.
+
+Debido a estas consideraciones, determinadas compañías decidieron aprovechar la misma como un dispositivo de procesamiento general, más económico que otras soluciones de alto desempeño (por ejemplo, clústers).
 
 
 Una de las primeras librerías fue desarrollada por la empresa NVIDIA: \acrshort{CUDA} (siglas en ingl\'es de Compute Unified Device Architecture), una arquitectura de computaci\'on paralela de prop\'osito general para placas NVIDIA.
-Además, el Khronos Group realiza la primera especificación del estándar abierto OpenCL \cite{Stone2010}.
-El mismo representa un intento de que la computación paralela de propósito general (GPGPU) sea abierta y pueda implementarse en cualquier procesador.
+Además, el Khronos Group realizó la primera especificación del estándar abierto OpenCL \cite{Stone2010}.
+El mismo representa un intento de apertura de la computación paralela de propósito general (GPGPU), permitiendo implementarse en cualquier procesador.
 
 \subsection{Paradigma de Programación OpenCL}
 Deben tenerse en cuenta ciertas consideraciones al implementar algoritmos en OpenCL y CUDA.
@@ -276,16 +243,17 @@ En primer lugar, asistimos a un paradigma diferente al usual, ya que el cómputo
 Esto implica diversos cambios en la forma de programar una solución a un problema dado.
 
 En su versión más simple, un programa secuencial es {\em trivialmente} paralelizable, si el cómputo es independiente para cada unidad del programa a ejecutar en cada procesador.
-De esta forma, sólo debe chequearse la coherencia de los resultados, en otras palabras, si por ejemplo sumamos dos arreglos, los índices en los arreglos de entrada que se suman se corresponda al índice correcto en el arreglo de salida.
+De esta forma, sólo debe chequearse la coherencia de los resultados, en otras palabras, si por ejemplo sumamos dos arreglos, los índices en los arreglos de entrada que se suman se correspondan a los índices correctos en el arreglo de salida.
 Para esto, las bibliotecas mencionadas tienen mecanismos de identificación global para cada hilo en ejecución.
 Entre los algoritmos trivialmente paralelizables encontramos aquellos que utilizan shaders (cómputos sobre vértices y píxeles independientes), suma de vectores y matrices, etc.
 
 Sin embargo, la programación paralela trae aparejados problemas que fueron resueltos en el paradigma secuencial hace tiempo, y parcialmente olvidados por la historia de la computación con el paso de los años.
 Entre ellos encontramos a los problemas de concurrencia.
-Cuando diferentes procesadores trabajan sobre la misma memoria, deben programarse coherentemente los pasos, de tal forma de que el resultado sea el esperado.
-Los problemas por regiones críticas (elementos de memoria que pueden ser modificados por más de una línea de trabajo) se multiplican en la programación paralela debido al número de procesos intervinientes.
+Cuando diferentes procesadores trabajan sobre la misma memoria, deben programarse coherentemente los pasos, garantizando que el resultado sea el esperado.
+Los inconvenientes debidos a regiones críticas (elementos de memoria que pueden ser modificados por más de una línea de trabajo) se multiplican en la programación paralela, debido al número de procesos intervinientes.
 
-Además de estas consideraciones, se encuentran otras dificultades inesperadas, como por ejemplo la utilización de condicionales (if), ya que, al ejecutar distintas ramas de un if, es posible perder mucha eficiencia.
+Surgen además otras dificultades inesperadas.
+Por ejemplo, la utilización de condicionales (if), ya que al ejecutar distintas ramas de un if, se produce pérdida de eficiencia.
 Esto se debe a las diferencias de velocidad que pueden existir en las ejecuciones de distintas ramas de los condicionales.
 Cuando la cantidad de trabajo supera la cantidad de procesadores, los procesos deben terminar al mismo tiempo su cómputo para poder proseguir con el siguiente grupo de procesos.
 Esto significa que el proceso más lento del grupo define la velocidad máxima que puede alcanzar el conjunto.
@@ -296,15 +264,15 @@ Por ejemplo, la recursión aún no se permite en OpenCL, debido al posible consu
 Debido a la misma causa, otro problema lo constituye la imposibilidad de solicitar memoria de la placa en tiempo de ejecución.
 
 Por todos estos factores, la programación paralela en placas gráficas es aún dificultosa.
-La elección de programación en GPU debe atender a la necesidad de un marcado crecimiento en la velocidad de ejecución del algoritmo en cuestión, y debe ser tomada teniendo en consideración todo lo expuesto aquí.
+La elección de implementación de un algoritmo en GPU debe atender a la necesidad de un marcado crecimiento en la velocidad de ejecución del algoritmo en cuestión, y debe ser tomada teniendo en consideración todo lo expuesto aquí.
 
 \section{Comparación GPU-CPU}
 El paradigma de programación introducido en este apéndice ha demostrado un crecimiento en poder de cómputo prácticamente exponencial.
 La Fig.~\ref{fg:cpugpu} muestra curvas con la evolución de las capacidades de cómputo, en número de operaciones flotantes por segundo, de las CPU y las GPU.
 Puede observarse que las GPUs superan por mucho el poder computacional de sus CPUs contemporáneas.
 Esto debe ser tenido en cuenta en aplicaciones donde los tiempos de cómputo resulten críticos.
-Actualmente es imposible implementar determinadas aplicaciones de tiempo real sin una implementación en GPU, y es por eso que en nuestra tesis hemos hecho hincapíé en esta tecnología.
-La implementación del modelo de iluminación está basada en shaders ya que el cómputo resultó trivialmente paralelizable, resultando en un algoritmo de tiempo real.
+Actualmente es imposible realizar una implementación de determinadas aplicaciones de tiempo real sin la tecnología GPU, y es por eso que en nuestra tesis hemos hecho hincapíé en esta tecnología.
+La implementación del modelo de iluminación DVR del capítulo de renderizado está basada en shaders, donde el cómputo resultó trivialmente paralelizable, resultando en un algoritmo de tiempo real.
 
 \begin{figure}[h]
 \begin{center}
@@ -318,13 +286,13 @@ La implementación del modelo de iluminación está basada en shaders ya que el 
 
 \subsection{Entorno de programación CUDA}
 En esta metodolog\'ia de programaci\'on, existen m\'ultiples hilos (threads) ejecutando en paralelo, ver Fig.~\ref{fg:cuda}.
-Los threads son l\'ogicamente agrupados en {\em bloques} y son enumerados con un \'indice, as\'i hablamos del hilo $i$ de un determinado bloque (también es posible que estén organizados en más de una dimensión).
-Los threads dentro de un bloque se ejecutan en el mismo procesador.
-La cantidad de threads en un bloque queda limitada por los recursos de memoria del procesador de la GPU. Los bloques presentan la misma organizaci\'on, siendo categorizados en {\em grillas}. 
+Los hilos son l\'ogicamente agrupados en {\em bloques} y son enumerados con un \'indice, as\'i hablamos del hilo $i$ de un determinado bloque (también es posible que estén organizados en más de una dimensión).
+Los hilos dentro de un bloque se ejecutan en el mismo procesador.
+La cantidad de hilos en un bloque queda limitada por los recursos de memoria del procesador de la GPU. Los bloques presentan la misma organizaci\'on, siendo categorizados en {\em grillas}. 
 Por lo tanto se habla del bloque $j$ de una determinada grilla.
-La memoria total de la GPU es llamada memoria global. Cada thread tiene su memoria local, s\'olo visible en ese thread.
-A su vez, un bloque tiene su memoria local, la cual es compartida por todos los threads del mismo.
-Por \'ultimo, todos los threads tienen acceso a la memoria {\em global} del grid.
+La memoria total de la GPU es llamada memoria global. Cada hilo tiene su memoria local, s\'olo visible en ese thread.
+A su vez, un bloque tiene su memoria local, la cual es compartida por todos los hilos del mismo.
+Por \'ultimo, todos los hilos tienen acceso a la memoria {\em global} de la grilla.
 Adem\'as, est\'an presentes la memoria de texturas y la memoria constante, las cuales son de s\'olo lectura.
 Estas dos y la memoria global se preservan entre llamadas a {\em kernels} (ver siguiente secci\'on).
 
@@ -344,7 +312,7 @@ En un futuro otros lenguajes como {\em C++} y {\em FORTRAN} tambi\'en ser\'an so
 Existen dos formas de escribir programas CUDA: {\em C para CUDA} y la {\em API del driver de CUDA}.
 En el primer caso, se presenta como una extensi\'on a dicho lenguaje junto con un {\em runtime}.
 El programador debe escribir funciones a ser ejecutadas en la GPU llamadas {\em kernels}. 
-La principal diferencia con una funci\'on C convencional es que en lugar de ejecutarse secuencialmente, existen N threads paralelos ejecutando N instancias de dicha funci\'on. 
+La principal diferencia con una funci\'on C convencional es que en lugar de ejecutarse secuencialmente, existen N hilos paralelos ejecutando N instancias de dicha funci\'on. 
 El creador del programa debe razonar el mismo como varios procesos a ejecutar en paralelo, los cuales unidos resuelven el problema.
 
 He aqu\'i un ejemplo de un kernel, el cual suma dos vectores:
@@ -359,7 +327,7 @@ __global__ void VecAdd(float* A, float* B, float* C)
 
 donde \_\_global\_\_ se usa para definir el kernel y denota el car\'acter global del mismo.
 La variable reservada threadIdx contiene el ID del thread dentro del bloque que ejecuta la operaci\'on actual, la misma puede tener m\'as de una dimensi\'on, aunque en este caso tiene una sola y por lo tanto se accede al miembro x de la misma.
-Para entender el kernel, debe comprenderse que cada thread sumar\'a un s\'olo elemento del vector final.
+Para comprender el kernel, debe observarse que cada thread sumar\'a un s\'olo elemento del vector final.
 Ejecutar este kernel es tan sencillo como una llamada en C, con una salvedad: debe especificarse la cantidad de bloques por grilla (A) y la de hilos por bloque (B), bajo la sintaxis:
 $$<<<A , B >>>$$
 
@@ -377,26 +345,25 @@ int main() {
 
 El driver de CUDA es una API de un nivel de abstracci\'on m\'as bajo que el runtime.
 De hecho, el runtime est\'a escrito sobre este API.
-Su idea principal es cargar assembler o c\'odigo binario CUDA, y poder ejecutarlo.
+Su idea principal consiste en utilizar assembler o c\'odigo binario CUDA en la placa, y poder ejecutarlo.
 Este c\'odigo se obtiene compilando un kernel.
 En este modo tenemos m\'as control sobre lo que ocurre en la GPU, pero tambi\'en es m\'as dificultosa la programaci\'on y el {\em debug} del c\'odigo.
-Ambos modos proveen m\'etodos para alocar memoria en la GPU, transferirla al CPU, manejar m\'ultiples GPU's, etc.
+Ambos modos proveen m\'etodos para alojar memoria en la GPU, transferirla al CPU, manejar m\'ultiples GPU's, etc.
 C para CUDA tiene la opci\'on de emular dispositivos f\'isicos en ausencia de ellos, lo cual puede resultar \'util en caso de no estar los mismos presentes.
 
-\subsection{NVCC}
+\paragraph{NVCC}
 CUDA provee un compilador llamado {\em nvcc}.
-El mismo se encarga de traducir nuestro c\'odigo hacia c\'odigo objeto.
+El mismo se encarga de traducir c\'odigo CUDA a c\'odigo objeto.
 Presenta una l\'inea de comandos similar a otros compiladores C como gcc, para facilitar su uso.
 Normalmente, un fuente contiene c\'odigo del host (CPU) y del device (GPU) mezclado.
 Por lo tanto, el esquema normal de trabajo del compilador consiste en separar c\'odigo a ejecutar en el host del c\'odigo a ejecutar en el device y traducir este \'ultimo hacia assembler ({\em PTX}) o c\'odigo objeto ({\em cubin}).
 El c\'odigo del host encontrado en este proceso debe luego ser compilado con un compilador C o bien nvcc puede invocar al mismo y luego producir c\'odigo objeto directamente.
 
-\subsection{Bibliotecas: cuFFT, cuBLAS}
-nVidia ha desarrollado una serie de bibliotecas de uso general para acelerar los cómputos en cómputos usuales.
+\paragraph{Bibliotecas: cuFFT, cuBLAS}
+nVidia ha desarrollado una serie de bibliotecas de uso general para acelerar los cómputos de problemas habituales.
 
 La biblioteca cuFFT implementa algoritmos que permiten aplicar la transformada de Fourier directa e inversa a im\'agenes de una o m\'as dimensiones.
-De este modo, podremos realizar la convoluci\'on de dos funciones aplicando s\'olo transformadas directas e inversas (por el teorema de convoluci\'on).
-Como su nombre lo indica, la biblioteca utiliza el algoritmo {\em fft}, fast fourier transform, el cual aprovecha la propiedad de separabilidad de la transformada de fourier para computar la misma rápidamente.
+Como su nombre lo indica, la biblioteca utiliza el algoritmo {\em fft}, fast fourier transform, útil en aplicaciones de procesamiento de imágenes.
 
 La biblioteca cuBLAS es una implementación en GPU de la biblioteca BLAS para cálculos de álgebra lineal.
 
@@ -404,23 +371,23 @@ La biblioteca cuBLAS es una implementación en GPU de la biblioteca BLAS para c�
 \subsection{OpenCL}
 Dada las similitudes entre CUDA y OpenCL, nos limitaremos aquí a exponer las principales diferencias entre ambas plataformas.
 
-En primer lugar, debe tenerse en cuenta que si bien la creación de OpenCL está basada en la necesidad de explotación de una placa gráfica, en realidad el diseño de la especificación asume la computación en {\em cualquier} unidad con procesadores.
+En primer lugar, debe considerarse que, a pesar que la creación de OpenCL está basada en la necesidad de explotación de una placa gráfica, en realidad el diseño de la especificación asume la computación en {\em cualquier} unidad con procesadores.
 Es decir que OpenCL también puede ejecutarse en la CPU, por ejemplo.
 
-Debido a esto, los nombres que fueron presentados previamente son más abstractos.
-Cada procesador o placa gráfica que implementa el estándar es llamada dispositivo o device OpenCL. Cada dispositivo expone una cantidad de unidades de cómputo, o compute units. Estas unidades de cómputo son grupos de uno o más procesadores.
-Los procesadores que forman parte de una unidad de cómputo son llamados elementos
-de procesamiento o processing elements.
+Debido a esto, los términos equivalentes a aquellos de CUDA, poseen nombres más abstractos.
+Cada procesador o placa gráfica que implementa el estándar es llamada {\em dispositivo} o device OpenCL. Cada dispositivo expone una cantidad de {\em unidades de cómputo}, o compute units. Estas unidades de cómputo son grupos de uno o más procesadores.
+Los procesadores que forman parte de una unidad de cómputo son llamados {\em elementos
+de procesamiento} o processing elements.
 Todos los elementos de procesamiento dentro de una misma unidad de cómputo comparten recursos, como memoria y cache.
 Esto significa que todos los elementos de procesamiento de una misma unidad de cómputo ejecutan las mismas instrucciones, aunque posiblemente leyendo y escribiendo a lugares diferentes de la memoria. En el caso de expresiones condicionales (if, else) simplemente se desactivan los elementos de procesamiento correspondientes durante la ejecución de la rama condicional que no deben ejecutar.
 
-La memoria en OpenCL es organizada de igual manera que en CUDA, con tres niveles de jerarquía, cada uno con sus tiempos de acceso (global, compartida y privada, en orden descendiente de jerarquía).
+La memoria en OpenCL se organiza similarmente a la de CUDA, con tres niveles de jerarquía, cada uno con sus tiempos de acceso (global, compartida y privada, en orden descendiente de jerarquía).
 
 El término {\em kernel} refiere al trozo de código a ser ejecutado por una unidad de procesamiento, el cual está escrito en un lenguaje parecido a {\em C}.
 
-Cada kernel será ejecutado en un {\em elemento de procesamiento}.
+Cada kernel será ejecutado en un elemento de procesamiento.
 Un conjunto de kernels es agrupado en un grupo de trabajo, el cual es ejecutado en una {\em unidad de cómputo}.
-Dado que el código que se escribe es el mismo para todos los kernels, para poder diferenciar cual kernel es el actual, se utiliza las función reservada $get\_global\_id(0)$, la cual devuelve el kernel actual dentro de todos los kernels.
+Dado que el código que se escribe es el mismo para todos los kernels, la diferenciación entre kernels se lleva a cabo por medio de las función reservada $get\_global\_id(0)$, la cual devuelve el kernel actual dentro de todos los kernels.
 Existe un límite a la cantidad de kernels dentro de las unidades de trabajo, pero no a la cantidad de kernels total a ejecutarse.
 En caso de que la cantidad total de kernels exceda la capacidad de la GPU, ésta dividirá el trabajo, comenzando a ejecutar algunos grupos de ellos (grupos de trabajo), y una vez terminado esto, ejecutará los siguientes grupos.
 
