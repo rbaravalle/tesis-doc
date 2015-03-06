@@ -8,23 +8,13 @@ El renderizado foto-realísta de materiales con una estructura interna compleja 
 En particular, las migas de panes son un material translúcido complejo, con una estructura porosa, que presenta detalles dispares en distintas escalas, todos igualmente necesarios de ser tenidos en cuenta para lograr una correcta visualización.
 El renderizado realista de estos materiales debe simular correctamente diversos fenómenos como translucencia, auto-sombreado, auto-oclusión, reflectancia, y absorción, entre otros.
 
-Las técnicas del estado del arte en renderizado de migas de panes tratan el material como una superficie, seteando un complejo procedimiento de captura, en el cual la luz reflejada por el material se fotografía desde distintos ángulos.
+Las técnicas del estado del arte en renderizado de migas de panes tratan el material como una superficie, capturando sus propiedades por medio de un complejo procedimiento en el cual la luz reflejada por el material se fotografía desde distintos ángulos.
 Posteriormente la información se procesa y reconstruye para formar un modelo del material.
 Si bien esta solución captura adecuadamente los fenómenos lumínicos previamente discutidos, también es cierto que la practicidad del método se encuentra severamente comprometida, presentando un elevado costo computacional, un procedimiento de captura muy limitado y la imposibilidad de obtener más de una apariencia con una única captura.
 
 En un intento por superar estas limitaciones en el renderizado de panes, proponemos utilizar la técnica de DVR, la cual implementamos en \acrshort{GPU}, utilizando el lenguaje de shader GLSL (ver Apéndice A).
-La técnica permite renderizar los campos escalares computados en capítulo anterior sin utilizar estructuras intermedias.
+La técnica permite renderizar los campos escalares computados en el capítulo anterior sin utilizar estructuras intermedias.
 Las imágenes obtenidas son promisorias, y se computan en tiempo real gracias al poder de las placas gráficas actuales.
-
-%La inmensa variedad de materiales y su compleja interacción con la luz han sido un tópico central en computación gráfica por décadas.
-%El modelado de materiales en física ha obtenido resultados excelentes en fenómenos relacionados con el transporte de la luz. Las aproximaciones computacionales a estos fenómenos son, actualmente, sujeto de gran interés en el renderizado en computación gráfica.
-%En materiales complejos, el modelado de la geometría de los mismos sigue una estrategia de investigación similar, comenzando con una comprensión física del material, la cual luego se aproximará computacionalmente.
-
-%Finalmente, una representación computacional realista del material debe tener en cuenta tanto el modelado geométrico como la interacción de la luz, simultáneamente.
-
-
-
-%The method obtains very promising images in real time.
 
 \section{Trabajo Previo}
 El tópico de renderizado foto-realista de materiales, y su modelado, atrajo un interés creciente en la literatura científica.
