@@ -2,24 +2,24 @@
 \chapter[Estado del Arte]{Simulación de Materiales en Computación Gráfica: Estado del Arte}
 \section{Introducción} %(hablar de los diferentes materiales, cómo los modelos "fáciles" no sirven)
 
-En este capítulo se presenta el estado del arte en modelado y renderización de materiales en computación gráfica, junto a un resumen de los aspectos más preponderantes que se deben considerar a la hora de diseñar modelos de los mismos: la geometría a distintas escalas y la  interacción de éstas con fenómenos lumínicos.
+En este capítulo se presenta el estado del arte en modelado y renderización de materiales en computación gráfica, junto a un resumen de los aspectos más preponderantes a considerar al diseñar modelos de la apariencia de los mismos: la geometría a distintas escalas y la interacción de éstas con fenómenos lumínicos.
 
 Se comienza presentando el marco conceptual sobre la apariencia de los materiales en computación gráfica.
 Luego se presentan modelos de la geometría de distintos materiales, desde un punto de vista puramente fenomenológico.
 Seguidamente incorporaremos comportamiento físico relacionado al comportamiento o formación del material en consideración.
-Luego presentaremos las ecuaciones fundamentales del renderizado, las cuales modelan la interacción entre la energía radiante de la luz en una escena y los materiales que se buscan renderizar.
-Finalmente, explicaremos brevemente casos particulares de la ecuación del renderizado que han sido utilizados como estándar en la síntesis de la apariencia de los materiales, y presentaremos ejemplos de algunos materiales que, debido a diversos factores, deben considerar otros métodos menos tradicionales para lograr un renderizado adecuado.
-Se muestran ejemplos de materiales cuya síntesis se ajustan a los métodos 
+Luego presentaremos las ecuaciones fundamentales del renderizado, las cuales modelan la interacción entre la energía radiante en una escena y los materiales que se buscan renderizar.
+Finalmente, explicaremos brevemente casos particulares de la ecuación del renderizado que han sido utilizados como estándar en la síntesis de la apariencia de los materiales, y presentaremos ejemplos de algunos materiales que, debido a diversos factores, deben considerar otros métodos menos tradicionales para obtener un renderizado adecuado.
+Se muestran ejemplos de materiales cuyas síntesis se ajustan a los métodos 
 siendo descriptos.
 
 \section{Apariencia de los Materiales}
 Se define informalmente la {\em apariencia} de un material como la percepción del mismo por parte de una persona.
-En computación gráfica, se pretende simular de la manera más realista posible las diferentes apariencias.
+En computación gráfica, se pretende simular de la manera más realista posible las diferentes apariencias o conjunto de estímulos visuales recibidos por una persona desde distintos materiales	.
 La apariencia de un material se codifica en aplicaciones gráficas por medio de datos, estructuras de datos y algoritmos, los cuales permiten representar las mismas.
 
-La idea subyacente en la producción de modelos sintéticos de materiales está representada por la síntesis de imágenes capaces de generar el mismo efecto producido por la observación directa de los materiales.
+La idea subyacente en la producción de modelos sintéticos de materiales está representada por la {\em síntesis de imágenes} capaces de generar el mismo efecto producido por la observación directa de los materiales ({\em foto-realismo}).
 Entre los fenómenos intervinientes en los procesos descriptos, se encuentran la física de la luz y la percepción humana, la cual depende de varios factores.
-La consideración de la percepción en el diseño de la apariencia de los materiales ayuda a perfeccionar los modelos existentes, siendo útil para focalizar los esfuerzos de diseño en los elementos más preponderantes intervinientes en dicho fenómeno.
+La consideración de la percepción, en el diseño de la apariencia de los materiales, ayuda a perfeccionar los modelos existentes, siendo útil para focalizar los esfuerzos de diseño en los elementos más preponderantes intervinientes en dicho fenómeno.
  
 
 
