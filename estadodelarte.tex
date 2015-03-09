@@ -146,12 +146,12 @@ Al interpretarse el comando $f$ ocurre lo mismo, sólo que la línea no se dibuj
 Cuando se lee el comando $+$ (girar a la izquierda). el nuevo estado pasa a ser $(x,y,\alpha-\delta)$ y cuando se interpreta $-$ (girar a la derecha), el nuevo estado resulta $(x,y,\alpha+\delta)$.
 
 De esta forma, dada una cadena $\eta$, la interpretación de tortuga de la misma es la imagen generada al responder la tortuga a los comandos inducidos por $\eta$.
-La Fig.~\ref{fg:tortuga} muestra un ejemplo de la figura resultante de la cadena FFF-FF-F-F+F+FF-F-FFF, donde la tortuga comienza {\em mirando} hacia arriba, es decir $\delta = 90^{\circ}$.
+La Fig.~\ref{fg:tortuga} muestra un ejemplo de la figura resultante de la cadena FF-FfF-FF, donde la tortuga comienza {\em mirando} hacia arriba ($\alpha = 90^{\circ}$), y $\delta = 90^{\circ}$.
 
 \begin{figure}
 \center
 \includegraphics[width=8cm]{figures/tortuga}
-\caption{Resultado de la interpretación de tortuga de una cadena de caracteres.}
+\caption[Resultado de la interpretación de tortuga de una cadena de caracteres]{Resultado de la interpretación de tortuga de una cadena de caracteres FF-FfF-FF.}
 \label{fg:tortuga}
 \end{figure}
 
@@ -162,7 +162,7 @@ Usualmente, y debido a la utlización de recursión y repetición, estos sistema
 \begin{figure}
 \center
 \includegraphics[width=13cm]{figures/sistemasL}
-\caption[Sistemas-L generados utilizando distintos parámetros]{Sistemas-L generados utilizando distintos parámetros y una única regla de producción. $n$ es la cantidad de derivaciones utilizadas para producir la cadena que da origen a la figura. En (a), el axioma es F-F-F-F, mientras que en (b) es -F.}
+\caption[Sistemas-L generados utilizando distintos parámetros]{Sistemas-L generados utilizando distintos parámetros y una única regla de producción. $n$ es la cantidad de derivaciones utilizadas para producir la cadena que da origen a la figura. En (a), el axioma es F-F-F-F, mientras que en (b) es -F  (imagen obtenida de \cite{Prusinkiewicz1990}).}
 \label{fg:sistemasL}
 \end{figure}
 
@@ -181,7 +181,7 @@ Por medio de una única regla de producción es posible obtener distintas planta
 \begin{figure}
 \center
 \includegraphics[width=11cm]{figures/sistemalcorchete}
-\caption[Sistemas-L con pila de estados, utilizando distintos parámetros]{Sistemas-L con pila de estados, utilizando distintos parámetros. Las imágenes muestran estructuras muy parecidas a plantas. $n$ es la cantidad de derivaciones utilizadas para producir la cadena que da origen a la figura.}
+\caption[Sistemas-L con pila de estados, utilizando distintos parámetros]{Sistemas-L con pila de estados, utilizando distintos parámetros. Las imágenes muestran estructuras muy parecidas a plantas. $n$ es la cantidad de derivaciones utilizadas para producir la cadena que da origen a la figura (imagen obtenida de \cite{Prusinkiewicz1990}).}
 \label{fg:sistemasLcorchete}
 \end{figure}
 
@@ -198,7 +198,7 @@ La generalización se realiza por medio de la utilización de matrices de rotaci
 \begin{figure}
 \center
 \includegraphics[width=11cm]{figures/3dlsystem}
-\caption[Sistema-L en tres dimensiones.]{Planta generada por un sistema-L en tres dimensiones.}
+\caption[Sistema-L en tres dimensiones.]{Planta generada por un sistema-L en tres dimensiones (imagen obtenida de \cite{Prusinkiewicz1990}).}
 \label{fg:sistemasL3D}
 \end{figure}
 
@@ -231,7 +231,7 @@ La principal diferencia con los sistemas-L se basa en que en aquellos, las reesc
 \begin{figure}
 \center
 \includegraphics[width=13cm]{figures/splitgrammar}
-\caption[Gramática para formar una secuencia de ventanas]{Gramática de división mostrando los pasos seguidos para formar una secuencia de ventanas.}
+\caption[Gramática para formar una secuencia de ventanas]{Gramática de división mostrando los pasos seguidos para formar una secuencia de ventanas (imagen original en \cite{Wonka2003}).}
 \label{fg:splitgrammar}
 \end{figure}
 
@@ -261,7 +261,7 @@ Esta interpretación depende de los atributos especificados y puede variar de ac
 \begin{figure}
 \center
 \includegraphics[width=11cm]{figures/controlgrammar}
-\caption{Gramática de control.}
+\caption[Gramática de control.]{Gramática de control (imagen original en \cite{Wonka2003}).}
 \label{fg:controlgrammar}
 \end{figure}
 
@@ -272,7 +272,7 @@ La Fig.~\ref{fg:edificios} muestra ejemplos de edificios generados procedimental
 \begin{figure}
 \center
 \includegraphics[width=11cm]{figures/edificios}
-\caption{Edificios generados procedimentalmente por medio de gramáticas.}
+\caption[Edificios generados procedimentalmente por medio de gramáticas.]{Edificios generados procedimentalmente por medio de gramáticas (imagen original en \cite{Wonka2003}).}
 \label{fg:edificios}
 \end{figure}
 
@@ -312,7 +312,7 @@ Esto resulta útil para modelar perfiles de montañas con distintas rugosidades 
 \begin{figure}
 \center
 \includegraphics[width=11cm]{figures/hurst}
-\caption{Curvas obtenida con distintos coeficientes de Hurst.}
+\caption[Curvas obtenida con distintos coeficientes de Hurst.]{Curvas obtenida con distintos coeficientes de Hurst (H). Se observa que a medida que $H$ crece, la curva se {\em suaviza} (imagen obtenida de \cite{Peitgen1988}).}
 \label{fg:hurst}
 \end{figure}
 
@@ -331,7 +331,7 @@ Se observa que se puede obtener mayor detalle a mayor número de iteraciones, do
 \begin{figure}
 \center
 \includegraphics[width=11cm]{figures/puntomedio}
-\caption[Curva obtenida utilizando el algoritmo del punto medio]{Curva obtenida con $H=0.8$, para $17$, $65$ y $257$ muestras, utilizando el algoritmo del punto medio.}
+\caption[Curva obtenida utilizando el algoritmo del punto medio]{Curva obtenida con $H=0.8$, para $17$, $65$ y $257$ muestras, utilizando el algoritmo del punto medio (imagen original en \cite{Delrieux1995}).}
 \label{fg:puntomedio}
 \end{figure}
 
@@ -437,14 +437,14 @@ Desafortunadamente, muchas veces este enfoque resulta prohibitivo, no solo debid
 \begin{figure}
 \center
 \includegraphics[width=11cm]{figures/fluidos1}
-\caption{Nubes y humo generados utilizando métodos basados en las ecuaciones de Navier-Stokes.}
+\caption[Nubes y humo generados utilizando métodos basados en las ecuaciones de Navier-Stokes.]{Nubes y humo generados utilizando métodos basados en las ecuaciones de Navier-Stokes (imagen obtenida de \cite{Stam1999}).}
 \label{fg:fluidos1}
 \end{figure}
 
 \begin{figure}
 \center
 \includegraphics[width=11cm]{figures/fluidos2}
-\caption{Fluidos generados utilizando métodos basados en las ecuaciones de Navier-Stokes.}
+\caption[Fluidos generados utilizando métodos basados en las ecuaciones de Navier-Stokes.]{Fluidos generados utilizando métodos basados en las ecuaciones de Navier-Stokes (imagen obtenida de \cite{Stam1999}).}
 \label{fg:fluidos2}
 \end{figure}
 
@@ -560,6 +560,7 @@ La ecuación en su forma completa representa el comportamiento de la luz en vol�
 (\vec{\omega} \cdot \nabla) L(\bold{x} \rightarrow \vec{\omega}) = - \sigma_{a}(\bold{x}) L(\bold{x} \rightarrow \vec{\omega}) - \sigma_{s}(\bold{x}) L(\bold{x} \rightarrow \vec{\omega}) + \\
 \sigma_{a}(\bold{x}) L_{e}(\bold{x} \rightarrow \vec{\omega}) + \sigma_{s}(\bold{x}) L_{i}(\bold{x} \rightarrow \vec{\omega}).
 \end{aligned}
+\label{eq:rte}
 \end{equation}
 
 La misma expresa que el cambio ($\nabla$) de radiancia $L$ de un rayo de luz en un medio, en una dirección dada ($\vec{\omega}$) está dado por cuatro fenómenos: absorción, dispersión saliente, emisión (del medio) y dispersión entrante, ver Fig.~\ref{fg:fenomenosrte}.
@@ -593,14 +594,14 @@ Como fue aclarado, diversos algoritmos específicos surgieron con anterioridad a
 \begin{figure}
 \center
 \includegraphics[width=11cm]{figures/fenomenosrte}
-\caption{Fenómenos intervinientes en la Ecuación del Transporte Radiativo.}
+\caption[Fenómenos intervinientes en la Ecuación del Transporte Radiativo (ec. \ref{eq:rte})]{Fenómenos intervinientes en la Ecuación del Transporte Radiativo (ec. \ref{eq:rte}).}
 \label{fg:fenomenosrte}
 \end{figure}
 
 \begin{figure}
 \center
 \includegraphics[width=11cm]{figures/rte}
-\caption{Interpretación gráfica de la Ecuación del Transporte Radiativo.}
+\caption{Interpretación gráfica de la Ecuación integral del Transporte Radiativo, ec. (\ref{eq:rteintegral}), tomada de \cite{Jarosz2008}.}
 \label{fg:rte}
 \end{figure}
 
@@ -658,7 +659,7 @@ Si el observador se coloca en la dirección de reflejo de estos lóbulos, observ
 
 \begin{figure}
 \center
-\includegraphics[width=11cm]{figures/contribuciones}
+\includegraphics[width=12cm]{figures/contribuciones}
 \caption[Diferentes reflectancias en BRDFs]{Diferentes reflectancias en BRDFs. La imagen de la izquierda muestra una reflexión difusa, la del centro, una completamente especular, y la de la derecha, lobular.}
 \label{fg:contribuciones}
 \end{figure}
@@ -768,7 +769,7 @@ En otro trabajo se utilizó además información proveniente de moldes de polím
 \begin{figure}
 \center
 \includegraphics[width=9cm]{figures/piel}
-\caption[Piel Humana renderizada]{Piel Humana renderizada con el método de \cite{Marschner2000}. La imagen de la derecha muestra la mejora obtenida al agregar detalles de geometría fina en el modelo (nariz, parte inferior del labio).}
+\caption[Piel Humana renderizada]{Piel Humana renderizada con el método de \cite{Marschner2000} (imagen del trabajo original). La imagen de la derecha muestra la mejora obtenida al agregar detalles de geometría fina en el modelo (nariz, parte inferior del labio).}
 \label{fg:piel}
 \end{figure}
 
@@ -890,7 +891,7 @@ En este caso, los rayos de luz provenientes de distintas posiciones atraviesan d
 \begin{figure}
 \center
 \includegraphics[width=4cm]{figures/fibra}
-\caption[Ejemplo de fibra de tela con más de una tintura]{Ejemplo de fibra de tela con más de una tintura. Se puede observar una tintura roja en el centro, y una tintura azul que la envuelve.}
+\caption[Ejemplo de fibra de tela con más de una tintura]{Ejemplo de fibra de tela con más de una tintura. Se puede observar una tintura roja en el centro, y una tintura azul que la envuelve (imagen tomada de \cite{Xu2001}).}
 \label{fg:fibra}
 \end{figure}
 
@@ -905,7 +906,7 @@ Para esto se utilizan curvas $3D$ construídas a partir de los puntos de control
 \begin{figure}
 \center
 \includegraphics[width=13cm]{figures/tela}
-\caption[Pasos para la definición de un modelo de una tela]{Pasos para la definición de un modelo de una tela, donde se toman en cuenta fibras individuales. Además de la utilización de una superficie (a), la misma se subdivide (b) para alojar distintas estructuras de hilo (c), los cuales se modelan individualmente ((d) y (e)).}
+\caption[Pasos para la definición de un modelo de una tela]{Pasos para la definición de un modelo de una tela, donde se toman en cuenta fibras individuales (imagen tomada de \cite{Xu2001}). Además de la utilización de una superficie (a), la misma se subdivide (b) para alojar distintas estructuras de hilo (c), los cuales se modelan individualmente ((d) y (e)).}
 \label{fg:tela}
 \end{figure}
 
