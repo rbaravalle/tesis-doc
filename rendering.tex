@@ -141,7 +141,7 @@ Con la modificación de estos parámetros, el usuario puede producir imágenes q
 La Fig. \ref{fg:fragmentshaderrte} muestra un esquema del shader de fragmentos implementado, donde se computa la Ec. (\ref{eq:ray_radiance}).
 
 \begin{figure}[htb!]
-\centerline{\includegraphics[width=12cm]{fragmentshader}}
+\centerline{\includegraphics[width=12cm]{figures/fragmentshader}}
 \caption[Cálculo de color en el shader de fragmentos]{Cálculo de color en el shader de fragmentos. Se implementa la suma en la ecuación (\ref{eq:ray_radiance}). La suma devuelve un color que luego se colorea por medio de un parámetro del usuario. Además, luego se computarán las normales, sombras y oclusión de ambiente.}
 \label{fg:fragmentshaderrte}
 \end{figure}
@@ -227,7 +227,7 @@ En la imagen central los patrones producidos por los sistemas de partículas des
 En ese caso, el tiempo de vida de las partículas difiere para cada una y de esa manera se obtienen burbujas de diferentes tamaños.
 
 \begin{figure*}[htb!]
-  \centerline{\includegraphics[width=13cm]{fig5}}
+  \centerline{\includegraphics[width=13cm]{figures/fig5}}
   \caption[Imágenes de diferentes tipos de pan renderizados en tiempo real, sin oclusión de ambiente]{Imágenes de diferentes tipos de pan renderizados en tiempo real, sin oclusión de ambiente. La imagen de la derecha muestra un pan sin corteza}
   \label{fg:breadsnooc}
 \end{figure*}
@@ -236,7 +236,7 @@ La Fig.~\ref{fg:breads} muestra panes renderizados en tiempo real con oclusión 
 Puede observarse que los panes con este efecto muestran un grado de realismo superior.
 
 \begin{figure*}[htb!]
-  \centerline{\includegraphics[width=13cm]{breads}}
+  \centerline{\includegraphics[width=13cm]{figures/breads}}
   \caption{Imágenes de diferentes tipos de pan renderizados en tiempo real, con oclusión de ambiente.}
   \label{fg:breads}
 \end{figure*}
@@ -311,14 +311,14 @@ En esa imagen puede apreciarse una esponja retroiluminada junto con la propagaci
 Este efecto surge como una consecuencia natural del algoritmo volumétrico basado en RTE utilizado en este capítulo.
 
 \begin{figure*}[htb!]
-  \centerline{\includegraphics[width=13cm]{fig6}}
+  \centerline{\includegraphics[width=13cm]{figures/fig6}}
   \caption[Budín, torta y esponja renderizados]{Distintos materiales obtenidos a partir de diferentes configuraciones de parámetros. De izquierda a derecha: budín, torta y esponja, sin oclusión de ambiente. }
   \label{fg:fig6}
 
 \end{figure*}
 
 \begin{figure*}[htb!]
-  \centerline{\includegraphics[width=8cm]{fig7}}
+  \centerline{\includegraphics[width=8cm]{figures/fig7}}
   \caption[Esponja retroiluminada.]{Esponja renderizada en tiempo real mostrando retroiluminación. La misma resulta consecuencia directa de la utilización de un modelo volumétrico de propagación de la energía radiante, sobre medios semi-transparentes.}
   \label{fg:fig7}
 \end{figure*}
