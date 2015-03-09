@@ -161,16 +161,16 @@ Este proceso puede observarse en la Fig.~\ref{fg:raster}, y a diferencia del sha
 Finalmente, para calcular el color de cada pixel en pantalla, se utiliza un programa llamado \emph{shader de fragmentos} que calcula el color de cada pixel (o fragmento) que ocupa un elemento (triángulo, linea, cuadrado) individualmente.
 Para computar el color final de cada píxel se utilizan \emph{uniformes}, y valores interpolados desde un \emph{shader de vértices}.
 Los valores que el programador especifica para ser interpolados se declaran como \emph{varying} en el código de ambos shaders.
-La Fig.~\ref{fg:fragmentshader} muestra un ejemplo de la utilización de un varying para computar el color interpolado de un triángulo.
+La Fig.~\ref{fg:varying} muestra un ejemplo de la utilización de un varying para computar el color interpolado de un triángulo.
 La Fig.~\ref{fg:interpolation} muestra el resultado de esta operación.
 
 
 \begin{figure}[h]
 \begin{center}
-\includegraphics[width=13cm]{figures/fragmentshader}
+\includegraphics[width=13cm]{figures/varying}
 \end{center}
 \caption{Ejemplo de comunicación de datos del shader de vértices al shader de fragmentos. El valor vColor se interpola entre los vértices para producir valores para los fragmentos.}
-\label{fg:fragmentshader}
+\label{fg:varying}
 \end{figure}
 
 \begin{figure}[h]
