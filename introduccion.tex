@@ -43,13 +43,23 @@ Los algoritmos desarrollados poseen diversas aplicaciones en el campo del modela
 Más específicamente, pueden mencionarse:
 
 \begin{itemize}
-\item Modelado de geometrías porosas microscópicas y macroscópicas: las técnicas fractales.
+\item {\bf Modelado de materiales con geometrías porosas microscópicas y macroscópicas}: las técnicas fractales desarrolladas capturan eficazmente variadas geometrías porosas. Es posible utilizar el algoritmo semi-automático de búsqueda de parámetros presentado, en la representación de otras geometrías macro-porosas. Estos resultados podrían generalizarse, y aplicarse en el desarrollo de técnicas de Monte-Carlo para la obtención de distribuciones estadísticas de radiancia de materiales con superficie microscópicamente porosa.
+\item {\bf Visualización médica realista}: la utilización de volúmenes en la representación de los materiales permite su aplicación en contextos médicos, donde se cuenta con datos provenientes de tomografías computadas, las cuales presentan materiales porosos como huesos.
+\item {\bf Extracción de características de materiales}: los métodos multifractales utilizados pueden ser aplicados en la discriminación de muestras reales de otros materiales, así como en la caracterización de los mismos. Estos estudios pueden devolver parámetros útiles en la generación procedimental de los mismos.
+\item  {\bf Clasificación de imágenes de materiales}: el espectro multifractal demostró ser útil en la clasificación y caracterización de imágenes de miga de pan. Es posible que el mismo sea útil en la clasificación de imágenes de materiales similares, pudiendo utilizarse al método en cadenas de producción, o en la determinación de parámetros de calidad del material.
 \end{itemize}
 
 \section{Resultados Originales Presentados}
 Para lograr estos objetivos, se tomó en consideración el proceso de cocción del pan, y de manera más general, se estudió la cadena completa de pasos existente en la elaboración del mismo (leudado, cocción, etc.).
+Debido a que la literatura de ingeniería de los alimentos presenta estudios muchas veces inconexos, sobre los distintos pasos involucrados, se implementaron algoritmos que aproximan los pasos más preponderantes: leudado y cocción, dejando de lado otros procesos como el amasamiento del mismo, o la formación de la corteza.
 
+Resumidamente, las contribuciones más preponderantes incluyen:
 \begin{itemize}
-\item 
+\item un algoritmo fractal que induce una distribución de radios de burbujas consistente con el proceso de leudado de la masa cruda del pan,
+\item un algoritmo que aproxima el proceso de cocción del pan,
+\item un algoritmo que aproxima el efecto de levantamiento del pan durante la cocción, basado en las distribuciones de burbujas existentes en el leudado,
+\item una técnica que permite asignar colores en la corteza, utilizando el espacio de color CIELab, indicando mayor o menor cocción en cada punto,
+\item el estudio del espectro multifractal en la discriminación de imágenes de migas de pan, y,
+\item un algoritmo que utiliza el espectro multifractal en la aproximación de una distribucioń de burbujas dada.
 \end{itemize}
 
