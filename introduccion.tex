@@ -12,7 +12,7 @@ Sin embargo, a lo largo de los años, se desarrollaron diversas técnicas que pe
 Esto ha resultado determinante en la obtención de imágenes con un realismo asombroso, y tiempos computacionales aceptables.
 
 A pesar de estos increíbles avances en un corto período de tiempo, el renderizado de una escena es un problema que involucra otras consideraciones.
-Entre ellas, la ecuación del renderizado no tiene en cuenta {\em cuálesd materiales} componen los objetos que definen la escena.
+Entre ellas, la ecuación del renderizado no tiene en cuenta {\em cuáles materiales} componen los objetos que definen la escena.
 Un objeto de una escena cuyo material se define como madera, no lucirá exactamente igual que uno de metal, ni a un objeto cuyo material está compuesto por tejidos.
 Debido a esta necesidad, a la par del desarrollo de técnicas de iluminación global, surgieron técnicas que intentaron abordar materiales específicos, o familias de materiales.
 
@@ -28,7 +28,13 @@ En contraste, otros materiales han recibido menor atención, la cual puede atrib
 Entre estos materiales, los materiales porosos o heterogéneos, y aquellos sometidos a un proceso de cocción han permanecido entre los más dificultosos por su compleja geometría y los fenómenos lumínicos involucrados.
 Tal vez el caso más emblemático de los materiales cocidos es el pan, debido a su importancia en la vida cotidiana.
 Como nota de color, un reconocido  científico del área, Alain Fournier, pronunció en 2001 la frase "la Computación Gráfica todavía no ha sido capaz de renderizar de manera convincente una feta de pan".
-En las siguientes secciones mostraremos que unos pocos intentos por abordar el problema fueron llevados a cabo pocos años después de la emisión de dicho comentario.
+En los siguientes capítulos mostraremos que unos pocos intentos por abordar el problema fueron llevados a cabo pocos años después de la emisión de dicho comentario.
+
+La geometría de estos materiales porosos ha sido estudiada muy superficialmente en computación gráfica, donde pocos trabajos abordaron el tema.
+Por otro lado, estas geometrías han sido objeto de estudio sistemático en el campo de la ingeniería de los alimentos.
+Sin embargo, debido a la compleja naturaleza de los fenómenos involucrados en la formación de estos materiales, los estudios resultan generalmente fenomenológicos y sólo proveen resultados estadísticos.
+
+Este escenario, junto con el crecimiento quasi-exponencial de poder de cómputo existente, gracias al desarrollo de las placas gráficas, proveen la base y la motivación de la presente tesis.
 
 \section{Alcances y Objetivos}
 Esta tesis propone el estudio e implementación de algoritmos tanto en CPU como GPU, que permitan un modelado y renderización adecuados y realistas de materiales porosos y cocidos.
@@ -44,7 +50,9 @@ Más específicamente, pueden mencionarse:
 
 \begin{itemize}
 \item {\bf Modelado de materiales con geometrías porosas microscópicas y macroscópicas}: las técnicas fractales desarrolladas capturan eficazmente variadas geometrías porosas. Es posible utilizar el algoritmo semi-automático de búsqueda de parámetros presentado, en la representación de otras geometrías macro-porosas. Estos resultados podrían generalizarse, y aplicarse en el desarrollo de técnicas de Monte-Carlo para la obtención de distribuciones estadísticas de radiancia de materiales con superficie microscópicamente porosa.
-\item {\bf Visualización médica realista}: la utilización de volúmenes en la representación de los materiales permite su aplicación en contextos médicos, donde se cuenta con datos provenientes de tomografías computadas, las cuales presentan materiales porosos como huesos.
+\item {\bf Renderización foto-realista}: como se explicará a lo largo de la tesis, la existencia de una geometría realista resulta fundamental en la obtención de métodos prácticos para su renderizado. Las geometrías resultantes de los algoritmos de modelado que serán presentados, serán expresadas en una representación que guiará la elección de métodos prácticos, posibilitando una visualización realista.
+\item {\bf Visualización médica realista}: la utilización de volúmenes en la representación de los materiales permite su aplicación en contextos médicos, donde se cuenta con datos provenientes de tomografías computadas, las cuales presentan materiales porosos como huesos. Gracias a las técnicas desarrolladas, la visualización de esos materiales podría ser mejorada drásticamente, permitiendo un mejor diagnóstico en caso de enfermedades o lesiones.
+\item {\bf Juegos serios}: los simuladores de escenarios realistas han sufrido una expansión dramática en la última década gracias al poder computacional actual \cite{Susi2007}. En ellos, una representación realista es indispensable para propósitos de entrenamiento, y por lo tanto, la generación de materiales basadas en primeros principios puede fortalecer en gran medida la sensación de inmersión necesaria en dichos simuladores. 
 \item {\bf Extracción de características de materiales}: los métodos multifractales utilizados pueden ser aplicados en la discriminación de muestras reales de otros materiales, así como en la caracterización de los mismos. Estos estudios pueden devolver parámetros útiles en la generación procedimental de los mismos.
 \item  {\bf Clasificación de imágenes de materiales}: el espectro multifractal demostró ser útil en la clasificación y caracterización de imágenes de miga de pan. Es posible que el mismo sea útil en la clasificación de imágenes de materiales similares, pudiendo utilizarse al método en cadenas de producción, o en la determinación de parámetros de calidad del material.
 \end{itemize}
@@ -63,3 +71,42 @@ Resumidamente, las contribuciones más preponderantes incluyen:
 \item un algoritmo que utiliza el espectro multifractal en la aproximación de una distribucioń de burbujas dada.
 \end{itemize}
 
+Los resultados de la investigación de la presente tesis doctoral fueron volcados en las siguientes publicaciones:
+
+\subsection*{Revistas Internacionales}
+
+\begin{itemize}
+\item {\bf Procedural Bread Making}. Rodrigo Baravalle, Gustavo Patow y Claudio Delrieux. En {\it Computers \& Graphics}. Mayo 2015. En prensa.
+
+\item {\bf Multifractal Characterisation and Classification of Bread Crumb Digital Images}. Rodrigo Baravalle, Claudio Delrieux y Juan Carlos Gómez. En {\it EURASIP Journal on Image and Video Processing}. {\bf 2015}:9. Abril 2015. doi:10.1186/s13640-015-0063-8.
+\end{itemize}
+
+
+\subsection*{Revistas Nacionales}
+
+\begin{itemize}
+\item {\bf Modelado para la Renderización Foto-Realista de Pan}. Rodrigo Baravalle, Leonardo Scandolo, Claudio Delrieux y Cristian García Bauza. En {\it Mecánica Computacional} ({\bf 33})26:1695-1709. Bariloche, Argentina. Septiembre 2014.
+\item {\bf Bread Crumb Classification Using Fractal and Multifractal Features}. Rodrigo Baravalle, Claudio Delrieux y Juan Carlos G\'omez. En {\it Mecánica Computacional} ({\bf 31})17:3013-3025. Salta, Argentina. Noviembre 2012.
+\end{itemize}
+
+
+\subsection*{Conferencias}
+\begin{itemize}
+\item {\bf Síntesis Procedimental de Materiales: resultados en el modelado de pan y materiales cocidos}. Rodrigo Baravalle, Claudio Delrieux y Juan Carlos G\'omez. En {\it Actas del XIV Workshop Investigadores en Ciencias de la Computación }, WICC. Posadas, Argentina, Abril 2012.
+\item {\bf Síntesis de Texturas utilizando Sistemas de Partículas}. Rodrigo Baravalle, Claudio Delrieux y Juan Carlos G\'omez. En {\it Actas de la Cuarta Escuela en Ciencias de las Imágenes}, ECIMAG. Buenos Aires, Argentina, Agosto 2011.
+\end{itemize}
+
+\subsection*{Pósters y Resúmenes}
+\begin{itemize}
+\item {\bf Experiencias con Cython y PyOpenCL}. En {\it Actas de la Segunda Conferencia de Python en la Ciencia}, SciPyConAr. Puerto Madryn, Argentina. Octubre 2014.
+\item {\bf Imfractal: Dimensiones Fractales con Python}.  En {\it Actas del Primer Conferencia de Python en la Ciencia}, SciPyConAr. Puerto Madryn, Argentina. Mayo 2013.
+\item {\bf Clasificación de Muestras de Pan Utilizando Características Fractales}. Rodrigo Baravalle, Claudio Delrieux y Juan Carlos G\'omez. En {\it Actas de la V Escuela en Ciencias de las Imágenes}, ECIMAG. Santa Fe, Argentina, Julio 2012.
+\end{itemize}
+
+
+\section{Organización de la Tesis}
+Los capítulos de la presente tesis se organizan de la siguiente manera: en el Capítulo 2 se introduce el estado del arte en el modelado y renderización de materiales en computación gráfica, explicando los casos más generales, y algunas derivaciones o casos particulares.
+En el Capítulo 3 se introducen las dificultaes presentes en materiales porosos, y una propuesta de modelado de los mismos, desde un punto de vista puramente procedimental, y otro con consideraciones físicas.
+En el Capítulo 4 se presenta una propuesta de renderizado para la representación volumétrica inducida en el capítulo anterior, logrando imágenes foto-realistas y en tiempo real, gracias a la utilización de la placa gráfica.
+En el Capítulo 5 se explican las conclusiones y los trabajos a futuro, los cuales se desprenden del trabajo de la presente tesis.
+Finalmente, en el Apéndice A, se presenta una introducción a la programacion de las placas gráficas actuales, tanto en aplicaciones gráficas, como en aplicaciones de propósito general.
