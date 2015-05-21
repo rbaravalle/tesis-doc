@@ -21,11 +21,11 @@ Diferentes estructuras microscópicas producen distintas apariencias, reflejando
 Por ejemplo: una superficie metálica tiene un gran componente reflexivo, emitiendo gran parte de su energía en direcciones específicas, a diferencia de una superficie más opaca como un plástico, la cual no presenta direcciones principales de emisión de radiancia.
 Dado que la ecuación del renderizado utiliza a los materiales como {\em caja negra}, los mismos deben ser modelados de una manera adecuada, específica para cada material, para luego ser integrados en las distintas técnicas de renderizado global.
 
-Determinados materiales han recibido mayor atención debido a su ubicuidad en escenas de películas y video juegos, o a la facilidad de su diseño: agua, fuego, aire, humo, piel humana, madera, etc.
-Por esta razón, las imágenes sintéticas obtenidas presentan cierta asimetría en la calidad de los distintos materiales.
+Determinados materiales han recibido mayor atención debido a su ubicuidad en escenas de películas y video juegos, o a la facilidad de su diseño: agua \cite{Schechter2012}, fuego, aire, humo, piel humana \cite{Donner2006}, madera, plásticos \cite{Kurt2010}, etc.
 En contraste, otros materiales han recibido menor atención, la cual puede atribuirse a una menor presencia en escenas o a una dificultad en el modelado y visualización, la cual ha resistido las técnicas más simples.
+Por esta razón, las imágenes sintéticas obtenidas presentan cierta asimetría en la calidad de los distintos materiales.
 
-Entre estos materiales, los materiales porosos o heterogéneos, y aquellos sometidos a un proceso de cocción han permanecido entre los más dificultosos por su compleja geometría y los fenómenos lumínicos involucrados.
+Entre estos materiales, los materiales porosos o heterogéneos, y aquellos sometidos a un proceso de cocción han permanecido entre los más dificultosos por su compleja geometría y los fenómenos lumínicos involucrados en su modelización.
 Tal vez el caso más emblemático de los materiales cocidos es el pan, debido a su importancia en la vida cotidiana.
 Como nota de color, un reconocido  científico del área, Alain Fournier, pronunció en 2001 la frase "la Computación Gráfica todavía no ha sido capaz de renderizar de manera convincente una feta de pan".
 En los siguientes capítulos mostraremos que unos pocos intentos por abordar el problema fueron llevados a cabo pocos años después de la emisión de dicho comentario.
@@ -34,7 +34,7 @@ La geometría de estos materiales porosos ha sido estudiada muy superficialmente
 Por otro lado, estas geometrías han sido objeto de estudio sistemático en el campo de la ingeniería de los alimentos.
 Sin embargo, debido a la compleja naturaleza de los fenómenos involucrados en la formación de estos materiales, los estudios resultan generalmente fenomenológicos y sólo proveen resultados estadísticos.
 
-Este escenario, junto con el crecimiento quasi-exponencial de poder de cómputo existente, gracias al desarrollo de las placas gráficas, proveen la base y la motivación de la presente tesis.
+Este escenario, junto con el crecimiento cuasi-exponencial de poder de cómputo existente, gracias al desarrollo de las placas gráficas, proveen la base y la motivación de la presente tesis.
 
 \section{Alcances y Objetivos}
 Esta tesis propone el estudio e implementación de algoritmos tanto en CPU como GPU, que permitan un modelado y renderización adecuados y realistas de materiales porosos y cocidos.
@@ -58,27 +58,31 @@ Más específicamente, pueden mencionarse:
 \end{itemize}
 
 \section{Resultados Originales Presentados}
-Para lograr estos objetivos, se tomó en consideración el proceso de cocción del pan, y de manera más general, se estudió la cadena completa de pasos existente en la elaboración del mismo (leudado, cocción, etc.).
-Debido a que la literatura de ingeniería de los alimentos presenta estudios muchas veces inconexos, sobre los distintos pasos involucrados, se implementaron algoritmos que aproximan los pasos más preponderantes: leudado y cocción, dejando de lado otros procesos como el amasamiento del mismo, o la formación de la corteza.
+En la obtención de los mencionados objetivos, se tomaron en consideración sistemas dinámicos por un lado (en la generación de geometrías procedimentales), y el proceso de cocción del pan, y de manera más general, la cadena completa de pasos existente en la elaboración del mismo (leudado, cocción, etc.).
+Debido a que la literatura de ingeniería de los alimentos presenta estudios muchas veces inconexos sobre los distintos pasos involucrados, se implementaron algoritmos que aproximan los pasos más preponderantes: leudado y cocción, dejando de lado otros procesos como el amasamiento del mismo, o la formación de la corteza.
 
 Resumidamente, las contribuciones más preponderantes incluyen:
 \begin{itemize}
-\item un algoritmo fractal que induce una distribución de radios de burbujas consistente con el proceso de leudado de la masa cruda del pan,
-\item un algoritmo que aproxima el proceso de cocción del pan,
-\item un algoritmo que aproxima el efecto de levantamiento del pan durante la cocción, basado en las distribuciones de burbujas existentes en el leudado,
-\item una técnica que permite asignar colores en la corteza, utilizando el espacio de color CIELab, indicando mayor o menor cocción en cada punto,
-\item el estudio del espectro multifractal en la discriminación de imágenes de migas de pan, y,
-\item un algoritmo que utiliza el espectro multifractal en la aproximación de una distribucioń de burbujas dada.
+\item un Algoritmo fractal \cite{Mandelbrot1983} que induce una distribución de radios de burbujas consistente con el proceso de leudado de la masa cruda del pan,
+\item un Algoritmo que aproxima el proceso de cocción del pan \cite{Powathil2004},
+\item un Algoritmo que aproxima el efecto de levantamiento del pan durante la cocción, basado en las distribuciones de burbujas existentes en el leudado,
+\item una Técnica que permite asignar colores en la corteza, utilizando el espacio de color CIELab \cite{Hunter58}, indicando mayor o menor cocción en cada punto,
+\item el Estudio del espectro multifractal \cite{Xu2009} en la discriminación, y clasificación de imágenes de migas de pan,
+\item un Algoritmo procedimental que genera texturas volumétricas de geometrías porosas utilizando sistemas dinámicos, y,
+\item un Algoritmo que utiliza el espectro multifractal en la aproximación de una distribucióń de burbujas dada.
 \end{itemize}
 
-Los resultados de la investigación de la presente tesis doctoral fueron volcados en las siguientes publicaciones:
+Los resultados de la investigación de la presente tesis doctoral fueron presentados en las siguientes publicaciones:
 
 \subsection*{Revistas Internacionales}
 
 \begin{itemize}
-\item {\bf Procedural Bread Making}. Rodrigo Baravalle, Gustavo Patow y Claudio Delrieux. En {\it Computers \& Graphics}. Mayo 2015. En prensa.
+\item {\bf Procedural Bread Making}. Rodrigo Baravalle, Gustavo Patow y Claudio Delrieux. En {\it Computers \& Graphics}. Mayo 2015. DOI:10.1016/j.cag.2015.05.003.
+En prensa.
 
 \item {\bf Multifractal Characterisation and Classification of Bread Crumb Digital Images}. Rodrigo Baravalle, Claudio Delrieux y Juan Carlos Gómez. En {\it EURASIP Journal on Image and Video Processing}. {\bf 2015}:9. Abril 2015. doi:10.1186/s13640-015-0063-8.
+
+\item Estamos trabajando en el artículo {\bf Real Time Realistic Rendering of Bread Crumbs}. Rodrigo Baravalle, Leonardo Scandolo, Claudio Delrieux y Cristian García Bauza, en {\it Computer Animation and Virtual Worlds}, el cual fue presentado, y devuelto con major revisions.
 \end{itemize}
 
 
@@ -106,7 +110,7 @@ Los resultados de la investigación de la presente tesis doctoral fueron volcado
 
 \section{Organización de la Tesis}
 Los capítulos de la presente tesis se organizan de la siguiente manera: en el Capítulo 2 se introduce el estado del arte en el modelado y renderización de materiales en computación gráfica, explicando los casos más generales, y algunas derivaciones o casos particulares.
-En el Capítulo 3 se introducen las dificultaes presentes en materiales porosos, y una propuesta de modelado de los mismos, desde un punto de vista puramente procedimental, y otro con consideraciones físicas.
+En el Capítulo 3 se introducen las dificultades presentes en materiales porosos, y una propuesta de modelado de los mismos, desde un punto de vista puramente procedimental, y otro con consideraciones físicas.
 En el Capítulo 4 se presenta una propuesta de renderizado para la representación volumétrica inducida en el capítulo anterior, logrando imágenes foto-realistas y en tiempo real, gracias a la utilización de la placa gráfica.
 En el Capítulo 5 se explican las conclusiones y los trabajos a futuro, los cuales se desprenden del trabajo de la presente tesis.
 Finalmente, en el Apéndice A, se presenta una introducción a la programacion de las placas gráficas actuales, tanto en aplicaciones gráficas, como en aplicaciones de propósito general.
