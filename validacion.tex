@@ -1,24 +1,17 @@
 \chapter[Características Fractales del Pan]{Validación: Características Fractales y Multifractales del Pan}
 
 \section{Introducción}
-
-
 Las imágenes generadas utilizando los métodos de los capítulos previos provocan la percepción de determinados materiales en escenas renderizadas.
 Lamentablemente, el fenómeno de la percepción resulta difícil de cuantificar.
 La computación gráfica ha apelado históricamente a métodos subjetivos de validación de resultados, debido a la complejidad de los fenómenos involucrados en los mecanismos de percepción humanos.
-
 Uno de los métodos de validación clásicos consiste en realizar pruebas con personas, entreg\'andoles im\'agenes verdaderas y sint\'eticas, sin que los participantes del experimento sepan a cu\'al categor\'ia pertenece cada una, pidi\'endoles que clasifiquen las im\'agenes en verdaderas y sint\'eticas.
 Si las im\'agenes sint\'eticas resultan ser clasificadas en un porcentaje adecuado como reales, se puede considerar al experimento como satisfactorio.
 Si bien este método puede resultar interesante, se siguen requiriendo métodos automáticos y objetivos, ya que en este caso se sigue dependiendo de observadores subjetivos para evaluar la calidad de las imágenes.
 
 
-
-
 Existen diversos criterios objetivos para evaluar la fidelidad de las im\'agenes resultantes.
 Apelando a métodos matemáticos, podemos comparar imágenes por medio de extracci\'on de caracter\'isticas.
 En el presente capítulo se comparan dimensiones fractales (\acrshort{DF}) y multifractales de determinadas caracter\'isticas de imágenes reales y sint\'eticas de cortes de panes.
-
-
 Gracias a estas t\'ecnicas, podemos validar los resultados obtenidos en los cap\'itulos anteriores con una base matem\'atica s\'olida, m\'as all\'a de la validaci\'on visual realizada por las personas, la cual se emplea tradicionalmente en computaci\'on gr\'afica.
 Como aporte extra de la tesis, las características fractales y multifractales capturan detalles esenciales que pueden ser utilizados para la clasificación de las muestras, superando a otros clasificadores del estado del arte.
 
@@ -32,14 +25,12 @@ Si bien estas estructuras parecen carecer de patrones repetitivos que caracteric
 En \cite{Gonzales2008} se present\'o un trabajo de c\'alculo de distintas DFs sobre muestras de pan.
 Las mismas son obtenidas a trav\'es de diversos algoritmos, diferentes a los utilizados en este trabajo.
 Debido a esto, en esta sección utilizaremos dos métodos, con el objetivo de demostrar que una única dimensión fractal, si bien constituye una aproximación adecuada en muchos casos, no resulta lo suficientemente descriptiva para capturar la riqueza de las distribuciones de burbujas en distintos tipos de panes.
-Esto será demostrado realizando una caracterización y clasificación de distintas imágenes de muestras de pan. 
-
+Esto será demostrado realizando una caracterización y clasificación de distintas imágenes de muestras de pan.
 Se utilizan las DFs de Korcak \cite{Mandelbrot1983} y la dimensi\'on Box \cite{Peitgen2004} sobre imágenes obtenidas por medios tradicionales (cámaras y escáneres), buscando caracterizar su estructura.
 
 
 \subsection{Dimensi\'on Box}
 La misma intenta simplificar el c\'alculo de la DF de Hausdorff, debido a que \'esta resulta muy dif\'icil de obtener \cite{Peitgen2004} (o imposible si el objeto no es estrictamente autosimilar).
-
 Dada una imagen, se la subdividide en una grilla de dimensiones $M\times M$ donde el largo del lado de cada cuadrado formado es $\delta$. Si $N(\delta)$ representa el n\'umero de cuadrados que contienen al menos un p\'ixel resultado de una binarizaci\'on de la imagen (p\'ixel blanco) para ese $\delta$, la dimensi\'on Box $D_{b}$ queda definida como:\\
 
 $D_{b} = \displaystyle\lim_{\delta \to 0}{\frac{\log(N(\delta))}{\log (1/\delta)}}$\\
@@ -53,8 +44,7 @@ Su definici\'on formal se muestra a continuación \cite{Imre11}:
 
 $$N(A > a) = k a^{-K},$$
 
-\noindent
-donde K es el exponente Korcak de fragmentaci\'on (patchiness), N es el n\'umero de fragmentos cuyo \'area $A$ es mayor que el valor $a$, y $k$ es una constante. La DF de Korcak, $D_{k}$, queda definida de la siguiente manera:
+\noindent donde K es el exponente Korcak de fragmentaci\'on (patchiness), N es el n\'umero de fragmentos cuyo \'area $A$ es mayor que el valor $a$, y $k$ es una constante. La DF de Korcak, $D_{k}$, queda definida de la siguiente manera:
 
 $$K = D_{k}/2.$$
 
@@ -64,7 +54,6 @@ Consideramos que esta dimensión es representativa, dado que las muestras de pan
 \subsection{Segmentaci\'on de las Im\'agenes}
 La imagen original se transforma a escala de grises y luego se binariza.
 Un método estándar para la binarización lo constituye el algoritmo de Otsu \cite{Otsu79} el cual define un valor de umbral, a partir del cual se decide si el p\'ixel ser\'a negro o blanco en la binarizaci\'on. 
-
 Si bien este algoritmo se utiliza de manera estándar en diversas aplicaciones, en el caso de fotografías o imágenes escaneadas de pan pueden existir variaciones en la iluminación dentro de la imagen.
 Por esto, se presenta un algoritmo de umbralamiento local que obtiene binarizaciones más adecuadas para estas imágenes. 
 
@@ -88,6 +77,10 @@ Experimentalmente encontramos que estos parámetros dependen del método de capt
 En la Figura~\ref{fig:bread} se observa una imagen de distintos tipos de pan (primera fila) y su binarización correspondiente utilizando el algoritmo descripto (segunda fila).
 Se removieron de la imagen binarizada elementos pequeños de $1$ o $2$ píxeles utilizando una operación de {\em opening} (erosión seguida de dilatación, ver capítulo anterior) con un elemento estructurante de tamaño $2\times 2$ píxeles.
 Las imágenes demuestran que este método presenta buenos resultados, incluso con condiciones de iluminación variando sobre la imagen.
+En la Fig.~\ref{bin} puede observarse una imagen  y su binarizaci\'on.
+La Fig.~\ref{fitbox} muestra los valores obtenidos en el c\'alculo de la dimensi\'on Box para esta imagen y la recta que ajusta estos valores. 
+En la Fig.~\ref{fit} se observan los valores obtenidos por el algoritmo de Korcak para esta imagen y las rectas aproximantes (en la siguiente secci\'on se explica el por qu\'e de dos rectas aproximantes).
+
 
 \begin{figure}[h!]
 \centering
@@ -96,11 +89,6 @@ Las imágenes demuestran que este método presenta buenos resultados, incluso co
 \label{fig:bread}
 \end{figure}
 
-
-En la Fig.~\ref{bin} puede observarse una imagen  y su binarizaci\'on.
-La Fig.~\ref{fitbox} muestra los valores obtenidos en el c\'alculo de la dimensi\'on Box para esta imagen y la recta que ajusta estos valores. 
-En la Fig.~\ref{fit} se observan los valores obtenidos por el algoritmo de Korcak para esta imagen y las rectas aproximantes (en la siguiente secci\'on se explica el por qu\'e de dos rectas aproximantes).
-
 \begin{figure}
 \centering
 \includegraphics[width=5cm]{figures/lactal}
@@ -108,8 +96,6 @@ En la Fig.~\ref{fit} se observan los valores obtenidos por el algoritmo de Korca
 \caption{Imagen de un corte de pan (izquierda) y binarización (derecha).}
 \label{bin}
 \end{figure}
-
-
 
 \begin{figure}
 \centering
@@ -153,8 +139,6 @@ Esto implica que se puede computar m\'as de una DF para la misma imagen. Se real
 \caption{DFs de Korcak estimadas en muestras reales de pan}
 \label{tab:korcak}
 \end{table}
-
-%Puede observarse que para distintos tipos de panes las DFs resultantes var\'ian de manera considerable, por lo cual es posible pensar a estas DF como clasificadores de muestras.
 
 Para la regresi\'on por DF Box, los valores que se obtuvieron se muestran en la Tabla \ref{tab:box}.
 Si bien se observa cierta similitud entre los valores obtenidos, se puede observar que la recta no ajusta perfectamente los datos en la figura.
@@ -211,8 +195,6 @@ Está demostrado que el MFS resulta localmente invariante a cambios afines en la
 Estas características son útiles para describir estructuras de migas de panes de una manera robusta y adecuada para los propósitos de esta sección.
 
 La clasificación de texturas de alimentos ha sido abordada utilizando fractales y otras técnicas en \cite{Zong2010,Bosch2011}, pero estos trabajos no tienen en cuenta el esquema intra-clase, es decir, la clasificación se da entre diferentes alimentos, a diferencia de generar una clasificación entre imágenes del mismo alimento.
-
-
 En esta sección comparamos los MFS de distintos tipos de panes con otras características del estado del arte utilizando distintos clasificadores, estudiando además las correlaciones entre las características fractales obtenidas con el procedimiento y diferentes características obtenidas de imágenes (heterogeneidad, porosidad y granularidad).
 
 Además, se comparan las características fractales obtenidas, con el estado del arte en extracción de características para clasificación de texturas.
@@ -240,7 +222,6 @@ Definimos el exponente de H\"older, $\alpha$, para cada sub-estructura $E_{j}$, 
 
 El límite $\alpha$ representa el valor del exponente de H\"older en un punto de la estructura, el cual caracteriza la regularidad local de la estructura en un punto.
 Para obtener una caracterización global de la regularidad de la estructura se necesita obtener la distribución de $\alpha$ en $E$.
-
 Luego, el espectro multifractal asociado al valor $\varepsilon$, $f_{\varepsilon}(\alpha)$, se obtiene contando las $N_{\varepsilon}$ cajas caracterizadas por $\alpha$ de la siguiente manera,
 
 \begin{equation}
@@ -266,7 +247,6 @@ El desarrollo de la sección anterior permite deducir un procedimiento para comp
 En primer lugar se debe computar la regularidad local en cada pixel, para esto, se computa el exponente de H\"older, $\alpha_{x}$, para cada píxel $x$ de la imagen, utilizando la ecuación (\ref{eq:holder}).
 Esto se logra definiendo a $B(x,\varepsilon)$ como el disco cerrado de radio $\varepsilon > 0$ centrado en $x$, y luego se reemplaza el límite en la ecuación con el ajuste lineal de los valores $log(\mu(B(x,\varepsilon)))$ y $log(\varepsilon)$.
 Al aplicar este procedimiento en cada píxel, se obtiene lo que se denomina una $\alpha-$imagen, compuesta por un conjunto discreto de valores con un mínimo $\alpha_{min}$, y un máximo $\alpha_{max}$.
-
 Para caracterizar globalmente la estructura, se debe aproximar la función que representa el MFS.
 Debido a que la función tiene un dominio contínuo, a fines prácticos se lo discretiza por medio de un conjunto de valores $\alpha_{i} \in [\alpha_{min},\alpha_{max}], \{\alpha_{i}, i = 1,\dots,M\}$, donde el conjunto de puntos que corresponde a un $\alpha_{i}$ se forma agrupando los píxeles de la $\alpha-$imagen cuyo valor está cerca a ese $\alpha_{i}$ bajo cierto umbral. 
 Entonces, se aproxima la ecuación (\ref{eq:mfs}) por medio de un conjunto de DFs, donde cada DF corresponde a un $\alpha_{i}$.
@@ -288,7 +268,7 @@ El primer ejemplo consiste en definir $\mu$ en el dominio de intensidades de la 
 \mu(B(x,\varepsilon)) = \int_{B(x,\varepsilon)}{(G_{\varepsilon} \ast I)} dx,
 \label{eqn:eqn11}
 \end{equation}
-donde $\ast$ representa el operador de convolución $2D$ y $G_{\varepsilon}$ un kernel Gaussiano con variancia $\varepsilon$, en otras palabras $\mu$ es el promedio ponderado de los valores de intensidades en el disco de radio $\varepsilon$ centrado en $x$ ($B(x,\varepsilon)$).
+\noindent donde $\ast$ representa el operador de convolución $2D$ y $G_{\varepsilon}$ un kernel Gaussiano con variancia $\varepsilon$, en otras palabras $\mu$ es el promedio ponderado de los valores de intensidades en el disco de radio $\varepsilon$ centrado en $x$ ($B(x,\varepsilon)$).
 Esta función se define como la densidad de la intensidad, y describe como la intensidad se modifica en un punto con la escala.
 
 La definición de $\mu$ puede ser realizada con fines específicos.
@@ -328,14 +308,12 @@ En la Figura ~\ref{fig:camera} se observan $4$ ejemplos de imágenes de pan obte
 
 \subsection{Extracción de Características de Migas de Panes}
 Para obtener una mayor comprensión de los valores de las DF del método multifractal, se extrajeron características típicas de las imágenes binarizadas para establecer correlaciones con las dimensiones del MFS.
-
 Se computaron la fracción de vacío de la imagen (\acrshort{VF}), el área media de las burbujas (\acrshort{MCA}) y el desvío estándar del área media de las burbujas (\acrshort{stCA}) con el propósito de establecer relaciones con la porosidad, granularidad y heterogeneidad de las diferentes migas.
 
 
 \section{MFS como vector de características}
 
 En esta sección nos proponemos demostrar el adecuado comportamiento del MFS como descriptor de imágenes de pan.
-
 Computamos el MFS para cada una de las $200$ imágenes presentes en la base de datos ($40$ imágenes de cada tipo, incluyendo no-pan), obteniendo $5$ clases balanceadas.
 En las siguientes subsecciones analizaremos los datos obtenidos, además de utilizarlos en la clasificación de las muestras.
 
@@ -349,6 +327,11 @@ La imagen de la izquierda muestra las $5$ clases ({\em baguette}, {\em lactal}, 
 En la imagen de la derecha la clase {\em no-pan} fue removida y el SOM recomputado para las restantes $4$ clases, con la intención de observar más detenidamente la relación entre los MFS de las distintas clases de pan.
 Las imágenes muestran, a primera vista, clases fácilmente separables.
 Un clasificador podría determinar regiones del espacio y clasificar de manera adecuada las clases, ya que se encuentran claramente separadas unas de otras (no existen prácticamente celdas con más de un número de clase en ellas).
+En la Figura~\ref{fig:boxplotsMFS}, se muestran boxplots del MFS de los cuatro tipos de panes con la mediana de cada dimensión (en rojo) unida por una línea a trozos.
+Cada dimensión fractal corresponde a un valor de $\alpha_{i}$.
+En nuestros experimentos el vector de MFS contiene $20$ dimensiones fractales. De estos datos se infiere que la primer mitad del MFS (primeras $10$ DFs, $\alpha \in [0,0.53)$), la dispersión resulta mayor que en la segunda mitad del espectro  (últimas $10$ DFs, $\alpha \in [0.53,1]$).
+Es decir, la segunda mitad del espectro puede identificar cada tipo de pan.
+
 
 \begin{figure}[h!]
 \begin{centering}
@@ -357,12 +340,6 @@ Un clasificador podría determinar regiones del espacio y clasificar de manera a
 \label{fig:somfractal}
 \end{centering}
 \end{figure}
-
-En la Figura~\ref{fig:boxplotsMFS}, se muestran boxplots del MFS de los cuatro tipos de panes con la mediana de cada dimensión (en rojo) unida por una línea a trozos.
-Cada dimensión fractal corresponde a un valor de $\alpha_{i}$.
-En nuestros experimentos el vector de MFS contiene $20$ dimensiones fractales. De estos datos se infiere que la primer mitad del MFS (primeras $10$ DFs, $\alpha \in [0,0.53)$), la dispersión resulta mayor que en la segunda mitad del espectro  (últimas $10$ DFs, $\alpha \in [0.53,1]$).
-Es decir, la segunda mitad del espectro puede identificar cada tipo de pan.
-
 
 \begin{figure}[h!]
 \centering
@@ -373,7 +350,6 @@ Es decir, la segunda mitad del espectro puede identificar cada tipo de pan.
 
 
 Los datos muestran que cada tipo de pan posee una curva característica en este sector del espectro, pero esta curva se modifica si se modifican las condiciones de iluminación (es decir, si se toma con el escáner o la cámara), en otras palabras esto altera el MFS obtenido, y por lo tanto no poseemos un único MFS para cada tipo de pan. 
-
 Por completitud, en la Figura~\ref{fig:meansMFS}, mostramos la media y el desvío estándar del MFS de cada tipo de pan.
 La imagen muestra, al igual que en los casos anteriores, que el MFS puede ser aprovechado para separar diferentes tipos de pan, ya que los valores medios de cada clase son distintos.
 
@@ -394,7 +370,6 @@ Preferimos $\rho$ al coeficiente de Pearson's $R$ ya que el primero no asume una
 La Figura~\ref{fig:corrVF} muestra que los coeficientes de las primeras $5$ dimensiones se comportan similarmente ($\alpha \in [0,0.23]$) en todos los tipos de pan y de manera distinta para la dimensión $5$ y superiores. Esto quiere decir que las primeras $5$ dimensiones están altamente correlacionadas con la fracción de vacío (porosidad) de las muestras escaneadas.
 Esto significa que las primeras DFs crecen cuando la fracción de vacío crece.
 Si bien otras dimensiones presentan correlaciones estadísticamente relevantes, lo mismo sólo ocurre en determinados tipos de pan, por lo cual el resultado depende del tipo de pan que se considere.
-
 De las imágenes correspondientes a los coeficientes de correlación MCA y stCA (Figuras \ref{fig:corrMCA} y \ref{fig:corrMCAstdev} respectivamente) se desprende que el área media de burbujas está más correlacionada con las dimensiones fractales que el desvío estándar del área media de burbujas. Esto significa que la granularidad de la miga de pan puede ser caracterizada de manera más precisa con el MFS, que su heterogeneidad.
 
 
@@ -430,7 +405,6 @@ Es decir, con un único vector de dimensiones fractales medimos diferentes carac
 \subsection{Clasificaci\'on de imágenes de diferentes tipos de pan}
 
 Definimos $5$ clases {\em baguette}, {\em lactal}, {\em salvado}, {\em sandwich} y {\em no-pan}, asignando $40$ imágenes a cada clase.  Se establecen comparaciones además entre el MFS y métodos del estado del arte en visión por computadora.
-
 Este esquema de clasificación corresponde a un esquema intra-clase (donde cada clase representa un tipo distinto del mismo objeto), el cual resulta más dificultoso de resolver que un esquema inter-clase (donde cada clase representa un objeto distinto).
 
 Se aplica K-fold cross-validation a todo el conjunto (con $K=4$), utilizando tres clasificadores distintos: Máquinas de vectores de soporte (Support Vector Machines, \acrshort{SVM}),  bosques aleatorios (Random Forests, \acrshort{RF}) \cite{Breiman2001}, y vecinos más cercanos (Nearest Neighbors, \acrshort{NN}).
@@ -438,12 +412,8 @@ Los resultados muestran que el MFS realiza una muy buena clasificación independ
 La implementación de SVM utilizada fue \textsf{libsvm} \cite{Chang2011} (con kernel RBF).
 Se utilizó la librería python \textsf{scikit-learn} en los restantes algoritmos de clasificación.
 En el caso de RF, se utilizaron $100$ árboles y en NN, un vecino.
-
 En la Tabla~\ref{tab:number}, se observan los resultados del método utilizando diferente número de FDs.
 Una combinación práctica de rendimiento y baja dimensionalidad se alcanza al utilizar $20$ FDs (en ese caso se obtienen los resultados de mayor desempeño para los algoritmos de clasificación RF y NN), por lo tanto este número de FDs se utilizará en las computaciones subsiguientes.
-
-
-
 
 
 \begin{table}[h!]
@@ -545,7 +515,6 @@ La tabla muestra que el $97.5\%$ de la base de datos se clasifica correctamente 
 En la clasificación de la base de datos, el MFS obtiene el mayor desempeño entre los algoritmos estudiados.
 El MFS captura información robusta en unos pocos valores.
 Estos resultados concuerdan con los obtenidos en \cite{Bosch2011} para la clasificación de otros productos alimenticios.
-
 Esta sección demostró la capacidad del MFS para caracterizar imágenes de cortes de la miga del pan, diferenciándola entre distintos tipos del mismo.
 Los resultados pueden ser útiles en la caracterización de las cualidades de su estructura.
 Además, la clasificación puede aplicarse en ambientes donde se trabaje con migas reales de panes.
@@ -562,14 +531,12 @@ Además, la clasificación puede aplicarse en ambientes donde se trabaje con mig
 
 En el capítulo de modelado introdujimos distintos algoritmos para modelar la geometría de la miga del pan.
 En esta sección mostraremos que el algoritmo de modelado que atiende al proceso de fabricación del pan puede ser validado utilizando métodos multifractales.
-
 Particularmente, utilizaremos el MFS previamente descripto, pero en otra representación, la cual resulta más adecuada para los propósitos de esta sección.
 Esta forma de computar el MFS se utiliza ampliamente en análisis de texturas en visión por computadoras y en análisis de patrones.
 
 A diferencia de las características fractales \cite{Gonzales2008}, la teoría multifractal ha sido utilizada para describir características de imágenes, pero no en caracterización de panes.
 Existen dos clases principales de espectro multifractal: dimensiones generalizadas ($D_{q}$) y exponentes de Lipschitz-H\"older ($f(\alpha)$). 
 La última representación resulta útil en clasificación, como fue mostrado.
-
 Las dimensiones multifractales generalizadas pueden ser computadas de muchas maneras, de las cuales el método Sandbox \cite{Tel1989} calcula el valor medio de muchas muestras aleatoriamente distribuidas, sobre puntos pertenecientes a la estructura \cite{Debartolo2004}. 
 
 La dimensión generalizada de orden $q$ con el método Sandbox se define como:
@@ -582,9 +549,8 @@ D_{q=1}^{sb} &= \lim_{R \rightarrow 0}{
 \frac{ \left\langle ln   { (M(R)/M_{0})  }  \right\rangle}
 {ln {(R/L)}       }},
 \end{align*}
-%
-donde $M_{0}$ es la cantidad de píxeles blancos en la imagen binarizada y $M(R)$ es el número de puntos que pertenecen a la estructura en un círculo de radio $R$ centrado en un punto de la misma.
 
+\noindent donde $M_{0}$ es la cantidad de píxeles blancos en la imagen binarizada y $M(R)$ es el número de puntos que pertenecen a la estructura en un círculo de radio $R$ centrado en un punto de la misma.
 Cuando $q\ne1$, computamos el límite como la pendiente del ajuste lineal de los valores $ln(R/L)$ vs. $ ln  \left\langle  { (M(R)/M_{0})^{q-1} }  \right\rangle$, para $R$ en $[R_{min}, R_{max}]$, donde $ \left\langle \cdot  \right\rangle$ denota el valor medio sobre los puntos muestreados.
 Se procede similarmente para $q=1$. 
 Computando el valor para diferentes $q \in [Q_{min},Q_{max}]$  se obtiene el espectro sandbox.
@@ -592,15 +558,13 @@ Computando el valor para diferentes $q \in [Q_{min},Q_{max}]$  se obtiene el esp
 Esta metodología para el cálculo del MFS aparece reportada como la más adecuada para análisis de características texturales y geométricas \cite{Gonzales2008}, por lo que lo utilizamos sobre $10$ imágenes binarizadas a partir de muestras escaneadas de migas de pan del tipo {\em baguette}, y $10$ imágenes sintéticas producidas con nuestro método luego del paso de cocción, obteniendo $20$ vectores de características.
 Luego separamos cada clase y computamos boxplots para las dos clases.
 Las migas de pan de imágenes reales fueron manualmente segmentadas para prevenir errores de segmentación automática, similarmente a como fue hecho en \cite{Bosch2011}.
-
 El modelo tiene $5$ parámetros:
 
 \begin{align*}
 N &= \frac{k}{r^{d}},\\ r &= r_{min}+paso*j, j \in [0,\frac{r_{max}}{paso}],
 \end{align*}
-$k,d,r_{min},r_{max}$ y $step$ que controlan la generación de burbujas en el paso de leudado.
+\noindent $k,d,r_{min},r_{max}$ y $step$ que controlan la generación de burbujas en el paso de leudado.
 Para computar el espectro sandbox de cada imagen, utilizamos $1000$ puntos aleatorios distintos para asegurar estabilidad en el espectro resultante.
-
 Los parámetros definen un espacio de búsqueda, en el cual implementamos una búsqueda semi automática definiendo una métrica de error:
 \begin{equation*}
 Error = \displaystyle \sum abs(medianas_{real}-medianas_{sint\acute{e}tico}).
@@ -616,7 +580,7 @@ r_{max} &=20.\\
 paso &=1,
 \end{align*}
 
-donde $N$ representa la cantidad de voxels en cada dimensión durante el leudado (elegimos $N = 512$). 
+\noindent donde $N$ representa la cantidad de voxels en cada dimensión durante el leudado (elegimos $N = 512$). 
 El error acumulado en medianas es de $\sim 0.21$, lo cual significa un error promedio de $0.21/21 \sim 0.01$ en cada dimensión.
 La Fig.~\ref{bestboxplot} muestra boxplots de panes reales y sintéticos con las medianas de cada dimensión unidas por líneas de puntos.
 Cuando $q < 0$ las dimensiones presentan una dispersión mayor, ya que el método aproxima esas dimensiones de un modo menos preciso, debido a que las burbujas más pequeñas poseen un límite en la resolución.
@@ -688,8 +652,6 @@ La Fig.~\ref{realbin2} y  Fig.~\ref{best2} muestran un ejemplo de binarizaciones
 
 En este capítulo demostramos que los métodos fractales y sobre todo, multifractales, permiten capturar características útiles de panes, las cuales se utilizan para caracterizarlos y clasificarlos.
 Además, la información capturada resulta lo suficientemente descriptiva como en la definición de parámetros de entrada a un algoritmo que genera versiones sintéticas de los mismos, las cuales fueron también validadas.
-
-
 La apariencia de diferentes tipos de panes puede ser caracterizada exitosamente computando dimensiones multifractales de sus imágenes digitales.
 Las DFs obtenidas por el método MFS cuyo $\alpha \in [0,0.23]$ proveen una buena medida de la porosidad de la miga del pan, ya que mientras mayor la DF, mayor la porosidad.
 Además, las DFs cuyo $\alpha \in [0.79,1]$ permiten caracterizar la granularidad y la heterogeneidad en la distribución de sus burbujas.
@@ -704,10 +666,8 @@ Se mostró además que el MFS resulta sensible a cambios en la iluminación dura
 
 Por otro lado, el método multifractal sanbox permite definir parámetros con la intención de aproximar la geometría de cualquier miga de pan, extrayendo parámetros para simular de manera precisa un tipo dado.
 Las distribuciones de burbujas de nuestro modelo pueden adecuarse de manera estadística con algún tipo de pan deseado, gracias al análisis multifractal sandbox.
-
 Para comprobar esta afirmación, se realizaron pruebas con dos tipos de panes diferentes: {\em baguette} y un tipo de pan casero.
 El espectro multifractal del pan casero resultó más dificultoso de sintetizar (es decir, los errores fueron mayores que aquellos del tipo {\em baguette}), pero a pesar de esto, las imágenes obtenidas resultan más que adecuadas para emular el tipo de pan deseado en computación gráfica.
-
 El espectro multifractal presentó mayor dispersión en las dimensiones negativas ($q < 0$), 
 lo cual significa que debido al límite de resolución en las imágenes, la distribución estadística resulta más difícil de capturar en escalas más pequeñas.
 

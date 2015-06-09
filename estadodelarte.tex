@@ -34,10 +34,8 @@ Las propiedades clave del objeto, que determinan la energía lumínica que llega
 
 La forma del objeto refiere a su geometría macroscópica.
 Las pequeñas imperfecciones de esta geometría también deben ser modeladas para alcanzar una imagen sintética realista.
-
 El material que define el objeto debe modelarse a diferentes escalas y debe poseer determinadas propiedades.
 Entre los atributos que componen un material encontramos su color, su función de distribución de energía lumínica, sus texturas, etc.
-
 Existe un compromiso en la elección del modelado de la microgeometría de un material.
 Es decir, la elección responde a la utilización de un modelado geométrico directo (es decir, como parte de su forma global), o al modelado de las mismas en su material.
 La respuesta final depende del material, ya que para algunos de ellos resulta más adecuado modelar la geometría, mientras que la complejidad en la superficie de determinados materiales tornan prohibitivo este enfoque.
@@ -74,7 +72,6 @@ Utilizando estas categorías, previamente definidas por las personas, es posible
 En esta sección presentaremos distintos modelos geométricos de materiales que han hecho su aparición a lo largo de los años en computación gráfica.
 Los mismos son el resultado de un balance entre el realismo buscado, los tiempos de cómputo y los recursos de memoria utilizados, y las dificultades en la recolección de datos reales (por ejemplo, detalles microscópicos del material).
 La experiencia sugiere que un correcto modelo de la geometría involucrada, posiblemente a distintas escalas, resulta indispensable para lograr imágenes realistas de los materiales a ser renderizados.
-
 Se comienza describiendo modelos fenomenológicos, para luego incorporar comportamiento físico a los mismos.
 
 \subsection{Modelos Procedimentales}
@@ -93,18 +90,16 @@ Más adelante se desarrolla un ejemplo de aplicación de modelos físicos en el 
 
 \subsection{Plantas}
 El modelado procedimental de plantas está basado en una interpretación de una tortuga que se mueve por un plano o el espacio tridimensional dibujando líneas, construyendo de esta manera la geometría de sus ramificaciones \cite{Prusinkiewicz1986}.
-
 Las gramáticas formales \cite{Chomsky1956} intentaron describir el lenguaje natural de forma matemática, por medio de un proceso recursivo donde sub-cadenas de caracteres son reemplazadas por otras.
+
 Siguiendo esta idea, los sistemas-L \cite{Lindenmayer1968} realizan una descripción algorítmica de la geometría de las plantas.
 El concepto central que permite comprender el modelado procedimental utilizando sistemas-L es el de {\em reescritura}.
 La reescritura consiste en una aplicación sucesiva de reglas que reemplazan determinadas partes en una descripción matemática por otras.
 En un sistema-L, una cadena de caracteres representa la estructura de la planta.
-
 Por medio de un proceso repetitivo de reescritura, una cadena de caracteres inicial se transforma, a través de ciertas reglas que deben proveerse, en una cadena final, la cual será interpretada por el algoritmo de la tortuga previamente descripto, produciendo una geometría que asemeja a una planta.
 
 \subsubsection{Definición de sistema-L}
 Sea $V$ un alfabeto (conjunto de caracteres), $V^{*}$ el conjunto de todas las palabras que se pueden formar con $V$, y $V^{+}$ el conjunto de todas las palabras que se pueden formar con $V$ y no son vacías.
-
 Una sistema-L de cadenas es una tripleta $G = (V,\omega,P)$, donde $V$ es el alfabeto, $\omega \in V^{+}$ es una cadena no vacía llamada {\em axioma} y $P \subset V \times V^{*}$ es un conjunto finito de reglas de producción.
 Una producción $(a,\chi)$ se denota $a \rightarrow \chi$.
 $a$ se denomina el {\em predecesor} y $\chi$ el {\em sucesor} de la producción.
@@ -112,7 +107,6 @@ Si no se especifica ninguna producción para $a$, se asume $a \rightarrow a \in 
 
 Sea $\mu = a_{1}, \dots, a_{m}$ una palabra en $V$.
 Se dice que la palabra $\eta = \mu_{1}, \dots, \mu_{m}$ es {\em derivada directamente} de $\mu$, y se nota $\mu \Rightarrow \eta$,  si y sólo si $a_{i} \rightarrow \mu_{i}, \forall i = 1, \dots, m$.
-
 Una palabra $\eta$ es {\it generada} por $G$ si existe una secuencia de cadenas que conducen a $\eta$ desde el axioma, es decir, $\beta_{1},\dots,\beta_{n}$, de tal forma que $\beta_{1} = \omega$, $\beta_{n} = \eta$ y $\beta_{1} \Rightarrow \dots  \Rightarrow \beta_{n}$.
 
 Exponemos un ejemplo de generación a continuación.
@@ -156,7 +150,6 @@ La Fig.~\ref{fg:tortuga} muestra un ejemplo de la figura resultante de la cadena
 \end{figure}
 
 La Fig.~\ref{fg:sistemasL} muestra otros ejemplos de sistemas-L, en los cuales se puede observar que con pocas reglas es posible obtener estructuras complejas y de gran belleza.
-
 Usualmente, y debido a la utlización de recursión y repetición, estos sistemas dan lugar a figuras fractales (similares a distintas escalas), por lo cual se las utiliza para dibujar este tipo de estructuras.
 
 \begin{figure}
@@ -212,13 +205,7 @@ Sin embargo, los edificios deben modelarse como conjuntos de objetos con una dis
 Para lograr esto, en \cite{Wonka2003} se proponen varias definiciones, entre las que se encuentran gramáticas de división y gramáticas de control.
 
 Una gramática puede ser definida de manera general como un álgebra de objetos $(U,+,-,F,\leq)$, cerrada bajo las operaciones $+$ y $-$, junto a un conjunto de operaciones $F$, de tal forma que si $u$ y $v$ son miembros de $U$, entonces $u+f(v)$ y $u-f(v)$ lo son, donde $f \in F$.
-
 Una gramática $G=(N,T,R,I)$ se define como una tupla de cuatro elementos, donde $N \subset U$ representa los nodos no terminales (es decir que se pueden seguir realizando divisiones), $T \subset U$ los terminales (no se pueden dividir), $I \subset N$ un conjunto de objetos iniciales y $R \subseteq U \times U$ un conjunto de producciones.
-
-%Para comprender mejor estos conceptos, definimos una gramática de conjuntos.
-%Este tipo de gramáticas 
-
-
 Una {\em forma} se define como un conjunto de líneas rectas en el espacio.
 Las gramáticas de división seleccionan reglas para subdividir formas en formas más básicas (cubos, cilindros, etc.).
 
@@ -318,7 +305,6 @@ Esto resulta útil para modelar perfiles de montañas con distintas rugosidades 
 
 Existen diversos métodos para computar el fBm en computación gráfica.
 En \cite{Fournier1982} se presenta un método de subdivisión recursiva, denominado algoritmo de desplazamiento aleatorio del punto medio.
-
 El algoritmo tiene su base en una fórmula de esperanza condicional para $B_{H}(u,w)$ \cite{Mandelbrot1968}.
 Partiendo de $B_{H}(0,w) = 0$ y $B_{H}(1,w) = 1$, $0 \le u \le 1$ entonces $E[B_{H}(u,w)|B_{H}(1,w)] = \frac{1}{2} (u^{2H} + 1 - |u-1|^{2H})$.
 Si $u=\frac{1}{2}$, entonces la esperanza es igual a $\frac{1}{2}$, independientemente de $H$.
@@ -479,7 +465,6 @@ El modelado de cada término, separadamente, posibilita la visualización fiel d
 Trabajos previos a la aparición de la ecuación del renderizado alcanzaron resultados parciales, sin lograr sintetizar un único método que englobe todos los fenómenos en investigación hasta ese entonces.
 Entre los casos particulares de la ecuación del renderizado, los más emblemáticos han sido el trazado de rayos \cite{Whitted1980} y la radiosidad \cite{Goral1984}.
 El primero resulta adecuado para renderizar escenas donde las superficies tienen BRDF únicamente especular (la luz se refleja en las superficies en direcciones específicas), mientras que la radiosidad resulta idónea para simular escenas donde las superficies tienen un comporamiento reflexivo idealmente difuso (Lambertiano).
-
 Fuera de la ecuación quedan efectos más complejos, como la difracción y la polarización.
 Más detalles de la misma pueden ser consultados en \cite{Kajiya1986}.
 Un esquema de esta ecuación puede observarse en la Fig. \ref{fg:rendequation}.
@@ -911,7 +896,6 @@ Los modelos desarrollados se han utlizado para presentar al público nuevos prod
 Debido a esto, un modelo adecuado del material resulta imprescindible para permitir una reproducción lo más fiel posible al mismo, en un automóvil real.
 
 Se han desarrollado principalmente dos categorías de métodos para obtener un material con la apariencia de pintura de automóviles: aquellos basados en primeros principios \cite{Ershov2001}, y los basados en capturas de características de pinturas reales.
-
 En el primero se realiza un modelo por capas, donde cada capa contiene partículas de pigmentos como en las pinturas reales.
 El modelo de dos capas presentado asume una capa con partículas que reflejan la luz especularmente, y la otra con una pintura opaca.
 Tomando en consideración parámetros como la densidad, la distribución de las orientaciones de las partículas, la transmitancia y la reflectancia, derivan una compleja BRDF parametrizada y analítica que permite definir distintos tipos de pinturas, ver Fig.~\ref{fg:pinturaauto}.

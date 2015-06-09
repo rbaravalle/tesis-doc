@@ -4,11 +4,9 @@ La tesis presenta tres áreas de investigación principales: por un lado, el mod
 
 En cuanto al modelado de geometrías porosas, el estudio comenzó con la introducción de sistemas de partículas en el modelado de texturas bidimensionales.
 Dichas texturas resultaron ser una herramienta flexible en la representación de diversos materiales comunes, como madera o mármol.
-
 Luego, se profundizó dicho modelado, extendiéndolo a tres dimensiones, a través del diseño de un sistema procedimental de generación de geometrías tridimensionales.
 El sistema se basa en el crecimiento de burbujas que se evitan unas a otras, donde el crecimiento está regulado por un sistema dinámico.
 De esta forma se obtiene una herramienta flexible y automática para representar una diversidad de sistemas porosos, como pan, esponjas y otros materiales similares.
-
 Finalmente, se introdujo un proceso completo de modelado procedimental, inspirado en el proceso de fabricación del pan, el cual obtiene imágenes foto-realístas del mismo, tanto en miga como corteza.
 Esto es resultado de la utilización de parámetros físicos tanto en su formación ({\em e.g.}, parametrización de distribuciones de burbujas), como en su visualización ({\em e.g.}, distribución de colores en la corteza).
 Es posible obtener imágenes en cualquiera de las etapas de formación (leudado, cocción, etc.), así como realizar cortes arbitrarios al material, resultando en un enfoque comprensivo al problema de modelado y renderización de pan, en computación gráfica.
@@ -16,7 +14,6 @@ Es posible obtener imágenes en cualquiera de las etapas de formación (leudado,
 Se observó que un enfoque de tiempo real precisa, en las placas gráficas actuales, una textura volumétrica de dimensiones pequeñas (típicamente, $256^{3}$ vóxels en cada eje).
 Si se desea una imagen con mayor grado de realismo, se necesitan texturas de mayores dimensiones ($512^{3}$).
 Sin embargo, esta limitación aparente fue parcialmente soslayada por medio de la utilización de más de una frecuencia en el muestreo de la textura, lo cual dio lugar a texturas con mayor detalle en tiempo real.
-
 El renderizado de estas geometrías fue abordado por medio de la utilización de técnicas basadas en la ecuación RTE (más precisamente, {\em Renderización de Volúmenes}), la cual modela la interacción de la luz con los objetos de una escena.
 La utilización de dichas técnicas derivó en la obtención de imágenes foto-realistas, en tiempo real.
 La GPU resulta indispensable en la obtención de dichas tasas de refresco ($> 30 $ FPS).
@@ -29,7 +26,6 @@ Además, se realizó un estudio de las características fractales y multifractal
 En primer lugar se estudió el comportamiento mono-fractal de cortes de distintos tipo de panes, donde la principal conclusión fue que era necesario utilizar más de una dimensión para caracterizar más ajustadamente los datos.
 Debido a este resultado, se aplicó una combinación de técnicas fractales, junto con el MFS, en la caracterización y clasificación de imágenes de miga de pan. Finalmente, se observó que la utilización, únicamente, del espectro multifractal (sin considerar características fractales) arroja los mejores resultados, superando clasificadores como SIFT \cite{Lowe2004}, junto a un costo computacional menor.
 Adicionalmente, se observaron correlaciones entre determinadas dimensiones fractales del MFS y características típicas del pan, como la porosidad, la distribución de burbujas y el área media de burbuja, permitiendo concentrar toda la información en un único vector de características.
-
 Finalmente, se validaron cortes bidimensionales de las geometrías obtenidas por el método inspirado en el proceso de fabricación del pan.
 Por medio de una búsqueda exhaustiva, se encontraron valores en la generación cuyas características multifractales se corresponden, estadísticamente, con panes reales.
 La búsqueda comienza por medio de la asignación manual de valores de los parámetros, buscando obtener imágenes visualmente similares a las reales.
@@ -45,7 +41,6 @@ El renderizado de los materiales derivó en un trabajo en conjunto con el Dr. Cr
 
 \section{Trabajos a Futuro}
 En estos momentos nos encontramos definiendo varias líneas de investigación las cuales surgen naturalmente de los resultados de la presente Tesis.
-
 Por un lado, el modelado procedimental de otros objetos porosos, como huesos, está siendo estudiado.
 Los huesos presentan en su interior una estructura esponjosa, la cual puede recibir el mismo tratamiento que obtuvo la miga de pan, tanto en modelado como renderización.
 Además, la capa externa del hueso puede seguir el mismo camino que la corteza del pan, logrando un tratamiento integrado de todas las capas del hueso.
@@ -64,7 +59,6 @@ De esta manera, será posible la obtención de parámetros de generación en mat
 También buscamos obtener una mayor comprensión de las dimensiones multifractales, buscando entender su relación con características observables de los materiales.
 De esta manera sería posible obtener una generacíon procedimental a partir de un MFS dado.
 Por otro lado, el MFS, debido a su bajo costo computacional,  puede ser utilizado en cadenas de producción, donde sería posible asociar parámetros de calidad de materiales con determinados MFS, de esta manera detectando materiales defectuosos en tiempo real.
-
 La implementación en GPU de los algoritmos de generación que aún se realizan en CPU, podrían dar lugar a una mejora en los tiempos de cómputo de las geometrías.
 Además, podría explorarse la generación directa de las geometrías en la placa gráfica a medida que se renderiza el material.
 

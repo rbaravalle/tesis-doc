@@ -20,7 +20,6 @@ Como fue discutido en el capítulo anterior, la inmensa variedad de materiales, 
 El modelado de la naturaleza en física ha demostrado capturar de manera muy precisa fenómenos de transporte de la luz.
 Las aproximaciones computacionales a estos modelos son una de las ramas más investigadas en el renderizado de materiales.
 El modelado geométrico de materiales sigue una estrategia de investigación similar. Primero se construye un modelo físico del material, el cual luego se aproxima computacionalmente.
-
 La elección del modelo geométrico depende de cada material, y de la escala de representación buscada.
 Esta elección influencia fuertemente el algoritmo de renderizado. 
 
@@ -439,7 +438,6 @@ Las imágenes muestran un objeto cuyo material asemeja al de la miga del pan.
 
 Estos patrones pueden ser utilizados adem\'as en otros materiales cocidos, variando el par\'ametro de aleatoriedad.
 Distintos sistemas de ecuaciones pueden utilizarse para definir distintos patrones.
-
 Si bien se pueden generar distintas geometrías de manera sencilla y prácticamente automática, todavía existen limitaciones de flexibilidad en los tipos de pan que se pueden sintetizar.
 Existe una dependencia sobre un sistema dinámico para producir la forma global de la deformación, siendo el sistema difícilmente controlable.
 Además, no siempre se adapta de manera sencilla a la forma exterior del material.
@@ -448,6 +446,11 @@ El mismo continúa la idea de una modelización volumétrica del material, pero 
 
 \section{Modelado de Pan desde su Proceso de Fabricación}
 La obtención de geometrías realistas de la miga de pan requiere comprender su proceso físico de formación.
+Utilizando las ideas de la sección anterior, proponemos otro modelo volumétrico de generación de geometrías de migas de pan.
+En esta sección proponemos unificar, y diferenciar, los pasos claves presentes en el proceso de fabricación del pan (sobre todo, leudado y cocción).
+El procedimiento busca utilizar el proceso físico de generación de geometrías de migas y cortezas de pan a partir de la masa original.
+Estos procesos han sido vagamente tenidos en cuenta en la literatura, la cual ha atendido siempre a procesos artísticos más simples, dada la complejidad de los mismos.
+
 
 \begin{figure*}
 \includegraphics[width=13cm]{figures/pipeline}
@@ -455,10 +458,6 @@ La obtención de geometrías realistas de la miga de pan requiere comprender su 
 \label{FigPipeline}
 \end{figure*}
 
-Utilizando las ideas de la sección anterior, proponemos otro modelo volumétrico de generación de geometrías de migas de pan.
-En esta sección proponemos unificar, y diferenciar, los pasos claves presentes en el proceso de fabricación del pan (sobre todo, leudado y cocción).
-El procedimiento busca utilizar el proceso físico de generación de geometrías de migas y cortezas de pan a partir de la masa original.
-Estos procesos han sido vagamente tenidos en cuenta en la literatura, la cual ha atendido siempre a procesos artísticos más simples, dada la complejidad de los mismos.
 
 En primer lugar, reveeremos el estado del arte del proceso de fabricación del pan.
 Luego presentaremos los procesos de modelado, que junto con el modelo de iluminación del siguiente capítulo, permiten obtener imágenes foto realistas de distintos tipos de pan.
@@ -522,9 +521,9 @@ Dada una textura volumétrica $M$, el algoritmo genera una textura volumétrica 
 
 
 $$DF_{M}[i,j,k] = \min \bigg\{ \delta([i,j,k],[i',j',k']): M[i',j',k'] = 0 \bigg\},$$
-\noindent
 
-donde $[i,j,k]$ y $[i',j',k']$ son celdas en las respectivas texturas, representando las posiciones espaciales $(i,j,k)$ y $(i',j',k')$, y $\delta$ es la función que computa la distancia entre dos celdas, las cuales pueden ser la distancia de Manhattan, o la distancia Euclideana.
+
+\noindent donde $[i,j,k]$ y $[i',j',k']$ son celdas en las respectivas texturas, representando las posiciones espaciales $(i,j,k)$ y $(i',j',k')$, y $\delta$ es la función que computa la distancia entre dos celdas, las cuales pueden ser la distancia de Manhattan, o la distancia Euclideana.
 Las entradas de la textura volumétrica lejanas a los bordes del objeto toman valores mayores que aquellas cercanas a los mismos.
 De esta manera se obtiene un mapa de la distancia de cada voxel a las superficies tridimensionales del objeto.
 Esta textura volumétrica de distancias será requerida en etapas posteriores del proceso.
@@ -561,7 +560,7 @@ La relación entre el número de esferas $N_{s}$ a ser sustraídas en cada paso,
 N(r) = \frac{k}{r^{d}},
 \end{equation*}
 
-donde $d$ constituye el exponente fractal que modela la ocurrencia de esferas en relación con su radio, y $k$ controla la cantidad de esferas para cada radio.
+\noindent donde $d$ constituye el exponente fractal que modela la ocurrencia de esferas en relación con su radio, y $k$ controla la cantidad de esferas para cada radio.
 Con estos simples parámetros basta para modelar una gran cantidad de texturas en general y pan en particular.
 
 La Fig.~\ref{FigProving} muestra un ejemplo de un corte en dos dimensiones de este modelo.
@@ -660,7 +659,6 @@ El vector obtenido presenta temperaturas decrecientes de $R = 0$ a $R = L/2$, ya
 Si utilizamos la textura volumétrica de distancias computado previamente, en conjunto con el vector de temperaturas, podemos mapear distancias a temperaturas.
 Esto permite definir temperaturas en la textura volumétrica de forma compatible a una simulación $3D$.
 Basados en estos razonamientos, mapeamos el vector de temperaturas $Temp$ en $3D$ de la siguiente manera,
-
 \begin{equation*}
 \displaystyle R_{vol}[x,y,z] = Temp[ round( DF_{M}[x,y,z] ) ], 
 \end{equation*}
@@ -678,8 +676,6 @@ Las imágenes son casi idénticas a lo que se obtendría con una simulación $3D
 
 Luego de cierto número de pasos de simulación ($t=20$ en nuestro caso), computamos el campo vectorial del gradiente de $R_{vol}$ \cite{Gonzalez2006}, $g$, y luego suavizamos el mismo utilizando un kernel Gaussiano, obteniendo $g'$.
 Finalmente, utilizamos las versiones suavizadas para deformar la textura volumétrica de la siguiente manera,
-
-
 \begin{align*}
 \displaystyle
 [x,y,z] = [u,v,w] + p\, g'[u,v,w],
@@ -778,7 +774,6 @@ En nuestro caso, definimos la {\em densidad de la corteza} en cada posición de 
 Luego utilizamos este valor para modular el canal $L$ en el color en cada posición, obteniendo imágenes plausibles.
 La función fue definida debido a la siguiente observación: en los lugares de la corteza donde hay menos masa (por ejemplo, esquinas), el efecto de la cocción es más marcado.
 El tamaño de la ventana puede ser utilizado para obtener variabilidad en la apariencia de la corteza.
-
 Por completitud presentaremos además otro método, basado en morfología matemática, para calcular la región del volumen que representa la corteza.
 
 \subsection{Determinación de la corteza utilizando morfología matemática}
@@ -862,10 +857,7 @@ Debido a los costos computacionales en resoluciones superiores, el usuario puede
 
 \subsection{Resultados}
 
-
-
 En esta sección presentamos imágenes de geometrías de pan obtenidas utilizando nuestro modelo, renderizadas con el método presentado en el siguiente capítulo.
-
 Los colores de corteza y miga son parámetros definibles por el usuario. Los cortes en la miga son fácilmente producidos anulando las regiones deseadas en la textura volumétrica luego de la cocción, y antes del renderizado.
 
 Las Figs.~\ref{fg:renders}{-{}-}\ref{fg:bakingdeform2} muestran imágenes de los volúmenes obtenidos por medio del proceso de formación presentado, renderizados utilizando DVR.
@@ -875,7 +867,6 @@ La Fig.~\ref{fg:bakingcolors} muestra la misma corteza con diferentes historias 
 Este efecto se logra definiendo diferentes valores máximos en el canal $L$ del espacio de color $CIELab$ para cada imagen.
 Las Figs.~\ref{fg:bakingdeform} y \ref{fg:bakingdeform2} muestran el efecto de definir distintos valores del parámetro $S$ en la ec.~(\ref{Eq:rise}), los cuales producen distintos crecimientos de la masa.
 Las imágenes muestran que el método produce imágenes realistas incluso para masas inverosímiles como una con forma de conejo.
-
 El método permite realizar fácilmente cortes y tajadas en el modelo, definiendo como $0$ diferentes regiones en el volumen luego de la cocción y antes del renderizado.
 
 Respecto de la sección anterior, puede observarse una forma más suave en las burbujas resultantes, junto con la capacidad de modelar tipos arbitrarios de panes.
@@ -936,7 +927,6 @@ En este Cap\'itulo hemos introducido diversos algoritmos para subsanar la falta 
 Hemos demostrado visualmente la capacidad de los métodos.
 
 El primer aporte constituye un algoritmo que produce texturas bidimensionales de materiales conocidos como madera y granito, utilizando sistemas de partículas, el cual fue presentado en una conferencia local \cite{Baravalle2011}.
-
 Haciendo hincapié en materiales porosos, particularmente el pan, diseñamos algoritmos que utilizan sistemas de partículas en conjunción con Sistemas Dinámicos para producir texturas que representan de manera realista geometrías de pan, el cual fue presentado en un congreso y revista nacionales \cite{Baravalle2014}.
 
 Finalmente, utilizando como referencia el proceso de formación real del pan, utilizamos conocimientos de ingeniería de los alimentos para producir una secuencia de pasos que emulan el proceso real de formación del pan, el cual fue presentado en una revista internacional \cite{Baravalle2015_2}.
@@ -947,6 +937,5 @@ Finalmente, la corteza fue generada sobre la superficie del material.
 El algoritmo de renderizado utilizado será explicado en el siguiente capítulo, el mismo produjo imágenes realistas de diversos tipos de pan, en varias etapas del proceso de formación del mismo.
 
 El modelo introducido resulta más flexible y poderoso que aquéllos del estado del arte actual en modelado de geometría de materiales porosos y panes.
-
 En un capítulo posterior, y con intención de validar el procedimiento, mostraremos que las geometrías obtenidas por el método inspirado en el proceso de formación del pan, arrojan distribuciones de burbujas coincidentes con panes reales.
 

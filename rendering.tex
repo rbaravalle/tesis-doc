@@ -42,12 +42,10 @@ La técnica de DVR genera imágenes bidimensionales computando la interacción d
 Este campo describe la densidad del medio en cada celda discretizada.
 Para cada píxel en la imagen final, se computa un rayo desde la posición de la cámara en el espacio virtual, y la radiancia que alcanza la cámara desde esa dirección se computa aproximando la RTE en su forma integral, ec. (\ref{eq:rteintegral}).
 Esta ecuación describe la modificación de radiancia a medida que el rayo atraviesa el medio no transparente.
-
 En su forma completa, la RTE incorpora muchas propiedades ópticas y efectos.
 Para aproximar el resultado de la RTE en tiempo real, este capítulo utiliza una versión simplificada de la ecuación que sólo toma en consideración algunos de los fenómenos ópticos que ocurren en la realidad.
 
 Como fue explicado en el Capítulo $2$, existen tres fenómenos ópticos importantes que afectan la propagación de la luz a través de un medio en un punto dado del espacio: emisión, absorción, y dispersión.
-
 La emisión se define como la generación de energía radiante en una dirección dada.
 La absorción ocurre cuando una fracción o toda la energía radiante en el rayo de luz se topa con un objeto opaco transformándose en otras formas de energía.
 Finalmente, la dispersión produce modificaciones de dirección en los fotones.
@@ -105,6 +103,12 @@ Describiremos el algoritmo de renderizado en detalle en una sección posterior.
 
 Se creó una aplicación demo\footnote{disponible en \emph{https://www.github.com/rbaravalle/Pysys}}  que usa el sistema de partículas descrito en secciones previas para renderizar panes en tiempo real, utilizando DVR.
 La Fig.~\ref{fg:application} muestra la aplicación desarrollada, con un pan renderizado en tiempo real.
+En la demo se produce una textura volumétrica, renderizando un cubo que corresponde a esta textura en la escena.
+El material utilizado para renderizar el cubo consta de un shader de vértices muy simple, y un shader de fragmentos, el cual implementa el algoritmo de DVR.
+Para cada fragmento, el shader computa un rayo con origen en la posición de la cámara y con la dirección del fragmento que debe ser coloreado.
+El procedimiento muestrea la textura volumétrica a intervalos regulares sobre la intersección del rayo y el cubo.
+Estos valores muestreados son luego utilizados como entrada de un algoritmo que implementa la Ec. (\ref{eq:ray_radiance}), computando el color del píxel resultante de la manera descrita en secciones previas.
+
 
 
 \begin{figure}
@@ -114,19 +118,11 @@ La Fig.~\ref{fg:application} muestra la aplicación desarrollada, con un pan ren
 \end{figure}
 
 
-En la demo se produce una textura volumétrica, renderizando un cubo que corresponde a esta textura en la escena.
-El material utilizado para renderizar el cubo consta de un shader de vértices muy simple, y un shader de fragmentos, el cual implementa el algoritmo de DVR.
-Para cada fragmento, el shader computa un rayo con origen en la posición de la cámara y con la dirección del fragmento que debe ser coloreado.
-El procedimiento muestrea la textura volumétrica a intervalos regulares sobre la intersección del rayo y el cubo.
-Estos valores muestreados son luego utilizados como entrada de un algoritmo que implementa la Ec. (\ref{eq:ray_radiance}), computando el color del píxel resultante de la manera descrita en secciones previas.
-
 La implementación acumula la transmitancia a lo largo del rayo y la contribución de radiancia en cada punto muestreado.
 La computación termina si el valor de la transmitancia acumulada está por debajo de un umbral (lo cual significa que no escaparán más fotones en el rayo) o si el rayo sale del cubo.
-
 La dispersión entrante ($\rho$), simplificada, se computa a través de un rayo secundario, para cada punto muestreado, en dirección a la fuente de luz.
 Este rayo secundario se muestrea para determinar la cantidad de luz que llega al punto.
 Esta técnica permite obtener sombras naturales dentro del volumen.
-
 El píxel se sombrea utilizando la información de transmitancia del rayo primario y los secundarios en cada punto.
 En este punto, diferentes consideraciones artísticas pueden ser aplicadas para obtener diferentes materiales con distintos aspectos.
 Por ejemplo, podemos diferenciar miga de corteza asignando un coeficiente de extinción mayor y un color más oscuro a las regiones de corteza.
@@ -156,11 +152,9 @@ Es posible lograr aproximaciones más precisas tomando en consideración además
 La literatura muestra que considerarla produce imágenes de mayor realismo \cite{Hernell2010}.
 
 Debido a estas consideraciones proponemos computar la dispersión entrante, múltiple, calculando de manera offline un término de oclusión del ambiente para cada voxel en el campo escalar y almacenándolo como una textura volumétrica extra, la cual se suple al shader de fragmentos, permitiendo así mantener los tiempos computacionales en tasas razonables.
-
 Para cada voxel en la textura volumétrica resultante de alguno de los métodos del capítulo anterior, el cómputo de dicho término define un radio $r$, almacenando el valor medio de los vóxeles vecinos dentro de una esfera que contiene ese radio.
 Luego, este valor se utiliza para modular la contribución de cada paso del rayo.
 Experimentalmente encontramos que el valor $r$ resulta visualmente indistinguible al variarlo, por lo cual cualquier valor mayor que $0$ puede utilizarse para el cómputo.
-
 La Fig.~\ref{fg:occlusion} muestra el realce que produce este concepto, resultando en un aspecto clave de nuestra implementación, a la hora de producir imágenes creíbles de migas de pan. 
 
 
@@ -200,7 +194,6 @@ Si durante el cómputo de la transmitancia, la misma cae por debajo del umbral, 
 A partir de este cómputo obtenemos un mapa de sombras, el cual puede almacenarse como una textura.
 Luego se computa DVR normalmente (desde el punto de vista del observador).
 En este paso debe mapearse cada texel del mapa de sombras con una posición en el espacio, para determinar si el punto está en sombra o no.
-
 Esta técnica se utiliza junto a un filtrado de porcentaje de cercanía, para generar sombras realístas en nuestra aplicación.
 Casi todas las imágenes presentadas muestran el uso de esta técnica en nuestra aplicación.
 
@@ -211,7 +204,6 @@ Por ejemplo, una función puede definir una corteza cilíndrica asignando la eti
 
 También se provee otra función que establece si la posición debe ser considerada aire.
 Esto permite definir, de una manera intuitiva, la corteza y cortes en el volumen (ver Figs.~\ref{fg:breadsnooc} y \ref{fg:breads}).
-
 Los métodos para definir la misma fueron explicados en el capítulo anterior, utilizando un mapa de distancias o bien morfología matemática.
 
 
@@ -219,7 +211,6 @@ Los métodos para definir la misma fueron explicados en el capítulo anterior, u
 Las imágenes obtenidas a partir del método descrito en la sección anterior fueron renderizadas en una computadora con una placa gráfica nVidia GTX 480 ($480$ cores), la cual normalmente se utiliza en hogares.
 La CPU fue una Intel(R) Core(TM) i5-2300 CPU (cuatro procesadores).
 La resolución de las imágenes es de $1440\times990$ pixels. 
-
 Se obtuvieron diferentes imágenes que semejan materiales horneados.
 Diferentes tipos de pan pueden ser representados variando los parámetros de transmitancia y colores utilizados (ver Fig.~\ref{fg:breadsnooc}).
 En esa imagen mostramos panes donde no se aplica oclusión de ambiente.
@@ -335,7 +326,6 @@ Este efecto surge como una consecuencia natural del algoritmo volumétrico basad
 %1)En primer lugar, un resumen de lo que hicimos en el paper y por qué es importante/novedoso
 
 Hasta donde podemos observar en la literatura, en el renderizado de panes y otros materiales porosos, este constituye el primer trabajo que involucra tasas de refresco de tiempo real, sin la utilización de estructuras intermedias, procesos de captura onerosos, o post-procesamientos.
-
 La literatura previa incluye pocos trabajos, como por ejemplo \cite{Cho2007}, pero las comparaciones con este método no son posibles, ya que los detalles claves del desarrollo no fueron explicados (tiempos de cómputo, método de renderización).
 El método propuesto resulta compatible con el renderizado de ráster en tiempo real disponible en las GPUs actuales, contando con la capacidad de producir un material realista.
 El método puede ser integrado con facilidad en cualquier motor $3D$ basado en shaders.
@@ -346,7 +336,6 @@ Además, la técnica de mapeo de sombras permite integrar el material en escenas
 El algoritmo de renderizado resulta lo suficientemente flexible, modelando diferentes materiales, como pan, esponjas, y tortas, modificando unos pocos parámetros.
 Otros materiales porosos como pizzas, quesos, y otros, pueden ser fácilmente obtenidos definiendo geometrías adecuadas y parámetros de transmitancia y cantidad de pasos.
 Es decir, se pueden obtener diversos materiales con el mismo método.
-
 Además, nuestra representación volumétrica permite realizar cortes en tiempo real en la miga y corteza del pan.
 Esto puede resultar de gran ayuda en diversas aplicaciones, entre las cuales encontramos video juegos.
 
@@ -355,10 +344,9 @@ El término de oclusión de ambiente proporcionó una textura mucho más detalla
 Otros efectos introducidos, como el reflejo especular de Phong, también incidieron sobre el realismo final.
 Sin embargo, métodos especulares más sofisticados (por ejemplo, Cook-Torrance \cite{Cook1982}) no aportaron mayores detalles sobre la apariencia las imágenes.
 
-%5)Tiempos de cómputo (muy importante en este paper!)
+%5)Tiempos de cómputo
 
 Los tiempos de cómputo alcanzados fueron adecuados para obtener tasas de refresco de tiempo real en computadoras estándares al año de publicación de la presente tesis (utilizamos una placa de video nVidia GTX 480, junto con una \acrshort{CPU} Intel(R) i5).
-
 En la gran mayoría de los casos, las tasas de refresco alcanzadas fueron de tiempo real.
 Los únicos casos que no lograron dichos tiempos ocurrieron cuando el objeto a ser renderizado ocupó una porción bastante considerable de la pantalla, ya que el método está implementado en el shader de fragmentos.
 Los tiempos de cómputo finales dependen de la cantidad de pasos utilizados, el coeficiente de absorción y el umbral inferior de transmitancia.
@@ -381,13 +369,10 @@ Se obtuvieron imágenes realistas en tiempo real.
 Debido a limitaciones del hardware, también se obtuvieron imágenes con aún mayor detalle, pero a tasas de refresco menores.
 
 El algoritmo presentado fue implementado en el shader de fragmentos utilizando componentes especulares y difusas, cómputo de normales y oclusión de ambiente.
-
 Los resultados alcanzados superan en gran medida al estado del arte, obteniendo imágenes que simulan el material en tiempo real con gran realismo.
 El método presenta aplicaciones en diversas áreas, como video juegos, juegos serios \cite{Susi2007} y renderizado foto-realista.
-
 Estas técnicas son mucho más simples y no presentan las desventajas de otros métodos, como procesos de captura, generación de mallas o post-procesos.
 Las mismas fueron presentadas en un congreso y revista nacionales \cite{Baravalle2014}.
-
 Estos resultados demuestran que la elección de una representación volumétrica resulta adecuada para estos materiales porosos.
 
 

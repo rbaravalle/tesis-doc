@@ -3,7 +3,6 @@
 \section{Introducci\'on}
 La constante demanda de poder en las aplicaciones gr\'aficas, motivada sobre todo por el auge de los videojuegos y las películas de animación, han provocado que el poder de cómputo de las unidades de hardware paralelo haya sufrido una marcada evoluci\'on desde su aparici\'on.
 Dicha evoluci\'on ha tenido como consecuencia la rivalizaci\'on y posterior superaci\'on por parte de las GPUs al poder de procesamiento con el que cuentan las CPUs tradicionales \cite{Harris06}.
-
 En la siguiente sección se resume la historia de la programación de las placas gráficas, desde las primeras placas configurables, las cuales sólo permitían controlar superficialmente su comportamiento, hasta las placas que permiten una programación de propósito general sobre ellas.
 
 \section{Historia del Shader Programable}
@@ -16,22 +15,17 @@ Esto implica que cada placa debe programarse bajo su propio lenguaje.
 El diseño orientado a elementos repetitivos e independientes como píxels, triángulos y vértices en los que se descompone una escena en computación gráfica, ha resultado en un diseño {\em paralelo} de las mismas.
 Actualmente, las placas gráficas cuentan con miles de procesadores (aunque con capacidades más limitados que un microprocesador CPU), los cuales realizan tareas como actualizar un píxel, o establecer la proyección perspectiva de un vértice en pantalla.
 Este procesamiento se realiza en paralelo ya que la computación resulta independiente para cada elemento.
-
 En un principio, la placa gráfica interactuaba como una caja gris o negra, la cual podía ser configurada únicamente, para producir resultados limitados sobre algunos tipos de efectos, como el color final de un píxel.
 En la década de $1980$ comenzaron a surgir las placas gráficas programables, las cuales permitían modificar el assembler de determinados procesos internos a las mismas, logrando efectos personalizados.
 El assembler de estas placas no resultaba nada amigable al programador, el cual además difería para cada placa.
 Debido a esto, un programador debía distribuir código assembler para cada placa donde pretendía correr su programa.
-
 Similarmente a lo acaecido con la aparición de los lenguajes de programación de propósito general como C, COBOL o Lisp, comenzaron a surgir aproximadamente en el año $2000$ lenguajes más amigables para el programador, los cuales generaban código para el assembler específico de cada GPU.
 De esta forma surgieron GLSL\footnote{OpenGL Shading Language} (OpenGL, libre), HLSL (Microsoft) y Cg (nVidia).
 De ellos, el primero constituye el único que compila para diferentes plataformas, ya que los otros dos están orientados a dispositivos de sus respectivas empresas (por ejemplo, Cg no se puede utilizar en placas ATI).
-
 Los lenguajes de shading probaron ser una herramienta flexible y poderosa para controlar el comportamiento y apariencia de objetos en una escena.
 Se han codificado algoritmos de iluminación, sombreado, de generación de vértices, superficies y un largo etc. en shaders, lo cual significó un gran trasvasamiento de cómputos del CPU al GPU.
-
 A medida que las placas se volvieron más poderosas, resultó evidente la posibilidad de utilizar las mismas como unidad de propósito general.
 El modelo de computación paralelo con el que cuentan provocó el surgimiento de herramientas que permiten derivar todo el cálculo hacia el hardware secundario, conoci\'endose este modelo de computaci\'on como {\em computación de propósito general en unidades de procesamiento gráfico} (General-Purpose Computing on Graphics Processing Units, {\em \acrshort{GPGPU}}).
-
 El cómputo GPGPU consta, a grandes rasgos, con la siguiente secuencia de pasos: 
 
 \begin{itemize}
@@ -40,10 +34,8 @@ El cómputo GPGPU consta, a grandes rasgos, con la siguiente secuencia de pasos:
 \item copia de los resultados desde el GPU al CPU (posiblemente modificando datos y memoria).
 \end{itemize}
 
-Es decir, la GPU {\em presta} sus capacidades de cómputo al CPU, atendiendo un propósito para el que no fue diseñada (realizar cómputos generales en paralelo).
-
+\noindent Es decir, la GPU {\em presta} sus capacidades de cómputo al CPU, atendiendo un propósito para el que no fue diseñada (realizar cómputos generales en paralelo).
 Debido a que los CPUs encontraron un límite físico en la velocidad que podían alcanzar (unos cuantos gigahertz o GHz), la aparición de las GPUs permitió, en el ámbito hogareño y empresarial (entre otros), seguir incrementando los TeraFlops\footnote{Unidad de medida, 1 TeraFlop = $10^{12}$ intrucciones de coma flotante por segundo.}, de manera similar a la utilización de un clúster o de microprocesadores de varios núcleos, aunque estos últimos no han podido alcanzar la velocidad de las GPUs modernas.
-
 El principal inconveniente de la metodología GPGPU lo constituye la copia de memoria desde y hacia la placa, lo cual puede resultar muy costoso.
 Debido a esto, en los últimos años se han desarrollado modelos GPGPU de memoria unificada, donde la CPU y la GPU comparten la memoria.
 
@@ -69,7 +61,6 @@ Los procesadores se organizan en grupos, los cuales contienen una memoria para e
 Finalmente, existe una memoria global, la cual permite la comunicación entre todos los procesadores.
 Los accesos a las distintas memorias tienen distintos costos.
 La memoria global es la más costosa, computacionalmente, siendo la memoria propia de cada procesador la más rápida.
-
 La GPU comienza el procesamiento una vez recibidos los datos: vértices, líneas, triángulos, texturas, etc. a ser renderizados.
 El procesamiento debe transformar la información tridimensional en información bidimensional para ser representada en la pantalla del monitor.
 La secuencia t\'ipica de procesamiento de la GPU est\'a ordenada de la siguiente manera:
@@ -99,7 +90,6 @@ En la GPU existen dos componentes llamados {\em procesador de v\'ertices program
 \end{figure}
 
 Finalizados los cómputos, se vuelcan los resultados en una memoria especial de la GPU, denominada {\em framebuffer}, el cual constituye el dispositivo mediador entre la placa de video y el monitor.
-
 La secuencia explicada constituye el escenario típico de procesamiento de una GPU, excepto en los casos de GPGPU, donde la placa se utiliza para otros propósitos.
 De hecho, los resultados de GPGPU no son imágenes, como se explicará más adelante.
 
@@ -107,7 +97,6 @@ De hecho, los resultados de GPGPU no son imágenes, como se explicará más adel
 \subsection{Características de GLSL}
 Presentamos un breve resumen de las pricipales caracter\'isticas del lenguaje.
 Como fue previamente mencionado, existen dos tipos de programas en GLSL, siendo sus nombres {\em Shader de Vértices} y {\em Shader de Fragmentos} respectivamente.
-
 La especificación de las primitivas a dibujar, dentro del pipeline de OpenGL 2.0+, se define por medio de {\em atributos} de vértices y {\em elementos}. 
 
 
@@ -115,7 +104,6 @@ Los \emph{atributos} son, como su nombre lo indica, atributos o propiedades de u
 El significado se los dará el uso.
 Un atributo a considerar consiste en la posición de cada vértice.
 Otros atributos comunes están representados por las normales, los colores y las coordenadas de texturas.
-
 Los \emph{elementos} son figuras geométricas (lineas, triángulos, cuadrados) que se forman a partir de unir los vértices definidos por los atributos, ver Fig.~\ref{fg:atributos}.
 
 \begin{figure}[h]
@@ -130,8 +118,7 @@ Como fue previamente explicado, la funci\'on del shader de vértices es transfor
 De manera simplificada, este shader recibe como entrada la posici\'on del v\'ertice en la escena, y terminada la ejecuci\'on devolver\'a el v\'ertice con su posici\'on modificada.
 Tambi\'en podr\'ia devolver el color y otros valores \'utiles que se puedan necesitar en otros pasos de la secuencia de ejecución.
 Estos programas reciben los atributos como entrada, asi como otras constantes llamadas \emph{uniformes}, para definir la posición final en espacio de clipping (el sub-espacio, proyectado, que dibujará la GPU) de cada vértice.
-Los valores \emph{uniformes} pueden ser por ejemplo las matrices de proyección y del modelo o matrices de transformación de normales. 
-
+Los valores \emph{uniformes} pueden ser por ejemplo las matrices de proyección y del modelo o matrices de transformación de normales.
 La Fig.~\ref{fg:vertexshader} muestra un ejemplo de un shader de vértices junto a atributos de ejemplo.
 El programa de la figura transforma vértices de manera estándar utilizando las matriz {\em modelviewproj} (modelo, vista, proyección), la cual se provee como dos uniformes desde la CPU (uPMatrix y uMVMatrix, las cuales se multiplican).
 Los atributos intervinientes son el color y la posición del vértice.
@@ -173,19 +160,16 @@ La Fig.~\ref{fg:interpolation} muestra un ejemplo de la utilización de un varyi
 \end{figure}
 
 Similarmente, el shader de fragmentos tene par\'ametros de entrada y salida.
-Generalmente recibe el color interpolado por la etapa previa, pero tambi\'en puede recibir informaci\'on sobre texturas. 
-
+Generalmente recibe el color interpolado por la etapa previa, pero tambi\'en puede recibir informaci\'on sobre texturas.
 A diferencia del shader de vértices, el shader de fragmentos devuelve un único elemento luego de realizar el procesamiento: el {\em color} (excepto en algunos casos específicos, como devolver la profundidad del objeto para cálculo de sombras).
 Esta salida representa el color que, de pasar las diversas pruebas, tomar\'a el p\'ixel en pantalla.
 
 \subsection{M\'as sobre el lenguaje}
 \paragraph{Integración}
 OpenGL incluye desde su versión 2.0 una integración directa con el lenguaje, por lo que es posible programar los distintos shaders de manera transparente, es decir, sin necesidad de compilar o enlazar el código resultante, como sí ocurre en lenguajes rivales como Cg.
-
 Como posible limitación, debe tenerse en cuenta la capacidad de la placa donde se correrá el programa.
 Debido a limitaciones de hardware, determinadas placas no permiten bucles en el shader de fragmentos, o tienen un límite en el número de texturas que soportan.
 Para agrupar distintas categorías de placas (o capacidades de cómputo), se definieron {\em versiones}.
-
 Las versiones establecen limitaciones a las operaciones en un programa GLSL.
 Es as\'i que un código GLSL en una versión determinada debe tener en cuenta las restricciones del mismo.
 Sin embargo, la r\'apida evoluci\'on del hardware gr\'afico provoca que las restricciones sean cada vez menores.
@@ -201,17 +185,14 @@ mat4 m;
 \end{verbatim}
 Aqu\'i se definen un flotante (f), un arreglo de cuatro elementos enteros (a), un vector con dos componentes flotantes (v) y una matriz de 16 elementos de tipo flotante (m).
 La diferencia entre un arreglo y un vector generalmente responde a la eficiencia.
-
 Otros tipos de datos son los llamados {\em samplers}, los cuales se especifican como {\em uniforms}. Estos representan objetos externos a GLSL, como por ejemplo una textura.
 Existen distintos tipos de samplers: {\em sampler1D}, {\em sampler2D} y {\em sampler3D}, representando respectivamente, objetos de una, dos y tres dimensiones. Tambi\'en tipos especiales como {\em samplerCUBE} (utilizado para t\'ecnicas como mapeo de entornos, {\em environment mapping}) y {\em samplerRECT} (permite dimensiones de samplers que no son potencias de dos).
 
 Existe una biblioteca est\'andar que contiene funciones muy \'utiles para el programador. La misma presenta funciones para realizar c\'alculos usuales como m\'aximos, m\'inimos, redondeos, seno, coseno, valores absolutos; y se le suman funciones para el trabajo con vectores, matrices y texturas, como {\em producto escalar}, {\em producto vectorial}, multiplicaci\'on de matrices, multiplicaci\'on de matriz y vector (y viceversa), etc.
-
 El lenguaje utiliza {\em funciones} de la manera usual y con sintaxis similar a C.
 Tambi\'en posee una funci\'on {\em principal} que se comporta como {\em main} en C.
 La misma se especifica en la aplicaci\'on gr\'afica al crear una instancia de un programa GLSL, la cual entonces representa el punto de entrada al programa.
 Se cuenta con estructuras de control usuales, como bucles {\em for} y {\em while}, aunque con determinadas restricciones dependiendo de la versión.
-
 Se presenta a continuaci\'on el cómputo de prop\'osito general en la GPU, GPGPU, el cual difiere de los lenguajes de shader, ya que éstos est\'an dise\~nados para utilizarse \'unicamente con fines gr\'aficos.
 
 \section{GPGPU: CUDA y OpenCL}
@@ -221,7 +202,6 @@ Como fue discutido, la capacidad de procesamiento de las placas gr\'aficas evolu
 La velocidad de transmisi\'on de datos en su memoria interna tambi\'en sufrió una marcada aceleración, superando a memorias tradicionales CPU.
 Esto ocurre porque la CPU debe dedicar parte de su poder a control de flujo y {\em cacheo} de datos.
 En contraposici\'on, la GPU est\'a dise\~nada para computar en paralelo; se debe aplicar el mismo programa a cada dato (instrucción simple, múltiples datos; Single Instruction, Multiple Data o \acrshort{SIMD}) por lo cual el control de flujo resulta menos necesario.
-
 Debido a estas consideraciones, determinadas compañías decidieron aprovechar la misma como un dispositivo de procesamiento general, más económico que otras soluciones de alto desempeño (por ejemplo, clústers).
 
 
@@ -233,7 +213,6 @@ El mismo representa un intento de apertura de la computación paralela de propó
 Deben tenerse en cuenta ciertas consideraciones al implementar algoritmos en OpenCL y CUDA.
 En primer lugar, asistimos a un paradigma diferente al usual, ya que el cómputo se realiza en paralelo, a diferencia del computo secuencial tradicional de la máquina de Von Neumann.
 Esto implica diversas modificaciones en la forma de programar una solución a un problema dado.
-
 En su versión más simple, un programa secuencial es {\em trivialmente} paralelizable, si el cómputo resulta independiente para cada unidad del programa a ejecutar en cada procesador.
 De esta forma, sólo debe chequearse la coherencia de los resultados, en otras palabras, si por ejemplo sumamos dos arreglos, los índices en los arreglos de entrada que se suman se correspondan a los índices correctos en el arreglo de salida.
 Para esto, las bibliotecas mencionadas tienen mecanismos de identificación global para cada hilo en ejecución.
@@ -243,7 +222,6 @@ Sin embargo, la programación paralela trae aparejados inconvenientes que fueron
 Entre ellos encontramos a los problemas de concurrencia.
 Cuando diferentes procesadores trabajan sobre la misma memoria, deben programarse coherentemente los pasos, garantizando que el resultado sea el esperado.
 Los inconvenientes debidos a regiones críticas (elementos de memoria que pueden ser modificados por más de una línea de trabajo) se multiplican en la programación paralela, debido al número de procesos intervinientes.
-
 Surgen además otras dificultades inesperadas.
 Por ejemplo, la utilización de condicionales (if), ya que al ejecutar distintas ramas de un if, se produce pérdida de eficiencia.
 Esto se debe a las diferencias de velocidad que pueden existir en las ejecuciones de distintas ramas de los condicionales.
@@ -254,7 +232,6 @@ Es por esto que muchas veces la programación debe ser modificada para atender e
 Otras limitaciones tienen su causa en el estado actual del hardware gráfico.
 Por ejemplo, la recursión aún no se permite en OpenCL, debido al posible consumo de memoria y registros en los procesadores, los cuales aún son limitados.
 Debido a la misma causa, otro inconveniente lo constituye la imposibilidad de solicitar memoria de la placa en tiempo de ejecución.
-
 Por todos estos factores, la programación paralela en placas gráficas resulta aún dificultosa.
 La elección de implementación de un algoritmo en GPU debe atender a la necesidad de un marcado crecimiento en la velocidad de ejecución del algoritmo en cuestión, y debe ser tomada teniendo en consideración todo lo expuesto aquí.
 
@@ -300,13 +277,11 @@ Estas dos y la memoria global se preservan entre llamadas a {\em kernels} (ver s
 \subsection{Programación en CUDA}
 El software que provee CUDA permite a los programadores trabajar en un entorno C o Python (PyCUDA).
 En un futuro otros lenguajes como {\em C++} y {\em FORTRAN} tambi\'en ser\'an soportados. 
-
 Existen dos formas de escribir programas CUDA: {\em C para CUDA} y la {\em API del driver de CUDA}.
 En el primer caso, se presenta como una extensi\'on a dicho lenguaje junto con un {\em runtime}.
 El programador debe escribir funciones a ser ejecutadas en la GPU llamadas {\em kernels}. 
 La principal diferencia con una funci\'on C convencional radica en el mecanismo de ejecución, ya que que en lugar de ejecutarse secuencialmente, existen N hilos paralelos ejecutando N instancias de dicha funci\'on. 
 El programador debe razonar la solución como varios procesos a ejecutarse en paralelo, los cuales unidos resuelven el problema.
-
 He aqu\'i un ejemplo de un kernel, el cual suma dos vectores:
 
 \begin{verbatim}
@@ -317,7 +292,7 @@ __global__ void VecAdd(float* A, float* B, float* C)
 }
 \end{verbatim}
 
-donde \_\_global\_\_ se usa para definir el kernel y denota el car\'acter global del mismo.
+\noindent donde \_\_global\_\_ se usa para definir el kernel y denota el car\'acter global del mismo.
 La variable reservada threadIdx contiene el ID del thread dentro del bloque que ejecuta la operaci\'on actual, la misma puede tener m\'as de una dimensi\'on, aunque en este caso tiene una sola y por lo tanto se accede al miembro x de la misma.
 Para comprender el kernel, debe observarse que cada thread sumar\'a un s\'olo elemento del vector final.
 Ejecutar este kernel resulta tan sencillo como una llamada en C, con una salvedad: debe especificarse la cantidad de bloques por grilla (A) y la de hilos por bloque (B), bajo la sintaxis:
@@ -353,16 +328,13 @@ El c\'odigo del host encontrado en este proceso debe luego ser compilado con un 
 
 \paragraph{Bibliotecas: cuFFT, cuBLAS}
 nVidia ha desarrollado una serie de bibliotecas de uso general para acelerar los cómputos de algoritmos habituales.
-
 La biblioteca cuFFT implementa algoritmos que permiten aplicar la transformada de Fourier directa e inversa a im\'agenes de una o m\'as dimensiones.
 Como su nombre lo indica, la biblioteca utiliza el algoritmo {\em fft}, fast fourier transform, útil en aplicaciones de procesamiento de imágenes.
-
 La biblioteca cuBLAS constituye una implementación en GPU de la biblioteca BLAS para cálculos de álgebra lineal.
 
 
 \subsection{OpenCL}
 Dada las similitudes entre CUDA y OpenCL, nos limitaremos aquí a exponer las principales diferencias entre ambas plataformas.
-
 En primer lugar, debe considerarse que, a pesar que la creación de OpenCL está basada en la necesidad de explotación de una placa gráfica, en realidad el diseño de la especificación asume la computación en {\em cualquier} unidad con procesadores.
 Es decir que OpenCL también puede ejecutarse en la CPU, por ejemplo.
 
@@ -374,9 +346,7 @@ Todos los elementos de procesamiento dentro de una misma unidad de cómputo comp
 Esto significa que todos los elementos de procesamiento de una misma unidad de cómputo ejecutan las mismas instrucciones, aunque posiblemente leyendo y escribiendo a lugares diferentes de la memoria. En el caso de expresiones condicionales (if, else) simplemente se desactivan los elementos de procesamiento correspondientes durante la ejecución de la rama condicional que no deben ejecutar.
 
 La memoria en OpenCL se organiza similarmente a la de CUDA, con tres niveles de jerarquía, cada uno con sus tiempos de acceso (global, compartida y privada, en orden descendiente de jerarquía).
-
 El término {\em kernel} refiere al trozo de código a ser ejecutado por una unidad de procesamiento, el cual está escrito en un lenguaje parecido a {\em C}.
-
 Cada kernel será ejecutado en un elemento de procesamiento.
 Un conjunto de kernels se agrupa en un grupo de trabajo, el cual se ejecuta en una {\em unidad de cómputo}.
 Dado que el código que se escribe resulta el mismo para todos los kernels, la diferenciación entre kernels se lleva a cabo por medio de las función reservada $get\_global\_id(0)$, la cual devuelve el kernel actual dentro de todos los kernels.
@@ -456,7 +426,6 @@ Este es el caso de física, finanzas, procesamiento de audio y video, astronomí
 
 En la presente tesis, el poder de la placa gráfica se ha utilizado sobre todo en el cómputo de la aproximación de la ecuación RTE, obteniendo tasas de refresco en tiempo real.
 No sólo su utilización fue de gran ayuda, sino que resulta indispensable para cualquier algoritmo gráfico moderno el poder ejecutarse en las mismas si se pretenden alcanzar tiempos interactivos.
-
 Además, se presentó la librería {\em imfractal} en \cite{Baravalle2013}, donde se aceleraron en GPU algunos de los algoritmos útiles para el cómputo de DFs.
 Finalmente, se utilizó la GPU para realizar comparaciones en el trabajo presentado en \cite{Baravalle2014_2}
 
