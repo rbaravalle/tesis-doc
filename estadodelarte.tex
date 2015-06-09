@@ -6,7 +6,7 @@ En este capítulo se presenta el estado del arte en modelado y renderización de
 
 Se comienza presentando el marco conceptual sobre la apariencia de los materiales en computación gráfica.
 Luego se presentan modelos de la geometría de distintos materiales, desde un punto de vista puramente fenomenológico.
-Seguidamente incorporaremos comportamiento físico relacionado al comportamiento o formación del material en consideración.
+Seguidamente incorporaremos mecanismos físicos relacionados al comportamiento o formación del material en consideración.
 Luego presentaremos las ecuaciones fundamentales del renderizado, las cuales modelan la interacción entre la energía radiante en una escena y los materiales que se buscan renderizar.
 Finalmente, explicaremos brevemente casos particulares de la ecuación del renderizado que han sido utilizados como estándar en la síntesis de la apariencia de los materiales, y presentaremos ejemplos de algunos materiales que, debido a diversos factores, deben considerar otros métodos menos tradicionales para obtener un renderizado adecuado.
 Se muestran ejemplos de materiales cuyas síntesis se ajustan a los métodos 
@@ -30,7 +30,7 @@ Típicamente la apariencia de cada punto en una escena depende de objetos que se
 
 Una imagen sintética se construye discretizando en cada píxel la radiancia proveniente en dirección al observador.
 La luz que viaja desde un objeto hacia el observador depende fuertemente del objeto sobre el que la observación sea realizada.
-Las propiedades claves del objeto, que determinan la energía lumínica que llega a la cámara, son la {\em forma} y el {\em material} del objeto.
+Las propiedades clave del objeto, que determinan la energía lumínica que llega a la cámara, son la {\em forma} y el {\em material} del objeto.
 
 La forma del objeto refiere a su geometría macroscópica.
 Las pequeñas imperfecciones de esta geometría también deben ser modeladas para alcanzar una imagen sintética realista.
@@ -81,7 +81,7 @@ Se comienza describiendo modelos fenomenológicos, para luego incorporar comport
 Un modelo procedimental resulta útil en determinadas situaciones donde la supervisión humana repetitiva no es adecuada o necesaria.
 Por ejemplo, si necesita diseñarse un bosque, puede resultar muy costoso económicamente que un artista diseñe cada árbol del mismo, o bien el tiempo necesario puede ser prohibitivo.
 
-Los modelos procedimentales de construcción de geometrías delegan la responsabilidad a un procedimiento o algoritmo automático.
+Los modelos procedimentales de construcción de geometrías delegan la responsabilidad a un procedimiento o algoritmo.
 Estos procedimientos cuentan con parámetros que permiten guiar el proceso, pero es finalmente el algoritmo quien obtiene la representación final.
 Las principales ventajas de este modelado geométrico incluyen el ahorro en memoria (debido a la innecesaria precomputación de las geometrías), y, como fue explicado, la automatización del proceso.
 
@@ -94,7 +94,7 @@ Más adelante se desarrolla un ejemplo de aplicación de modelos físicos en el 
 \subsection{Plantas}
 El modelado procedimental de plantas está basado en una interpretación de una tortuga que se mueve por un plano o el espacio tridimensional dibujando líneas, construyendo de esta manera la geometría de sus ramificaciones \cite{Prusinkiewicz1986}.
 
-Las gramáticas formales \cite{Chomsky1956} intentaron describir el lenguaje natural de forma matemática, por medio de un proceso repetitivo donde sub-cadenas de caracteres son reemplazadas por otras.
+Las gramáticas formales \cite{Chomsky1956} intentaron describir el lenguaje natural de forma matemática, por medio de un proceso recursivo donde sub-cadenas de caracteres son reemplazadas por otras.
 Siguiendo esta idea, los sistemas-L \cite{Lindenmayer1968} realizan una descripción algorítmica de la geometría de las plantas.
 El concepto central que permite comprender el modelado procedimental utilizando sistemas-L es el de {\em reescritura}.
 La reescritura consiste en una aplicación sucesiva de reglas que reemplazan determinadas partes en una descripción matemática por otras.
@@ -103,7 +103,7 @@ En un sistema-L, una cadena de caracteres representa la estructura de la planta.
 Por medio de un proceso repetitivo de reescritura, una cadena de caracteres inicial se transforma, a través de ciertas reglas que deben proveerse, en una cadena final, la cual será interpretada por el algoritmo de la tortuga previamente descripto, produciendo una geometría que asemeja a una planta.
 
 \subsubsection{Definición de sistema-L}
-Sea $V$ un alfabeto (conjunto de caracteres), $V^{*}$ el conjunto de todas las palabras que se pueden formar con $V$ y $V^{+}$ el conjunto de todas las palabras que se pueden formar con $V$ y no son vacías.
+Sea $V$ un alfabeto (conjunto de caracteres), $V^{*}$ el conjunto de todas las palabras que se pueden formar con $V$, y $V^{+}$ el conjunto de todas las palabras que se pueden formar con $V$ y no son vacías.
 
 Una sistema-L de cadenas es una tripleta $G = (V,\omega,P)$, donde $V$ es el alfabeto, $\omega \in V^{+}$ es una cadena no vacía llamada {\em axioma} y $P \subset V \times V^{*}$ es un conjunto finito de reglas de producción.
 Una producción $(a,\chi)$ se denota $a \rightarrow \chi$.
@@ -113,7 +113,7 @@ Si no se especifica ninguna producción para $a$, se asume $a \rightarrow a \in 
 Sea $\mu = a_{1}, \dots, a_{m}$ una palabra en $V$.
 Se dice que la palabra $\eta = \mu_{1}, \dots, \mu_{m}$ es {\em derivada directamente} de $\mu$, y se nota $\mu \Rightarrow \eta$,  si y sólo si $a_{i} \rightarrow \mu_{i}, \forall i = 1, \dots, m$.
 
-Una palabra $\eta$ es generada por $G$ si existe una secuencia de cadenas que conducen a $\eta$ desde el axioma, es decir, $\beta_{1},\dots,\beta_{n}$, de tal forma que $\beta_{1} = \omega$, $\beta_{n} = \eta$ y $\beta_{1} \Rightarrow \dots  \Rightarrow \beta_{n}$.
+Una palabra $\eta$ es {\it generada} por $G$ si existe una secuencia de cadenas que conducen a $\eta$ desde el axioma, es decir, $\beta_{1},\dots,\beta_{n}$, de tal forma que $\beta_{1} = \omega$, $\beta_{n} = \eta$ y $\beta_{1} \Rightarrow \dots  \Rightarrow \beta_{n}$.
 
 Exponemos un ejemplo de generación a continuación.
 Si el axioma está dado por $\omega = a$, y las reglas de producción por:
@@ -122,9 +122,9 @@ p1 &: a \rightarrow b,\\
 p2 &: b \rightarrow ab,
 \end{align*}
 
-entonces una cadena de derivaciones podría resultar $a \Rightarrow b \Rightarrow ab \Rightarrow bb \Rightarrow abab \Rightarrow \dots$, donde las reglas aplicadas en cada paso serían $p1, p2, p1, p2$ (dos veces).
+\noindent entonces una cadena de derivaciones podría resultar $a \Rightarrow b \Rightarrow ab \Rightarrow bb \Rightarrow abab \Rightarrow \dots$, donde las reglas aplicadas en cada paso serían $p1, p2, p1, p2$ (dos veces).
 
-Estos sistemas fueron diseñados buscando representar las divisiones celulares existentes en ciertas amebas.
+Estos sistemas fueron diseñados buscando representar las divisiones celulares existentes en ciertas algas (en particular la {\it annabena catenulla}).
 Sin embargo, luego se mostrará que los mismos pueden ser utilizados como modelos para capturar la geometría de diversos objetos.
 
 \subsubsection{Interpretación de Tortuga}
@@ -170,7 +170,7 @@ Para lograr una imagen que semeje la estructura de árboles y plantas, es necesa
 Utilizando una {\em pila} de estados, es posible alcanzar este comportamiento.
 
 El caracter $[$ se utiliza para copiar el estado actual en la pila (operación {\em push}).
-De manera análoga, el caracter $[$ implica un reemplazo del estado actual por el de la cabeza de la pila ({\em pop}).
+De manera análoga, el caracter $]$ implica un reemplazo del estado actual por el de la cabeza de la pila ({\em pop}).
 El estado actual de la tortuga está representado por la tripleta antes mencionada.
 Por lo tanto, al realizar la operación $]$, en general la posición y orientación de la tortuga serán modificadas.
 La utilización de un par $[\dots]$ produce que la tortuga dibuje una rama y vuelva al punto inicial, permitiendo continuar con la computación de otras partes de la estructura.
@@ -277,16 +277,16 @@ La Fig.~\ref{fg:edificios} muestra ejemplos de edificios generados procedimental
 \end{figure}
 
 \subsection{Fractales y Montañas}
-Una forma adecuada para modelar fenómenos de apariencia pseudo-aleatoria (montañas, ríos, nubes) se da a través de algoritmos fractales \cite{Mandelbrot1983}.
+Una forma adecuada para modelar fenómenos de apariencia pseudo-aleatoria (montañas, ríos, nubes) se da a través de algoritmos no determinísticos de auto-similitud estadística \cite{Mandelbrot1983}.
 Al igual que en las secciones anteriores, una única fórmula matemática encapsula en una representación suficientemente descriptiva todos los detalles, a diferentes escalas, de un fenómeno u objeto dado.
 Esto resulta de particular interés en computación, donde los recursos de memoria no son infinitos.
 
-En el siglo $XIX$, el botánico Robert Brown describió el movimiento de partículas de polen en suspensión en agua, a lo cual se le otorgó el nombre de movimiento browniano.
+En el siglo {\it XIX}, el botánico Robert Brown describió el movimiento de partículas de polen en suspensión en agua, a lo cual se le otorgó el nombre de movimiento Browniano.
 Los movimientos de la partícula se dan sobre direcciones aleatorias por un período de tiempo también aleatorio.
 Con el paso de los años se descubrió que la aparente aleatoriedad de los movimientos responde al choque de la partícula de polen con moléculas dispersas en el agua.
 Se asume que los movimientos de la partícula de polen son independientes entre sí.
 
-En \cite{Mandelbrot1968}, se plantea una generalización del método llamada movimiento browniano fraccionario (\acrshort{fBm}). 
+En \cite{Mandelbrot1968}, se plantea una generalización del método llamada movimiento Browniano fraccionario (\acrshort{fBm}). 
 
 \begin{align*}
 B_{H}(0,w) &= b_{0},\\
@@ -295,9 +295,9 @@ B_{H}(u,w)- B_{H}(0,w) &= \frac{1}{\Gamma(H+0.5)} \big\{ \int_{-\infty}^{u} [(u-
 \end{align*}
 
 
-donde $b_{0}$ es un número real, $0 < H < 1$ es el coeficiente de Hurst, $-\infty < u < \infty $ y $w$ es un conjunto de valores aleatorios en un espacio uniforme de muestras.
-
+\noindent donde $b_{0}$ es un número real, $0 < H < 1$ es el coeficiente de Hurst, $-\infty < u < \infty $ y $w$ es un conjunto de valores aleatorios en un espacio uniforme de muestras.
 Cuando $H = 0.5$ se obtiene movimiento Browniano convencional.
+
 En el dominio frecuencial (al cual se puede acceder por medio de una transformada de Fourier), se observa que el fBm no posee una frecuencia dominante, es decir, la función está compuesta por frecuencias a todas las escalas.
 Además, la contribución de cada frecuencia es inversamente proporcional a la misma, es decir que el ruido pertenece a la clase de ruidos $\frac{1}{f}$.
 El ruido presenta autosimilaridad estadística.
@@ -322,7 +322,7 @@ En \cite{Fournier1982} se presenta un método de subdivisión recursiva, denomin
 El algoritmo tiene su base en una fórmula de esperanza condicional para $B_{H}(u,w)$ \cite{Mandelbrot1968}.
 Partiendo de $B_{H}(0,w) = 0$ y $B_{H}(1,w) = 1$, $0 \le u \le 1$ entonces $E[B_{H}(u,w)|B_{H}(1,w)] = \frac{1}{2} (u^{2H} + 1 - |u-1|^{2H})$.
 Si $u=\frac{1}{2}$, entonces la esperanza es igual a $\frac{1}{2}$, independientemente de $H$.
-Esto, junto a la autosimilaridad del proceso, permite diseñar un algoritmo que subdivide el segmento en su punto medio, y al valor esperado para el punto medio lo desplaza por un número aleatorio con media $0$ y variancia $1$ multiplicado por la variancia de $B_{H}(u,w)$ en el punto, la cual resulta igual a $2^{-H}$, en términos matemáticos, $2^{-H} * gauss(0,1) $.
+Esto, junto a la autosimilaridad del proceso, permite diseñar un algoritmo que subdivide el segmento en su punto medio, y al valor esperado para el punto medio lo desplaza por un número aleatorio con media $0$ y variancia $1$ multiplicado por la variancia de $B_{H}(u,w)$ en el punto, la cual resulta igual a $2^{-H}$, en términos matemáticos, $2^{-H} * gauss(0,1) $\footnote{$gauss(0,1)$ devuelve un valor pseudo-aleatorio normalmente distribuido, con media $0$ y desvío estándar $1$. }.
 Una vez computado el punto medio, el intervalo se subdivide y se computan de manera recursiva las mitades resultantes, donde la nueva variancia será proporcional al tamaño del nuevo segmento.
 
 En la Fig.~\ref{fg:puntomedio} puede observarse un ejemplo de una curva obtenida utilizando distintas profundidades en el algoritmo recursivo.
@@ -365,12 +365,12 @@ Si bien los resultados obtenidos por los modelos presentados hasta ahora son muy
 Hasta aquí, la utilización de los modelos se basa casi exclusivamente en su {\em parecido visual} a los objetos que se intentan modelar.
 
 Para obtener una representación más ajustada a la geometría real de los materiales, se apela a los procesos físicos de formación o comportamiento de los materiales (movimiento de partículas, deformaciones, reacciones químicas, etc.), lo cual permitiría definir parámetros más intuitivos que tienen su correlación en la realidad, logrando además una representación más exacta de la misma.
-La desventaja de utilizar modelos físicos o matemáticos, recae sobre los tiempos de cómputo y la dificultad de diseño de éstos.
+La desventaja de utilizar modelos físicos o matemáticos, se experimenta en los tiempos de cómputo y la dificultad de diseño de aquellos.
 
-Sin embargo, desde el surgimiento del área, estos modelos han ido evolucionando gracias al incremento en el poder de cómputo del hardware gráfico disponible. A pesar de esto, aún nos encontramos en los comienzos de la utilización masiva de los mismos, por lo cual existen sólo unos pocos casos en los que se utilizan modelos de primeros principios.
+Sin embargo, desde el surgimiento del área del modelado físico, estos modelos han ido evolucionando gracias al incremento en el poder de cómputo del hardware gráfico disponible. A pesar de esto, aún nos encontramos en los comienzos de la utilización masiva de los mismos, por lo cual existen sólo unos pocos casos en los que se utilizan modelos físicos implementados a partir de primeros principios.
 En esta sección presentamos un ejemplo de esto, lo cual ejemplifica la capacidad de representación que puede alcanzarse al agregar detalles reales en las implementaciones.
 
-\subsection{Fluidos}
+\subsubsection{Fluidos}
 Entre los primeros intentos por utilizar procesos físicos para modelar la apariencia de los materiales, encontramos ecuaciones que describen fluidos.
 Las ecuaciones de Navier-Stokes describen un fluído con temperatura prácticamente constante, por medio de un campo vectorial de velocidades $\bold{u}$ y un campo de presiones $p$.
 
@@ -381,7 +381,7 @@ Dadas condiciones iniciales para $\bold{u}$ y $p$ cuando $t = 0$, la evolución 
 \frac{\partial \bold{u} }{\partial t} &= - (\bold{u} \cdot \nabla) \bold{u} - \frac{1}{\rho} \nabla p + \nu \nabla^{2} \bold{u} + \bold{f} \label{eq:eq2},
 \end{align}
 
-donde $\nu$ representa la viscosidad cinemática del fluído, $\rho$ la densidad y $\bold{f}$ una fuerza externa.
+\noindent donde $\nu$ representa la viscosidad cinemática del fluído, $\rho$ la densidad y $\bold{f}$ una fuerza externa.
 Las ecuaciones modelan la conservación de masa (\ref{eq:eq1}) y de momento (\ref{eq:eq2}).
 
 Además, deben tenerse en cuenta condiciones de borde.
@@ -397,7 +397,7 @@ Para esto, se utiliza la descomposición de Helmholtz-Hodge \cite{Chorin1990}, l
 \bold{w} = \bold{u} + \nabla q,
 \end{equation}
 
-donde $\bold{u}$ tiene divergencia $0$, es decir $\nabla\cdot\bold{u} = 0$.
+\noindent donde $\bold{u}$ tiene divergencia $0$, es decir $\nabla\cdot\bold{u} = 0$.
 Entonces, se puede definir un operador $\bold{P}$, el cual proyecta un campo vectorial $\bold{w}$ en su componente de divergencia $0$, $\bold{u} = \bold{P}\bold{w}$.
 Dicho operador se puede definir implícitamente multiplicando $\nabla$ en ambos términos en la ecuación (\ref{eq:eq3}),
 
@@ -410,7 +410,7 @@ Una solución a esta ecuación está dada por
 
 \begin{equation}
 \label{eq:eq5}
-\bold{u} = \bold{P}\bold{w} = \bold{w} - \nabla q,
+\bold{u} = \bold{P}\bold{w} = \bold{w} - \nabla q.
 \end{equation}
 
 Aplicando el operador $\bold{P}$ en ambos lados de la ecuación (\ref{eq:eq2}), se obtiene una ecuación única para la velocidad,
@@ -419,7 +419,7 @@ Aplicando el operador $\bold{P}$ en ambos lados de la ecuación (\ref{eq:eq2}), 
 \frac{\partial \bold{u} }{\partial t} = \bold{P} (- (\bold{u} \cdot \nabla) \bold{u} + \nu \nabla^{2} \bold{u} + \bold{f}) \label{eq:eq6},
 \end{equation}
 
-ya que $\bold{P}\bold{u} = \bold{u}$ y $\bold{P}\nabla p = 0$.
+\noindent ya que $\bold{P}\bold{u} = \bold{u}$ y $\bold{P}\nabla p = 0$.
 Esta ecuación se utiliza en la derivación de un algoritmo práctico que implementa apariencia de fluídos \cite{Stam1999}.
 En la ecuación pueden verse un paso difusivo $\nu \nabla^{2} \bold{u}$, un paso de advección $- (\bold{u} \cdot \nabla) \bold{u}$ y una fuerza final aplicada $\bold{f}$.
 Estos términos pueden resolverse por medio de la aplicación de métodos numéricos clásicos (por ejemplo diferencias finitas), por lo cual la solución final consiste en aplicar sucesivamente cada paso para obtener soluciones al campo vectorial $u$ en cada instante de tiempo $t$, finalmente proyectando el resultado con $P$.
@@ -427,7 +427,6 @@ El paso más complicado lo constituye el paso de proyección $P$, el cual se res
 
 Las velocidades $\bold{u}$ permiten definir un sistema de partículas sobre el fluido, otorgando velocidades a las partículas, correspondientes a su localización en el medio.
 Luego, las partículas podrán ser renderizadas.
-
 Este método se utiliza para modelar el comportamiento de agua y otros líquidos, además de algunos gases, nubes y humo, ver Figs.~\ref{fg:fluidos1},\ref{fg:fluidos2}.
 
 La utilización de los procesos físicos subyacentes produce mayor realismo en las imágenes resultantes sobre la utilización de métodos heurísticos y fenomenológicos.
@@ -470,7 +469,7 @@ donde $L(\bold{x'} \rightarrow \bold{x})$ representa la intensidad de la luz que
 
 Puede observarse que la ecuación presenta una definición recursiva, ya que la energía radiante saliente de un punto $x'$ depende de la energía radiante que llega desde todos los puntos de todas las superficies a ese punto.
 De esta forma, $\bold{x}$,$\bold{x'}$ y $\bold{x''}$ varían sobre todas las superficies de la escena.
-Además se asume una superficie $S_{0}$, la cual se modela como un semi-hemisferio que engloba a toda la escena.
+Además se asume una superficie $S_{0}$, la cual se modela como una semi-esfera que engloba a toda la escena.
 
 La ecuación aproxima las propiedades óptico-geométricas de las ecuaciones del electromagnetismo de Maxwell.
 $L$ representa la radiación de energía por unidad de tiempo por unidad de superficie de destino por unidad de superficie de origen ($joule/m^{4} s$).
@@ -479,7 +478,7 @@ El término geométrico resulta $0$ si los puntos en consideración no son mutua
 El modelado de cada término, separadamente, posibilita la visualización fiel de una gran cantidad de superficies.
 Trabajos previos a la aparición de la ecuación del renderizado alcanzaron resultados parciales, sin lograr sintetizar un único método que englobe todos los fenómenos en investigación hasta ese entonces.
 Entre los casos particulares de la ecuación del renderizado, los más emblemáticos han sido el trazado de rayos \cite{Whitted1980} y la radiosidad \cite{Goral1984}.
-El primero resulta adecuado para renderizar superficies especulares (la luz se refleja en las superficies en direcciones específicas), mientras que la radiosidad resulta idónea para simular superficies cuyas geometrías microscópicas provocan una distribución de la luz reflejada de manera equitativa, produciendo una apariencia difusa.
+El primero resulta adecuado para renderizar escenas donde las superficies tienen BRDF únicamente especular (la luz se refleja en las superficies en direcciones específicas), mientras que la radiosidad resulta idónea para simular escenas donde las superficies tienen un comporamiento reflexivo idealmente difuso (Lambertiano).
 
 Fuera de la ecuación quedan efectos más complejos, como la difracción y la polarización.
 Más detalles de la misma pueden ser consultados en \cite{Kajiya1986}.
@@ -500,7 +499,7 @@ Si lo que se pretende modelar son fenómenos volumétricos, como partículas en 
 En esta sección denotaremos como $L(\bold{x} \rightarrow \vec{\omega})$ a la energía radiante o {\em radiancia} que parte desde un punto del espacio $\bold{x}$ en la dirección $\vec{\omega}$.
 Siguiendo la notación de la sección anterior, para cada vector en el espacio $\vec{\omega}$, existe un punto tridimensional $\bold{y}$ tal que $L(\bold{x} \rightarrow \vec{\omega}) = L(\bold{x} \rightarrow \bold{y})$.
 
-La luz se modeliza por medio de partículas denominadas {\em fotones}. Cuando un fotón de un rayo de luz atraviesa un medio en una dirección dada, pueden ocurrir una serie de eventos, de los cuales dos corresponden a fenómenos de extinción: la absorción y la redirección del mismo en otra dirección.
+La luz se modela por medio de partículas denominadas {\em fotones}. Cuando un fotón de un rayo de luz atraviesa un medio en una dirección dada, pueden ocurrir una serie de eventos, de los cuales dos corresponden a fenómenos de extinción: la absorción y la redirección del mismo en otra dirección.
 Estos fenómenos dependen del coeficiente de absorción del medio $\sigma_{a}$ y el coeficiente de dispersión $\sigma_{s}$.
 La suma de ambos se denota como el coeficiente de extinción $\sigma_{t}$.
 
@@ -511,7 +510,7 @@ Finalmente, podemos escribir la radiancia que {\em escapa} del medio en direcci�
 
 $$L((\bold{x}+t\vec{\omega}) \rightarrow \vec{\omega}) = L(\bold{x} \rightarrow \vec{\omega}) (1-\sigma_{a}(\bold{x} + t\vec{\omega}) \Delta t),$$
 
-o, de otra forma:
+\noindent o, de otra forma:
 
 $$\frac{L((\bold{x}+t\vec{\omega}) \rightarrow \vec{\omega}) - L(\bold{x} \rightarrow \vec{\omega}) }{ \Delta t } = - \sigma_{a}(\bold{x} + t\vec{\omega}) L(\bold{x} \rightarrow \vec{\omega}).$$
 
@@ -519,13 +518,13 @@ Tomando el límite cuando $\Delta t \rightarrow 0$ se obtiene la derivada, es de
 
 $$\lim_{\Delta t \rightarrow 0} \frac{L((\bold{x}+t\vec{\omega}) \rightarrow \vec{\omega}) - L(\bold{x} \rightarrow \vec{\omega}) }{ \Delta t } = (\vec{\omega} \cdot \nabla_{a}) L(\bold{x} \rightarrow \vec{\omega}) = - \sigma_{a}(\bold{x}) L(\bold{x} \rightarrow \vec{\omega}),$$
 
-donde $\nabla_{a}$ denota el gradiente dado por la absorción y $ \vec{\omega} \cdot \nabla_{a}$ expresa la derivada direccional de la absorción del medio en dirección $\vec{\omega}$.
+\noindent donde $\nabla_{a}$ denota el gradiente dado por la absorción y $ \vec{\omega} \cdot \nabla_{a}$ expresa la derivada direccional de la absorción del medio en dirección $\vec{\omega}$.
 
 Similarmente se halla el cambio en radiancia debido a la dispersión saliente,
 
 $$ (\vec{\omega} \cdot \nabla_{o}) L(\bold{x} \rightarrow \vec{\omega}) = -\sigma_{s}(\bold{x}) L(\bold{x} \rightarrow \vec{\omega}),$$
 
-de esta forma se pueden aunar ambos términos para expresar el cambio en radiancia debido a la extinción,
+\noindent  de esta forma se pueden aunar ambos términos para expresar el cambio en radiancia debido a la extinción,
 
 $$(\vec{\omega} \cdot \nabla_{t}) L(\bold{x} \rightarrow \vec{\omega}) = -(\sigma_{a}(\bold{x})+\sigma_{s}(\bold{x})) L(\bold{x} \rightarrow \vec{\omega}) = -\sigma_{t}(\bold{x}) L(\bold{x} \rightarrow \vec{\omega}).$$
 
@@ -534,11 +533,11 @@ La integración de la ecuación anterior permite obtener una expresión para la 
 
 $$T_{r}(\bold{x'} \leftrightarrow \bold{x}) = e^{-\tau(\bold{x'} \leftrightarrow \bold{x})},$$
 
-donde $\tau$ recibe el nombre de densidad óptica del material y su expresión es,
+\noindent donde $\tau$ recibe el nombre de densidad óptica del material y su expresión es,
 
 $$\tau(\bold{x'} \leftrightarrow \bold{x}) = \int_{0}^{d} -\sigma_{t}(\bold{x}+t\vec{\omega})dt,$$
 
-con $t \in [0,d]$.
+\noindent con $t \in [0,d]$.
 La ecuación resulta de integrar la extinción a lo largo del segmento de recta.
 
 
@@ -577,7 +576,7 @@ L(\bold{x} \leftarrow \vec{\omega}) = T_{r}(\bold{x} \leftrightarrow \bold{x_{s}
 \label{eq:rteintegral}
 \end{equation}
 
-donde $L(\bold{x} \leftarrow \vec{\omega})$ describe la radiancia que llega a $\bold{x}$ desde $\bold{\omega}$ (este constituye el caso inverso a $L(\bold{x} \rightarrow {\vec{\omega}})$, el cual resulta útil en el diseño de algoritmos que implementan esta ecuación), $s$ es la profundidad del medio desde $\bold{x}$ en dirección $\vec{\omega}$, $\bold{x_{t}} = \bold{x} + t\vec{\omega}$ con $t \in (0,s)$ y $\bold{x_{s}} = \bold{x}+ s\vec{\omega}$ es un punto en una superficie cercana y visible desde el medio, ver Fig.~\ref{fg:rte}.
+\noindent donde $L(\bold{x} \leftarrow \vec{\omega})$ describe la radiancia que llega a $\bold{x}$ desde $\bold{\omega}$ (este constituye el caso inverso a $L(\bold{x} \rightarrow {\vec{\omega}})$, el cual resulta útil en el diseño de algoritmos que implementan esta ecuación), $s$ es la profundidad del medio desde $\bold{x}$ en dirección $\vec{\omega}$, $\bold{x_{t}} = \bold{x} + t\vec{\omega}$ con $t \in (0,s)$ y $\bold{x_{s}} = \bold{x}+ s\vec{\omega}$ es un punto en una superficie cercana y visible desde el medio, ver Fig.~\ref{fg:rte}.
 El primer término de la ecuación representa radiancia entrando por detrás del medio.
 El segundo, la emisión de radiancia en el medio.
 El último, la acumulación de radiancia entrante al medio. 
@@ -627,7 +626,7 @@ Esta simplificación resulta en una función de {\em seis} variables, que incluy
 
 Debido a la prohibitiva complejidad aún presente en estas simplificaciones, los primeros modelos utilizados en computación gráfica eran funciones analíticas \cite{Phong1975,Blinn1977}, es decir, una función simple que no requería almacenamiento de datos (ya que el valor se calcula en el momento de llamar a la función).
 De esta manera fue posible representar diversos materiales sencillos, sobre todo metales y objetos con una marcada reflectancia.
-Las funciones no estaban basadas en ningún procedimiento de obtención, sino más bien en un procedimiento artístico que producía resultados aceptables.
+Las funciones no estaban basadas en ningún procedimiento de obtención, sino más bien en un procedimiento artístico que producía resultados aceptables desde lo fenomenológico.
 
 Posteriormente surgieron modelos más precisos, los cuales desarrollaron funciones analíticas teniendo en consideración mayores precisiones sobre los modelos geométricos subyacentes, por lo que resultaron más ajustadas a los fenómenos reales \cite{He1991,Ward1992,Lafortune1997}.
 Para esto, se modelaron las anisotropías en la reflectancia presentes en las superficies (reflectancia diferente para distintos ángulos).
@@ -646,7 +645,7 @@ Una forma equivalente consiste en definir, para cada punto de una superficie, el
 
 $$\rho(\theta_{i},\phi_{i},\theta_{r},\phi_{r}) = \frac{dL_{r}(\theta_{r},\phi_{r})}{dE_{i}(\theta_{i},\phi_{i})},$$
 
-donde $E_{i}$ constituye la {\em irradiancia} entrante, definida como flujo incidente sobre unidad de área, y $L_{r}$ nota la radiancia reflejada.
+\noindent donde $E_{i}$ constituye la {\em irradiancia} entrante, definida como flujo incidente sobre unidad de área, y $L_{r}$ nota la radiancia reflejada.
 Intuitivamente, la BRDF mide la cantidad de luz reflejada a partir de la cantidad de energía incidente en la superficie, para cada ángulo de entrada y de salida.
 
 Muchas BRDF modelan por separado determinadas características comunes en materiales.
@@ -654,7 +653,7 @@ Por ejemplo, las contribuciones especulares (reflejos perfectos) y difusa (la lu
 La primera produce diferencias visibles en superficies, siendo característica la visualización de círculos o líneas blancas sobre determinadas direcciones en las que se posiciona el observador.
 
 La Fig.~\ref{fg:contribuciones} muestra ejemplos de estos rebotes.
-Las direcciones de reflejo suelen formar patrones llamados lóbulos, los cuales permiten entender intuitivamente el comportamiento de la BRDF (se puede predecir las direcciones donde habrá mayor radiancia saliente).
+Las direcciones de reflejo suelen formar patrones llamados lóbulos, los cuales permiten entender intuitivamente el comportamiento de la BRDF (se pueden predecir las direcciones donde habrá mayor radiancia saliente).
 Si el observador se coloca en la dirección de reflejo de estos lóbulos, observará mayor radiancia que en otras direcciones.
 
 \begin{figure}
@@ -684,7 +683,7 @@ Un ejemplo muy común de BRDF analítica está dado por el modelo de Phong, ver 
 
 $$\rho_{phong}(-L,V) =  k_{a} I_{a} + k_{d} max((N \cdot L),0) + k_{s} (R \cdot V)^{\alpha},$$
 
-donde $k_{a}$, $k_{d}$ y $k_{s}$ son coeficientes de iluminación ambiente, difusa y especular, el vector $N$ representa el normal a la superficie, $R$, el reflejado (en un rebote especular perfecto), $V$ el vector que se forma desde la superficie hacia la posición del observador y $L$ el vector desde la superficie hacia la fuente de luz (por lo que debe considerarse su opuesto, $-L$, resultando en una definición compatible con la de BRDF), y $\alpha$ define un parámetro que determina el brillo final de los reflejos del material (llamado {\em glossiness}), ver Fig.~\ref{fg:phongparametros}.
+\noindent donde $k_{a}$, $k_{d}$ y $k_{s}$ son coeficientes de iluminación ambiente, difusa y especular, el vector $N$ representa el normal a la superficie, $R$, el reflejado (en un rebote especular perfecto), $V$ el vector que se forma desde la superficie hacia la posición del observador y $L$ el vector desde la superficie hacia la fuente de luz (por lo que debe considerarse su opuesto, $-L$, resultando en una definición compatible con la de BRDF), y $\alpha$ define un parámetro que determina el ancho de la componenete lobular de la BRDF, lo cual es fenomenológicamente compatible con la variación de la misma en función de la rugosidad en la superficie (llamado {\em glossiness}), ver Fig.~\ref{fg:phongparametros}.
 
 
 \begin{figure}
@@ -694,7 +693,7 @@ donde $k_{a}$, $k_{d}$ y $k_{s}$ son coeficientes de iluminación ambiente, difu
 \label{fg:phongVecs}
 \end{figure}
 
-El término ambiente en la ecuación, representa una aproximación a la radiancia dispersa por toda la escena, y está definido por una constante.
+El término ambiente en la ecuación, representa una aproximación a la reflexión (tanto especular como difusa) de la radiancia dispersa por toda la escena (rebotes indirectos que han perdido la coherencia geométrica respecto de iluminantes puntuales), por lo que se lo asimila a un término de iluminación ambiente, y está definido por una constante.
 
 El término difuso de la BRDF del material no se modifica con respecto a la posición del observador.
 El mismo resulta del cómputo del producto escalar entre la normal a la superficie y la posición de la fuente de luz.
@@ -729,11 +728,11 @@ Además, y debido a las características particulares de determinados materiales
 Esto provocó que se desarrollaran técnicas específicas para materiales determinados.
 
 En otras palabras, si bien las ecuaciones presentadas proveen un marco teórico general para los fenómenos resultantes de la interacción entre la energía radiante y los materiales en una escena, los detalles de implementación computacional (representación como superficie o volumen, escala de representación, consideraciones de almacenamiento, etc.) muchas veces dificultan su utilización directa, debiendo diseñarse soluciones particulares que atiendan a los requerimientos específicos de cada material.
-Por ejemplo, la BRDF no siempre constituye la solución adecuada para modelar una superficie, escogiéndose en algunos casos otras representaciones, como una BSSRDF o una BTF.
+Por ejemplo, la BRDF no siempre constituye la solución adecuada para modelar una superficie, escogiéndose en algunos casos otras representaciones, como una función de distribución de radiancia debajo de la superficie, \acrshort{BSSRDF} \cite{Donner2006} o una función bidireccional de texturas, \acrshort{BTF} \cite{Tong2002}.
 
 Debido a esto, han surgido técnicas que han considerado distintos aspectos intentando obtener realismo en el renderizado.
-Algunas optaron por sintetizar modelos de primeros principios. 
-Entre ellas se encuentran la modelización del proceso de fabricación del material (por ejemplo en telas), o modelizar el comportamiento químico de determinados componentes que forman el material (piel).
+Algunas optaron por sintetizar modelos a partir de primeros principios. 
+Entre ellas se encuentran el modelado del proceso de fabricación del material (por ejemplo en telas), o modelar el comportamiento químico de determinados componentes que forman el material (piel).
 Otras metodologías utilizaron un enfoque fenomenológico para la obtención de un modelo.
 Entre estas técnicas encontramos el diseño de las microgeometrías presentes en superficies de materiales (cerámicos), y el uso de dispositivos de captura de determinadas propiedades del material (pinturas de autos). 
 
@@ -761,7 +760,7 @@ Este material posee mucho dinamismo, pudiendo ser afectado por diversos factores
 Su compleja estructura geométrica presenta poros y patrones característicos que varían para cada persona (por ejemplo las huellas dactilares).
 
 La estructura de capas fue imitada en computación gráfica realizando abruptas simplificaciones.
-De esta forma, se diseñó un modelo de reflectancia para su superficie (BRDF) junto con un modelo microgeométrico, y un modelo de dispersión debajo de la superficie (\acrshort{BSSRDF}) en una segunda capa.
+De esta forma, se diseñó un modelo de reflectancia para su superficie (BRDF) junto con un modelo microgeométrico, y un modelo de dispersión debajo de la superficie (BSSRDF) en una segunda capa.
 
 Un ejemplo de síntesis de piel aparece en \cite{Marschner2000}, donde se utiliza una BRDF de Lafortune (definida como una generalización de la BRDF de Phong con varios lóbulos) para la reflectancia superficial, junto con texturas que se mapean sobre una geometría de la cara de una persona.
 En otro trabajo se utilizó además información proveniente de moldes de polímeros presionados sobre la cara de personas \cite{Haro2001}, con el fin de capturar detalles finos de la geometría, utilizando además algoritmos de síntesis de imágenes para generar muestras más grandes que las medidas, ver Fig.~\ref{fg:piel}.
@@ -781,7 +780,6 @@ Existen trabajos que abordan otros aspectos del modelado de la apariencia de la 
 El estudio de los patrones que produce el envejecimiento se estudia en \cite{Boissieux2000}.
 Los mismos fueron medidos en muestras reales de una empresa cosmética.
 La información geométrica fina puede obtenerse además a partir de imágenes \cite{Golovinskiy2006}.
-
 Este ejemplo muestra con claridad que un mismo material puede presentar una amplia gama de modelos que simulan su apariencia, dependiendo de la aplicación específica y los detalles que se buscan representar.
 
 \subsection{Materiales Porosos}
@@ -801,14 +799,12 @@ Por ejemplo, un rayo de luz que se comporta de forma especular, podría ser desv
 Esto se traduce en la dirección del rayo de rebote, ya que la presencia del poro provoca que el rayo que sería especular obtenga una dirección de salida posiblemente arbitraria.
 Matemáticamente, el coeficiente difuso toma una parte del coeficiente especular.
 
-Para obtener una distribución estadística de las geometrías de los poros presentes en una superficie, se deben modelizar los mismos.
+Para obtener una distribución estadística de las geometrías de los poros presentes en una superficie, se deben modelar los mismos.
 El modelado de los poros se lleva a cabo por medio de simulaciones estocásticas Monte Carlo sobre posibles geometrías microscópicas de poros bajo ciertas asunciones.
 Dos ejemplos diferentes de poros pueden observarse en la Fig.~\ref{fg:poro}.
 Se simula el rebote de rayos de luz sobre la geometría sintetizada, computándose las distribuciones de reflectancia para poros con distintas formas, utilizando un máximo en el número de rebotes.
 También resulta adecuado incorportar un factor de absorción en cada rebote, disminuyendo la radiancia del rayo siendo computado.
 El proceso se repite para distintas simulaciones estocásticas de la geometría de los poros.
-
-
 En la Fig.~\ref{fg:ceramico} podemos observar una imagen de una maceta renderizada con una BRDF tradicional, y a la derecha, la misma imagen utilizando la BRDF modificada por este método.
 
 \begin{figure}
@@ -835,7 +831,7 @@ Su color está dado por gránulos de melanina en el córtex.
 Cuando no están presentes estos gránulos se observa un color blanco.
 
 
-Existen dos tipos principales de pelo : el {\em vello}, presente en prácticamente toda la superficie del cuerpo, con $1$ {\em mm} de alto; y el {pelo terminal}, presente únicamente en el cuero cabelludo.
+Existen dos tipos principales de pelo: el {\em vello}, presente en prácticamente toda la superficie del cuerpo, con $1$ {\em mm} de alto, y el {pelo terminal}, presente únicamente en el cuero cabelludo.
 Este último fue el que recibió mayor atención en computación gráfica.
 El pelo terminal tiene aproximadamente entre $50$ y $90$ micrones de diámetro.
 Existen entre $175$ y $300$ pelos terminales por {\em $cm^{2}$}.
@@ -858,14 +854,13 @@ Los componentes difuso y especular del modelo son,
 \psi_{s} &= K_{s} (cos \theta_{i} cos \theta_{r} + sin \theta_{i} sin \theta_{r})^{p},
 \end{align*}
 
-donde $\theta_{i}$ nota el ángulo entre la luz y la tangente al pelo, y $\theta_{r}$ el ángulo entre la tangente al pelo y el observador.
+\noindent donde $\theta_{i}$ nota el ángulo entre la luz y la tangente al pelo, y $\theta_{r}$ el ángulo entre la tangente al pelo y el observador.
 
 Luego, para calcular el color final de un pixel en pantalla, desde el punto de vista del observador, se recorren en línea recta, desde $t_{near}$ a $t_{far}$ según corresponda a ese pixel, los texels necesarios,
 
 $$L = \sum_{t=t_{near}}^{t=t_{far}} {e^{-\tau \sum_{u=t_{near}}^{u=t} \rho(u)} \rho(t) \sum_{i} L_{i}(t) \bold{\psi}(t)},$$
 
-donde la suma sobre $i$ refiere a las fuentes de luz, y $\tau$ representa un coeficiente que convierte las distribuciones de área proyectada en un coeficiente de atenuación.
-
+\noindent donde la suma sobre $i$ refiere a las fuentes de luz, y $\tau$ representa un coeficiente que convierte las distribuciones de área proyectada en un coeficiente de atenuación.
 Este método sirve para simular pelo corto, pero visto a cierta distancia, ver Fig.~\ref{fg:osopelo}.
 La percepción de pelo se pierde cuando la cámara se acerca demasiado al objeto.
 
@@ -945,6 +940,5 @@ Se cuenta con un único trabajo en el tópico \cite{Tong2005}.
 El enfoque utilizado resulta en un método de fuerza bruta, es decir, capturas de reflectancia e imágenes de la miga de pan desde un punto de vista puramente fenomenológico.
 Además, no se realizan consideraciones sobre la geometría del mismo.
 Estas y otras limitaciones severas del método fueron superadas en la presente tesis.
-
 En los capítulos que siguen, mostraremos como el diseño de la geometría y la interacción lumínica, fueron claves para lograr un renderizado realista de la miga y corteza de diferentes tipos de panes.
 

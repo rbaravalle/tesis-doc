@@ -1,10 +1,9 @@
 \chapter{Introducción}
 El renderizado en computación gráfica es el área que estudia métodos para producir imágenes que representan una escena tridimensional, la cual está compuesta por medio de primitivas matemáticas como puntos, líneas, cubos, etc.
-
 En los últimos años, el avance en el campo del renderizado de escenas ha sido muy notorio. 
 El nivel de realismo presente en las imágenes obtenidas ha ido en aumento hasta el punto de ser de difícil distinción, para un ser humano, si una imagen renderizada es real o sintética.
 Dichos avances han sido debidos en gran medida al desarrollo de dispositivos de hardware gráficos más poderosos, ya que la aproximación matemática a la teoría física que describe el comportamiento de la luz en escenas fue desarrollada hace varias décadas, mediante la denominada Ecuación del Renderizado \cite{Kajiya1986}.
-Sin embargo, los tiempos computacionales requeridos en la obtención de una imagen realista típicamente se extendían durante horas, resultando en una teoría completa pero poco práctica. 
+Sin embargo, los tiempos computacionales requeridos en la obtención de una imagen realista típicamente se extendían durante horas, resultando en una teoría descriptivamente completa, pero computacionalmente poco práctica. 
 
 La ecuación constituye una aproximación al fenómeno físico de interacción de la luz con diversos objetos en una escena.
 Lamentablemente, la ecuación resulta, en términos teóricos, no computable.
@@ -25,10 +24,10 @@ Determinados materiales han recibido mayor atención debido a su ubicuidad en es
 En contraste, otros materiales han recibido menor atención, la cual puede atribuirse a una menor presencia en escenas o a una dificultad en el modelado y visualización, la cual ha resistido las técnicas más simples.
 Por esta razón, las imágenes sintéticas obtenidas presentan cierta asimetría en la calidad de los distintos materiales.
 
-Entre estos materiales, los materiales porosos o heterogéneos, y aquellos sometidos a un proceso de cocción han permanecido entre los más dificultosos por su compleja geometría y los fenómenos lumínicos involucrados en su modelización.
+Entre éstps, los materiales porosos o heterogéneos, y aquellos sometidos a un proceso de cocción han permanecido entre los más dificultosos por su compleja geometría y los fenómenos lumínicos involucrados en su modelización.
 Tal vez el caso más emblemático de los materiales cocidos es el pan, debido a su importancia en la vida cotidiana.
-Como nota de color, un reconocido  científico del área, Alain Fournier, pronunció en 2001 la frase "la Computación Gráfica todavía no ha sido capaz de renderizar de manera convincente una feta de pan".
-En los siguientes capítulos mostraremos que unos pocos intentos por abordar el problema fueron llevados a cabo pocos años después de la emisión de dicho comentario.
+Como nota de color, un reconocido  científico del área, Alain Fournier, pronunció en 2001 la frase ``la Computación Gráfica todavía no ha sido capaz de renderizar de manera convincente una feta de pan''.
+En los siguientes capítulos mostraremos que solo unos pocos intentos por abordar el problema fueron llevados a cabo pocos años después de la emisión de dicho comentario.
 
 La geometría de estos materiales porosos ha sido estudiada muy superficialmente en computación gráfica, donde pocos trabajos abordaron el tema.
 Por otro lado, estas geometrías han sido objeto de estudio sistemático en el campo de la ingeniería de los alimentos.
@@ -59,17 +58,17 @@ Más específicamente, pueden mencionarse:
 
 \section{Resultados Originales Presentados}
 En la obtención de los mencionados objetivos, se tomaron en consideración sistemas dinámicos por un lado (en la generación de geometrías procedimentales), y el proceso de cocción del pan, y de manera más general, la cadena completa de pasos existente en la elaboración del mismo (leudado, cocción, etc.).
-Debido a que la literatura de ingeniería de los alimentos presenta estudios muchas veces inconexos sobre los distintos pasos involucrados, se implementaron algoritmos que aproximan los pasos más preponderantes: leudado y cocción, dejando de lado otros procesos como el amasamiento del mismo, o la formación de la corteza.
+Debido a que la literatura de ingeniería de los alimentos presenta estudios muchas veces inconexos sobre los distintos pasos involucrados, se implementaron algoritmos que aproximan los pasos más preponderantes: leudado y cocción, dejando de lado otros procesos como el amasado, o la formación de la corteza.
 
-Resumidamente, las contribuciones más preponderantes incluyen:
+En forma resumida, las contribuciones más preponderantes incluyen:
 \begin{itemize}
-\item un Algoritmo fractal \cite{Mandelbrot1983} que induce una distribución de radios de burbujas consistente con el proceso de leudado de la masa cruda del pan,
-\item un Algoritmo que aproxima el proceso de cocción del pan \cite{Powathil2004},
-\item un Algoritmo que aproxima el efecto de levantamiento del pan durante la cocción, basado en las distribuciones de burbujas existentes en el leudado,
-\item una Técnica que permite asignar colores en la corteza, utilizando el espacio de color CIELab \cite{Hunter58}, indicando mayor o menor cocción en cada punto,
-\item el Estudio del espectro multifractal \cite{Xu2009} en la discriminación, y clasificación de imágenes de migas de pan,
-\item un Algoritmo procedimental que genera texturas volumétricas de geometrías porosas utilizando sistemas dinámicos, y,
-\item un Algoritmo que utiliza el espectro multifractal en la aproximación de una distribucióń de burbujas dada.
+\item un algoritmo fractal \cite{Mandelbrot1983} que induce una distribución de radios de burbujas consistente con el proceso de leudado de la masa cruda del pan,
+\item un algoritmo que aproxima el proceso de cocción del pan \cite{Powathil2004},
+\item un algoritmo que aproxima el efecto de levantamiento del pan durante la cocción, basado en las distribuciones de burbujas existentes en el leudado,
+\item una técnica que permite asignar colores en la corteza, utilizando el espacio de color CIELab \cite{Hunter58}, indicando mayor o menor cocción en cada punto,
+\item el estudio del espectro multifractal \cite{Xu2009} en la discriminación, y clasificación de imágenes de migas de pan,
+\item un algoritmo procedimental que genera texturas volumétricas de geometrías porosas utilizando sistemas dinámicos, y,
+\item un algoritmo que utiliza el espectro multifractal en la aproximación de una distribucióń de burbujas dada.
 \end{itemize}
 
 Los resultados de la investigación de la presente tesis doctoral fueron presentados en las siguientes publicaciones:
@@ -77,12 +76,13 @@ Los resultados de la investigación de la presente tesis doctoral fueron present
 \subsection*{Revistas Internacionales}
 
 \begin{itemize}
-\item {\bf Procedural Bread Making}. Rodrigo Baravalle, Gustavo Patow y Claudio Delrieux. En {\it Computers \& Graphics}. Mayo 2015. DOI:10.1016/j.cag.2015.05.003.
-En prensa.
+\item {\bf Procedural Bread Making}. Rodrigo Baravalle, Gustavo Patow y Claudio Delrieux. En {\it Computers \& Graphics}. {\bf 50}(2015):13-24.
+
+doi:10.1016/j.cag.2015.05.003.
 
 \item {\bf Multifractal Characterisation and Classification of Bread Crumb Digital Images}. Rodrigo Baravalle, Claudio Delrieux y Juan Carlos Gómez. En {\it EURASIP Journal on Image and Video Processing}. {\bf 2015}:9. Abril 2015. doi:10.1186/s13640-015-0063-8.
 
-\item Estamos trabajando en el artículo {\bf Real Time Realistic Rendering of Bread Crumbs}. Rodrigo Baravalle, Leonardo Scandolo, Claudio Delrieux y Cristian García Bauza, en {\it Computer Animation and Virtual Worlds}, el cual fue presentado, y devuelto con major revisions.
+\item {\bf Real Time Realistic Rendering of Bread Crumbs}. Rodrigo Baravalle, Leonardo Scandolo, Claudio Delrieux y Cristian García Bauza, en {\it Computer Animation and Virtual Worlds}, el cual está en proceso de revisión.
 \end{itemize}
 
 

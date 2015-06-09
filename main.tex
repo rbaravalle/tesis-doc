@@ -32,6 +32,9 @@
 
 \pagestyle{fancy} 
 
+\widowpenalty 10000
+\clubpenalty 10000
+
 
 \begin{document}
 
@@ -54,7 +57,7 @@ Lic. Rodrigo Guillermo Baravalle
 \pagenumbering{Roman} % para comenzar la numeracion de paginas en numeros romanos
 \addcontentsline{toc}{chapter}{Reconocimientos} % si queremos que aparezca en el índice
 \markboth{RECONOCIMIENTOS}{RECONOCIMIENTOS} % encabezado 
-Esta Tesis fue desarrollada gracias a la ayuda económica del Consejo Nacional de Investigaciones Científicas y Técnicas (CONICET) mediante becas tipo I (abril 2011-marzo 2014) y II (abril 2014 - abril 2016), y con subsidios PGI 24/K060 del proyecto SECyT-UNS.
+Esta Tesis fue desarrollada gracias a la ayuda económica del Consejo Nacional de Investigaciones Científicas y Técnicas (CONICET) mediante becas tipo I (abril 2011-marzo 2014) y II (abril 2014 - abril 2016), y con subsidios PGI 24/K060 de la SECyT-UNS.
 
 \phantom{p. 1}
 \clearpage
@@ -88,12 +91,12 @@ Agradezco a mi novia, Estefi, y al resto de mi familia por su apoyo emocional a 
 \markboth{RESUMEN}{RESUMEN} % encabezado
 
 Las últimas decadas han sido testigos de la evolución sin precedentes en el modelado y visualización realistas de escenas en Computación Gráfica.
-Esto se debe, en gran medida, a dos factores: por un lado, la teoría matemática que describe la distribución de luz en una escena fue aproximada en computación gráfica hace ya tres décadas, y por otro, la evolución del hardware gráfico ha sufrido un aumento exponencial en poder de cómputo, permitiendo aproximar la teoría mencionada a tasas de refresco interactivas o de tiempo real.
-Los objetos que componen una escena están a su vez compuestos por diversos materiales, los cuales deben ser tratados en detalle, para que su apariencia asemeje los objetos reales.
+Esto se debe, en gran medida, a dos factores: por un lado, el modelo físico que describe la distribución de luz en una escena fue aproximado en computación gráfica hace ya tres décadas, y por otro, la evolución del hardware gráfico ha experimentado un aumento exponencial en poder de cómputo, permitiendo aproximar el modelo mencionado a tasas de refresco interactivas o de tiempo real.
+Los objetos que integran una escena están a su vez compuestos por diversos materiales, los cuales deben ser tratados en detalle, para que su apariencia asemeje los objetos reales.
 
-A lo largo de los años, los materiales más ubicuos en escenas fueron los que recibieron mayor atención (agua, nubes, piel humana, etc.), sin embargo muchos materiales, debido a su complejidad estructural (geometría, estado de la materia), o su complejo comportamiento con la luz (reflectancia, absorción, translucencia), han sido ignorados, o tratados superficialmente.
-Entre estos materiales, los materiales porosos, como pan, esponjas y huesos; y cocidos, como (nuevamente) pan, pizzas, tortas, etc., han sido especialmente dificultosos, dada la familiaridad que los seres humanos poseen con dichos materiales.
-En otras palabras, los modelos que no se ajusten fuertemente a los materiales reales serán reconocidos con facilidad, y por lo tanto deben diseñarse muy precisamente.
+A lo largo de los años, los materiales ubicuos en escenas fueron los que recibieron mayor atención (agua, nubes, piel humana, etc.), sin embargo muchos materiales, debido a su complejidad estructural (geometría, estado de la materia), o su complejo comportamiento con la luz (reflectancia, absorción, translucencia), han sido ignorados, o tratados superficialmente.
+Entre éstos, los materiales porosos, como pan, esponjas y huesos; y cocidos, como (nuevamente) pan, pizzas, tortas, etc., han sido especialmente dificultosos, dada la familiaridad que los seres humanos poseen con dichos materiales.
+En otras palabras, los materiales cuyos modelos computacionales tienen una apariencia que no coincide exactamente con la apariencia real, son rápidamente reconocidos como ficticios. Por lo tanto, requieren un modelado muy sofisticado, que hasta ahora en muchos casos ha sido elusivo.
 
 La presente tesis aborda el problema de la simulación, modelizado y renderizado de dichos materiales.
 Para esto, se toma como principal caso de estudio al pan, dado que se encuentra en la intersección de ambas familias.
@@ -103,8 +106,8 @@ Además, el material es tratado como una superficie, lo cual presenta severas li
 Para superar estos inconvenientes, en la presente tesis se representa al material poroso por medio de un volumen.
 En primer lugar se propone un método de generación procedimental de materiales basado en sistemas de partículas que crecen, evitándose, en dos dimensiones.
 Dicho sistema obtiene imágenes aceptables de materiales comunes como madera y mármol.
-Luego, los resultados se generalizaron a tres dimensiones, con el objetivo de obtener volúmenes representado geometrías porosas, donde el crecimiento de las partículas se guía por medio de sistemas dinámicos.
-Los resultados son promisorios, resultando en un procedimiento flexible, con el poder de representar diversidad de estructuras porosas, como esponjas y pan, sin presentar las limitaciones de un tratamiento de superficie, por ejemplo, la imposibilidad de realizar cortes arbitrarios.
+Luego, los resultados se generalizaron a tres dimensiones, con el objetivo de obtener volúmenes representando geometrías porosas, donde el crecimiento de las partículas se guía por medio de sistemas dinámicos.
+Los resultados son promisorios, obteniéndose un procedimiento flexible, con el poder de representar diversidad de estructuras porosas, como esponjas y pan, sin presentar las limitaciones de un tratamiento de superficie, por ejemplo, la imposibilidad de realizar cortes arbitrarios.
 
 En una segunda etapa, se decidió abordar el tópico de un modelado procedimental inspirado en procesos físicos, entre ellos, el proceso de cocción del pan.
 Los resultados muestran que el agregado de procesos físicos permite la eliminación de parámetros ad-hoc, obteniendo resultados similares o superiores.
@@ -115,7 +118,7 @@ Esta técnica mostró ser muy flexible en la renderización de los volúmenes, o
 Finalmente, en la validación de los resultados obtenidos, se desarrollaron técnicas multifractales, las cuales permiten extraer parámetros de generación del modelo procedimental a partir de muestras reales.
 De esta manera es posible guiar el proceso de generación, hacia un tipo de pan en particular.
 Además, las dimensiones multifractales mostraron ser útiles en la caracterización de migas de panes (área media de burbujas, porosidad), y en su clasificación, superando a otros clasificadores del estado del arte.
-Estos resultados resultan promisorios, y útiles para su extensión a otros materiales.
+Estos resultados resultan novedosos y alentadores, además de útiles para su extensión a otros materiales.
 
 \phantom{p. 1}
 \clearpage
@@ -125,20 +128,21 @@ Estos resultados resultan promisorios, y útiles para su extensión a otros mate
 \addcontentsline{toc}{chapter}{Abstract} % si queremos que aparezca en el índice
 \markboth{ABSTRACT}{ABSTRACT} % encabezado
 
-Last decades have witnessed the unprecedent evolution in photo-realistic scene modeling and rendering.
-Causes are twofold: on the one hand, the mathematical theory that describes light distribution over a scene was already approximated in Computer Graphics three decades from now, on the other hand, the evolution in the computing capabilities of graphics hardware increased exponentially.
+Last decades have witnessed an unprecedent evolution in photo-realistic scene modeling and rendering.
+Causes are twofold: on the one hand, the physical model that describes light distribution over a scene was already approximated in Computer Graphics three decades from now.
+On the other hand, the evolution in the computing capabilities of graphics hardware increased exponentially.
 This computing power enabled to approximate the computations at interactive or real time frame rates.
 
-The objects in a scene encompasses several materials, which should be carefully designed to appear realistic.
-Over the years, the most predominant materials received great attention (water, fire, clouds, skin, etc.), but several other materials, either based on its structural complexity, or its complex light interaction (reflectance, translucency, absorption), have been largely ignored, or only superficially treated.
-Among these materials, those that show porous geometries such as sponges, bread or bones, and those that results from a cooking process, such as bread (again), cakes, pizzas, and cookies, have been specially tricky to tackle, given humans are specially prepared to spot improper models.
+Objects in a scene encompass several materials, which should be carefully designed to appear realistic.
+Over the years, the most predominant materials received great attention (water, fire, clouds, skin, etc.), but several other materials, either due to their structural complexity, or their complex interaction with light (reflectance, translucency, absorption), have been largely ignored, or treated only superficially.
+Among these materials, those that show porous geometries such as sponges, bread or bones, and those that results from a cooking process, such as bread (again), cakes, pizzas, and cookies, have been specially tricky to tackle, given humans are specially able to spot improper models.
 
-This Thesis deals with the simulation, modelization and rendering of these materials.
+This thesis deals with the simulation, modeling and rendering of these materials.
 For this, we start with bread, since it lies in the intersection of both families.
 The state-of-the-art in modeling and rendering of these materials is very limited, and the solutions proposed are quite complex.
 In addition, the material is treated as a surface, which presents several drawbacks (for instance, it is not possible to arbitrary slice the material).
 
-To overcome these drawbacks, in this Thesis we represent the porous material as a volume.
+To overcome these drawbacks, in this thesis we represent the porous material as a volume.
 First, we propose a method for procedural generation of materials, based on particle systems that grow and self-avoid, in two dimensions.
 The system obtains acceptable images of materials such as wood and marble.
 Then, results were generalized to three dimensions, to obtain volume textures of porous geometries.

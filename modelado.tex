@@ -36,7 +36,7 @@ La utilización de superficies constituye un enfoque menos costoso computacional
 
 Siguiendo este razonamiento, la miga del pan constituye un material extremadamente complejo de capturar, modelar y renderizar, debido a la geometría a distintos niveles (microscópico y mesoscópico) y su resultante interacción con la energía radiante.
 De esta forma, la utilización de superficies no resulta adecuada, ya que la textura del pan debe su apariencia en gran medida a los fenómenos previamente explicados.
-Si bien existen métodos en la literatura que utilizan superficies para representar características mesoscópicas de los materiales como funciones bidireccionales de texturas (bidirectional texture functions, \acrshort{BTF}) \cite{Tong2002}, las mismas no manejan adecuadamente la interacción lumínica antes mencionada.
+Si bien existen métodos en la literatura que utilizan superficies para representar características mesoscópicas de los materiales como BTFs, las mismas no manejan adecuadamente la interacción lumínica antes mencionada.
 Existe un intento en la literatura por suprimir esta falta \cite{Tong2005}.
 El método produce imágenes realistas, pero existen muchas dificultades prácticas en la captura, el cómputo y el renderizado.
 Estas limitaciones provocan que la utilización de dicho método no sea práctica por el momento.
@@ -49,7 +49,7 @@ Una de ellas radica en su independencia de mallas de triángulos, a diferencia d
 
 Finalmente, existe un compromiso al momento de modelar materiales complejos y elegir una representación plausible.
 Donde se requiere simplicidad y velocidad (posiblemente tiempo real), se utilizan generalmente superficies, en cambio, si el foto-realismo constituye el objetivo final, resulta más adecuado optar por una representación volumétrica.
-En los últimos años esta elección se ve perturbada por la aparición de hardware paralelo de alta velocidad (placas gráficas o GPUs), ya que un diseño adecuado podría alcanzar imágenes foto-realistas utilizando volúmenes en tiempos interactivos.
+En los últimos años esta elección se ve enriquecida por la aparición de hardware paralelo de alta velocidad (placas gráficas o GPUs), ya que un diseño adecuado podría producir imágenes foto-realistas utilizando volúmenes en tiempos interactivos.
 
 En este capítulo proponemos una representación volumétrica para la geometría de la miga de pan.
 Existe una metodología volumétrica que simula geometrías estocásticas \cite{Perlin1989}, utilizando funciones algebraicas para construir la geometría.
@@ -59,7 +59,7 @@ Sin embargo, la utilización de funciones algebraicas resulta impráctica en el 
 
 La textura característica de la miga de pan emerge como resultado de numerosos procesos.
 El crecimiento de la levadura en la masa cruda del pan produce una de las principales transformaciones texturales.
-Este proceso atañe la mayor responsabilidad en la formación de la geometría porosa macroscópica del material.
+A este proceso le atañe la mayor responsabilidad en la formación de la geometría porosa macroscópica del material.
 La observación detallada de binarizaciones de fotografías de cortes en la masa cruda, durante distintas etapas del proceso de leudado y cocción del pan \cite{Scanlon2001}, permite sentar las bases de un algoritmo fenomenológico que responde a este comportamiento.
 En dichas imágenes se observa un crecimiento pseudo-aleatorio de burbujas atrapadas en la masa.
 La textura final debe su apariencia a un aglomerado de burbujas interconectadas con distintos tamaños y formas.
@@ -68,20 +68,19 @@ La implementación de este método constituye el principal motivo de esta secci�
 Si bien el objetivo del mismo radica en la producción de geometrías, como sub-producto surgen imágenes o geometrías que recuerdan apariencias típicas de otros materiales.
 Al asignárseles colores, permiten obtener imágenes aceptables de los mismos.
 
-Presentamos entonces un método procedimental de generación de texturas de materiales en dos dimensiones, basado en el crecimiento de partículas.
+Presentamos entonces un método procedimental de generación de texturas de materiales en dos dimensiones, basado en el crecimiento de partículas \cite{Reeves1983}.
 Se define una textura como una imagen. o arreglo bidimensional de múltiples usos que almacena información sobre un fenómeno determinado.
 En este caso, una textura representará el material directamente, a nivel macroscópico (es decir una imagen del mismo).
 La simulación de imágenes de materiales usualmente se presenta en publicaciones separadas en la literatura, dado que los procedimientos que producen distintos materiales se basan en metodologías dispares.
-
-El algoritmo introducido será especializado en la siguiente sección en la obtención de geometrías de la miga de pan y otros materiales porosos.
+El algoritmo introducido será luego descripto en casos especiales, en la obtención de geometrías de la miga de pan y otros materiales porosos.
 
 \subsection{Sistemas de Partículas}
 Un sistema de partículas está compuesto por abstracciones denominadas {\em partículas}, las cuales coexisten en un mismo ambiente.
-En un sistema de part\'iculas \cite{Reeves1983} las part\'iculas nacen, se desarrollan y mueren, respetando reglas que les son impuestas por el sistema. Estos sistemas intentan modelar la din\'amica del fen\'omeno a trav\'es del tiempo, siendo uno de sus principales intereses mostrar una animaci\'on del mismo \cite{Gao2010, Bagar2010, Lentine2010}.
+En un sistema de part\'iculas, las part\'iculas nacen, se desarrollan y mueren, respetando reglas que les son impuestas por el sistema. Estos sistemas intentan modelar la din\'amica del fen\'omeno a trav\'es del tiempo, siendo uno de sus principales intereses mostrar una animaci\'on del mismo \cite{Gao2010, Bagar2010, Lentine2010}.
 
 Se propone utilizar estos sistemas como generadores procedimentales de texturas. Un enfoque similar puede observarse en \cite{Kranidotis98}, aunque el mismo no fue desarrollado en profundidad.
-Aquí se sigue una linea de investigaci\'on similar, presentando un sistema de part\'iculas que est\'a caracterizado por el crecimiento de las mismas en cada iteraci\'on, las cuales ocupan texels (elemento individual de una textura bidimensional, correspondiente a una posición $(u,v)$ dentro de la misma) asign\'andoles colores, pudi\'endose detener al mismo en una iteración arbitraria, obteni\'endose una textura.
-Debido a la utilización de una selección aleatoria de los texels vecinos, donde crece cada partícula, las im\'agenes resultantes presentan apariencia estocástica, símilarmente a materiales naturales.
+Aquí se sigue una linea de investigaci\'on semejante, presentando un sistema de part\'iculas que est\'a caracterizado por el crecimiento de las mismas en cada iteraci\'on, las cuales ocupan texels (elemento individual de una textura bidimensional, correspondiente a una posición $(u,v)$ dentro de la misma) asign\'andoles colores, pudi\'endose detener al mismo en una iteración arbitraria, obteni\'endose una textura.
+Debido a la utilización de una selección aleatoria de los texels vecinos, donde crece cada partícula, las im\'agenes resultantes presentan apariencia estocástica, de manera análoga a materiales naturales.
 A trav\'es de la direcci\'on de crecimiento de las part\'iculas se producen distintos patrones visuales.
 
 Es posible representar materiales cl\'asicos como madera, granito y m\'armol, pero tambi\'en otros como mosaicos, pinturas, vegetaci\'on, entre muchos otros.
@@ -127,7 +126,7 @@ color_{i} = col_{h} + rand * varcolor,
 \end{equation}
 
 \noindent
-y donde rand constituye un n\'umero pseudo-aleatorio uniformemente distribuido entre $-1$ y $1$, $varcolor$ un parámetro en los reales y $col_{h} \in cols$.
+y donde {\it rand} constituye un n\'umero pseudo-aleatorio uniformemente distribuido entre $-1$ y $1$, $varcolor$ un parámetro en los reales y $col_{h} \in cols$.
 Cada $t \in T_{i}$ tiene asociado un color que var\'ia con respecto a $color_{i}$, de similar manera a la ecuaci\'on (\ref{eqColor}).
 
 El {\em contorno} de una part\'icula determina los texels que la misma puede incorporar. 
@@ -140,7 +139,6 @@ Se repite el proceso $\forall p_{i} \in P$, respetando las siguientes restriccio
 \end{eqnarray}
 
 Es decir, si una part\'icula posee un texel en $T_{i}$, ninguna otra lo posee (las part\'iculas son disjuntas), y si una part\'icula posee un texel en $T_{i}$, \'este no est\'a en su contorno.
-
 Las part\'iculas pueden {\em nacer} y {\em morir}, lo cual representa su inclusi\'on o eliminaci\'on de $P$.
 Al morir, la part\'icula deja asociados los colores de su conjunto $T_{i}$ en $B$, pudiendo utilizarse posteriormente esta informaci\'on.
 
@@ -206,16 +204,14 @@ Para esto, se generalizarán los resultados a tres dimensiones.
 
 \section{Modelado Procedimental de Geometrías Porosas}
 
-
-Utilizamos los sistemas de partículas previamente mencionados, en un cubo (tres dimensiones), pero reemplazando las direcciones de crecimiento por sistemas dinámicos \cite{Strogatz2001}, para evolucionar al sistema, produciendo patrones con formas geométricas naturales.
-Este constituye un intento por simular el efecto de la levadura en la masa cruda del pan.
+Utilizamos los sistemas de partículas previamente mencionados, en un cubo (tres dimensiones), pero reemplazando las direcciones de crecimiento por sistemas dinámicos \cite{Strogatz2001}, para hacer evolucionar las partículas dentro del sistema, produciendo patrones con formas geométricas naturales.
+Este constituye un intento por simular, entre otros,  el efecto de la levadura en la masa cruda del pan.
 Estos procedimientos producen distribuciones de burbujas de distintos tamaños, resultando en un mecanismo controlable, que presenta propiedades estadísticas.
-
 Si bien la metodología introducida no está basada en primeros principios, la misma constituye un paso previo que permite sentar las bases de un modelo inspirado físicamente, el cual se presentará en la siguiente sección.
 
-\section[Sistemas Dinámicos y Geometrías Porosas]{Sistemas Dinámicos como Modelo de Geometrías Porosas}
+\subsection[Sistemas Dinámicos y Geometrías Porosas]{Sistemas Dinámicos como Modelo de Geometrías Porosas}
 El propósito de este algoritmo constituye producir una geometría, la cual se renderizará posteriormente.
-Por lo tanto, en lugar de devolver el color de una posici\'on espec\'ifica, el algoritmo genera una textura volumétrica binaria, $0$s y $1$ ($0$ si la posici\'on contiene aire, $1$ si la misma contiene masa).
+Por lo tanto, en lugar de devolver el color de una posici\'on espec\'ifica, el algoritmo genera una textura volumétrica binaria, ceros y unos (cero si la posici\'on contiene aire, uno si la misma contiene masa).
 
 Similarmente al caso de generación de texturas, el sistema consta de un conjunto de part\'iculas $P$,
 
@@ -223,7 +219,7 @@ Similarmente al caso de generación de texturas, el sistema consta de un conjunt
   P = \{p_{1}, ... , p_{n}\}, n  \in \mathbb{N},
 \end{equation}
 
-\noindent una grilla $L_{N\times N \times N}, N \in \mathbb{N} $ (inicialmente $L_{xyz}=1$) de masa y aire como fue descripto previamente, y otra grilla $L^{2}_{N\times N \times N}$, (inicialmente $L^{2}_{xyz}=-1$) de posiciones donde cada celda almacena un único entero que indica qu\'e part\'icula adue\~na la misma ($i$ si el elemento de la grilla pertenece al contorno o interior de la part\'icula $i$).
+\noindent dos grillas $L$ y $L^{2}$, donde la grilla $L_{N\times N \times N}, N \in \mathbb{N}$ (inicialmente $L_{xyz}=1$) representa masa y aire como fue descripto previamente, y $L^{2}_{N\times N \times N}$, (inicialmente $L^{2}_{xyz}=-1$) representa posiciones donde cada celda almacena un único entero, indicando qu\'e part\'icula adue\~na la misma ($i$ si el elemento de la grilla pertenece al contorno o interior de la part\'icula $i$).
 
 Cada elemento en $P$ posee las siguientes propiedades:
 
@@ -240,7 +236,6 @@ Cada elemento en $P$ posee las siguientes propiedades:
 \end{itemize}
 
 El vector $O$ representa las posiciones que ser\'an afectadas por la part\'icula, y el contorno $C$ se utiliza para asegurar que las part\'iculas se eviten entre s\'i.
-
 El procedimiento se describe, simplificadamente, en el Algoritmo $1$. 
 
 \begin{algorithm}[h!]
@@ -275,8 +270,8 @@ El procedimiento se describe, simplificadamente, en el Algoritmo $1$.
         \For{$h \in C[i]$}
             \State{$C[i].eliminar(h)$}
             \Comment{la posición ya fue explorada}
-            \State{// Si la posición o el contorno pertenece a otra partícula, elegir otra posición}
-            \State{// borde\_libre chequea que el vecindario no este dominado por otra partícula}
+            \State{// Si la pos. o contorno pertenecen a otra partícula, descartar}
+            \State{// borde\_libre chequea disponibilidad en el vecindario}
             \If{$!(L^{2}[h] > 0 ~\&\&~ L^{2}[h] != i ~\&\&~ borde\_libre(separacion)$}
                 \State{// Posición libre, ocupar}                
                 \State{$L[h] \gets 0$} \Comment{masa -> aire}
@@ -292,12 +287,12 @@ El procedimiento se describe, simplificadamente, en el Algoritmo $1$.
 \end{algorithmic}
 \end{algorithm}
 
-Cuando $t = 0$, un conjunto de part\'iculas iniciales toman posiciones aleatorias en la grilla.
-Para cada partícula, la posici\'on elegida resulta la primera posici\'on ocupada en $O$, adem\'as, el vecindario de $O$ se agrega a $C$.
-Cada part\'icula evoluciona en un intento por extender sus posiciones ocupadas ($O$), marcando posiciones en $L$. Las posiciones se toman de $C$.
-Cuando una part\'icula ocupa una posici\'on, la misma se elimina de $C$ y se agrega a $O$.
-Luego el vecindario de esa posici\'on se agrega a $C$ (es decir las posiciones que rodean inmediatamente a la posici\'on tomada).
-Las grillas se actualizan de la siguiente manera: $L$ se setea a $0$ en la posici\'on y $L^{2}$ se setea con el valor $i$ en las posiciones que se agregan a $C$. Las part\'iculas s\'olo pueden crecer si el valor encontrado en $L^{2}$ no pertenece a otra part\'icula.
+Cuando $t = 0$, un conjunto de part\'iculas iniciales toman posiciones aleatorias en la textura volumétrica.
+Para cada partícula, la posici\'on elegida resulta la primera ocupada en $O$, adem\'as, el vecindario de $O$ se agrega a $C$.
+Cada part\'icula evoluciona en un intento por extender sus voxels ocupados ($O$), marcándolos en $L$. Los mismos se toman de $C$.
+Cuando una part\'icula ocupa una entrada en la textura volumétrica, la misma se elimina de $C$ y se agrega a $O$.
+Luego el vecindario de ese voxel se agrega a $C$ (es decir las posiciones que rodean inmediatamente a la entrada tomada).
+Las grillas se actualizan de la siguiente manera: $L$ se setea a $0$ en la entrada y $L^{2}$ se setea con el valor $i$ en los voxels que se agregan a $C$. Las part\'iculas s\'olo pueden crecer si el valor encontrado en $L^{2}$ no pertenece a otra part\'icula.
 El tama\~no del vecindario se par\'ametriza, definiendo la distancia entre part\'iculas.
 Si el vector $C$ est\'a vac\'io, la part\'icula {\em muere} ya que no puede continuar creciendo.
 
