@@ -10,7 +10,7 @@ La misma se desarrolla en un ambiente de cocina, y por lo tanto existen alimento
 Debido a la inexistencia de modelos estándar de determinados materiales en la literatura de computación gráfica (comestibles), los artistas y programadores encargados de llevar a cabo la producción visual de la película debieron crear técnicas {\em ad-hoc} para lograr un renderizado realista de los diferentes materiales.
 Sin embargo, el éxito visual obtenido no se vio acompañado de una liberación del código que producía dichas imágenes, por lo cual la técnica permaneció para uso privado de la compañía productora, resultando en una difícil reproducción de dichos materiales por parte de terceros.
 
-En este capítulo se busca introducir soluciones a estas problemáticas: por un lado, la falta de modelos fenomenologicos documentados y por lo tanto reproducibles, sobre geometría de migas de panes y otros materiales porosos, y por otro, la utilización de modelos físicos basados en los procesos reales de formación de dichos materiales, los cuales provocan que el resultado sintético posea una mayor similitud visual y estructural a los materiales que se pretenden representar.
+En este capítulo se busca introducir soluciones a estas problemáticas: por un lado, la falta de modelos fenomenológicos documentados y por lo tanto reproducibles, sobre geometría de migas de panes y otros materiales porosos, y por otro, la utilización de modelos físicos basados en los procesos reales de formación de dichos materiales, los cuales provocan que el resultado sintético posea una mayor similitud visual y estructural a los materiales que se pretenden representar.
 
 En este capítulo presentamos modelos procedimentales que permiten realizar simulaciones de la geometría de la miga de pan.
 Como sub-producto presentamos un algoritmo que produce imágenes de texturas bidimensionales de materiales estocásticos como granito y mármol, y otros más estructurados como la madera.
@@ -209,7 +209,7 @@ Estos procedimientos producen distribuciones de burbujas de distintos tamaños, 
 Si bien la metodología introducida no está basada en primeros principios, la misma constituye un paso previo que permite sentar las bases de un modelo inspirado físicamente, el cual se presentará en la siguiente sección.
 
 \subsection[Sistemas Dinámicos y Geometrías Porosas]{Sistemas Dinámicos como Modelo de Geometrías Porosas}
-El propósito de este algoritmo constituye producir una geometría, la cual se renderizará posteriormente.
+El propósito de este algoritmo constituye producir una textura volumétrica que representará una geometría, la cual se renderizará posteriormente.
 Por lo tanto, en lugar de devolver el color de una posici\'on espec\'ifica, el algoritmo genera una textura volumétrica binaria, ceros y unos (cero si la posici\'on contiene aire, uno si la misma contiene masa).
 
 Similarmente al caso de generación de texturas, el sistema consta de un conjunto de part\'iculas $P$,
@@ -302,7 +302,7 @@ Variando el par\'ametro de distancia entre part\'iculas (separación) se obtiene
 
 
 \begin{figure*}[htb!]
-  \centerline{\includegraphics[width=13cm]{figures/sistdin1}}
+  \centerline{\includegraphics[width=13cm]{figures/Fig1}}
   \caption[Efecto del parámetro separación entre partículas.]{Efecto del parámetro separación entre partículas. Izquierda: separaci\'on = 1, centro: separaci\'on = 2, derecha: separaci\'on = 4.}
   \label{fg:sistdin1}
 \end{figure*}
@@ -365,7 +365,7 @@ A modo de ejemplo, el siguiente conjunto de ecuaciones produce la imagen a la iz
 
 
 \begin{figure*}[htb!]
-  \centerline{\includegraphics[width=13cm]{figures/sistdin2}}
+  \centerline{\includegraphics[width=13cm]{figures/Fig2}}
   \caption{Sistemas dinámicos en el plano.}
   \label{fg:sistdin2}
 \end{figure*}
@@ -414,35 +414,160 @@ La probabilidad se define como $1-aleatoriedad$, donde $0 \leq aleatoriedad \leq
 Las ecuaciones del sistema son las mismas que las de la imagen derecha mostrada en la Fig.~\ref{fg:sistdin2}.
 
 \begin{figure*}[htb!]
-  \centerline{\includegraphics[width=13cm]{figures/sistdin3}}
+  \centerline{\includegraphics[width=13cm]{figures/Fig3}}
   \caption[Sistemas din\'amicos aplicados en sistemas de part\'iculas]{Sistemas din\'amicos aplicados en sistemas de part\'iculas. Efecto del parámetro {\em aleatoriedad}. De izquierda a derecha, aleatoriedad: 0.3,0.2,0.1 respectivamente. }
   \label{fg:sistdin3}
 \end{figure*}
 
+\subsection{Condiciones de contorno}
+A partir de una geometría tridimensional dada, se establecen condiciones de contorno que las burbujas deben respetar durante su crecimiento.
+Esto permite representar más fielmente estructuras porosas como huesos, panes y esponjas, dado que de esta forma las burbujas pueden realizar una interacción más realista con el contorno de los objetos.
+Determinados materiales como huesos humanos o el pan presentan burbujas orientadas de manera paralela a las paredes del objeto, ya que durante el proceso de formación del material las burbujas son presionadas contra las paredes del mismo.
+Huesos típicos presentan estructuas porosas y no porosas combinadas, y regiones donde el tejido trabecular (poroso) muestra una orientación definida en determinadas direcciones, dependiendo del estado de salud del hueso, la edad de la persona y otros factores.
+En otras estructuras porosas como las esponjas, las celdas visibles en la estructura no presentan una orientación definida.
+
+Nuestro modelo puede adaptarse a estas variadas situaciones definiendo sistemas dinámicos que varían de acuerdo a la región del material en la cual se encuentran.
+
+El procedimiento comienza voxelizando una geometría de entrada arbitraria, definiendo una región de interés donde las partículas pueden crecer (seteando 1 si el voxel pertenece a la geometría, y 0 en otro caso).
+Luego, definimos condiciones de contorno en la textura volumétrica resultante.
+Para esto utilizamos un método por cortes bidimensionales de la textura, es decir, el sistema dinámico y su condición de borde se definen en un corte del volumen únicamente.
+Si bien esto no resulta una parametrización 3D completa, la elección produce un algoritmo de modelado que es más intuitivo para definir y visualizar, ya que el sistema dinámico sólo necesita ser especificado en coordenadas 2D.
+
+Para esto, se define un eje principal en el volumen entre los tres ejes Cartesianos (este eje resulta un parámetro del modelo), a partir del cual cada corte queda definido.
+De cada corte obtenemos el centro de masa del mismo, estableciéndolo como centro.
+Esto quiere decir que se define un patrón circular, inducido por el sistema dinámico, alrededor del mismo.
+El sistema dinámico exacto puede variar, obteniendo apariencias ligeramente diferentes (espiral, círculo concéntrico, etc.).
+
+Luego de que se eligió un eje principal, el procedimiento computa las condiciones de borde para cada voxel en el corte.
+Para obtener estos valores, se computa un suavizado (utilizando filtrado gaussiano) de cada corte $s_{i}$.
+El gradiente de este suavizado permite definir vectores gradientes en cada punto del borde de la geometría:
+
+$$\displaystyle (v_{x},v_{y}) = g_{s_{i}}[x,y],$$
+
+\noindent donde $v_{x}$ y $v_{y}$ son los componentes del vector gradiente en $x$ e $y$, respectivamente.
+Un vector ortogonal a este puede utilizarse para seguir la silueta exterior del corte, y por lo tanto del volumen.
+Para esto se computa el vector $(v_{y},-v_{x})$.
+La Fig.~\ref{fg:Fig4} muestra el resultado de estos cómputos en un corte de una geometría.
+El campo vectorial resultante sigue adecuadamente la forma exterior del corte.
+La imagen también muestra que el método funciona en cortes con regiones desconectadas.
+
+
+\begin{figure}
+  \centerline{\includegraphics[width=11cm]{figures/Fig4}}
+  \caption{Campo discreto de vectores perpendiculares al gradiente. La imagen muestra que los vectores computados siguen la silueta exterior de figuras arbitrarias. Por claridad solo se muestran algunos vectores del campo.}
+  \label{fg:Fig4}
+\end{figure}
+
+Las condiciones de contorno se eligen si $v_{x}$ o $v_{y}$ resultan $>0$, caso contrario un sistema dinámico regula el crecimiento en el interior del corte bidimensional.
+Este proceso crea un patrón global realístico de deformación en el corte, ver Fig.~\ref{fg:Fig5}.
+
+Las burbujas tienden a permanecer en el corte bidimensional en el cual se originaron, pero debido al cómputo de números aleatorios en el proceso de crecimiento, las mismas no se limitan al corte mencionado, pudiendo cambiar entonces de corte y sistema dinámico.
+
+\begin{figure}
+  \centerline{\includegraphics[width=15cm]{figures/Fig5}}
+  \caption{Cortes porosos generados con el algoritmo de crecimiento propuesto. La imagen muestra que las burbujas siguen las condiciones de contorno cerca de los bordes de las geometrías y el sistema dinámico en el centro, produciendo patrones naturales tanto locales como globales. La imagen de la izquierda, arriba, utiliza un valor de aleatoriedad superior a las otras imágenes, produciendo una estructura parecida a una esponja. La imagen de la izquierda, abajo fue producida con el menor valor de aleatoriedad de todas las imágenes.}
+  \label{fg:Fig5}
+\end{figure}
+
+El parámetro {\em aleatoriedad} puede utilizarse para determinar la homogeneidad de la textura resultante.
+Por ejemplo, un valor cercano a 0 fuerza a las burbujas a seguir ajustadamente el sistema, lo cual es útil para determinados tipos de panes.
+Un valor más alto del parámetro es útil para esponjas.
+
+Adicionalmente, el método puede definir comportamiento diferente en distintas regiones, definiendo un sistema dinámico distinto para cada conjunto de cortes.
+De esta forma la estructura porosa resultante podrá mostrar diferentes orientaciones dependiendo del voxel y el corte en el cual se observe.
+Por ejemplo, es posible definir sistemas dinámicos que tomen en consideradión el ancho y alto del corte, produciendo burbujas que se adapten a esta situación: si el ancho es mayor al alto, se puede definir un sistema dinámico donde las burbujas crezcan horizontalmente.
+Ídem si el alto es mayor que el ancho.
+Un valor umbral relacionando el ancho y el alto puede definir cuándo se utilizan estos comportamientos.
+La Fig.~\ref{fg:Fig6} muestra estas consideraciones.
+
+
+\begin{figure}
+  \centerline{\includegraphics[width=11cm]{figures/Fig6}}
+  \caption{Cortes 2D generados con sistemas dinámicos predominantemente horizontal (izquierda) y vertical (derecha). La imagen muestra que las burbujas resultantes producen patrones que se adaptan a la relación entre el ancho y el alto de cada corte.}
+  \label{fg:Fig6}
+\end{figure}
+
+
+Como un ejemplo final, en la Fig.~\ref{fg:Fig7} se muestran cortes con forma de conejo, donde las burbujas ciclan sobre el centro de masa, y el parámetro {\em separación} es $2$.
+Este ejemplo demuestra que el sistema puede ser configurado para atender a distintas configuraciones visibles en distintos materiales (en este caso al distancia entre las burbujas).
+
+
+\begin{figure}
+  \centerline{\includegraphics[width=9cm]{figures/Fig7}}
+  \caption{Cortes con forma de conejo, donde las burbujas ciclan sobre el centro de masa del mismo. Adicionalmente, el parámetro {\em separación} es $2$.}
+  \label{fg:Fig7}
+\end{figure}
+
+\subsection{Comparación con modelos de ruidos}
+La generación artística de estructuras porosas es llevada a cabo usualmente utilizando distintos modelos de ruido, como ruido blanco, ruido Voronoi, ruido de Perlin \cite{Perlin1985}, y ruido de Worley \cite{Worley1996}.
+Estos modelos generan poros por medio de variaciones aleatorias de valores, y posterior suavizado del volumen resultante.
+Estos procedimientos arrojan resultados aceptables cuando los patrones finales no necesitan ser completamente controlados, dada la naturaleza aleatoria de los métodos.
+
+En particular, el ruido blanco no captura la mesoestructura requerida para representar adecuadamente materiales porosos, debido a que la textura generada es muy poco realista.
+De manera similar, el ruido de Perlin produce resultados muy suaves, con patrones estadísticos que inhabilitan la formación de poros de manera flexible, ver Fig.~\ref{fg:Fig8}.
+Ambos modelos de ruido presentas dificultades para controlar el tamaño y la distribución resultante de poros.
+
+Los ruidos de Voronoi y Worley son capaces de representar poros y sus distribuciones en posiciones arbitrarias en el espacio tridimensional.
+Luego, se pueden definir funciones de distancia sobre estos puntos para construir densidades volumétricas, generando volúmenes de aire/masa.
+Esto puede generar representaciones aceptables para esponjas y otros materiales homogéneos o con características aleatorias, como piedras y células.
+Sin embargo, es muy difícil o muy {\em ad-hoc} obtener orientaciones específicas sobre los patrones resultantes, ver Fig.~\ref{fg:Fig9}.
+Generalmente se requieren otras técnicas como mapas de texturas\footnote{https://graphics.stanford.edu/wikis/cs348b-11/aharaux/FinalProject} para obtener deformación de burbujas.
+
+Nuestro procedimiento no requiere técnicas auxiliares para obtener patrones convincentes, debido a que el sistema dinámico captura la dinámica de estos comportamientos.
+Esto implica que nuestro método reduce tiempo y complejidad en el modelo.
+El método resultante es altamente parametrizable y completamente automático, permitiendo utilizar la técnica no sólo a programadores y expertos en computación gráfica, sino también a artistas.
+
+
+\begin{figure}
+  \centerline{\includegraphics[width=11cm]{figures/Fig8}}
+  \caption{Estructura porosa simulada con ruido blanco (arriba) y ruido de Perlin (abajo). La imagen muestra que el material no es poroso (arriba) o es demasiado suave (abajo), haciendo difícil controlar las posiciones y la distribución de tamaños de poros.}
+  \label{fg:Fig8}
+\end{figure}
+
+\clearpage
+
+\begin{figure}
+  \centerline{\includegraphics[width=11cm]{figures/Fig9CAVW}}
+  \caption{Estructura porosa simulada con ruido de Voronoi (arriba) y ruido de Worley (abajo). La imagen muestra que si bien los métodos generan estructuras porosas convincentes, los usuarios de las mismas deben emplear técnicas auxiliares para obtener flexibilidad en los patrones resultantes (por ejemplo para controlar la orientación y forma de los poros).}
+  \label{fg:Fig9}
+\end{figure}
+
 \subsection{Resultados y Limitaciones}
-Las Figs.~\ref{fg:crumb} y \ref{fg:results2} muestran imágenes de geometrías tridimensionales sintetizadas a través del procedimiento de partículas descrito, utilizando el método de renderizado del siguiente capítulo.
-Las imágenes muestran un objeto cuyo material asemeja al de la miga del pan.
-
-\begin{figure}
-  \centerline{\includegraphics[width=13cm]{figures/crumb}}
-  \caption{Miga de pan sintetizada, observada desde distintos ángulos.}
-  \label{fg:crumb}
-\end{figure}
-
-
-\begin{figure}
-  \centerline{\includegraphics[width=13cm]{figures/results2}}
-  \caption{Miga de pan sintetizada, observada desde distintos ángulos (con corteza agregada).}
-  \label{fg:results2}
-\end{figure}
-
+En las Figs.~\ref{fg:Fig11} y \ref{fg:Fig12} se muestran imágenes sintetizadas a través del procedimiento de partículas descrito, utilizando el método de renderizado del siguiente capítulo.
+Las imágenes muestran objetos cuyo materiales se asemejan a panes, tanto en apariencia como en los patrones de sus burbujas.
+Las Figs.~\ref{fg:Fig13} y \ref{fg:Fig14} se muestran esponjas y piedras porosas sintetizadas con el mismo procedimiento, utilizando distintos valores para la aleatoriedad y la cantidad de burbujas iniciales.
+La Fig.~\ref{fg:Fig11} resalta el resultado de utilizar poca aleatoriedad en el crecimiento de las burbujas, forzando a las mismas a seguir un sistema dinámico circular.
 Estos patrones pueden ser utilizados adem\'as en otros materiales cocidos, variando el par\'ametro de aleatoriedad.
-Distintos sistemas de ecuaciones pueden utilizarse para definir distintos patrones.
-Si bien se pueden generar distintas geometrías de manera sencilla y prácticamente automática, todavía existen limitaciones de flexibilidad en los tipos de pan que se pueden sintetizar.
-Existe una dependencia sobre un sistema dinámico para producir la forma global de la deformación, siendo el sistema difícilmente controlable.
-Además, no siempre se adapta de manera sencilla a la forma exterior del material.
-Debido a esto, en la siguiente sección presentamos un algoritmo que permite superar estas deficiencias.
-El mismo continúa la idea de una modelización volumétrica del material, pero el mismo está basado en modelos físicos del proceso de fabricado del pan, extraído directamente de la literatura de ingeniería de los alimentos.
+Si bien es posible generar distintas geometrías de manera sencilla y automática, se requiere mayor profundidad en la investigación para determinar sistemas adecuados para determinados materiales.
+Los resultados alcanzados permiten obtener buenos resultados para panes, esponjas, y piedras, como fue mostrado, entre otros.
+Sin embargo, para posibilitar una renderización convincente de materiales como huesos debe extenderse el método para atender a las necesidades específicas del material, dado que en el mismo los patrones no son completamente aleatorios, y determinadas zonas presentan orientaciones claramente definidas en muestras reales.
+
+\begin{figure}
+  \centerline{\includegraphics[width=12cm]{figures/Fig11CAVW}}
+  \caption{Panes renderizados, destacando burbujas concéntricas sobre el centro de masa de cada corte bidimensional.}
+  \label{fg:Fig11}
+\end{figure}
+
+\begin{figure}
+  \centerline{\includegraphics[width=15cm]{figures/Fig12CAVW}}
+  \caption{Panes renderizados, utilizando diferentes geometrías y parámetros de renderizado. La imagen muestra que el método simula diferentes apariencias de panes.}
+  \label{fg:Fig12}
+\end{figure}
+
+\begin{figure}
+  \centerline{\includegraphics[width=12cm]{figures/Fig13CAVW}}
+  \caption{Esponjas renderizadas. La textura volumétrica que representa la geometría fue generada con un valor de {\em aleatoriedad} mayor que en el caso del pan. La geometría resultante posee tamaños y orientaciones de burbujas homogéneos.}
+  \label{fg:Fig13}
+\end{figure}
+
+\begin{figure}
+  \centerline{\includegraphics[width=12cm]{figures/Fig14CAVW}}
+  \caption{Piedras renderizadas. Se utilizó un menor número de partículas en la generación de este material. El índice de absorción fue incrementado en el renderizado para prevenir una difusión lumínica excesiva.}
+  \label{fg:Fig14}
+\end{figure}
+
+Debido a estas consideraciones, en la siguiente sección presentamos un algoritmo que demuestra que la elección de un sistema de ecuaciones específico en el diseño permite superar estas deficiencias para el material siendo estudiado.
+El mismo continúa la idea de una modelización volumétrica del material, pero está basado en modelos físicos del proceso de fabricación del pan, extraído directamente de la literatura de ingeniería de los alimentos.
 
 \section{Modelado de Pan desde su Proceso de Fabricación}
 La obtención de geometrías realistas de la miga de pan requiere comprender su proceso físico de formación.
@@ -774,58 +899,58 @@ En nuestro caso, definimos la {\em densidad de la corteza} en cada posición de 
 Luego utilizamos este valor para modular el canal $L$ en el color en cada posición, obteniendo imágenes plausibles.
 La función fue definida debido a la siguiente observación: en los lugares de la corteza donde hay menos masa (por ejemplo, esquinas), el efecto de la cocción es más marcado.
 El tamaño de la ventana puede ser utilizado para obtener variabilidad en la apariencia de la corteza.
-Por completitud presentaremos además otro método, basado en morfología matemática, para calcular la región del volumen que representa la corteza.
+%Por completitud presentaremos además otro método, basado en morfología matemática, para calcular la región del volumen que representa la corteza.
 
-\subsection{Determinación de la corteza utilizando morfología matemática}
-Debido a que resulta difícil o imposible definir funciones matemáticas algebraicas que se adapten a cualquier forma, proponemos un método automático para determinar regiones exteriores de volúmenes utilizando el formalismo conocido como morfología matemática \cite{Gonzalez2001}.
+%\subsection{Determinación de la corteza utilizando morfología matemática}
+%Debido a que resulta difícil o imposible definir funciones matemáticas algebraicas que se adapten a cualquier forma, proponemos un método automático para determinar regiones exteriores de volúmenes utilizando el formalismo conocido como morfología matemática \cite{Gonzalez2001}.
 
-Con esto se pretende obtener una región que se ajuste a los bordes de una textura volumétrica.
-Para esto se utilizarán técnicas simples conocidas como apertura, cierre, erosión y dilatación.
-Las operaciones las definiremos en campos escalares tridimensionales.
+%Con esto se pretende obtener una región que se ajuste a los bordes de una textura volumétrica.
+%Para esto se utilizarán técnicas simples conocidas como apertura, cierre, erosión y dilatación.
+%Las operaciones las definiremos en campos escalares tridimensionales.
 
-Un elemento estructurante $E$ denota una textura volumétrica binaria que representa una forma particular (cubo, esfera, etc.).
-Los elementos estructurantes son utilizados en la definición de las operaciones antes mencionadas.
+%Un elemento estructurante $E$ denota una textura volumétrica binaria que representa una forma particular (cubo, esfera, etc.).
+%Los elementos estructurantes son utilizados en la definición de las operaciones antes mencionadas.
 
-La operación de erosión se utiliza para reducir el tamaño total de la textura volumétrica.
-La erosión de una textura volumétrica $A$ utilizando un elemento estructurante $B$ se define de la siguiente manera,
+%La operación de erosión se utiliza para reducir el tamaño total de la textura volumétrica.
+%La erosión de una textura volumétrica $A$ utilizando un elemento estructurante $B$ se define de la siguiente manera,
 
-\begin{equation}
-A \ominus B = \{z\in \mathbb{Z}^3 | B_{z} \subseteq A\},
-\end{equation}
+%\begin{equation}
+%A \ominus B = \{z\in \mathbb{Z}^3 | B_{z} \subseteq A\},
+%\end{equation}
 
-\noindent donde $B_{z}$ es la traslación de $B$ por el vector tridimensional $z$.
+%noindent donde $B_{z}$ es la traslación de $B$ por el vector tridimensional $z$.
 
-La dilatación aumenta el tamaño total de la textura volumétrica, preservando en cierta manera la forma de sus bordes.
-La dilatación de una textura volumétrica $A$ utilizando el elemento estructurante $E$ se define como sigue,
+%La dilatación aumenta el tamaño total de la textura volumétrica, preservando en cierta manera la forma de sus bordes.
+%La dilatación de una textura volumétrica $A$ utilizando el elemento estructurante $E$ se define como sigue,
 
-\begin{equation}
-A  \oplus E = \bigcup_{e\in E} A_e.
-\end{equation}
+%\begin{equation}
+%A  \oplus E = \bigcup_{e\in E} A_e.
+%\end{equation}
 
-La operación de cierre se emplea para {\em cerrar agujeros} en la textura volumétrica.
-El cierre de un campo $B$ utilizando un elemento estructurante $E$ se define como una dilatación seguida de una erosión,
+%La operación de cierre se emplea para {\em cerrar agujeros} en la textura volumétrica.
+%El cierre de un campo $B$ utilizando un elemento estructurante $E$ se define como una dilatación seguida de una erosión,
 
-\begin{equation}
-B \bullet E = (B \oplus E) \ominus E,
-\end{equation}
+%\begin{equation}
+%B \bullet E = (B \oplus E) \ominus E,
+%\end{equation}
 
-\noindent ver \cite{Gonzalez2001} para obtener mayores detalles.
+%\noindent ver \cite{Gonzalez2001} para obtener mayores detalles.
 
-Para obtener la región externa de la geometría representada en la textura volumétrica, se necesitan eliminar los agujeros internos que representan las burbujas.
-Para esto, el primer paso produce un cierre $c$ de la textura volumétrica utilizando un cubo (elemento estructurante de radio $r$), causando el cierre de las burbujas internas.
-Llamaremos $d$ a la dilatación de $c$ con un elemento esférico de radio $r_{2}$ ($d = c \oplus E_{r_{2}}$) y $e$ a la erosión de $d$ utilizando un elemento estructurante esférico con un radio ligeramente menor ($r_{3}$), $e = d \oplus E_{r_{3}}$.
-La diferencia entre $d$ y $e$ ($d-e$) se encuentra en el borde de la textura volumétrica, por lo cual puede utilizarse como corteza.
-Para eliminar posibles imperfecciones en los pasos anteriores, se suaviza la textura volumétrica por medio de un cierre de $d-e$ y una dilatación del resultado, obteniendo la corteza final.
+%Para obtener la región externa de la geometría representada en la textura volumétrica, se necesitan eliminar los agujeros internos que representan las burbujas.
+%Para esto, el primer paso produce un cierre $c$ de la textura volumétrica utilizando un cubo (elemento estructurante de radio $r$), causando el cierre de las burbujas internas.
+%Llamaremos $d$ a la dilatación de $c$ con un elemento esférico de radio $r_{2}$ ($d = c \oplus E_{r_{2}}$) y $e$ a la erosión de $d$ utilizando un elemento estructurante esférico con un radio ligeramente menor ($r_{3}$), $e = d \oplus E_{r_{3}}$.
+%La diferencia entre $d$ y $e$ ($d-e$) se encuentra en el borde de la textura volumétrica, por lo cual puede utilizarse como corteza.
+%Para eliminar posibles imperfecciones en los pasos anteriores, se suaviza la textura volumétrica por medio de un cierre de $d-e$ y una dilatación del resultado, obteniendo la corteza final.
 
 
-La Fig.~\ref{fg:crusts} muestra ejemplos de texturas volumétricas con cortezas agregadas utilizando este técnica. Los resultados se adaptan naturalmente a cualquier textura volumétrica, inclusive si existen agujeros grandes.
-El resultado cubre completamente la textura volumétrica, por lo cual para poder observar la parte interna del material deben realizarse cortes en el mismo.
+%La Fig.~\ref{fg:crusts} muestra ejemplos de texturas volumétricas con cortezas agregadas utilizando este técnica. Los resultados se adaptan naturalmente a cualquier textura volumétrica, inclusive si existen agujeros grandes.
+%El resultado cubre completamente la textura volumétrica, por lo cual para poder observar la parte interna del material deben realizarse cortes en el mismo.
 
-\begin{figure}
-  \centerline{\includegraphics[width=13cm]{figures/crusts}}
-  \caption[Determinación de la corteza del pan utilizando morfología matemática]{Determinación de la corteza del pan utilizando morfología matemática. La imagen de la derecha muestra que el método se comporta adecuadamente incluso en casos donde existen grandes agujeros en la textura volumétrica.}
-  \label{fg:crusts}
-\end{figure}
+%\begin{figure}
+%  \centerline{\includegraphics[width=13cm]{figures/crusts}}
+%  \caption[Determinación de la corteza del pan utilizando morfología matemática]{Determinación de la corteza del pan utilizando morfología matemática. La imagen de la derecha muestra que el método se comporta adecuadamente incluso en casos donde existen grandes agujeros en la textura volumétrica.}
+%  \label{fg:crusts}
+%\end{figure}
 
 \subsection{Tiempos de cómputo}
 En la implementación utilizamos los lenguajes Python\footnote{python.org} y Cython\footnote{cython.org}.
