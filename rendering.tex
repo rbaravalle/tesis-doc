@@ -1,18 +1,18 @@
 
 \chapter{Renderización de Geometrías Porosas}
 \section{Introducción}
-Debido a las limitaciones existentes actualmente en el renderizado realista de pan, nos proponemos en este capítulo estudiar la utilización de renderizado directo de volúmenes (Direct Volume Rendering, \acrshort{DVR} \cite{Kratz2006}), aplicado a un campo escalar representando la geometría de la miga de pan. 
+Debido a las limitaciones existentes actualmente en el renderizado realista geometrías porosas en tiempos interactivos, nos proponemos en este capítulo estudiar la utilización de renderizado directo de volúmenes (Direct Volume Rendering, \acrshort{DVR} \cite{Kratz2006}), aplicado a un campo escalar representando la geometría del material. 
 Los resultados obtenidos son realistas y se renderizan en tiempo real. La misma evita el uso de estructuras intermedias, simplificando el desarrollo y reduciendo los costos computacionales.
 
-El renderizado foto-realísta de materiales con una estructura interna compleja presenta grandes retos en computación gráfica.
-En particular, las migas de panes son un material translúcido complejo, con una estructura porosa, que presenta detalles dispares en distintas escalas, todos igualmente necesarios de ser tenidos en cuenta para lograr una correcta visualización.
+El renderizado foto-realista de materiales con una estructura interna compleja presenta grandes retos en computación gráfica.
+En particular, los materiales porosos son translúcidos y complejos, presentando detalles dispares en distintas escalas, todos igualmente necesarios de ser tenidos en cuenta para lograr una correcta visualización.
 El renderizado realista de estos materiales debe simular correctamente diversos fenómenos como translucencia, auto-sombreado, auto-oclusión, reflectancia, y absorción, entre otros.
 
-Las técnicas del estado del arte en renderizado de migas de panes tratan el material como una superficie, capturando sus propiedades por medio de un complejo procedimiento en el cual la luz reflejada por el material se fotografía desde distintos ángulos.
+Las técnicas del estado del arte en renderizado de materiales porosos tratan el material como una superficie, capturando sus propiedades por medio de un complejo procedimiento en el cual la luz reflejada por el material se fotografía desde distintos ángulos.
 Posteriormente la información se procesa y reconstruye para formar un modelo del material.
 Si bien esta solución captura adecuadamente los fenómenos lumínicos previamente discutidos, también es cierto que la practicidad del método se encuentra severamente comprometida, presentando un elevado costo computacional, un procedimiento de captura muy limitado y la imposibilidad de obtener más de una apariencia con una única captura.
 
-En un intento por superar estas limitaciones en el renderizado de panes, proponemos utilizar la técnica de DVR, la cual implementamos en \acrshort{GPU}, utilizando el lenguaje de shader GLSL (ver Apéndice A).
+En un intento por superar estas limitaciones, proponemos utilizar la técnica de DVR, la cual implementamos en \acrshort{GPU}, utilizando el lenguaje de shader GLSL (ver Apéndice A).
 La técnica permite renderizar los campos escalares computados en el capítulo anterior sin utilizar estructuras intermedias.
 Las imágenes obtenidas son promisorias, y se computan en tiempo real gracias al poder de las placas gráficas actuales.
 
@@ -113,7 +113,7 @@ Estos valores muestreados son luego utilizados como entrada de un algoritmo que 
 
 \begin{figure}
 \centerline{\includegraphics[width=13cm]{figures/application}}
-\caption{Aplicación desarrollada mostrando un pan renderizado en tiempo real.}
+\caption{Aplicación desarrollada mostrando una estructura porosa renderizada en tiempo real.}
 \label{fg:application}
 \end{figure}
 
@@ -204,18 +204,21 @@ Por ejemplo, una función puede definir una corteza cilíndrica asignando la eti
 
 También se provee otra función que establece si la posición debe ser considerada aire.
 Esto permite definir, de una manera intuitiva, la corteza y cortes en el volumen (ver Figs.~\ref{fg:breadsnooc} y \ref{fg:breads}).
-Los métodos para definir la misma fueron explicados en el capítulo anterior, utilizando un mapa de distancias o bien morfología matemática.
+Los métodos para definir la misma fueron explicados en el capítulo anterior por medio de la utilización de un mapa de distancias.
 
 
 \section{Resultados}
 Las imágenes obtenidas a partir del método descrito en la sección anterior fueron renderizadas en una computadora con una placa gráfica nVidia GTX 480 ($480$ cores), la cual normalmente se utiliza en hogares.
 La CPU fue una Intel(R) Core(TM) i5-2300 CPU (cuatro procesadores).
 La resolución de las imágenes es de $1440\times990$ pixels. 
-Se obtuvieron diferentes imágenes que semejan materiales horneados.
-Diferentes tipos de pan pueden ser representados variando los parámetros de transmitancia y colores utilizados (ver Fig.~\ref{fg:breadsnooc}).
+Se obtuvieron diferentes imágenes que semejan materiales porosos y horneados.
+Diferentes tipos de materiales pueden ser representados variando los parámetros de transmitancia y colores utilizados (ver Fig.~\ref{fg:breadsnooc}).
 En esa imagen mostramos panes donde no se aplica oclusión de ambiente.
 En la imagen central los patrones producidos por los sistemas de partículas descritos en el capítulo anterior son claramente visibles.
 En ese caso, el tiempo de vida de las partículas difiere para cada una y de esa manera se obtienen burbujas de diferentes tamaños.
+
+La Fig.~\ref{fg:breads} muestra panes renderizados en tiempo real con oclusión de ambiente agregada.
+Puede observarse que los panes con este efecto muestran un grado de realismo superior.
 
 \begin{figure*}[htb!]
   \centerline{\includegraphics[width=13cm]{figures/fig5}}
@@ -223,8 +226,6 @@ En ese caso, el tiempo de vida de las partículas difiere para cada una y de esa
   \label{fg:breadsnooc}
 \end{figure*}
 
-La Fig.~\ref{fg:breads} muestra panes renderizados en tiempo real con oclusión de ambiente agregada.
-Puede observarse que los panes con este efecto muestran un grado de realismo superior.
 
 \begin{figure*}[htb!]
   \centerline{\includegraphics[width=13cm]{figures/breads}}
@@ -290,11 +291,9 @@ La Tabla \ref{tab:rayossecundarios} muestra que los rayos secundarios constituye
 En regiones con corteza, la velocidad del método resulta superior, ya que se puede obtener la apariencia deseada con un coeficiente de absorción mayor, es decir, los rayos necesitarán menos pasos para alcanzar el umbral inferior de transmitancia.
 
 \subsection{Otros Materiales y Efectos}
-Es posible obtener imágenes que asemejan otros materiales (ver Fig.~\ref{fg:fig6}).
-Estos son el resultado de la variación de parámetros técnicos y artísticos del modelo.
+Como fue mostrado en el capítulo anterior, es posible obtener imágenes que asemejan otros materiales (ver Fig.~\ref{fg:fig6}), variando parámetros técnicos y artísticos del modelo.
 En las imágenes de prueba pueden distinguirse un budín (izquierda), un pedazo de torta (medio) y una esponja (derecha).
-En el caso de la esponja se modificaron los parámetros que definen la función de densidad.
-Cuando no hay levadura en el proceso de creación puede utilizarse una textura volumétrica cuyos valores provienen de una función aleatoria.
+En el caso de la esponja se modificaron los parámetros que definen la función de densidad, utilizando una mayor aleatoriedad, para producir una textura más homogenea.
 
 En la Fig.~\ref{fg:sponges} puede observarse que la utilización de oclusión de ambiente produce imágenes de esponja más realistas que las obtenidas sin su aplicación.
 La retroiluminación también se aproxima en este modelo (ver Fig. \ref{fg:fig7}).
@@ -321,9 +320,29 @@ Este efecto surge como una consecuencia natural del algoritmo volumétrico basad
   \label{fg:sponges}
 \end{figure}
 
-\section{Discusión}
+\subsection{Renderizado Multi-escala}
+Debido a limitaciones del hardware, el tamaño de la textura influencia el rendimiento final del algoritmo.
+Una textura de resoluciones mayores a $256^{3}$ voxels compromete el desempeño de tiempo real del algoritmo de renderizado, sin embargo, como fue demostrado, para aumentar la calidad gráfica de la imagen es necesario superar esta barrera.
 
-%1)En primer lugar, un resumen de lo que hicimos en el paper y por qué es importante/novedoso
+Una posible solución a este conflicto está constituída por la utilización de más de una textura volumétrica en el modelado, donde una de ellas modela las características de mayor tamaño del objeto (por ejemplo, sus burbujas más grandes), y la otra se utiliza para representar detalles de menor escala.
+El resultado de la utilización de más de una textura puede observarse en la Fig.~\ref{fg:multiscale}, donde la diferencia es claramente visible.
+La segunda textura produce la ilusión de un objeto con una estructura mucho más rica.
+La implementación de esta técnica simplemente reemplaza el valor de la textura, representando los detalles de mayor escala, en el voxel siendo muestreado, con la combinación de los valores de ambas texturas en ese voxel, donde la textura que representa los detalles de menor escala se muestrea a mayor frecuencia.
+Es decir, si la posición del voxel es $(x,y,z)$, la primera textura se muestrea en esa posición, y la segunda textura se muestrea en $N\times (x, y,z)$, con $N \in \mathbb{R}$.
+A medida que $N$ crece, se representan detalles de menor escala en la textura final (por ejemplo, burbujas más chicas).
+Estos valores pueden multiplicarse o sumarse para producir el valor final del voxel antes de ser renderizado.
+
+El costo computacional agregado está representado por muestrear dos texturas en lugar de una.
+Si bien el muestreo es una operación costosa, el tiempo total resulta mucho menor al costo computacional de trabajar con texturas de mayores dimensiones.
+La textura que se muestrea a distintas escalas debe poseer cierta coherencia en sus bordes (arriba/abajo, izquierda/derecha, etc.), para poder ser ensamblada sin que se note el efecto del muestreo.
+
+\begin{figure}
+  \centerline{\includegraphics[width=13cm]{figures/multiscale}}
+  \caption{Estructura utilizando una única escala de muestreo (izquierda) y dos (derecha). Se puede apreciar claramente el aumento en el nivel de detalle resultante en la imagen, a un costo computacional aceptable.}
+  \label{fg:multiscale}
+\end{figure}
+
+\section{Discusión}
 
 Hasta donde podemos observar en la literatura, en el renderizado de panes y otros materiales porosos, este constituye el primer trabajo que involucra tasas de refresco de tiempo real, sin la utilización de estructuras intermedias, procesos de captura onerosos, o post-procesamientos.
 La literatura previa incluye pocos trabajos, como por ejemplo \cite{Cho2007}, pero las comparaciones con este método no son posibles, ya que los detalles claves del desarrollo no fueron explicados (tiempos de cómputo, método de renderización).
@@ -361,18 +380,20 @@ Por lo tanto, las aplicaciones en tiempo real deben limitar la resolución de la
 En otras palabras, acercamientos extremos a la estructura a ser renderizada puede dar lugar áreas homogéneas (sin detalle).
 Esta limitación está relacionada al tamaño de textura de la GPU, y será eventualmente superado con la mejora del hardware de la próxima generación de GPUs.
 En aplicaciones donde el tiempo de cómputo constituye un factor crucial, se permite la utilización de texturas lo suficientemente grandes para dar lugar a imágenes foto-realísticas.
+La utilización de un modelo multiescala, como fue discutido, puede subsanar estas deficiencias.
 
 \section{Conclusiones}
 
 En este capítulo hemos aplicado el modelo de transmitancia del renderizado directo de volúmenes utilizando la GPU, sobre un campo escalar tridimensional representando la estructura de la miga del pan (la cual fue computada en el capítulo anterior).
 Se obtuvieron imágenes realistas en tiempo real.
 Debido a limitaciones del hardware, también se obtuvieron imágenes con aún mayor detalle, pero a tasas de refresco menores.
+Si bien el algoritmo de renderizado no es novedoso, sí lo es su aplicación en los materiales porosos discutidos, y la obtención de tasas de tiempo real a partir del mismo.
 
 El algoritmo presentado fue implementado en el shader de fragmentos utilizando componentes especulares y difusas, cómputo de normales y oclusión de ambiente.
-Los resultados alcanzados superan en gran medida al estado del arte, obteniendo imágenes que simulan el material en tiempo real con gran realismo.
+Los resultados alcanzados son compatables al estado del arte, obteniendo imágenes que simulan el material en tiempo real con gran realismo.
 El método presenta aplicaciones en diversas áreas, como video juegos, juegos serios \cite{Susi2007} y renderizado foto-realista.
 Estas técnicas son mucho más simples y no presentan las desventajas de otros métodos, como procesos de captura, generación de mallas o post-procesos.
-Las mismas fueron presentadas en un congreso y revista nacionales \cite{Baravalle2014}.
+Las mismas fueron presentadas en un congreso y revista nacionales \cite{Baravalle2014}, y están en revisión en una revista internacional.
 Estos resultados demuestran que la elección de una representación volumétrica resulta adecuada para estos materiales porosos.
 
 

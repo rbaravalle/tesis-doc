@@ -1,4 +1,4 @@
-\chapter[Modelado Procedimental de Geometrías Porosas]{Modelado Procedimental de Geometrías de Miga de Pan y Otros Materiales Porosos}
+\chapter[Modelado Procedimental de Geometrías Porosas]{Modelado Procedimental de Geometrías Porosas}
 
 \section{Introducción y Motivación} % (Películas de Animación)
 Como fue explicado en la motivación de esta tesis, determinados materiales recibieron menor atención en la literatura científica, debido entre otros factores, a las dificultades presentes	 en el modelado, a los excesivos costos computacionales, y/o a la necesidad de utilización del material en aplicaciones prácticas.
@@ -12,7 +12,7 @@ Sin embargo, el éxito visual obtenido no se vio acompañado de una liberación 
 
 En este capítulo se busca introducir soluciones a estas problemáticas: por un lado, la falta de modelos fenomenológicos documentados y por lo tanto reproducibles, sobre geometría de migas de panes y otros materiales porosos, y por otro, la utilización de modelos físicos basados en los procesos reales de formación de dichos materiales, los cuales provocan que el resultado sintético posea una mayor similitud visual y estructural a los materiales que se pretenden representar.
 
-En este capítulo presentamos modelos procedimentales que permiten realizar simulaciones de la geometría de la miga de pan.
+En este capítulo presentamos modelos procedimentales que permiten realizar simulaciones de la geometría de materiales porosos.
 Como sub-producto presentamos un algoritmo que produce imágenes de texturas bidimensionales de materiales estocásticos como granito y mármol, y otros más estructurados como la madera.
 
 \subsection{Consideraciones sobre el modelado de geometrías porosas}
@@ -33,15 +33,14 @@ Esta estrategia modela la superficie del material asumiendo distribuciones estad
 Para lograr capturar detalles mesoscópicos, por ejemplo en el caso de maderas o ladrillos \cite{Lefebvre2000}, una técnica usual consiste en precomputar dichas características en texturas, las cuales luego son mapeadas en la superficie.
 La utilización de superficies constituye un enfoque menos costoso computacionalmente, pero por otro lado impone limitaciones al realismo que se puede alcanzar, sobre todo en aquellos detalles que son propios de la estructura a nivel mesoscópico y la interacción de la misma con la luz (por ejemplo luz que pasa a través de agujeros en una superficie).
 
-Siguiendo este razonamiento, la miga del pan constituye un material extremadamente complejo de capturar, modelar y renderizar, debido a la geometría a distintos niveles (microscópico y mesoscópico) y su resultante interacción con la energía radiante.
-De esta forma, la utilización de superficies no resulta adecuada, ya que la textura del pan debe su apariencia en gran medida a los fenómenos previamente explicados.
+Siguiendo este razonamiento, las estructuras porosas constituyen materiales extremadamente complejos de capturar, modelar y renderizar, debido a la geometría a distintos niveles (microscópico y mesoscópico) y su resultante interacción con la energía radiante.
+De esta forma, la utilización de superficies no resulta adecuada, ya que las texturas de estos materiales deben su apariencia en gran medida a los fenómenos previamente explicados.
 Si bien existen métodos en la literatura que utilizan superficies para representar características mesoscópicas de los materiales como BTFs, las mismas no manejan adecuadamente la interacción lumínica antes mencionada.
 Existe un intento en la literatura por suprimir esta falta \cite{Tong2005}.
 El método produce imágenes realistas, pero existen muchas dificultades prácticas en la captura, el cómputo y el renderizado.
 Estas limitaciones provocan que la utilización de dicho método no sea práctica por el momento.
 Además, el método resulta inflexible dado que para cada imagen del material se requiere repetir todo el proceso (dos imágenes distintas del material requieren dos capturas).
 Tampoco se pueden obtener cortes del mismo, dada la naturaleza de superficie del método.
-
 Por otro lado, existen numerosas publicaciones que tratan el modelado de materiales mejor adaptados a una representación volumétrica (por ejemplo humo o nubes) \cite{Chentanez2011,Zhou2008}.
 La utilización de volúmenes resulta costosa computacionalmente pero presenta varias ventajas.
 Una de ellas radica en su independencia de mallas de triángulos, a diferencia de las superficies, evitando las desventajas mencionadas para las mismas.
@@ -50,14 +49,14 @@ Finalmente, existe un compromiso al momento de modelar materiales complejos y el
 Donde se requiere simplicidad y velocidad (posiblemente tiempo real), se utilizan generalmente superficies, en cambio, si el foto-realismo constituye el objetivo final, resulta más adecuado optar por una representación volumétrica.
 En los últimos años esta elección se ve enriquecida por la aparición de hardware paralelo de alta velocidad (placas gráficas o GPUs), ya que un diseño adecuado podría producir imágenes foto-realistas utilizando volúmenes en tiempos interactivos.
 
-En este capítulo proponemos una representación volumétrica para la geometría de la miga de pan.
+En este capítulo proponemos una representación volumétrica para la geometría de materiales porosos.
 Existe una metodología volumétrica que simula geometrías estocásticas \cite{Perlin1989}, utilizando funciones algebraicas para construir la geometría.
 Sin embargo, la utilización de funciones algebraicas resulta impráctica en el caso de materiales porosos estocásticos, como el pan.
 
 \section[Síntesis de Texturas de Materiales]{Un Framework para la Síntesis de Texturas de Materiales}
 
-La textura característica de la miga de pan emerge como resultado de numerosos procesos.
-El crecimiento de la levadura en la masa cruda del pan produce una de las principales transformaciones texturales.
+La textura característica de los materiales porosos emerge como resultado de numerosos procesos.
+En el pan, por ejemplo, el crecimiento de la levadura en la masa cruda produce una de las principales transformaciones texturales.
 A este proceso le atañe la mayor responsabilidad en la formación de la geometría porosa macroscópica del material.
 La observación detallada de binarizaciones de fotografías de cortes en la masa cruda, durante distintas etapas del proceso de leudado y cocción del pan \cite{Scanlon2001}, permite sentar las bases de un algoritmo fenomenológico que responde a este comportamiento.
 En dichas imágenes se observa un crecimiento pseudo-aleatorio de burbujas atrapadas en la masa.
@@ -205,11 +204,11 @@ Para esto, se generalizarán los resultados a tres dimensiones.
 
 Utilizamos los sistemas de partículas previamente mencionados, en un cubo (tres dimensiones), pero reemplazando las direcciones de crecimiento por sistemas dinámicos \cite{Strogatz2001}, para hacer evolucionar las partículas dentro del sistema, produciendo patrones con formas geométricas naturales.
 Este constituye un intento por simular, entre otros,  el efecto de la levadura en la masa cruda del pan.
-Estos procedimientos producen distribuciones de burbujas de distintos tamaños, resultando en un mecanismo controlable, que presenta propiedades estadísticas.
-Si bien la metodología introducida no está basada en primeros principios, la misma constituye un paso previo que permite sentar las bases de un modelo inspirado físicamente, el cual se presentará en la siguiente sección.
+Si bien la metodología introducida no está basada en primeros principios, la misma constituye un paso previo que permite sentar las bases de modelos físicamente inspirados.
+Un ejemplo de ellos se presentará en la siguiente sección.
 
 \subsection[Sistemas Dinámicos y Geometrías Porosas]{Sistemas Dinámicos como Modelo de Geometrías Porosas}
-El propósito de este algoritmo constituye producir una textura volumétrica que representará una geometría, la cual se renderizará posteriormente.
+El propósito de este algoritmo constituye la producción de una textura volumétrica que representará una geometría, la cual se renderizará posteriormente.
 Por lo tanto, en lugar de devolver el color de una posici\'on espec\'ifica, el algoritmo genera una textura volumétrica binaria, ceros y unos (cero si la posici\'on contiene aire, uno si la misma contiene masa).
 
 Similarmente al caso de generación de texturas, el sistema consta de un conjunto de part\'iculas $P$,
@@ -298,7 +297,7 @@ Si el vector $C$ est\'a vac\'io, la part\'icula {\em muere} ya que no puede cont
 
 El algoritmo puede ser terminado en cualquier $t$ deseado. El mismo puede finalizar su c\'omputo ante determinados eventos, por ejemplo, cuando todas las posiciones de $L^{2}$ fueron tomadas por part\'iculas, ya que no pueden realizarse progresos.
 
-Variando el par\'ametro de distancia entre part\'iculas (separación) se obtienen distintas estructuras (ver Fig.~\ref{fg:sistdin1}). Las im\'agenes muestran ejemplos 2D (para mayor claridad) de crecimiento aleatorio de part\'iculas. La regi\'on blanca en las im\'agenes representa la masa restante luego del proceso.
+Variando el par\'ametro de distancia entre part\'iculas (separación) se obtienen distintas estructuras (ver Fig.~\ref{fg:sistdin1}). Las im\'agenes muestran ejemplos 2D (para mayor claridad) de crecimiento aleatorio de part\'iculas. La regi\'on negra en las im\'agenes representa la masa restante luego del proceso.
 
 
 \begin{figure*}[htb!]
@@ -331,25 +330,15 @@ De manera general, las ODEs se representan utilizando el siguiente sistema de ec
 a $t$.
 Las variables $x_{i}$ y las funciones $f_{i}$ se definen de manera diferente en cada modelo.
 En este caso, cada variable representa una coordenada cartesiana en el espacio, $x_{1}$ es $x$, $x_{2}$ es $y$ y $x_{3}$ es $z$.
-El conjunto de $f_{i}$ ser\'a definido tratando de capturar la estructura interna del pan. 
+El conjunto de $f_{i}$ ser\'a definido tratando de capturar la estructura interna del material a representar. 
 La siguiente secci\'on muestra cómo estos sistemas pueden describir la evoluci\'on de los sistemas de part\'iculas.
 
 \subsection{Evoluci\'on de sistemas de part\'iculas utilizando sistemas din\'amicos}
 
-La percepci\'on humana puede detectar patrones en la estructura de la miga de pan. Distintas observaciones pueden realizarse sobre la distribuci\'on de las burbujas en la misma (ver Fig.~\ref{fg:panreal}).
+La percepci\'on humana puede detectar patrones en la estructura de los materiales.
+Por ejemplo, en la miga de pan, distintas observaciones pueden realizarse sobre la distribuci\'on de las burbujas en la misma.
 Primero, la forma de las burbujas cercanas a la corteza tiende a estirarse paralelamente a la misma, como resultado de la acci\'on de las elevadas temperaturas durante la cocci\'on de la masa.
 Tambi\'en resulta evidente que la estructura completa posee la apariencia de un fluido con la forma de la corteza.
-
-
-\begin{figure*}[htb!]
-  \centerline{\includegraphics[width=13cm]{figures/panreal}}
-  \caption[Imágenes de cortes reales de pan]{Imágenes de cortes reales de pan, obtenidas online\protect\footnotemark \protect\footnotemark  }
-  \label{fg:panreal}
-\end{figure*}
-
-\footnotetext{http://jeremyrenners.blogspot.com.ar/2009/01/slice-of-bread.html}
-\footnotetext{https://markforeman.wordpress.com/category/dehydration/}
-
 Por otro lado, los sistemas din\'amicos previamente presentados producen formas naturales (ver Fig.~\ref{fg:sistdin2}).
 En las im\'agenes pueden observarse c\'irculos y espirales, entre otras formas.
 Las im\'agenes se obtuvieron dibujando trayectorias sobre un plano, siguiendo distintas ODEs.
@@ -419,35 +408,68 @@ Las ecuaciones del sistema son las mismas que las de la imagen derecha mostrada 
   \label{fg:sistdin3}
 \end{figure*}
 
+
+%====================================================================
+
+\subsection{Inclusión de una geometría}
+
+El modelo permite generar materiales con geometrías arbitrarias, supliendo un modelo de triángulos en algún formato estándar.
+%El modelo consta de una serie de pasos. 
+El primer paso de la secuencia voxeliza un modelo provisto por el usuario con la utilidad de código abierto {\tt binvox} \footnote{http://www.cs.princeton.edu/$\sim$min/binvox/} \cite{Nooruddin2003}.
+La voxelización genera una textura volumétrica binaria, con $1$ representando que el voxel dado está dentro de la geometría, y $0$ significando que el voxel está fuera de la geometría.
+%El paso de leudado (siguiente subsección) genera la textura del material que se ubica dentro de esta geometría voxelizada.
+Esto permite generar materiales con formas arbitrarias, tales como {\em baguettes}, {\em croissants}, pan {\em lactal}, piedras, esponjas u otros menos comunes (una tetera o un conejo).
+
+Un sub-producto importante de la matriz que representa la geometría está dado por una textura volumétrica secundaria, resultante de una transformación de distancia.
+La transformación de distancia genera una matriz $n$-dimensional con las mismas dimensiones que la matriz que se transforma \cite{osh03}.
+La transformación computa, para cada entrada en la matriz, la distancia más cercana a una entrada nula de dicha matriz.
+Dada una textura volumétrica $M$, el algoritmo genera una textura volumétrica a valores reales $DF_{M}$ con las mismas dimensiones que $M$,
+
+
+$$DF_{M}[i,j,k] = \min \bigg\{ \delta([i,j,k],[i',j',k']): M[i',j',k'] = 0 \bigg\},$$
+
+
+\noindent donde $[i,j,k]$ y $[i',j',k']$ son celdas en las respectivas texturas, representando las posiciones espaciales $(i,j,k)$ y $(i',j',k')$, y $\delta$ es la función que computa la distancia entre dos celdas, las cuales pueden ser la distancia de Manhattan, o la distancia Euclideana.
+Las entradas de la textura volumétrica lejanas a los bordes del objeto toman valores mayores que aquellas cercanas a los mismos.
+De esta manera se obtiene un mapa de la distancia de cada voxel a las superficies tridimensionales del objeto.
+A partir de un valor umbral, esta textura volumétrica con distancias se utiliza para definir una región envolvente tridimensional de la textura volumétrica.
+Esta región definida es utilizada en materiales como pan, para definir la zona de la corteza.
+La Fig.\ref{fg:distance} muestra un ejemplo de un mapa de distancias.
+
+\begin{figure*}
+\includegraphics[width=12cm]{figures/distance}
+\caption[Mapa de distancias de una matriz bidimensional]{Mapa de distancias de una matriz bidimensional. A la izquierda se observa la matriz original, y a la derecha su mapa de distancias. Se observa que en los bordes el valor del mapa resulta mínimo, aumentando hacia el centro.}
+\label{fg:distance}
+\end{figure*}
+
 \subsection{Condiciones de contorno}
 A partir de una geometría tridimensional dada, se establecen condiciones de contorno que las burbujas deben respetar durante su crecimiento.
 Esto permite representar más fielmente estructuras porosas como huesos, panes y esponjas, dado que de esta forma las burbujas pueden realizar una interacción más realista con el contorno de los objetos.
 Determinados materiales como huesos humanos o el pan presentan burbujas orientadas de manera paralela a las paredes del objeto, ya que durante el proceso de formación del material las burbujas son presionadas contra las paredes del mismo.
 Huesos típicos presentan estructuas porosas y no porosas combinadas, y regiones donde el tejido trabecular (poroso) muestra una orientación definida en determinadas direcciones, dependiendo del estado de salud del hueso, la edad de la persona y otros factores.
 En otras estructuras porosas como las esponjas, las celdas visibles en la estructura no presentan una orientación definida.
-
 Nuestro modelo puede adaptarse a estas variadas situaciones definiendo sistemas dinámicos que varían de acuerdo a la región del material en la cual se encuentran.
 
-El procedimiento comienza voxelizando una geometría de entrada arbitraria, definiendo una región de interés donde las partículas pueden crecer (seteando 1 si el voxel pertenece a la geometría, y 0 en otro caso).
+El procedimiento comienza voxelizando una geometría de entrada arbitraria, definiendo una región de interés donde las partículas pueden crecer (asignando el valor 1 si el voxel pertenece a la geometría, y 0 en otro caso).
 Luego, definimos condiciones de contorno en la textura volumétrica resultante.
 Para esto utilizamos un método por cortes bidimensionales de la textura, es decir, el sistema dinámico y su condición de borde se definen en un corte del volumen únicamente.
-Si bien esto no resulta una parametrización 3D completa, la elección produce un algoritmo de modelado que es más intuitivo para definir y visualizar, ya que el sistema dinámico sólo necesita ser especificado en coordenadas 2D.
+Si bien esto no constituye una parametrización 3D completa, la elección produce un algoritmo de modelado que es más intuitivo para definir y visualizar, ya que el sistema dinámico sólo necesita ser especificado en coordenadas 2D.
 
 Para esto, se define un eje principal en el volumen entre los tres ejes Cartesianos (este eje resulta un parámetro del modelo), a partir del cual cada corte queda definido.
 De cada corte obtenemos el centro de masa del mismo, estableciéndolo como centro.
-Esto quiere decir que se define un patrón circular, inducido por el sistema dinámico, alrededor del mismo.
+Esto quiere decir que el origen de coordenadas del sistema dinámico se traslada al centro de masa computado.
 El sistema dinámico exacto puede variar, obteniendo apariencias ligeramente diferentes (espiral, círculo concéntrico, etc.).
 
-Luego de que se eligió un eje principal, el procedimiento computa las condiciones de borde para cada voxel en el corte.
+Luego el procedimiento computa las condiciones de borde para cada voxel en el corte.
 Para obtener estos valores, se computa un suavizado (utilizando filtrado gaussiano) de cada corte $s_{i}$.
-El gradiente de este suavizado permite definir vectores gradientes en cada punto del borde de la geometría:
+El gradiente de este suavizado permite definir vectores gradientes en cada punto del contorno de la geometría:
 
 $$\displaystyle (v_{x},v_{y}) = g_{s_{i}}[x,y],$$
 
 \noindent donde $v_{x}$ y $v_{y}$ son los componentes del vector gradiente en $x$ e $y$, respectivamente.
-Un vector ortogonal a este puede utilizarse para seguir la silueta exterior del corte, y por lo tanto del volumen.
+Un vector ortogonal a este resulta paralelo a la silueta exterior del corte.
 Para esto se computa el vector $(v_{y},-v_{x})$.
-La Fig.~\ref{fg:Fig4} muestra el resultado de estos cómputos en un corte de una geometría.
+La Fig.~\ref{fg:Fig4} muestra el resultado de estos cómputos en cortes de distintas geometrías.
 El campo vectorial resultante sigue adecuadamente la forma exterior del corte.
 La imagen también muestra que el método funciona en cortes con regiones desconectadas.
 
@@ -460,8 +482,11 @@ La imagen también muestra que el método funciona en cortes con regiones descon
 
 Las condiciones de contorno se eligen si $v_{x}$ o $v_{y}$ resultan $>0$, caso contrario un sistema dinámico regula el crecimiento en el interior del corte bidimensional.
 Este proceso crea un patrón global realístico de deformación en el corte, ver Fig.~\ref{fg:Fig5}.
+El parámetro {\em aleatoriedad} puede utilizarse para determinar la homogeneidad de la textura resultante.
+Por ejemplo, un valor cercano a 0 fuerza a las burbujas a seguir ajustadamente al sistema, lo cual es útil para modelar determinados tipos de panes.
+Un valor más alto del parámetro resulta útil para modelar esponjas.
 
-Las burbujas tienden a permanecer en el corte bidimensional en el cual se originaron, pero debido al cómputo de números aleatorios en el proceso de crecimiento, las mismas no se limitan al corte mencionado, pudiendo cambiar entonces de corte y sistema dinámico.
+%Las burbujas tienden a permanecer en el corte bidimensional en el cual se originaron, pero debido al cómputo de números aleatorios en el proceso de crecimiento, las mismas no se limitan al corte mencionado, pudiendo cambiar entonces de corte y sistema dinámico.
 
 \begin{figure}
   \centerline{\includegraphics[width=15cm]{figures/Fig5}}
@@ -469,17 +494,13 @@ Las burbujas tienden a permanecer en el corte bidimensional en el cual se origin
   \label{fg:Fig5}
 \end{figure}
 
-El parámetro {\em aleatoriedad} puede utilizarse para determinar la homogeneidad de la textura resultante.
-Por ejemplo, un valor cercano a 0 fuerza a las burbujas a seguir ajustadamente el sistema, lo cual es útil para determinados tipos de panes.
-Un valor más alto del parámetro es útil para esponjas.
-
 Adicionalmente, el método puede definir comportamiento diferente en distintas regiones, definiendo un sistema dinámico distinto para cada conjunto de cortes.
-De esta forma la estructura porosa resultante podrá mostrar diferentes orientaciones dependiendo del voxel y el corte en el cual se observe.
+De esta forma la estructura porosa resultante podrá mostrar diferentes orientaciones dependiendo del voxel y el corte en el cual se encuentre.
 Por ejemplo, es posible definir sistemas dinámicos que tomen en consideradión el ancho y alto del corte, produciendo burbujas que se adapten a esta situación: si el ancho es mayor al alto, se puede definir un sistema dinámico donde las burbujas crezcan horizontalmente.
 Ídem si el alto es mayor que el ancho.
 Un valor umbral relacionando el ancho y el alto puede definir cuándo se utilizan estos comportamientos.
-La Fig.~\ref{fg:Fig6} muestra estas consideraciones.
-
+La Fig.~\ref{fg:Fig6} muestra ejemplos de DS definidos teniendo en cuenta estas consideraciones.
+El DS que produce la imagen de la izquierda es $\dot{x} = 1, \dot{y} = 0$, y el de la imagen de la derecha $\dot{x} = 0, \dot{y} = 1$, indicando en cada caso que sólo debe haber cambio en uno de los dos ejes mientras crece la partícula.
 
 \begin{figure}
   \centerline{\includegraphics[width=11cm]{figures/Fig6}}
@@ -499,7 +520,7 @@ Este ejemplo demuestra que el sistema puede ser configurado para atender a disti
 \end{figure}
 
 \subsection{Comparación con modelos de ruidos}
-La generación artística de estructuras porosas es llevada a cabo usualmente utilizando distintos modelos de ruido, como ruido blanco, ruido Voronoi, ruido de Perlin \cite{Perlin1985}, y ruido de Worley \cite{Worley1996}.
+La generación artística de estructuras porosas es llevada a cabo, usualmente, utilizando distintos modelos de ruido, como ruido blanco, ruido Voronoi, ruido de Perlin \cite{Perlin1985}, y ruido de Worley \cite{Worley1996}.
 Estos modelos generan poros por medio de variaciones aleatorias de valores, y posterior suavizado del volumen resultante.
 Estos procedimientos arrojan resultados aceptables cuando los patrones finales no necesitan ser completamente controlados, dada la naturaleza aleatoria de los métodos.
 
@@ -519,7 +540,7 @@ El método resultante es altamente parametrizable y completamente automático, p
 
 
 \begin{figure}
-  \centerline{\includegraphics[width=11cm]{figures/Fig8}}
+  \centerline{\includegraphics[width=9cm]{figures/Fig8}}
   \caption{Estructura porosa simulada con ruido blanco (arriba) y ruido de Perlin (abajo). La imagen muestra que el material no es poroso (arriba) o es demasiado suave (abajo), haciendo difícil controlar las posiciones y la distribución de tamaños de poros.}
   \label{fg:Fig8}
 \end{figure}
@@ -527,7 +548,7 @@ El método resultante es altamente parametrizable y completamente automático, p
 \clearpage
 
 \begin{figure}
-  \centerline{\includegraphics[width=11cm]{figures/Fig9CAVW}}
+  \centerline{\includegraphics[width=9cm]{figures/Fig9CAVW}}
   \caption{Estructura porosa simulada con ruido de Voronoi (arriba) y ruido de Worley (abajo). La imagen muestra que si bien los métodos generan estructuras porosas convincentes, los usuarios de las mismas deben emplear técnicas auxiliares para obtener flexibilidad en los patrones resultantes (por ejemplo para controlar la orientación y forma de los poros).}
   \label{fg:Fig9}
 \end{figure}
@@ -535,8 +556,8 @@ El método resultante es altamente parametrizable y completamente automático, p
 \subsection{Resultados y Limitaciones}
 En las Figs.~\ref{fg:Fig11} y \ref{fg:Fig12} se muestran imágenes sintetizadas a través del procedimiento de partículas descrito, utilizando el método de renderizado del siguiente capítulo.
 Las imágenes muestran objetos cuyo materiales se asemejan a panes, tanto en apariencia como en los patrones de sus burbujas.
-Las Figs.~\ref{fg:Fig13} y \ref{fg:Fig14} se muestran esponjas y piedras porosas sintetizadas con el mismo procedimiento, utilizando distintos valores para la aleatoriedad y la cantidad de burbujas iniciales.
-La Fig.~\ref{fg:Fig11} resalta el resultado de utilizar poca aleatoriedad en el crecimiento de las burbujas, forzando a las mismas a seguir un sistema dinámico circular.
+En las Figs.~\ref{fg:Fig13} y \ref{fg:Fig14} se muestran esponjas y piedras porosas sintetizadas con el mismo procedimiento, utilizando distintos valores para la aleatoriedad y la cantidad de burbujas iniciales.
+La Fig.~\ref{fg:Fig11} destaca la utilización de un valor bajo de aleatoriedad en el crecimiento de las burbujas, forzando a las mismas a seguir un sistema dinámico circular.
 Estos patrones pueden ser utilizados adem\'as en otros materiales cocidos, variando el par\'ametro de aleatoriedad.
 Si bien es posible generar distintas geometrías de manera sencilla y automática, se requiere mayor profundidad en la investigación para determinar sistemas adecuados para determinados materiales.
 Los resultados alcanzados permiten obtener buenos resultados para panes, esponjas, y piedras, como fue mostrado, entre otros.
@@ -549,13 +570,13 @@ Sin embargo, para posibilitar una renderización convincente de materiales como 
 \end{figure}
 
 \begin{figure}
-  \centerline{\includegraphics[width=15cm]{figures/Fig12CAVW}}
+  \centerline{\includegraphics[width=13cm]{figures/Fig12CAVW}}
   \caption{Panes renderizados, utilizando diferentes geometrías y parámetros de renderizado. La imagen muestra que el método simula diferentes apariencias de panes.}
   \label{fg:Fig12}
 \end{figure}
 
 \begin{figure}
-  \centerline{\includegraphics[width=12cm]{figures/Fig13CAVW}}
+  \centerline{\includegraphics[width=9cm]{figures/Fig13CAVW}}
   \caption{Esponjas renderizadas. La textura volumétrica que representa la geometría fue generada con un valor de {\em aleatoriedad} mayor que en el caso del pan. La geometría resultante posee tamaños y orientaciones de burbujas homogéneos.}
   \label{fg:Fig13}
 \end{figure}
@@ -578,7 +599,7 @@ Estos procesos han sido vagamente tenidos en cuenta en la literatura, la cual ha
 
 
 \begin{figure*}
-\includegraphics[width=13cm]{figures/pipeline}
+\includegraphics[width=12cm]{figures/pipeline}
 \caption{Procedimiento semi-automático para obtener pan sintético foto-realista}
 \label{FigPipeline}
 \end{figure*}
@@ -608,7 +629,7 @@ En años recientes, la tecnología GPGPU \cite{Owens2007} permitió la posibilid
 A pesar de todos estos avances, el modelado y visualización foto-realista de panes y materiales porosos todavía presenta diversos retos.
 Además de un modelo geométrico realista, el renderizado requiere que se represente de manera adecuada los fenómenos de transporte de la luz, incluyendo auto-oclusión, auto-sombreado, transmitancia, translucencia, transparencia, entre otras.
 Solamente unas pocas publicaciones proponen atacar ambos aspectos, pero utilizando consideraciones artísticas \cite{Xenakis2007}.
-Además, estos autores no liberaron suficientes detalles del modelado y renderización ya que existen derechos de propiedad intelectual, limitando enormemente la reproducción de dichas imágenes.
+Además, estos autores no difundieron suficientes detalles del modelado y renderización ya que existen derechos de propiedad intelectual, limitando enormemente la reproducción de dichas imágenes.
 
 Por otro lado, la comunidad artística usualmente produce imágenes realistas de pan utilizando fotografías de los mismos, y definiendo geometrías a partir de ellas, junto a la utilización de materiales translúcidos\footnote{http://www.blenderguru.com/tutorials/how-to-create-realistic-bread} y otras consideraciones {\em ad-hoc}\footnote{http://design.tutsplus.com/tutorials/create-a-realistic-loaf-of-bread-in-photoshop--psd-10555}.
 Si bien los resultados obtenidos son buenos, los procesos son tediosos y demandan horas de trabajo.
@@ -622,43 +643,12 @@ La Fig.~\ref{FigPipeline} muestra el proceso completo de formación de geometrí
 Todos los pasos se aplican sobre texturas volumétricas.
 Los usuarios pueden proveer al sistema con un modelo de tres dimensiones de su preferencia, o dejar que el sistema provea un pan de forma estándar ({\em croissants}, {\em baguettes}, etc.).
 
-La geometría introducida se voxeliza para proceder a las siguientes etapas.
+La geometría introducida se voxeliza, de la forma descrita en la sección anterior, para proceder a las siguientes etapas.
 En la simulación del proceso de leudado, el usuario puede parametrizar la textura del pan (cantidad y tamaño de las burbujas y su distribución), o nuevamente dejar que el sistema provea parámetros estándar que producen tipos de pan conocidos.
 La masa cruda será intersectada con la geometría voxelizada, obteniendo una textura volumétrica, la cual tiene la forma externa que provee el usuario (o el sistema), con el interior de la misma compuesta de las burbujas procedentes de los parámetros establecidos (ver Sección~\ref{breadprov}).
 Luego, se computa un modelo de cocción específico \cite{Powathil2004} el cual deforma la textura volumétrica (y las burbujas de ésta), de acuerdo a los efectos que produce la cocción en el proceso de formación del pan, y a su vez, provoca el levantamiento del mismo, basado en la distribución de burbujas, como ocurre en el proceso real de cocción de este material.
 El último paso aplica renderizado directo de volúmenes (direct volume rendering, DVR) \cite{Kruger2003} a la textura volumétrica resultado de la cocción, obteniendo imágenes realistas del pan resultante.
 
-%====================================================================
-
-\subsection{Voxelización de la Geometría}
-
-El modelo permite generar panes con geometrías arbitrarias, supliendo un modelo de triángulos en algún formato estándar.
-El modelo consta de una serie de pasos. 
-El primer paso de la secuencia voxeliza un modelo provisto por el usuario con la utilidad de código abierto {\tt binvox} \footnote{http://www.cs.princeton.edu/$\sim$min/binvox/} \cite{Nooruddin2003}.
-La voxelización genera una textura volumétrica binaria, con $1$ representando que el voxel dado está dentro de la geometría, y $0$ significando que el voxel está fuera de la geometría.
-El paso de leudado (siguiente subsección) genera la textura del material que se ubica dentro de esta geometría voxelizada.
-Esto permite generar panes con formas arbitrarias, tales como {\em baguettes}, {\em croissants}, pan {\em lactal}, u otros menos comunes (una tetera o un conejo).
-
-Un sub-producto importante de la matriz que representa la geometría está dado por una textura volumétrica secundaria, resultante de una transformación de distancia.
-La transformación de distancia genera una matriz $n$-dimensional con las mismas dimensiones que la matriz que se transforma \cite{osh03}.
-La transformación computa, para cada entrada en la matriz, la distancia más cercana a una entrada nula de dicha matriz.
-Dada una textura volumétrica $M$, el algoritmo genera una textura volumétrica a valores reales $DF_{M}$ con las mismas dimensiones que $M$,
-
-
-$$DF_{M}[i,j,k] = \min \bigg\{ \delta([i,j,k],[i',j',k']): M[i',j',k'] = 0 \bigg\},$$
-
-
-\noindent donde $[i,j,k]$ y $[i',j',k']$ son celdas en las respectivas texturas, representando las posiciones espaciales $(i,j,k)$ y $(i',j',k')$, y $\delta$ es la función que computa la distancia entre dos celdas, las cuales pueden ser la distancia de Manhattan, o la distancia Euclideana.
-Las entradas de la textura volumétrica lejanas a los bordes del objeto toman valores mayores que aquellas cercanas a los mismos.
-De esta manera se obtiene un mapa de la distancia de cada voxel a las superficies tridimensionales del objeto.
-Esta textura volumétrica de distancias será requerida en etapas posteriores del proceso.
-La Fig.\ref{fg:distance} muestra un ejemplo de un mapa de distancias.
-
-\begin{figure*}
-\includegraphics[width=13cm]{figures/distance}
-\caption[Mapa de distancias de una matriz bidimensional]{Mapa de distancias de una matriz bidimensional. A la izquierda se observa la matriz original, y a la derecha su mapa de distancias. Se observa que en los bordes el valor del mapa resulta mínimo, aumentando hacia el centro.}
-\label{fg:distance}
-\end{figure*}
 
 
 \subsection{Simulación del Leudado}
@@ -993,9 +983,8 @@ Este efecto se logra definiendo diferentes valores máximos en el canal $L$ del 
 Las Figs.~\ref{fg:bakingdeform} y \ref{fg:bakingdeform2} muestran el efecto de definir distintos valores del parámetro $S$ en la ec.~(\ref{Eq:rise}), los cuales producen distintos crecimientos de la masa.
 Las imágenes muestran que el método produce imágenes realistas incluso para masas inverosímiles como una con forma de conejo.
 El método permite realizar fácilmente cortes y tajadas en el modelo, definiendo como $0$ diferentes regiones en el volumen luego de la cocción y antes del renderizado.
+A diferencia de la sección anterior, el proceso está basado en la secuencia real de pasos de la fabricación del pan, permitiendo la obtención de imágenes en distintos momentos del mismo, utilizando además parámetros intuitivos, los cuales son difíciles de controlar con un proceso como el de la sección anterior, ya que el mismo no toma en consideración los mecanismos de formación intervinientes.
 
-Respecto de la sección anterior, puede observarse una forma más suave en las burbujas resultantes, junto con la capacidad de modelar tipos arbitrarios de panes.
-Además, el proceso está basado en la secuencia real de pasos de la fabricación del pan, permitiendo la obtención de imágenes en distintos momentos del mismo.
 
 \begin{figure*}[!ht]
 \begin{center}
@@ -1048,11 +1037,12 @@ Además, el proceso está basado en la secuencia real de pasos de la fabricació
 
 
 \section{Conclusiones}
-En este Cap\'itulo hemos introducido diversos algoritmos para subsanar la falta de procedimientos flexibles e intuitivos para modelar determinados materiales, entre ellos materiales porosos como el pan. Además, como sub-producto de la investigación, se obtuvieron representaciones bidimensionales de madera, granito, mármol y otros materiales comunes en la literatura.
+En este Cap\'itulo hemos introducido diversos algoritmos para subsanar la falta de procedimientos flexibles e intuitivos para modelar determinados materiales porosos.
+Además, como sub-producto de la investigación, se obtuvieron representaciones bidimensionales de madera, granito, mármol y otros materiales comunes en la literatura.
 Hemos demostrado visualmente la capacidad de los métodos.
 
 El primer aporte constituye un algoritmo que produce texturas bidimensionales de materiales conocidos como madera y granito, utilizando sistemas de partículas, el cual fue presentado en una conferencia local \cite{Baravalle2011}.
-Haciendo hincapié en materiales porosos, particularmente el pan, diseñamos algoritmos que utilizan sistemas de partículas en conjunción con Sistemas Dinámicos para producir texturas que representan de manera realista geometrías de pan, el cual fue presentado en un congreso y revista nacionales \cite{Baravalle2014}.
+Haciendo hincapié en materiales porosos, particularmente el pan, diseñamos algoritmos que utilizan sistemas de partículas en conjunción con Sistemas Dinámicos para producir texturas que representan de manera realista geometrías porosas, el cual fue presentado en un congreso, revista nacional \cite{Baravalle2014}, y se encuentra en revisión en una revista internacional.
 
 Finalmente, utilizando como referencia el proceso de formación real del pan, utilizamos conocimientos de ingeniería de los alimentos para producir una secuencia de pasos que emulan el proceso real de formación del pan, el cual fue presentado en una revista internacional \cite{Baravalle2015_2}.
 El mismo permite modelar de manera realista tipos de panes arbitrarios, produciendo geometrías de su miga y su corteza, utilizando un proceso fractal de generación.
@@ -1061,6 +1051,6 @@ Luego aplicamos una simulación física de la cocción, la cual se utilizó para
 Finalmente, la corteza fue generada sobre la superficie del material.
 El algoritmo de renderizado utilizado será explicado en el siguiente capítulo, el mismo produjo imágenes realistas de diversos tipos de pan, en varias etapas del proceso de formación del mismo.
 
-El modelo introducido resulta más flexible y poderoso que aquéllos del estado del arte actual en modelado de geometría de materiales porosos y panes.
-En un capítulo posterior, y con intención de validar el procedimiento, mostraremos que las geometrías obtenidas por el método inspirado en el proceso de formación del pan, arrojan distribuciones de burbujas coincidentes con panes reales.
+Los modelos introducidos resultan más flexibles y poderosos que aquéllos del estado del arte actual en modelado de geometría de materiales porosos.
+En un capítulo posterior, y con intención de validar el procedimiento de generación de panes, mostraremos que las geometrías obtenidas por el mismo arrojan distribuciones de burbujas coincidentes con panes reales.
 
