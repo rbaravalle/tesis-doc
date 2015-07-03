@@ -12,7 +12,7 @@ Estos microprocesadores han ido evolucionando a lo largo de los años, donde dis
 Debido a esto, existen (al igual que ocurre con las CPUs) distintos lenguajes assembler, y distintas arquitecturas de GPUs.
 Esto implica que cada placa debe programarse bajo su propio lenguaje.
 
-El diseño orientado a elementos repetitivos e independientes como píxels, triángulos y vértices en los que se descompone una escena en computación gráfica, ha resultado en un diseño {\em paralelo} de las mismas.
+El diseño orientado a elementos repetitivos e independientes como píxeles, triángulos y vértices en los que se descompone una escena en computación gráfica, ha resultado en un diseño {\em paralelo} de las mismas.
 Actualmente, las placas gráficas cuentan con miles de procesadores (aunque con capacidades más limitados que un microprocesador CPU), los cuales realizan tareas como actualizar un píxel, o establecer la proyección perspectiva de un vértice en pantalla.
 Este procesamiento se realiza en paralelo ya que la computación resulta independiente para cada elemento.
 En un principio, la placa gráfica interactuaba como una caja gris o negra, la cual podía ser configurada únicamente, para producir resultados limitados sobre algunos tipos de efectos, como el color final de un píxel.
@@ -35,7 +35,7 @@ El cómputo GPGPU consta, a grandes rasgos, con la siguiente secuencia de pasos:
 \end{itemize}
 
 \noindent Es decir, la GPU {\em presta} sus capacidades de cómputo al CPU, atendiendo un propósito para el que no fue diseñada (realizar cómputos generales en paralelo).
-Debido a que los CPUs encontraron un límite físico en la velocidad que podían alcanzar (unos cuantos gigahertz o GHz), la aparición de las GPUs permitió, en el ámbito hogareño y empresarial (entre otros), seguir incrementando los TeraFlops\footnote{Unidad de medida, 1 TeraFlop = $10^{12}$ intrucciones de coma flotante por segundo.}, de manera similar a la utilización de un clúster o de microprocesadores de varios núcleos, aunque estos últimos no han podido alcanzar la velocidad de las GPUs modernas.
+Debido a que los CPUs encontraron un límite físico en la velocidad que podían alcanzar (unos cuantos gigahertz o GHz), la aparición de las GPUs permitió, en el ámbito hogareño y empresarial (entre otros), seguir incrementando los TeraFlops\footnote{Unidad de medida, 1 TeraFlop = $10^{12}$ instrucciones de coma flotante por segundo.}, de manera similar a la utilización de un clúster o de microprocesadores de varios núcleos, aunque estos últimos no han podido alcanzar la velocidad de las GPUs modernas.
 El principal inconveniente de la metodología GPGPU lo constituye la copia de memoria desde y hacia la placa, lo cual puede resultar muy costoso.
 Debido a esto, en los últimos años se han desarrollado modelos GPGPU de memoria unificada, donde la CPU y la GPU comparten la memoria.
 
@@ -44,7 +44,7 @@ Debido a esto, en los últimos años se han desarrollado modelos GPGPU de memori
 % En primer lugar se discute el lenguaje de shading utilizado en el framework. En segundo lugar se muestra un ejemplo de una biblioteca de GPGPU muy conocida hoy en d\'ia, la cual fue utilizada para el c\'alculo de texturas offline.
 
 \section{El lenguaje GLSL}
-La principal ventaja en la utilización de la GPU por sobre la CPU tradicional en aplicaciones gráficas, está constituída por la {\em velocidad}.
+La principal ventaja en la utilización de la GPU por sobre la CPU tradicional en aplicaciones gráficas, está constituida por la {\em velocidad}.
 La CPU delega las operaciones gr\'aficas hacia el hardware secundario programable, el cual realizar\'a el procesamiento en un marco especializado, liberándose el primero para realizar tareas de cómputo general.
 Esto implica entonces una labor conjunta entre CPU y GPU.
 
@@ -52,7 +52,7 @@ Esto implica entonces una labor conjunta entre CPU y GPU.
 \subsection{El pipeline Gráfico y GLSL}
 La GPU presenta un {\em pipeline} de ejecución (al igual que la CPU), esto es, una secuencia ordenada de pasos que debe cumplir cada instrucci\'on de procesamiento.
 En primer lugar, la CPU se comunica con la GPU enviándole información de una escena para ser procesada.
-La misma está constituída generalmente por triángulos, pero además existen otros datos como las texturas de los materiales, y datos del entorno (color y posición de las fuentes de luz, etc.).
+La misma está constituida generalmente por triángulos, pero además existen otros datos como las texturas de los materiales, y datos del entorno (color y posición de las fuentes de luz, etc.).
 La GPU cuenta, de manera análoga a la CPU, con una unidad de procesamiento y una unidad de memoria.
 A diferencia de la CPU, la arquitectura de la misma presenta una memoria estratificada, y un diseño paralelo de la unidad de procesamiento.
 
@@ -85,7 +85,7 @@ En la GPU existen dos componentes llamados {\em procesador de v\'ertices program
 \begin{center}
 \includegraphics[width=13cm]{figures/pipelinegrafico}
 \end{center}
-\caption[Pipeline de la GPU con shaders incluídos]{Pipeline de la GPU con shaders incluídos, resaltados en naranja.}
+\caption[Pipeline de la GPU con shaders incluidos]{Pipeline de la GPU con shaders incluidos, resaltados en naranja.}
 \label{fg:pipelinegrafico}
 \end{figure}
 
@@ -95,7 +95,7 @@ De hecho, los resultados de GPGPU no son imágenes, como se explicará más adel
 
 
 \subsection{Características de GLSL}
-Presentamos un breve resumen de las pricipales caracter\'isticas del lenguaje.
+Presentamos un breve resumen de las principales caracter\'isticas del lenguaje.
 Como fue previamente mencionado, existen dos tipos de programas en GLSL, siendo sus nombres {\em Shader de Vértices} y {\em Shader de Fragmentos} respectivamente.
 La especificación de las primitivas a dibujar, dentro del pipeline de OpenGL 2.0+, se define por medio de {\em atributos} de vértices y {\em elementos}. 
 
@@ -108,7 +108,7 @@ Los \emph{elementos} son figuras geométricas (lineas, triángulos, cuadrados) q
 
 \begin{figure}[h]
 \begin{center}
-\includegraphics[width=13cm]{figures/atributos}
+\includegraphics[width=12cm]{figures/atributos}
 \end{center}
 \caption{Atributos y elementos en GLSL.}
 \label{fg:atributos}
@@ -117,7 +117,7 @@ Los \emph{elementos} son figuras geométricas (lineas, triángulos, cuadrados) q
 Como fue previamente explicado, la funci\'on del shader de vértices es transformar los v\'ertices de la escena.
 De manera simplificada, este shader recibe como entrada la posici\'on del v\'ertice en la escena, y terminada la ejecuci\'on devolver\'a el v\'ertice con su posici\'on modificada.
 Tambi\'en podr\'ia devolver el color y otros valores \'utiles que se puedan necesitar en otros pasos de la secuencia de ejecución.
-Estos programas reciben los atributos como entrada, asi como otras constantes llamadas \emph{uniformes}, para definir la posición final en espacio de clipping (el sub-espacio, proyectado, que dibujará la GPU) de cada vértice.
+Estos programas reciben los atributos como entrada, así como otras constantes llamadas \emph{uniformes}, para definir la posición final en espacio de clipping (el sub-espacio, proyectado, que dibujará la GPU) de cada vértice.
 Los valores \emph{uniformes} pueden ser por ejemplo las matrices de proyección y del modelo o matrices de transformación de normales.
 La Fig.~\ref{fg:vertexshader} muestra un ejemplo de un shader de vértices junto a atributos de ejemplo.
 El programa de la figura transforma vértices de manera estándar utilizando las matriz {\em modelviewproj} (modelo, vista, proyección), la cual se provee como dos uniformes desde la CPU (uPMatrix y uMVMatrix, las cuales se multiplican).
@@ -126,26 +126,26 @@ La imagen muestra además que la variable gl\_Position representa la salida del 
 
 \begin{figure}[h]
 \begin{center}
-\includegraphics[width=13cm]{figures/vertexshader}
+\includegraphics[width=12cm]{figures/vertexshader}
 \end{center}
 \caption[Atributos y elementos, junto a un ejemplo de shader de vértices en GLSL.]{Atributos y elementos, junto a un ejemplo de shader de vértices en GLSL. Este shader de vértices transforma los vértices en el espacio al espacio del objeto y luego del observador (uMVMatrix). Finalmente realiza una proyección de los mismos sobre el espacio de clipping (uPMatrix).}
 \label{fg:vertexshader}
 \end{figure}
 
 Una vez que todos los shaders de vértices realizaron sus cómputos, debe procederse a la rasterización, es decir se calcula su posición final en la pantalla a partir de la información del tamaño de la imagen final requerida.
-Cada elemento (triángulo, linea, cuadrado) se convierte en una grupo de pixeles (llamado fragmento) que posiblemente se dibujará en la pantalla.
+Cada elemento (triángulo, linea, cuadrado) se convierte en una grupo de píxeles (llamado fragmento) que posiblemente se dibujará en la pantalla.
 Este proceso puede observarse en la Fig.~\ref{fg:raster}, y a diferencia del shader de vértices, no se permite su programación.
 
 
 \begin{figure}[h]
 \begin{center}
-\includegraphics[width=13cm]{figures/raster}
+\includegraphics[width=12cm]{figures/raster}
 \end{center}
 \caption[Proceso de rasterización en la placa gráfica]{Proceso de rasterización en la placa gráfica. En la imagen, un triángulo se convierte en el conjunto de las posiciones de los píxeles que representará en la pantalla.}
 \label{fg:raster}
 \end{figure}
 
-Finalmente, para calcular el color de cada pixel en pantalla, se utiliza un programa llamado \emph{shader de fragmentos} que calcula el color de cada pixel (o fragmento) que ocupa un elemento (triángulo, linea, cuadrado) individualmente.
+Finalmente, para calcular el color de cada píxel en pantalla, se utiliza un programa llamado \emph{shader de fragmentos} que calcula el color de cada píxel (o fragmento) que ocupa un elemento (triángulo, linea, cuadrado) individualmente.
 Para computar el color final de cada píxel se utilizan \emph{uniformes}, y valores interpolados desde un \emph{shader de vértices}.
 Los valores que el programador especifica para ser interpolados se declaran como \emph{varying} en el código de ambos shaders.
 La Fig.~\ref{fg:interpolation} muestra un ejemplo de la utilización de un varying para computar el color interpolado de un triángulo.
@@ -153,13 +153,13 @@ La Fig.~\ref{fg:interpolation} muestra un ejemplo de la utilización de un varyi
 
 \begin{figure}[h]
 \begin{center}
-\includegraphics[width=13cm]{figures/interpolation}
+\includegraphics[width=12cm]{figures/interpolation}
 \end{center}
 \caption[Interpolación automática de colores en la GPU.]{Interpolación automática de colores en la GPU. En la imagen se observan tres vértices de diferente color, junto con el resultado de la rasterización e interpolación de los mismos. Además se muestra un ejemplo de comunicación de datos del shader de vértices al shader de fragmentos. El valor vColor se interpola utilizando la información de los vértices del triángulo, produciendo valores para los fragmentos}
 \label{fg:interpolation}
 \end{figure}
 
-Similarmente, el shader de fragmentos tene par\'ametros de entrada y salida.
+Similarmente, el shader de fragmentos tiene par\'ametros de entrada y salida.
 Generalmente recibe el color interpolado por la etapa previa, pero tambi\'en puede recibir informaci\'on sobre texturas.
 A diferencia del shader de vértices, el shader de fragmentos devuelve un único elemento luego de realizar el procesamiento: el {\em color} (excepto en algunos casos específicos, como devolver la profundidad del objeto para cálculo de sombras).
 Esta salida representa el color que, de pasar las diversas pruebas, tomar\'a el p\'ixel en pantalla.
@@ -214,7 +214,7 @@ Deben tenerse en cuenta ciertas consideraciones al implementar algoritmos en Ope
 En primer lugar, asistimos a un paradigma diferente al usual, ya que el cómputo se realiza en paralelo, a diferencia del computo secuencial tradicional de la máquina de Von Neumann.
 Esto implica diversas modificaciones en la forma de programar una solución a un problema dado.
 En su versión más simple, un programa secuencial es {\em trivialmente} paralelizable, si el cómputo resulta independiente para cada unidad del programa a ejecutar en cada procesador.
-De esta forma, sólo debe chequearse la coherencia de los resultados, en otras palabras, si por ejemplo sumamos dos arreglos, los índices en los arreglos de entrada que se suman se correspondan a los índices correctos en el arreglo de salida.
+De esta forma, sólo deben verificarse la coherencia de los resultados, en otras palabras, si por ejemplo sumamos dos arreglos, los índices en los arreglos de entrada que se suman se correspondan a los índices correctos en el arreglo de salida.
 Para esto, las bibliotecas mencionadas tienen mecanismos de identificación global para cada hilo en ejecución.
 Entre los algoritmos trivialmente paralelizables encontramos aquellos que utilizan shaders (cómputos sobre vértices y píxeles independientes), suma de vectores y matrices, etc.
 
@@ -240,7 +240,7 @@ El paradigma de programación introducido en este apéndice ha demostrado un cre
 La Fig.~\ref{fg:cpugpu} muestra curvas con la evolución de las capacidades de cómputo, en número de operaciones flotantes por segundo, de las CPU y las GPU.
 Puede observarse que las GPUs superan por mucho el poder computacional de sus CPUs contemporáneas.
 Esto debe ser tenido en cuenta en aplicaciones donde los tiempos de cómputo resulten críticos.
-Actualmente resulta imposible proveer una implementación de determinadas aplicaciones de tiempo real sin la tecnología GPU, por lo que en la presente tesis se hizo hincapíé en esta tecnología.
+Actualmente resulta imposible proveer una implementación de determinadas aplicaciones de tiempo real sin la tecnología GPU, por lo que en la presente tesis se hizo hincapié en esta tecnología.
 La implementación del modelo de iluminación DVR del capítulo de renderizado está basada en shaders, donde el cómputo resultó trivialmente paralelizable, resultando en un algoritmo de tiempo real.
 
 \begin{figure}[h]
@@ -267,7 +267,7 @@ Estas dos y la memoria global se preservan entre llamadas a {\em kernels} (ver s
 
 \begin{figure}[h]
 \begin{center}
-\includegraphics[width=13cm]{figures/cuda}
+\includegraphics[width=12cm]{figures/cuda}
 \end{center}
 \caption{Arquitectura CUDA.}
 \label{fg:cuda}

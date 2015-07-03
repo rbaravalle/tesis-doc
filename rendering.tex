@@ -1,7 +1,7 @@
 
 \chapter{Renderización de Geometrías Porosas}
 \section{Introducción}
-Debido a las limitaciones existentes actualmente en el renderizado realista geometrías porosas en tiempos interactivos, nos proponemos en este capítulo estudiar la utilización de renderizado directo de volúmenes (Direct Volume Rendering, \acrshort{DVR} \cite{Kratz2006}), aplicado a un campo escalar representando la geometría del material. 
+Debido a las limitaciones existentes actualmente en el renderizado realista de geometrías porosas en tiempos interactivos, nos proponemos en este capítulo estudiar la utilización de renderizado directo de volúmenes (Direct Volume Rendering, \acrshort{DVR} \cite{Kratz2006}), aplicado a un campo escalar representando la geometría del material. 
 Los resultados obtenidos son realistas y se renderizan en tiempo real. La misma evita el uso de estructuras intermedias, simplificando el desarrollo y reduciendo los costos computacionales.
 
 El renderizado foto-realista de materiales con una estructura interna compleja presenta grandes retos en computación gráfica.
@@ -28,10 +28,10 @@ De todas formas, el crecimiento notable en poder de cómputo debido al diseño m
 %Simular un modelo geométrico aceptable representa un reto adicional, como fue visto en el capítulo anterior.
 %El pan y otras estructuras porosas son el resultado de mecanismos complejos que involucran deformaciones físicas, transferencia de masa y calor durante la cocción, y distintas reacciones químicas.
 
-Estudios recientes utilizan consideraciones fenomenológicas sobre panes reales, pero la geometría resulta invariable (es decir, no procedimental) \cite{VanDyck2014}: una geometría fija no permite obtener diferentes tipos de pan fácilmente, ya que requiere un procedimiento de captura para cada uno de ellos.
+Estudios recientes utilizan consideraciones fenomenológicas sobre materiales porosos, pero la geometría resulta invariable (es decir, no procedimental) \cite{VanDyck2014}: una geometría fija no permite obtener diferentes tipos de pan fácilmente, ya que requiere un procedimiento de captura para cada uno de ellos.
 Adicionalmente, las distribuciones de burbujas no pueden ser controladas.
 
-La presencia de mesoestructuras (burbujas con formas complejas) provocan una clasificación del pan como un material {\em quasi-homogéneo} \cite{Tong2005}. 
+La presencia de mesoestructuras (burbujas con formas complejas) provocan una clasificación de los materiales porosos como {\em quasi-homogéneos} \cite{Tong2005}. 
 Por esta razón, modelar al material como una superficie no resulta adecuado.
 Técnicas típicas como BRDFs, BSSRDFs \cite{Donner2009} y BTFs, no resultan satisfactorias.
 Una publicación intenta resolver las limitaciones \cite{Tong2005}, pero las desventajas que acarrea (proceso de captura muy complejo, altos costos computacionales, invariabilidad geométrica), resultan en un proceso basado en fuerza bruta y muy poco práctico.
@@ -102,7 +102,7 @@ Describiremos el algoritmo de renderizado en detalle en una sección posterior.
 \section{Implementación}
 
 Se creó una aplicación demo\footnote{disponible en \emph{https://www.github.com/rbaravalle/Pysys}}  que usa el sistema de partículas descrito en secciones previas para renderizar panes en tiempo real, utilizando DVR.
-La Fig.~\ref{fg:application} muestra la aplicación desarrollada, con un pan renderizado en tiempo real.
+La Fig.~\ref{fg:application} muestra la aplicación desarrollada, con un objeto poroso renderizado en tiempo real.
 En la demo se produce una textura volumétrica, renderizando un cubo que corresponde a esta textura en la escena.
 El material utilizado para renderizar el cubo consta de un shader de vértices muy simple, y un shader de fragmentos, el cual implementa el algoritmo de DVR.
 Para cada fragmento, el shader computa un rayo con origen en la posición de la cámara y con la dirección del fragmento que debe ser coloreado.
@@ -112,7 +112,7 @@ Estos valores muestreados son luego utilizados como entrada de un algoritmo que 
 
 
 \begin{figure}
-\centerline{\includegraphics[width=13cm]{figures/application}}
+\centerline{\includegraphics[width=11cm]{figures/application}}
 \caption{Aplicación desarrollada mostrando una estructura porosa renderizada en tiempo real.}
 \label{fg:application}
 \end{figure}
@@ -132,12 +132,12 @@ Para esto, se necesita computar la primera intersección entre el rayo y la geom
 Gracias a esto se puede incrementar ligeramente el realismo final de la imagen.
 El vector normal usado en este cálculo está dado por el gradiente de la textura volumétrica en ese punto.
 
-La demo presentada provee al usuario la habilidad de modificar parámetros como el coeficiente de absorción, el umbral de transmitancia, el color asignado a la miga y la visibilidad de los reflejos especulares.
-Con la modificación de estos parámetros, el usuario puede producir imágenes que semejan otros materiales porosos como las esponjas.
+La demo presentada provee al usuario la habilidad de modificar parámetros como el coeficiente de absorción, el umbral de transmitancia, los colores asignados y la visibilidad de los reflejos especulares.
+Con la modificación de estos parámetros, el usuario puede producir imágenes que semejan distintos materiales porosos, como las esponjas, budines, panes o piedras.
 La Fig. \ref{fg:fragmentshaderrte} muestra un esquema del shader de fragmentos implementado, donde se computa la Ec. (\ref{eq:ray_radiance}).
 
 \begin{figure}[htb!]
-\centerline{\includegraphics[width=12cm]{figures/fragmentshader}}
+\centerline{\includegraphics[width=9cm]{figures/fragmentshader}}
 \caption[Cálculo de color en el shader de fragmentos]{Cálculo de color en el shader de fragmentos. Se implementa la suma en la ecuación (\ref{eq:ray_radiance}). La suma devuelve un color que luego se colorea por medio de un parámetro del usuario. Además, luego se computarán las normales, sombras y oclusión de ambiente.}
 \label{fg:fragmentshaderrte}
 \end{figure}
@@ -152,22 +152,22 @@ Es posible lograr aproximaciones más precisas tomando en consideración además
 La literatura muestra que considerarla produce imágenes de mayor realismo \cite{Hernell2010}.
 
 Debido a estas consideraciones proponemos computar la dispersión entrante, múltiple, calculando de manera offline un término de oclusión del ambiente para cada voxel en el campo escalar y almacenándolo como una textura volumétrica extra, la cual se suple al shader de fragmentos, permitiendo así mantener los tiempos computacionales en tasas razonables.
-Para cada voxel en la textura volumétrica resultante de alguno de los métodos del capítulo anterior, el cómputo de dicho término define un radio $r$, almacenando el valor medio de los vóxeles vecinos dentro de una esfera que contiene ese radio.
+Para cada voxel en la textura volumétrica resultante de alguno de los métodos del capítulo anterior, el cómputo de dicho término define un radio $r$, almacenando el valor medio de los voxels vecinos dentro de una esfera que contiene ese radio.
 Luego, este valor se utiliza para modular la contribución de cada paso del rayo.
 Experimentalmente encontramos que el valor $r$ resulta visualmente indistinguible al variarlo, por lo cual cualquier valor mayor que $0$ puede utilizarse para el cómputo.
-La Fig.~\ref{fg:occlusion} muestra el realce que produce este concepto, resultando en un aspecto clave de nuestra implementación, a la hora de producir imágenes creíbles de migas de pan. 
+La Fig.~\ref{fg:occlusion} muestra el realce que produce este concepto, resultando en un aspecto clave de nuestra implementación, a la hora de producir imágenes creíbles. 
 
 
 
 \begin{figure}
-\centerline{\includegraphics[width=13cm]{figures/occlusion}}
+\centerline{\includegraphics[width=10cm]{figures/occlusion}}
   \caption[Pan renderizado sin y con oclusión de ambiente]{Pan sin (izquierda) y con (derecha) oclusión de ambiente. La imagen final se realza notablemente, apreciándose una apariencia más natural.}
   \label{fg:occlusion}
 \end{figure}
  
 \subsection{Cómputo de las Normales}
-Utilizamos un esquema {\em hacia adelante} en el cómputo de diferencias finitas del gradiente.
-El gradiente en el punto será utilizado para computar el vector normal, el cual resulta de la diferencia normalizada, entre la posición {\em hacia adelante} y la posición actual del campo escalar,
+El gradiente en el punto será utilizado para computar el vector normal en el modelo de iluminación.
+Utilizamos un esquema {\em hacia adelante} en el cómputo de diferencias finitas del gradiente, el cual resulta de la diferencia normalizada, entre la posición {\em hacia adelante} y la posición actual del campo escalar,
 
 
 \begin{equation}
@@ -188,22 +188,22 @@ Se han testeado otros modelos especulares más complejos, pero no se encontró d
 La técnica de DVR puede ser utilizada para computar sombras realistas, desde el objeto renderizado hacia la escena en la que se encuentra, por medio de mapas de sombras \cite{Williams1978}.
 Durante la generación del mapa de sombras renderizamos nuevamente un cubo representando la geometría, pero esta vez los cómputos se realizan desde la posición de la fuente de luz.
 El shader de fragmentos para ese cubo utiliza el mismo método de rayos explicado, pero solo computa la transmitancia en el rayo.
-Si la transmitancia en ese rayo está por encima de un umbral al finalizar el cómputo (lo cual significa que cierta cantidad de fotones logran escapar al medio), luego el fragmento no corresponde a un oclusor, y su profundidad se setea en infinito.
+Si la transmitancia en ese rayo está por encima de un umbral al finalizar el cómputo (lo cual significa que cierta cantidad de fotones logran escapar al medio), luego el fragmento no corresponde a un oclusor, y su profundidad se establece a infinito.
 Si durante el cómputo de la transmitancia, la misma cae por debajo del umbral, la profundidad del fragmento se establece en la profundidad alcanzada por el rayo en ese momento.
 
 A partir de este cómputo obtenemos un mapa de sombras, el cual puede almacenarse como una textura.
 Luego se computa DVR normalmente (desde el punto de vista del observador).
 En este paso debe mapearse cada texel del mapa de sombras con una posición en el espacio, para determinar si el punto está en sombra o no.
-Esta técnica se utiliza junto a un filtrado de porcentaje de cercanía, para generar sombras realístas en nuestra aplicación.
+Esta técnica se utiliza junto a un filtrado de porcentaje de cercanía, para generar sombras realistas en nuestra aplicación.
 Casi todas las imágenes presentadas muestran el uso de esta técnica en nuestra aplicación.
 
 
 \subsection{Corteza}
-Se puede proveer al sistema con una función que indique si la posición es parte de la corteza o la miga, u otras consideraciones en otros materiales (por ejemplo, si el color de la sección de una esponja debe ser amarillo o verde).
-Por ejemplo, una función puede definir una corteza cilíndrica asignando la etiqueta de miga a aquellas posiciones cercanas al eje del cilindro, y corteza a las restantes.
+Se puede proveer al sistema con una función que indique si la posición es parte de una capa exterior o interior del material, u otras consideraciones (por ejemplo, si el color de la sección de una esponja debe ser amarillo o verde).
+Una función puede definir una capa exterior cilíndrica asignando la etiqueta de ``capa interior'' a aquellas posiciones cercanas al eje del cilindro, y ``capa exterior'' a las restantes.
 
-También se provee otra función que establece si la posición debe ser considerada aire.
-Esto permite definir, de una manera intuitiva, la corteza y cortes en el volumen (ver Figs.~\ref{fg:breadsnooc} y \ref{fg:breads}).
+También se provee otra función que establece si la posición debe ser considerada parte del material o aire.
+Esto permite definir de una manera intuitiva cortes en el volumen (ver Figs.~\ref{fg:breadsnooc} y \ref{fg:breads}).
 Los métodos para definir la misma fueron explicados en el capítulo anterior por medio de la utilización de un mapa de distancias.
 
 
@@ -221,18 +221,24 @@ La Fig.~\ref{fg:breads} muestra panes renderizados en tiempo real con oclusión 
 Puede observarse que los panes con este efecto muestran un grado de realismo superior.
 
 \begin{figure*}[htb!]
-  \centerline{\includegraphics[width=13cm]{figures/fig5}}
-  \caption[Imágenes de diferentes tipos de pan renderizados en tiempo real, sin oclusión de ambiente]{Imágenes de diferentes tipos de pan renderizados en tiempo real, sin oclusión de ambiente. La imagen de la derecha muestra un pan sin corteza}
+  \centerline{\includegraphics[width=12cm]{figures/fig5}}
+  \caption[Imágenes de diferentes tipos de panes renderizados en tiempo real, sin oclusión de ambiente]{Imágenes de diferentes tipos de panes renderizados en tiempo real, sin oclusión de ambiente. La imagen de la derecha muestra un pan sin corteza}
   \label{fg:breadsnooc}
 \end{figure*}
 
 
 \begin{figure*}[htb!]
-  \centerline{\includegraphics[width=13cm]{figures/breads}}
-  \caption{Imágenes de diferentes tipos de pan renderizados en tiempo real, con oclusión de ambiente.}
+  \centerline{\includegraphics[width=12cm]{figures/breads}}
+  \caption{Imágenes de diferentes tipos de panes renderizados en tiempo real, con oclusión de ambiente.}
   \label{fg:breads}
 \end{figure*}
 
+
+\begin{figure}
+  \centerline{\includegraphics[width=12cm]{figures/Fig12CAVW}}
+  \caption[Panes renderizados, utilizando diferentes geometrías y parámetros de renderizado]{Panes renderizados, utilizando diferentes geometrías y parámetros de renderizado. La imagen muestra que el método simula diferentes apariencias de panes.}
+  \label{fg:Fig12}
+\end{figure}
 
 
 \subsection*{Tiempos de Cómputo}
@@ -244,7 +250,7 @@ Experimentalmente encontramos que utilizar $140$ o más pasos produce imágenes 
 
 
 \begin{figure}
-  \centerline{\includegraphics[width=13cm]{figures/stepcount}}
+  \centerline{\includegraphics[width=12cm]{figures/stepcount}}
   \caption[Tiempos de cómputo de acuerdo a la cantidad de pasos utilizados]{Tiempos de cómputo de acuerdo a la cantidad de pasos utilizados. La imagen muestra que utilizar $300$ pasos del rayo produce imágenes razonables en tiempo real.}
   \label{fg:stepcount}
 \end{figure}
@@ -293,38 +299,45 @@ En regiones con corteza, la velocidad del método resulta superior, ya que se pu
 \subsection{Otros Materiales y Efectos}
 Como fue mostrado en el capítulo anterior, es posible obtener imágenes que asemejan otros materiales (ver Fig.~\ref{fg:fig6}), variando parámetros técnicos y artísticos del modelo.
 En las imágenes de prueba pueden distinguirse un budín (izquierda), un pedazo de torta (medio) y una esponja (derecha).
-En el caso de la esponja se modificaron los parámetros que definen la función de densidad, utilizando una mayor aleatoriedad, para producir una textura más homogenea.
+En el caso de la esponja se modificaron los parámetros que definen la función de densidad, utilizando una mayor aleatoriedad, para producir una textura más homogénea.
 
+En las Figs.~\ref{fg:sponges} y \ref{fg:Fig14} se muestran esponjas y piedras porosas sintetizadas con el mismo procedimiento, utilizando distintos valores para la aleatoriedad, cantidad de burbujas iniciales, la especularidad, y el coeficiente de absorción.
 En la Fig.~\ref{fg:sponges} puede observarse que la utilización de oclusión de ambiente produce imágenes de esponja más realistas que las obtenidas sin su aplicación.
-La retroiluminación también se aproxima en este modelo (ver Fig. \ref{fg:fig7}).
-En esa imagen puede apreciarse una esponja retroiluminada junto con la propagación de luz a través del volumen que representa.
+La retro-iluminación también se aproxima en este modelo (ver Fig. \ref{fg:fig7}).
+En esa imagen puede apreciarse una esponja retro-iluminada junto con la propagación de luz a través del volumen que representa.
 Este efecto surge como una consecuencia natural del algoritmo volumétrico basado en RTE utilizado en este capítulo.
 
 \begin{figure*}[htb!]
-  \centerline{\includegraphics[width=13cm]{figures/fig6}}
+  \centerline{\includegraphics[width=10cm]{figures/fig6}}
   \caption[Budín, torta y esponja renderizados]{Distintos materiales obtenidos a partir de diferentes configuraciones de parámetros. De izquierda a derecha: budín, torta y esponja, sin oclusión de ambiente. }
   \label{fg:fig6}
 
 \end{figure*}
 
 \begin{figure*}[htb!]
-  \centerline{\includegraphics[width=8cm]{figures/fig7}}
-  \caption[Esponja retroiluminada.]{Esponja renderizada en tiempo real mostrando retroiluminación. La misma resulta consecuencia directa de la utilización de un modelo volumétrico de propagación de la energía radiante, sobre medios semi-transparentes.}
+  \centerline{\includegraphics[width=5cm]{figures/fig7}}
+  \caption[Esponja retro-iluminada.]{Esponja renderizada en tiempo real mostrando retro-iluminación. La misma resulta consecuencia directa de la utilización de un modelo volumétrico de propagación de la energía radiante, sobre medios semi-transparentes.}
   \label{fg:fig7}
 \end{figure*}
 
 
 \begin{figure}
-  \centerline{\includegraphics[width=13cm]{figures/sponges}}
-  \caption{Esponjas renderizadas en tiempo real utilizando un campo escalar aleatorio como geometría, con oclusión de ambiente aplicada.}
+  \centerline{\includegraphics[width=9cm]{figures/Fig13CAVW}}
+  \caption[Esponjas renderizadas]{Esponjas renderizadas. La textura volumétrica que representa la geometría fue generada con un valor de {\em aleatoriedad} mayor que en el caso del pan. La geometría resultante posee tamaños y orientaciones de burbujas homogéneos.}
   \label{fg:sponges}
+\end{figure}
+
+\begin{figure}
+  \centerline{\includegraphics[width=12cm]{figures/Fig14CAVW}}
+  \caption[Piedras renderizadas]{Piedras renderizadas. Se utilizó un menor número de partículas en la generación de este material. El índice de absorción fue incrementado en el renderizado para prevenir una difusión lumínica excesiva.}
+  \label{fg:Fig14}
 \end{figure}
 
 \subsection{Renderizado Multi-escala}
 Debido a limitaciones del hardware, el tamaño de la textura influencia el rendimiento final del algoritmo.
 Una textura de resoluciones mayores a $256^{3}$ voxels compromete el desempeño de tiempo real del algoritmo de renderizado, sin embargo, como fue demostrado, para aumentar la calidad gráfica de la imagen es necesario superar esta barrera.
 
-Una posible solución a este conflicto está constituída por la utilización de más de una textura volumétrica en el modelado, donde una de ellas modela las características de mayor tamaño del objeto (por ejemplo, sus burbujas más grandes), y la otra se utiliza para representar detalles de menor escala.
+Una posible solución a este conflicto está constituida por la utilización de más de una textura volumétrica en el modelado, donde una de ellas modela las características de mayor tamaño del objeto (por ejemplo, sus burbujas más grandes), y la otra se utiliza para representar detalles de menor escala.
 El resultado de la utilización de más de una textura puede observarse en la Fig.~\ref{fg:multiscale}, donde la diferencia es claramente visible.
 La segunda textura produce la ilusión de un objeto con una estructura mucho más rica.
 La implementación de esta técnica simplemente reemplaza el valor de la textura, representando los detalles de mayor escala, en el voxel siendo muestreado, con la combinación de los valores de ambas texturas en ese voxel, donde la textura que representa los detalles de menor escala se muestrea a mayor frecuencia.
@@ -337,8 +350,8 @@ Si bien el muestreo es una operación costosa, el tiempo total resulta mucho men
 La textura que se muestrea a distintas escalas debe poseer cierta coherencia en sus bordes (arriba/abajo, izquierda/derecha, etc.), para poder ser ensamblada sin que se note el efecto del muestreo.
 
 \begin{figure}
-  \centerline{\includegraphics[width=13cm]{figures/multiscale}}
-  \caption{Estructura utilizando una única escala de muestreo (izquierda) y dos (derecha). Se puede apreciar claramente el aumento en el nivel de detalle resultante en la imagen, a un costo computacional aceptable.}
+  \centerline{\includegraphics[width=12cm]{figures/multiscale}}
+  \caption[Estructura porosa utilizando una y dos escala de muestreo]{Estructura porosa utilizando una única escala de muestreo (izquierda) y dos (derecha). Se puede apreciar claramente el aumento en el nivel de detalle resultante en la imagen, a un costo computacional aceptable.}
   \label{fg:multiscale}
 \end{figure}
 
@@ -384,13 +397,13 @@ La utilización de un modelo multiescala, como fue discutido, puede subsanar est
 
 \section{Conclusiones}
 
-En este capítulo hemos aplicado el modelo de transmitancia del renderizado directo de volúmenes utilizando la GPU, sobre un campo escalar tridimensional representando la estructura de la miga del pan (la cual fue computada en el capítulo anterior).
+En este capítulo hemos aplicado el modelo de transmitancia del renderizado directo de volúmenes, utilizando la GPU, sobre un campo escalar tridimensional representando la estructura de la miga del pan (la cual fue computada en el capítulo anterior).
 Se obtuvieron imágenes realistas en tiempo real.
-Debido a limitaciones del hardware, también se obtuvieron imágenes con aún mayor detalle, pero a tasas de refresco menores.
+Por medio de la utilización de texturas de mayores dimensiones se obtuvieron imágenes con mayor detalle, pero a tasas de refresco menores.
 Si bien el algoritmo de renderizado no es novedoso, sí lo es su aplicación en los materiales porosos discutidos, y la obtención de tasas de tiempo real a partir del mismo.
 
 El algoritmo presentado fue implementado en el shader de fragmentos utilizando componentes especulares y difusas, cómputo de normales y oclusión de ambiente.
-Los resultados alcanzados son compatables al estado del arte, obteniendo imágenes que simulan el material en tiempo real con gran realismo.
+Los resultados alcanzados son comparables al estado del arte, obteniendo imágenes que simulan el material en tiempo real con gran realismo.
 El método presenta aplicaciones en diversas áreas, como video juegos, juegos serios \cite{Susi2007} y renderizado foto-realista.
 Estas técnicas son mucho más simples y no presentan las desventajas de otros métodos, como procesos de captura, generación de mallas o post-procesos.
 Las mismas fueron presentadas en un congreso y revista nacionales \cite{Baravalle2014}, y están en revisión en una revista internacional.

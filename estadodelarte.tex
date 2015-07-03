@@ -49,7 +49,7 @@ La comprensión del fenómeno denominado {\em luz} ha evolucionado a lo largo de
 Existen diversos modelos, los cuales atienden a distintas manifestaciones de la misma.
 A pesar de los esfuerzos dedicados a lo largo de siglos, la naturaleza de la misma aún no se comprende en su totalidad, acuñándose el término {\em dualidad onda-partícula} para describirla, debido a que en determinados experimentos la misma parece mostrar propiedades características y concluyentes que permiten catalogarla como una partícula (fotón), mientras que en otros se comporta como una onda.
 
-La luz visible constituye el sub-fenómeno del espectro electomagnético que interviene mayormente en la apariencia de los materiales, dado que las limitaciones del sistema de visión humano sólo permite la percepción de los efectos del sub-fenómeno mencionado.
+La luz visible constituye el sub-fenómeno del espectro electromagnético que interviene mayormente en la apariencia de los materiales, dado que las limitaciones del sistema de visión humano sólo permite la percepción de los efectos del sub-fenómeno mencionado.
 Formalmente la luz visible se define como el rango del espectro de radiación electromagnética aproximadamente entre los  $380$ [{\em nm}] y los $780$ [{\em nm}].
 
 Debido al comportamiento dispar del fenómeno lumínico en distintas escalas, debe limitarse el modelado de la misma, en una escena, a la escala humana, al menos como primera aproximación.
@@ -150,7 +150,7 @@ La Fig.~\ref{fg:tortuga} muestra un ejemplo de la figura resultante de la cadena
 \end{figure}
 
 La Fig.~\ref{fg:sistemasL} muestra otros ejemplos de sistemas-L, en los cuales se puede observar que con pocas reglas es posible obtener estructuras complejas y de gran belleza.
-Usualmente, y debido a la utlización de recursión y repetición, estos sistemas dan lugar a figuras fractales (similares a distintas escalas), por lo cual se las utiliza para dibujar este tipo de estructuras.
+Usualmente, y debido a la utilización de recursión y repetición, estos sistemas dan lugar a figuras fractales (similares a distintas escalas), por lo cual se las utiliza para dibujar este tipo de estructuras.
 
 \begin{figure}
 \center
@@ -235,7 +235,7 @@ Cuando se invocan, las mismas generan una secuencia nodos terminales con atribut
 Estos nodos terminales se utilizan para rellenar los valores de los atributos de las nuevas formas en la división.
 Entonces, con una gramática de control se posibilita el control del proceso de distribución de atributos.
 Un ejemplo sería asignar el atributo {\em puerta} con $1$ a alguna región de la planta baja, y $0$ al resto del edificio.
-De igual modo, pueden controlarse los colores de cada piso, seteando por ejemplo colores distintos de manera alternada.
+De igual modo, pueden controlarse los colores de cada piso, estableciendo por ejemplo colores distintos de manera alternada.
 La Fig.~\ref{fg:controlgrammar} muestra un ejemplo de una gramática de control.
 
 
@@ -323,7 +323,7 @@ Se observa que se puede obtener mayor detalle a mayor número de iteraciones, do
 
 
 Una extensión directa de este algoritmo se da en dos dimensiones, donde los valores que se subdividen representan las alturas de un terreno.
-Comenzando con $4$ puntos en un plano, formando un cuadrado, donde cada punto almacena la altura del terreno, se puede sudividir el terreno en $4$ cuadrados, a partir de los puntos medios de cada arista del cuadrado original.
+Comenzando con $4$ puntos en un plano, formando un cuadrado, donde cada punto almacena la altura del terreno, se puede subdividir el terreno en $4$ cuadrados, a partir de los puntos medios de cada arista del cuadrado original.
 $H$ controla la rugosidad del terreno.
 La Fig.~\ref{fg:terreno} muestra un ejemplo de la renderización de un terreno generado utilizando este método, donde $H = 0.9$, en la Fig.~\ref{fg:terreno2} $H = 0.3$.
 Se puede observar que a medida que $H$ crece, el terreno posee una apariencia más {\em suave}.
@@ -358,7 +358,7 @@ En esta sección presentamos un ejemplo de esto, lo cual ejemplifica la capacida
 
 \subsubsection{Fluidos}
 Entre los primeros intentos por utilizar procesos físicos para modelar la apariencia de los materiales, encontramos ecuaciones que describen fluidos.
-Las ecuaciones de Navier-Stokes describen un fluído con temperatura prácticamente constante, por medio de un campo vectorial de velocidades $\bold{u}$ y un campo de presiones $p$.
+Las ecuaciones de Navier-Stokes describen un fluido con temperatura prácticamente constante, por medio de un campo vectorial de velocidades $\bold{u}$ y un campo de presiones $p$.
 
 Dadas condiciones iniciales para $\bold{u}$ y $p$ cuando $t = 0$, la evolución de las cantidades puede describirse como sigue, independientemente del número de dimensiones,
 
@@ -367,7 +367,7 @@ Dadas condiciones iniciales para $\bold{u}$ y $p$ cuando $t = 0$, la evolución 
 \frac{\partial \bold{u} }{\partial t} &= - (\bold{u} \cdot \nabla) \bold{u} - \frac{1}{\rho} \nabla p + \nu \nabla^{2} \bold{u} + \bold{f} \label{eq:eq2},
 \end{align}
 
-\noindent donde $\nu$ representa la viscosidad cinemática del fluído, $\rho$ la densidad y $\bold{f}$ una fuerza externa.
+\noindent donde $\nu$ representa la viscosidad cinemática del fluido, $\rho$ la densidad y $\bold{f}$ una fuerza externa.
 Las ecuaciones modelan la conservación de masa (\ref{eq:eq1}) y de momento (\ref{eq:eq2}).
 
 Además, deben tenerse en cuenta condiciones de borde.
@@ -416,7 +416,7 @@ Luego, las partículas podrán ser renderizadas.
 Este método se utiliza para modelar el comportamiento de agua y otros líquidos, además de algunos gases, nubes y humo, ver Figs.~\ref{fg:fluidos1},\ref{fg:fluidos2}.
 
 La utilización de los procesos físicos subyacentes produce mayor realismo en las imágenes resultantes sobre la utilización de métodos heurísticos y fenomenológicos.
-Desafortunadamente, muchas veces este enfoque resulta prohibitivo, no solo debido a costos computacionales, sino también por la complejidad presente en el diseño de los métodos, ya que se requiere muchas veces la participación de personas provinientes de áreas científicas afines a la física utilizada.
+Desafortunadamente, muchas veces este enfoque resulta prohibitivo, no solo debido a costos computacionales, sino también por la complejidad presente en el diseño de los métodos, ya que se requiere muchas veces la participación de personas provenientes de áreas científicas afines a la física utilizada.
 
 
 \begin{figure}
@@ -439,7 +439,7 @@ Desafortunadamente, muchas veces este enfoque resulta prohibitivo, no solo debid
 
 Además de presentar una geometría compleja, los materiales exhiben fenómenos particulares en su interacción con la luz, entre los cuales se observan translucencia, reflectancia, absorción, etc.
 Cada fenómeno puede determinar de forma inequívoca la apariencia de un material determinado.
-Debido a esto, en las décadas posteriores al nacimiento de la informática gráfica, se desarrollaron distintas técnicas, inpiradas en determinadas ecuaciones físicas que fueron simplificadas y aproximadas para ser implementadas por medio de una computadora, permitiendo modelar la apariencia de una gran variedad de materiales.
+Debido a esto, en las décadas posteriores al nacimiento de la informática gráfica, se desarrollaron distintas técnicas, inspiradas en determinadas ecuaciones físicas que fueron simplificadas y aproximadas para ser implementadas por medio de una computadora, permitiendo modelar la apariencia de una gran variedad de materiales.
 
 \subsection{Ecuación del Renderizado}
 
@@ -464,7 +464,7 @@ El término geométrico resulta $0$ si los puntos en consideración no son mutua
 El modelado de cada término, separadamente, posibilita la visualización fiel de una gran cantidad de superficies.
 Trabajos previos a la aparición de la ecuación del renderizado alcanzaron resultados parciales, sin lograr sintetizar un único método que englobe todos los fenómenos en investigación hasta ese entonces.
 Entre los casos particulares de la ecuación del renderizado, los más emblemáticos han sido el trazado de rayos \cite{Whitted1980} y la radiosidad \cite{Goral1984}.
-El primero resulta adecuado para renderizar escenas donde las superficies tienen BRDF únicamente especular (la luz se refleja en las superficies en direcciones específicas), mientras que la radiosidad resulta idónea para simular escenas donde las superficies tienen un comporamiento reflexivo idealmente difuso (Lambertiano).
+El primero resulta adecuado para renderizar escenas donde las superficies tienen BRDF únicamente especular (la luz se refleja en las superficies en direcciones específicas), mientras que la radiosidad resulta idónea para simular escenas donde las superficies tienen un comportamiento reflexivo idealmente difuso (Lambertiano).
 Fuera de la ecuación quedan efectos más complejos, como la difracción y la polarización.
 Más detalles de la misma pueden ser consultados en \cite{Kajiya1986}.
 Un esquema de esta ecuación puede observarse en la Fig. \ref{fg:rendequation}.
@@ -651,7 +651,7 @@ Si el observador se coloca en la dirección de reflejo de estos lóbulos, observ
 La Fig.~\ref{fg:microestructura} muestra un ejemplo de una geometría microscópica de un material y su BRDF resultante.
 Como puede observarse, la apariencia final de una BRDF depende de la orientación de determinadas estructuras presentes a escalas microscópicas del material.
 En algunos materiales resulta válido asumir distribuciones estadísticas de reflectancia.
-Sin embargo, la mayoria de los materiales está constituído de microgeometrías con estructuras en extremo complejas, responsables de marcadas anisotropías en sus patrones de reflectancia.
+Sin embargo, la mayoría de los materiales está constituido de microgeometrías con estructuras en extremo complejas, responsables de marcadas anisotropías en sus patrones de reflectancia.
 Como fue discutido, debido a las dificultades presentes en el modelado matemático del comportamiento lumínico en la apariencia de materiales, muchas veces se recurre a mediciones sobre muestras reales.
 
 
@@ -668,7 +668,7 @@ Un ejemplo muy común de BRDF analítica está dado por el modelo de Phong, ver 
 
 $$\rho_{phong}(-L,V) =  k_{a} I_{a} + k_{d} max((N \cdot L),0) + k_{s} (R \cdot V)^{\alpha},$$
 
-\noindent donde $k_{a}$, $k_{d}$ y $k_{s}$ son coeficientes de iluminación ambiente, difusa y especular, el vector $N$ representa el normal a la superficie, $R$, el reflejado (en un rebote especular perfecto), $V$ el vector que se forma desde la superficie hacia la posición del observador y $L$ el vector desde la superficie hacia la fuente de luz (por lo que debe considerarse su opuesto, $-L$, resultando en una definición compatible con la de BRDF), y $\alpha$ define un parámetro que determina el ancho de la componenete lobular de la BRDF, lo cual es fenomenológicamente compatible con la variación de la misma en función de la rugosidad en la superficie (llamado {\em glossiness}), ver Fig.~\ref{fg:phongparametros}.
+\noindent donde $k_{a}$, $k_{d}$ y $k_{s}$ son coeficientes de iluminación ambiente, difusa y especular, el vector $N$ representa el normal a la superficie, $R$, el reflejado (en un rebote especular perfecto), $V$ el vector que se forma desde la superficie hacia la posición del observador y $L$ el vector desde la superficie hacia la fuente de luz (por lo que debe considerarse su opuesto, $-L$, resultando en una definición compatible con la de BRDF), y $\alpha$ define un parámetro que determina el ancho de la componente lobular de la BRDF, lo cual es fenomenológicamente compatible con la variación de la misma en función de la rugosidad en la superficie (llamado {\em glossiness}), ver Fig.~\ref{fg:phongparametros}.
 
 
 \begin{figure}
@@ -685,7 +685,7 @@ El mismo resulta del cómputo del producto escalar entre la normal a la superfic
 En un extremo, el término difuso se anula cuando la luz incide perpendicularmente a la superficie.
 El otro extremo se da cuando la normal coincide con la fuente de luz, en cuyo caso el término difuso toma su valor máximo.
 
-La única modificación percibible por un observador al moverse, sobre la apariencia de una superficie modelada por la BRDF de Phong, está dada por el término especular.
+La única modificación perceptible por un observador al moverse, sobre la apariencia de una superficie modelada por la BRDF de Phong, está dada por el término especular.
 Intuitivamente, a medida que el observador en $V$ se acerca a la dirección del rayo reflejado $R$, ocurre que $R$ se acerca a $V$. En el límite, $R = V$
 y por lo tanto $R \cdot V$ asume un valor máximo.
 A medida que el observador en $V$ se aleja de $R$, el producto escalar tiende a cero, y la reflectancia se percibe en menor medida.
@@ -695,7 +695,7 @@ Además, obtiene buenos resultados en superficies opacas de marcada especularida
 
 \begin{figure}
 \center
-\includegraphics[width=9cm]{figures/phongparametros}
+\includegraphics[width=7cm]{figures/phongparametros}
 \caption[Diferentes apariencias en el modelo de Phong]{Diferentes apariencias obtenidas en una esfera, modificando parámetros en el modelo de Phong, para un observador y una fuente de luz fijos. De izquierda a derecha $k_{s}$ varía de $0$ a $1$. De arriba hacia abajo, $\alpha$ varía de $50$ a $1$.}
 \label{fg:phongparametros}
 \end{figure}
@@ -770,7 +770,7 @@ Este ejemplo muestra con claridad que un mismo material puede presentar una ampl
 \subsection{Materiales Porosos}
 
 Determinados materiales porosos presentan micro-poros en la geometría de sus superficies.
-Estos poros afectan de manera directa la noción de superficie contínua, asumida al modelar un material como una superficie y representar su comportamiento con la energía radiante por medio de una BRDF.
+Estos poros afectan de manera directa la noción de superficie continua, asumida al modelar un material como una superficie y representar su comportamiento con la energía radiante por medio de una BRDF.
 
 Estos poros microscópicos son aún más pequeños que los poros presentes en la piel humana.
 Si bien su tamaño excede la longitud de onda de la luz, los mismos no son visibles al ojo humano.
@@ -788,7 +788,7 @@ Para obtener una distribución estadística de las geometrías de los poros pres
 El modelado de los poros se lleva a cabo por medio de simulaciones estocásticas Monte Carlo sobre posibles geometrías microscópicas de poros bajo ciertas asunciones.
 Dos ejemplos diferentes de poros pueden observarse en la Fig.~\ref{fg:poro}.
 Se simula el rebote de rayos de luz sobre la geometría sintetizada, computándose las distribuciones de reflectancia para poros con distintas formas, utilizando un máximo en el número de rebotes.
-También resulta adecuado incorportar un factor de absorción en cada rebote, disminuyendo la radiancia del rayo siendo computado.
+También resulta adecuado incorporar un factor de absorción en cada rebote, disminuyendo la radiancia del rayo siendo computado.
 El proceso se repite para distintas simulaciones estocásticas de la geometría de los poros.
 En la Fig.~\ref{fg:ceramico} podemos observar una imagen de una maceta renderizada con una BRDF tradicional, y a la derecha, la misma imagen utilizando la BRDF modificada por este método.
 
@@ -828,7 +828,7 @@ Sin embargo, utilizar soluciones volumétricas típicas, como modelar el pelo co
 
 Para solucionar estos inconvenientes se creó una estructura denominada {\em texel}, que no debe confundirse con un elemento de una textura.
 Un texel se define como una {\em estructura de datos} volumétrica que asocia tres componentes: una densidad de área proyectada $\rho$, un marco de referencia $\bold{B}$ y un modelo bidireccional de reflexión de la luz $\psi$, a cada posición $3D$ del espacio.
-La densidad de área proyectada $\rho$ se define como la fracción del área proyectada del {\em vóxel} (cada entrada en una matriz tridimensional) en una dirección particular cubierta por geometría del pelo proyectada en la misma dirección.
+La densidad de área proyectada $\rho$ se define como la fracción del área proyectada del {\em voxel} (cada entrada en una matriz tridimensional) en una dirección particular cubierta por geometría del pelo proyectada en la misma dirección.
 En $\bold{B}$, la orientación queda especificada por los vectores normal, binormal, y tangente.
 Para determinar los vectores, se asume un cilindro general que crece desde la piel del cuero cabelludo.
 $\psi$ se define como una variación del modelo de Phong, devolviendo la luz reflejada en el punto.
@@ -841,7 +841,7 @@ Los componentes difuso y especular del modelo son,
 
 \noindent donde $\theta_{i}$ nota el ángulo entre la luz y la tangente al pelo, y $\theta_{r}$ el ángulo entre la tangente al pelo y el observador.
 
-Luego, para calcular el color final de un pixel en pantalla, desde el punto de vista del observador, se recorren en línea recta, desde $t_{near}$ a $t_{far}$ según corresponda a ese pixel, los texels necesarios,
+Luego, para calcular el color final de un píxel en pantalla, desde el punto de vista del observador, se recorren en línea recta, desde $t_{near}$ a $t_{far}$ según corresponda a ese píxel, los texels necesarios,
 
 $$L = \sum_{t=t_{near}}^{t=t_{far}} {e^{-\tau \sum_{u=t_{near}}^{u=t} \rho(u)} \rho(t) \sum_{i} L_{i}(t) \bold{\psi}(t)},$$
 
@@ -880,7 +880,7 @@ En \cite{Xu2001} se observa que determinados hilos están formados por un conjun
 Esta observación se aplica para definir un texel específico como en el caso del pelo, el cual luego permite determinar la cantidad de luz que será emitida en una dirección para una dirección entrante, ver Fig. \ref{fg:tela}.
 Para esto se tienen en cuenta efectos como sombras, oclusión y dispersión múltiple entre los distintos hilos que componen una tela.
 Debe contarse además con una estructura coherente que conecte a los hilos, formando una tela realista.
-Para esto se utilizan curvas $3D$ construídas a partir de los puntos de control definidos en la división de la superficie.
+Para esto se utilizan curvas $3D$ construidas a partir de los puntos de control definidos en la división de la superficie.
 
 
 \begin{figure}
@@ -892,12 +892,12 @@ Para esto se utilizan curvas $3D$ construídas a partir de los puntos de control
 
 \subsection{Pinturas de autos}
 Determinadas marcas de automotores han expuesto la necesidad de una correcta visualización de las pinturas aplicadas sobre la superficie exterior de los mismos.
-Los modelos desarrollados se han utlizado para presentar al público nuevos productos de estas fábricas, permitiendo a los posibles compradores configurar los colores y características deseadas en las pinturas.
+Los modelos desarrollados se han utilizado para presentar al público nuevos productos de estas fábricas, permitiendo a los posibles compradores configurar los colores y características deseadas en las pinturas.
 Debido a esto, un modelo adecuado del material resulta imprescindible para permitir una reproducción lo más fiel posible al mismo, en un automóvil real.
 
 Se han desarrollado principalmente dos categorías de métodos para obtener un material con la apariencia de pintura de automóviles: aquellos basados en primeros principios \cite{Ershov2001}, y los basados en capturas de características de pinturas reales.
 En el primero se realiza un modelo por capas, donde cada capa contiene partículas de pigmentos como en las pinturas reales.
-El modelo de dos capas presentado asume una capa con partículas que reflejan la luz especularmente, y la otra con una pintura opaca.
+El modelo de dos capas presentado asume una capa con partículas que reflejan la luz de manera especular, y la otra con una pintura opaca.
 Tomando en consideración parámetros como la densidad, la distribución de las orientaciones de las partículas, la transmitancia y la reflectancia, derivan una compleja BRDF parametrizada y analítica que permite definir distintos tipos de pinturas, ver Fig.~\ref{fg:pinturaauto}.
 
 Modelos basados en capturas reales utilizan distintas tomas de la radiancia saliente de la pintura de autos, combinándolas.

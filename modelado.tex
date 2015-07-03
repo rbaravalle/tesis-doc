@@ -277,7 +277,7 @@ El procedimiento se describe, simplificadamente, en el Algoritmo $1$.
                 \State{$C[i].agregar(vecindario(h))$} 
                 \State{$L^{2}.setear(vecindario(h),i)$} \Comment{Marcar posiciones en $L^{2}$ como $i$}
                 \State{$L^{2}.setear(h,i)$}
-                \Comment{turno de la particula $i+1$...}
+                \Comment{turno de la partícula $i+1$...}
             \EndIf
         \EndFor
     \EndFor
@@ -290,7 +290,7 @@ Para cada partícula, la posici\'on elegida resulta la primera ocupada en $O$, a
 Cada part\'icula evoluciona en un intento por extender sus voxels ocupados ($O$), marcándolos en $L$. Los mismos se toman de $C$.
 Cuando una part\'icula ocupa una entrada en la textura volumétrica, la misma se elimina de $C$ y se agrega a $O$.
 Luego el vecindario de ese voxel se agrega a $C$ (es decir las posiciones que rodean inmediatamente a la entrada tomada).
-Las grillas se actualizan de la siguiente manera: $L$ se setea a $0$ en la entrada y $L^{2}$ se setea con el valor $i$ en los voxels que se agregan a $C$. Las part\'iculas s\'olo pueden crecer si el valor encontrado en $L^{2}$ no pertenece a otra part\'icula.
+Las grillas se actualizan de la siguiente manera: $L$ se establece a $0$ en la entrada y $L^{2}$ toma el valor $i$ en los voxels que se agregan a $C$. Las part\'iculas s\'olo pueden crecer si el valor encontrado en $L^{2}$ no pertenece a otra part\'icula.
 El tama\~no del vecindario se par\'ametriza, definiendo la distancia entre part\'iculas.
 Si el vector $C$ est\'a vac\'io, la part\'icula {\em muere} ya que no puede continuar creciendo.
 
@@ -301,7 +301,7 @@ Variando el par\'ametro de distancia entre part\'iculas (separación) se obtiene
 
 
 \begin{figure*}[htb!]
-  \centerline{\includegraphics[width=13cm]{figures/Fig1}}
+  \centerline{\includegraphics[width=12cm]{figures/Fig1}}
   \caption[Efecto del parámetro separación entre partículas.]{Efecto del parámetro separación entre partículas. Izquierda: separaci\'on = 1, centro: separaci\'on = 2, derecha: separaci\'on = 4.}
   \label{fg:sistdin1}
 \end{figure*}
@@ -354,7 +354,7 @@ A modo de ejemplo, el siguiente conjunto de ecuaciones produce la imagen a la iz
 
 
 \begin{figure*}[htb!]
-  \centerline{\includegraphics[width=13cm]{figures/Fig2}}
+  \centerline{\includegraphics[width=12cm]{figures/Fig2}}
   \caption{Sistemas dinámicos en el plano.}
   \label{fg:sistdin2}
 \end{figure*}
@@ -398,12 +398,12 @@ El Algoritmo $2$ muestra cómo se modifica el algoritmo de modelado para incluir
 
 Las part\'iculas se deforman globalmente en un patr\'on visualmente similar a las trayectorias que produce el sistema (ver Fig.~\ref{fg:sistdin3}).
 En las im\'agenes, de izquierda a derecha se decrementa la {\em aleatoriedad} de las trayectorias.
-El par\'ametro aleatoriedad seteado a $0.1$ genera la imagen de la derecha, lo cual significa que las burbujas eligen como siguiente posición de crecimiento la que mejor se acopla al sistema con una probabilidad de $0.9$.
+El par\'ametro aleatoriedad en $0.1$ genera la imagen de la derecha, lo cual significa que las burbujas eligen como siguiente posición de crecimiento la que mejor se acopla al sistema con una probabilidad de $0.9$.
 La probabilidad se define como $1-aleatoriedad$, donde $0 \leq aleatoriedad \leq 1$.
 Las ecuaciones del sistema son las mismas que las de la imagen derecha mostrada en la Fig.~\ref{fg:sistdin2}.
 
 \begin{figure*}[htb!]
-  \centerline{\includegraphics[width=13cm]{figures/Fig3}}
+  \centerline{\includegraphics[width=12cm]{figures/Fig3}}
   \caption[Sistemas din\'amicos aplicados en sistemas de part\'iculas]{Sistemas din\'amicos aplicados en sistemas de part\'iculas. Efecto del parámetro {\em aleatoriedad}. De izquierda a derecha, aleatoriedad: 0.3,0.2,0.1 respectivamente. }
   \label{fg:sistdin3}
 \end{figure*}
@@ -429,7 +429,7 @@ Dada una textura volumétrica $M$, el algoritmo genera una textura volumétrica 
 $$DF_{M}[i,j,k] = \min \bigg\{ \delta([i,j,k],[i',j',k']): M[i',j',k'] = 0 \bigg\},$$
 
 
-\noindent donde $[i,j,k]$ y $[i',j',k']$ son celdas en las respectivas texturas, representando las posiciones espaciales $(i,j,k)$ y $(i',j',k')$, y $\delta$ es la función que computa la distancia entre dos celdas, las cuales pueden ser la distancia de Manhattan, o la distancia Euclideana.
+\noindent donde $[i,j,k]$ y $[i',j',k']$ son celdas en las respectivas texturas, representando las posiciones espaciales $(i,j,k)$ y $(i',j',k')$, y $\delta$ es la función que computa la distancia entre dos celdas, las cuales pueden ser la distancia de Manhattan, o la distancia Euclidiana.
 Las entradas de la textura volumétrica lejanas a los bordes del objeto toman valores mayores que aquellas cercanas a los mismos.
 De esta manera se obtiene un mapa de la distancia de cada voxel a las superficies tridimensionales del objeto.
 A partir de un valor umbral, esta textura volumétrica con distancias se utiliza para definir una región envolvente tridimensional de la textura volumétrica.
@@ -446,7 +446,7 @@ La Fig.\ref{fg:distance} muestra un ejemplo de un mapa de distancias.
 A partir de una geometría tridimensional dada, se establecen condiciones de contorno que las burbujas deben respetar durante su crecimiento.
 Esto permite representar más fielmente estructuras porosas como huesos, panes y esponjas, dado que de esta forma las burbujas pueden realizar una interacción más realista con el contorno de los objetos.
 Determinados materiales como huesos humanos o el pan presentan burbujas orientadas de manera paralela a las paredes del objeto, ya que durante el proceso de formación del material las burbujas son presionadas contra las paredes del mismo.
-Huesos típicos presentan estructuas porosas y no porosas combinadas, y regiones donde el tejido trabecular (poroso) muestra una orientación definida en determinadas direcciones, dependiendo del estado de salud del hueso, la edad de la persona y otros factores.
+Huesos típicos presentan estructuras porosas y no porosas combinadas, y regiones donde el tejido trabecular (poroso) muestra una orientación definida en determinadas direcciones, dependiendo del estado de salud del hueso, la edad de la persona y otros factores.
 En otras estructuras porosas como las esponjas, las celdas visibles en la estructura no presentan una orientación definida.
 Nuestro modelo puede adaptarse a estas variadas situaciones definiendo sistemas dinámicos que varían de acuerdo a la región del material en la cual se encuentran.
 
@@ -476,7 +476,7 @@ La imagen también muestra que el método funciona en cortes con regiones descon
 
 \begin{figure}
   \centerline{\includegraphics[width=11cm]{figures/Fig4}}
-  \caption{Campo discreto de vectores perpendiculares al gradiente. La imagen muestra que los vectores computados siguen la silueta exterior de figuras arbitrarias. Por claridad solo se muestran algunos vectores del campo.}
+  \caption[Campo discreto de vectores perpendiculares al gradiente]{Campo discreto de vectores perpendiculares al gradiente. La imagen muestra que los vectores computados siguen la silueta exterior de figuras arbitrarias. Por claridad solo se muestran algunos vectores del campo.}
   \label{fg:Fig4}
 \end{figure}
 
@@ -489,22 +489,22 @@ Un valor más alto del parámetro resulta útil para modelar esponjas.
 %Las burbujas tienden a permanecer en el corte bidimensional en el cual se originaron, pero debido al cómputo de números aleatorios en el proceso de crecimiento, las mismas no se limitan al corte mencionado, pudiendo cambiar entonces de corte y sistema dinámico.
 
 \begin{figure}
-  \centerline{\includegraphics[width=15cm]{figures/Fig5}}
-  \caption{Cortes porosos generados con el algoritmo de crecimiento propuesto. La imagen muestra que las burbujas siguen las condiciones de contorno cerca de los bordes de las geometrías y el sistema dinámico en el centro, produciendo patrones naturales tanto locales como globales. La imagen de la izquierda, arriba, utiliza un valor de aleatoriedad superior a las otras imágenes, produciendo una estructura parecida a una esponja. La imagen de la izquierda, abajo fue producida con el menor valor de aleatoriedad de todas las imágenes.}
+  \centerline{\includegraphics[width=12cm]{figures/Fig5}}
+  \caption[Cortes porosos generados con el algoritmo de crecimiento propuesto]{Cortes porosos generados con el algoritmo de crecimiento propuesto. La imagen muestra que las burbujas siguen las condiciones de contorno cerca de los bordes de las geometrías y el sistema dinámico en el centro, produciendo patrones naturales tanto locales como globales. La imagen de la izquierda, arriba, utiliza un valor de aleatoriedad superior a las otras imágenes, produciendo una estructura parecida a una esponja. La imagen de la izquierda, abajo fue producida con el menor valor de aleatoriedad de todas las imágenes.}
   \label{fg:Fig5}
 \end{figure}
 
 Adicionalmente, el método puede definir comportamiento diferente en distintas regiones, definiendo un sistema dinámico distinto para cada conjunto de cortes.
 De esta forma la estructura porosa resultante podrá mostrar diferentes orientaciones dependiendo del voxel y el corte en el cual se encuentre.
-Por ejemplo, es posible definir sistemas dinámicos que tomen en consideradión el ancho y alto del corte, produciendo burbujas que se adapten a esta situación: si el ancho es mayor al alto, se puede definir un sistema dinámico donde las burbujas crezcan horizontalmente.
+Por ejemplo, es posible definir sistemas dinámicos que tomen en consideración el ancho y alto del corte, produciendo burbujas que se adapten a esta situación: si el ancho es mayor al alto, se puede definir un sistema dinámico donde las burbujas crezcan horizontalmente.
 Ídem si el alto es mayor que el ancho.
 Un valor umbral relacionando el ancho y el alto puede definir cuándo se utilizan estos comportamientos.
 La Fig.~\ref{fg:Fig6} muestra ejemplos de DS definidos teniendo en cuenta estas consideraciones.
 El DS que produce la imagen de la izquierda es $\dot{x} = 1, \dot{y} = 0$, y el de la imagen de la derecha $\dot{x} = 0, \dot{y} = 1$, indicando en cada caso que sólo debe haber cambio en uno de los dos ejes mientras crece la partícula.
 
 \begin{figure}
-  \centerline{\includegraphics[width=11cm]{figures/Fig6}}
-  \caption{Cortes 2D generados con sistemas dinámicos predominantemente horizontal (izquierda) y vertical (derecha). La imagen muestra que las burbujas resultantes producen patrones que se adaptan a la relación entre el ancho y el alto de cada corte.}
+  \centerline{\includegraphics[width=9cm]{figures/Fig6}}
+  \caption[Cortes 2D generados con sistemas dinámicos produciendo patrones horizontales y verticales]{Cortes 2D generados con sistemas dinámicos predominantemente horizontal (izquierda) y vertical (derecha). La imagen muestra que las burbujas resultantes producen patrones que se adaptan a la relación entre el ancho y el alto de cada corte.}
   \label{fg:Fig6}
 \end{figure}
 
@@ -514,8 +514,8 @@ Este ejemplo demuestra que el sistema puede ser configurado para atender a disti
 
 
 \begin{figure}
-  \centerline{\includegraphics[width=9cm]{figures/Fig7}}
-  \caption{Cortes con forma de conejo, donde las burbujas ciclan sobre el centro de masa del mismo. Adicionalmente, el parámetro {\em separación} es $2$.}
+  \centerline{\includegraphics[width=7cm]{figures/Fig7}}
+  \caption[Cortes con forma de conejo y parámetro separación igual a 2]{Cortes con forma de conejo, donde las burbujas ciclan sobre el centro de masa del mismo. Adicionalmente, el parámetro {\em separación} es $2$.}
   \label{fg:Fig7}
 \end{figure}
 
@@ -540,52 +540,32 @@ El método resultante es altamente parametrizable y completamente automático, p
 
 
 \begin{figure}
-  \centerline{\includegraphics[width=9cm]{figures/Fig8}}
-  \caption{Estructura porosa simulada con ruido blanco (arriba) y ruido de Perlin (abajo). La imagen muestra que el material no es poroso (arriba) o es demasiado suave (abajo), haciendo difícil controlar las posiciones y la distribución de tamaños de poros.}
+  \centerline{\includegraphics[width=7cm]{figures/Fig8}}
+  \caption[Estructura porosa simulada con ruido blanco y ruido de Perlin]{Estructura porosa simulada con ruido blanco (arriba) y ruido de Perlin (abajo). La imagen muestra que el material no es poroso (arriba) o es demasiado suave (abajo), haciendo difícil controlar las posiciones y la distribución de tamaños de poros.}
   \label{fg:Fig8}
 \end{figure}
 
-\clearpage
-
 \begin{figure}
-  \centerline{\includegraphics[width=9cm]{figures/Fig9CAVW}}
-  \caption{Estructura porosa simulada con ruido de Voronoi (arriba) y ruido de Worley (abajo). La imagen muestra que si bien los métodos generan estructuras porosas convincentes, los usuarios de las mismas deben emplear técnicas auxiliares para obtener flexibilidad en los patrones resultantes (por ejemplo para controlar la orientación y forma de los poros).}
+  \centerline{\includegraphics[width=7cm]{figures/Fig9CAVW}}
+  \caption[Estructura porosa simulada con ruido de Voronoi y ruido de Worley]{Estructura porosa simulada con ruido de Voronoi (arriba) y ruido de Worley (abajo). La imagen muestra que si bien los métodos generan estructuras porosas convincentes, los usuarios de las mismas deben emplear técnicas auxiliares para obtener flexibilidad en los patrones resultantes (por ejemplo para controlar la orientación y forma de los poros).}
   \label{fg:Fig9}
 \end{figure}
 
 \subsection{Resultados y Limitaciones}
-En las Figs.~\ref{fg:Fig11} y \ref{fg:Fig12} se muestran imágenes sintetizadas a través del procedimiento de partículas descrito, utilizando el método de renderizado del siguiente capítulo.
+La Fig.~\ref{fg:Fig11} muestra imágenes sintetizadas a través del procedimiento de partículas descrito, utilizando el método de renderizado del siguiente capítulo.
 Las imágenes muestran objetos cuyo materiales se asemejan a panes, tanto en apariencia como en los patrones de sus burbujas.
-En las Figs.~\ref{fg:Fig13} y \ref{fg:Fig14} se muestran esponjas y piedras porosas sintetizadas con el mismo procedimiento, utilizando distintos valores para la aleatoriedad y la cantidad de burbujas iniciales.
 La Fig.~\ref{fg:Fig11} destaca la utilización de un valor bajo de aleatoriedad en el crecimiento de las burbujas, forzando a las mismas a seguir un sistema dinámico circular.
 Estos patrones pueden ser utilizados adem\'as en otros materiales cocidos, variando el par\'ametro de aleatoriedad.
 Si bien es posible generar distintas geometrías de manera sencilla y automática, se requiere mayor profundidad en la investigación para determinar sistemas adecuados para determinados materiales.
-Los resultados alcanzados permiten obtener buenos resultados para panes, esponjas, y piedras, como fue mostrado, entre otros.
+Los resultados alcanzados permiten obtener buenos resultados para panes, esponjas, y piedras, entre otros (ver siguiente capítulo).
 Sin embargo, para posibilitar una renderización convincente de materiales como huesos debe extenderse el método para atender a las necesidades específicas del material, dado que en el mismo los patrones no son completamente aleatorios, y determinadas zonas presentan orientaciones claramente definidas en muestras reales.
 
 \begin{figure}
   \centerline{\includegraphics[width=12cm]{figures/Fig11CAVW}}
-  \caption{Panes renderizados, destacando burbujas concéntricas sobre el centro de masa de cada corte bidimensional.}
+  \caption[Panes renderizados con burbujas concéntricas]{Panes renderizados, destacando burbujas concéntricas sobre el centro de masa de cada corte bidimensional.}
   \label{fg:Fig11}
 \end{figure}
 
-\begin{figure}
-  \centerline{\includegraphics[width=13cm]{figures/Fig12CAVW}}
-  \caption{Panes renderizados, utilizando diferentes geometrías y parámetros de renderizado. La imagen muestra que el método simula diferentes apariencias de panes.}
-  \label{fg:Fig12}
-\end{figure}
-
-\begin{figure}
-  \centerline{\includegraphics[width=9cm]{figures/Fig13CAVW}}
-  \caption{Esponjas renderizadas. La textura volumétrica que representa la geometría fue generada con un valor de {\em aleatoriedad} mayor que en el caso del pan. La geometría resultante posee tamaños y orientaciones de burbujas homogéneos.}
-  \label{fg:Fig13}
-\end{figure}
-
-\begin{figure}
-  \centerline{\includegraphics[width=12cm]{figures/Fig14CAVW}}
-  \caption{Piedras renderizadas. Se utilizó un menor número de partículas en la generación de este material. El índice de absorción fue incrementado en el renderizado para prevenir una difusión lumínica excesiva.}
-  \label{fg:Fig14}
-\end{figure}
 
 Debido a estas consideraciones, en la siguiente sección presentamos un algoritmo que demuestra que la elección de un sistema de ecuaciones específico en el diseño permite superar estas deficiencias para el material siendo estudiado.
 El mismo continúa la idea de una modelización volumétrica del material, pero está basado en modelos físicos del proceso de fabricación del pan, extraído directamente de la literatura de ingeniería de los alimentos.
@@ -666,7 +646,7 @@ Esto será explicado en profundidad en el siguiente capítulo (validación).
 
 La textura de la masa se genera procedimentalmente en una textura volumétrica separada, definida en una matriz de tres dimensiones.
 Las dimensiones son las mismas de la matriz de geometría definida en la subsección anterior, donde cada voxel se inicializa a $1$ (significando que el material aún no tiene burbujas).
-El proceso comienza sustrayendo esferas de radio $r_{min}$ posicionadas arbitrariamente en la textura volumétrica (esto se logra seteando a $0$ las celdas respectivas).
+El proceso comienza sustrayendo esferas de radio $r_{min}$ posicionadas arbitrariamente en la textura volumétrica (esto se logra estableciendo en $0$ las celdas respectivas).
 Luego, substraemos esferas de radio mayor, nuevamente en posiciones arbitrarias, hasta un radio máximo $r_{max}$.
 La relación entre el número de esferas $N_{s}$ a ser sustraídas en cada paso, y sus respectivos radios $r$, está dada por la ley fractal
 
@@ -699,7 +679,7 @@ Para solucionar este inconveniente, utilizamos la textura volumétrica de distan
 
 
 \begin{figure*}
-\includegraphics[width=13cm]{figures/intersectProblem}
+\includegraphics[width=12cm]{figures/intersectProblem}
 \caption[Intersección simple de la geometría y de las burbujas provenientes del leudado]{Intersección simple de la geometría y de las burbujas provenientes del leudado. A diferencia de masas reales, pueden verse burbujas en la superficie de la masa.}
 \label{fg:intersectProblem}
 \end{figure*}
@@ -710,13 +690,13 @@ Las imágenes muestran que el método definido permite la producción de imágen
 Cabe remarcar que el modelo resulta suficientemente flexible, permitiendo renderizar el material en cualquier etapa de su proceso de fabricación, además de permitir la posibilidad de realizar cortes arbitrarios sobre el mismo.
 
 \begin{figure*}
-\includegraphics[width=13cm]{figures/prebakebread}
+\includegraphics[width=12cm]{figures/prebakebread}
 \caption{Pan sintético luego del leudado, y antes de la cocción.}
 \label{fg:proving}
 \end{figure*}
 
 \begin{figure*}
-\includegraphics[width=13cm]{figures/prebakebunny}
+\includegraphics[width=12cm]{figures/prebakebunny}
 \caption{Conejo de pan sintético, luego del leudado, y antes de la cocción.}
 \label{fg:provingBunny}
 \end{figure*}
@@ -784,7 +764,7 @@ La Fig.~\ref{fg:baking} muestra cortes del resultado de este mapeo ($R_{vol}$), 
 Las imágenes son casi idénticas a lo que se obtendría con una simulación $3D$~\cite{Purlis2010}.
 
 \begin{figure*}
-\includegraphics[width=13cm]{figures/tempsbunny}
+\includegraphics[width=12cm]{figures/tempsbunny}
 \caption[Temperaturas unidimensionales mapeadas a una textura volumétrica con forma de conejo]{Temperaturas unidimensionales mapeadas a una textura volumétrica con forma de conejo. Las imágenes muestran que la distribución de temperaturas arroja resultados similares a una simulación en tres dimensiones.}
 \label{fg:baking}
 \end{figure*}
@@ -800,7 +780,7 @@ Finalmente, utilizamos las versiones suavizadas para deformar la textura volumé
 La Fig.~\ref{fg:bakedbubbles} muestra cortes $2D$ de campos escalares luego de aplicado el proceso de deformación por temperatura a diferentes formas.
 
 \begin{figure*}
-\includegraphics[width=13cm]{figures/bakedbubbles}
+\includegraphics[width=12cm]{figures/bakedbubbles}
 \caption{Cortes bidimensionales con burbujas deformadas por el proceso de deformación en diferentes tipos de panes.}
 \label{fg:bakedbubbles}
 \end{figure*}
@@ -811,14 +791,14 @@ La imagen también muestra que el método deforma más pronunciadamente las burb
 Finalmente, en la imagen puede observarse el elongamiento de las burbujas, paralelo a la pared derecha del pan.
 
 \begin{figure*}
-\includegraphics[width=13cm]{figures/parameterp}
+\includegraphics[width=12cm]{figures/parameterp}
 \caption[Efecto del parámetro $p$ en la simulación de cocción]{Efecto del parámetro $p$: de izquierda a derecha $p$ es $5$, $10$, y $15$ respectivamente. Las burbujas son presionadas de manera realista hacia la corteza del pan.}
 \label{fg:parameterp}
 \end{figure*}
 
 \subsubsection{Crecimiento de la Masa}
 El crecimiento de la masa constituye uno de los fenómenos más visibles durante el proceso de cocción del pan.
-Esto se debe a que las temperaturas producen la liberaación de $CO_2$ en las burbujas atrapadas en la masa, resultando en un crecimiento global del pan.
+Esto se debe a que las temperaturas producen la liberación de $CO_2$ en las burbujas atrapadas en la masa, resultando en un crecimiento global del pan.
 
 La literatura muestra que, en escenarios típicos, la masa del pan crece hasta el doble en volumen \cite{Fan1999}, dependiendo de las condiciones del horno.
 En nuestro modelo, este proceso puede ser simulado utilizando la distribución de burbujas y sus radios, provenientes del proceso de leudado.
@@ -856,8 +836,8 @@ Además se puede observar que, de la misma manera que en los panes reales, se pr
 Las diferencias en tamaño pueden ser aleatorizadas para obtener crecimiento variable en las burbujas.
 
 \begin{figure*}
-\includegraphics[width=13cm]{figures/Fig9}
-\caption{Ejemplos de crecimiento de la masa, utilizando distintos valores de $S$. La imagen muestra el efecto de la cocción en la forma global de la masa y en las burbujas en particular. Diferentes crecimientos y coalescencias se observan en las burbujas. }
+\includegraphics[width=12cm]{figures/Fig9}
+\caption[Ejemplos de crecimiento de la masa, utilizando distintos valores del parámetro $S$]{Ejemplos de crecimiento de la masa, utilizando distintos valores del parámetro $S$. La imagen muestra el efecto de la cocción en la forma global de la masa y en las burbujas en particular. Diferentes crecimientos y coalescencias se observan en las burbujas. }
 \label{fg:rising}
 \end{figure*}
 
@@ -876,13 +856,13 @@ Además, obtenemos diferentes apariencias de pan utilizando un parámetro de dis
 
 Adicionalmente, utilizamos colores medidos en el proceso real de cocción \cite{Purlis2009}, para determinar diferentes apariencias de la corteza.
 Utilizamos el canal $L$ del espacio de color CIELab \cite{Hunter58} para controlar la historia de cocción en cada voxel de la corteza.
-Dicho canal determina la {\em luminancia}, mientras uqe los canales restantes, $a$ y $b$, determinan la cromaticidad.
+Dicho canal determina la {\em luminancia}, mientras que los canales restantes, $a$ y $b$, determinan la cromaticidad.
 En \cite{Purlis2009} fue determinado que los valores del canal $L$ varían aproximadamente entre $90$ (crudo) y $40$ (quemado).
 Los valores de los canales de cromaticidad fueron elegidos utilizando colores medidos en imágenes de panes reales.
 Esta información nos permitió definir un rango de colores $CIELab$, los cuales varían suavemente de crudo a completamente cocido. 
 
 Los colores definidos pueden ser distribuidos sobre la superficie de la corteza por medio de consideraciones artísticas.
-Por ejemplo, es posible utilizar nuevamente información proveninente del proceso de leudado ({\em e.g.}, el radio de la burbuja más cercana), e incluso ruidos procedimentales ({\em e.g.}, Perlin).
+Por ejemplo, es posible utilizar nuevamente información proveniente del proceso de leudado ({\em e.g.}, el radio de la burbuja más cercana), e incluso ruidos procedimentales ({\em e.g.}, Perlin).
 En cada entrada de la corteza, los valores obtenidos de estas funciones se utilizan para elegir un color de los colores definidos.
 
 En nuestro caso, definimos la {\em densidad de la corteza} en cada posición de la textura volumétrica como $N_{v} / W_{size},$ donde $N_{v}$ es el número de voxels con valor $1$ en una ventana en el entorno de la posición, y $W_{size}$ es el número de voxels en esa ventana.
@@ -988,7 +968,7 @@ A diferencia de la sección anterior, el proceso está basado en la secuencia re
 
 \begin{figure*}[!ht]
 \begin{center}
-\includegraphics[width=13cm]{figures/Fig10}
+\includegraphics[width=12cm]{figures/Fig10}
 \caption{Panes cortados luego de la cocción, utilizando una textura volumétrica de dimensiones $256^{3}$.}
 \label{fg:renders}
 \end{center}
@@ -996,7 +976,7 @@ A diferencia de la sección anterior, el proceso está basado en la secuencia re
 
 \begin{figure*}[!ht]
 \begin{center}
-\includegraphics[width=13cm]{figures/Fig11}
+\includegraphics[width=12cm]{figures/Fig11}
 \caption[Panes cortados luego de la cocción, utilizando una textura volumétrica de dimensiones $512^{3}$]{Panes cortados luego de la cocción, utilizando una textura volumétrica de dimensiones $512^{3}$. La miga muestra mayor detalle. Además el parámetro $S$ fue elegido con un valor aleatorio en cada punto, produciendo picos visibles en la corteza. El color de la corteza difiere ligeramente del de la figura anterior.}
 \label{fg:renders2}
 \end{center}
@@ -1004,7 +984,7 @@ A diferencia de la sección anterior, el proceso está basado en la secuencia re
 
 \begin{figure*}[!ht]
 \begin{center}
-\includegraphics[width=13cm]{figures/Fig12}
+\includegraphics[width=12cm]{figures/Fig12}
 \caption[Panes luego de la cocción]{Panes luego de la cocción. Se observan distintas geometrías $\rm 3D$ y apariencias de corteza.}
 \label{fg:renders3}
 \end{center}
@@ -1012,7 +992,7 @@ A diferencia de la sección anterior, el proceso está basado en la secuencia re
 
 \begin{figure*}[!ht]
 \begin{center}
-\includegraphics[width=13cm]{figures/Fig13}
+\includegraphics[width=12cm]{figures/Fig13}
 \caption[Corteza con diferentes historias de cocción]{Cortezas con diferentes historias de cocción. De izquierda a derecha, se decrementa el valor máximo admitido para el canal $L$.}
 \label{fg:bakingcolors}
 \end{center}
@@ -1021,7 +1001,7 @@ A diferencia de la sección anterior, el proceso está basado en la secuencia re
 
 \begin{figure*}[!ht]
 \begin{center}
-\includegraphics[width=13cm]{figures/Fig14}
+\includegraphics[width=12cm]{figures/Fig14}
 \caption[Panes luego de la cocción mostrando diferentes crecimientos]{Panes luego de la cocción mostrando diferentes crecimientos. De izquierda a derecha se incrementa el parámetro $S$.}
 \label{fg:bakingdeform}
 \end{center}
@@ -1029,7 +1009,7 @@ A diferencia de la sección anterior, el proceso está basado en la secuencia re
 
 \begin{figure*}[!ht]
 \begin{center}
-\includegraphics[width=13cm]{figures/Fig15}
+\includegraphics[width=12cm]{figures/Fig15}
 \caption[Panes con forma de conejo luego de la cocción, mostrando diferentes crecimientos]{Panes con forma de conejo luego de la cocción, mostrando diferentes crecimientos. De izquierda a derecha se incrementa el parámetro $S$. Las imágenes resultan realistas incluso para masas de formas inverosímiles.}
 \label{fg:bakingdeform2}
 \end{center}
