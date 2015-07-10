@@ -764,6 +764,7 @@ Total & 68.43 & 190.76 & 415.96 \\
 \end{frame}
 
 \section{Renderización}
+\subsection{Renderización}
 
 \begin{frame}{Renderización}
 
@@ -855,7 +856,7 @@ En el fragment shader,
 
 \end{frame}
 
-\begin{frame}{Renderizado con más de una escala}
+\begin{frame}{Renderizado utilizando más de una escala}
 A la hora de obtener complejidad en la imagen resultante, existen limitaciones en la resolución de la textura.
 
 Una solución consiste en utilizar más de una textura
@@ -885,18 +886,191 @@ Textura B muestreada en $N\times (x,y,z), N \in \mathbb{R}$
 \end{frame}
 
 \section{Validación}
+\subsection{Validación automática}
 
-\begin{frame}{Espectro Multifractal}
+\begin{frame}{a}
+Pretendemos utilizar un \textbf{algoritmo} objetivo, en la validación de las geometrías porosas obtenidas, en oposición a una inspección subjetiva de los resultados.
+
+En la generación utilizamos el concepto de estructura fractal para construir la geometría de migas de pan.
+La estructura visible de la miga de pan sugiere que un algoritmo de extracción de características fractales podría describirla.
+
+
+\end{frame}
+
+\begin{frame}{Dimensión Box}
+
+\begin{wrapfigure}{r}{0.5\textwidth}
+\includegraphics[width=6cm]{../figures/fitbox}
+\end{wrapfigure}
+
+Dada una imagen, se la subdividide en una grilla de dimensiones $M\times M$ donde el largo del lado de cada cuadrado formado es $\delta$. Si $N(\delta)$ representa el n\'umero de cuadrados que contienen al menos un p\'ixel resultado de una binarizaci\'on de la imagen (p\'ixel blanco) para ese $\delta$, la dimensi\'on Box $D_{b}$ queda definida como:\\
+
+$$D_{b} = \displaystyle\lim_{\delta \to 0}{\frac{\log(N(\delta))}{\log (1/\delta)}}$$
+
+
+\end{frame}
+
+\begin{frame}
+Esto sugiere que podría ser útil utilizar más de una DF para caracterizar los resultados.
+
+El espectro multifractal puede ser utilizado para capturar distintas estructuras fractales dentro del mismo objeto, o distintos comportamientos fractales dependiendo de la escala.
+
+La dimensión generalizada de orden $q$ con el método Sandbox se define como:
+
+ \begin{align*}
+D_{q\ne 1}^{sb} &= \frac{1}{q-1} \lim_{R \rightarrow 0}{
+\frac{ln   { \left\langle  (M(R)/M_{0})^{q-1} \right\rangle   }}
+{ln {(R/L)}       }},\\
+D_{q=1}^{sb} &= \lim_{R \rightarrow 0}{
+\frac{ \left\langle ln   { (M(R)/M_{0})  }  \right\rangle}
+{ln {(R/L)}       }},
+\end{align*}
+
+\noindent donde $M_{0}$ es la cantidad de píxeles blancos en la imagen binarizada y $M(R)$ es el número de puntos que pertenecen a la estructura en un círculo de radio $R$ centrado en un punto de la misma.
+\end{frame}
+
+\begin{frame}
+Se computó el espectro multifractal en muestras reales ({\em baguette} y pan casero), obteniendo las medianas de cada dimensión, con $q \in [-10,10]$.
+
+Se compararon estos resultados con los sintéticos, por medio de la métrica de error:
+
+\begin{equation*}
+Error = \displaystyle \sum abs(medianas_{real}-medianas_{sint\acute{e}tico}).
+\end{equation*}
+
+Las imágenes sintéticas fueron generadas utilizando diversos parámetros en el leudado:
+
+\begin{align*}
+N &= \frac{k}{r^{d}},\\ r &= r_{min}+paso*j, j \in [0,\frac{r_{max}}{paso}],
+\end{align*}
+\noindent $k,d,r_{min},r_{max}$ y $step$ que controlan la generación de burbujas.
+
+\end{frame}
+
+\begin{frame}
+\begin{figure}[!ht]
+\includegraphics[width=7cm]{../figures/bestboxplot}
+\caption[Mejores parámetros de síntesis para el tipo de pan {\em baguette}]{Mejores parámetros de síntesis para el tipo de pan {\em baguette}. El error total en medianas es de $\sim 0.21$.}
+\label{bestboxplot}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}
+\begin{figure}
+\begin{center}
+\includegraphics[width=6.5cm]{../figures/realbin}
+\caption{ Pan {\em baguette} real y binarización.}
+\label{realbin}
+\end{center}
+\end{figure}
+Sintético:
+\begin{center}
+\includegraphics[width=3cm]{../figures/best}
+\end{center}
+\end{frame}
+
+
+\begin{frame}
+\begin{figure}
+\includegraphics[width=7cm]{../figures/bestboxplot2}
+\caption[Mejores parámetros de síntesis para un tipo casero de pan]{Mejores parámetros de síntesis para un tipo casero de pan. El error total en medianas es de $\sim 0.88$.}
+\label{bestboxplot2}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=7cm]{../figures/realbin2}
+\caption{ Pan casero real y ejemplo de binarización.}
+\label{realbin2}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=5cm]{../figures/best2}
+\caption{Ejemplo de pan sintético con características similares a imágenes de un pan casero.}
+\label{best2}
+\end{center}
+\end{figure}
+\end{frame}
+
+
+
+\begin{frame}{Conclusiones}
+\begin{block}{}
+\begin{itemize}
+\item Algoritmo semi-automático para comparar muestras reales y sintéticas
+\item Es posible utilizarlo para alimentar la generación a partir de una muestra real, y obtener un pan sintético con características estadísticamente similares.
+\item Es posible mejorar el algoritmo hallando automáticamente los parámetros iniciales.
+\end{itemize}
+\end{block}
 
 \end{frame}
 
 \subsection{Extras}
 
 \begin{frame}{Clasificación de Imágenes de cortes de Pan}
+Adicionalmente se estudió el espectro multifractal para caracterizar y clasificar imágenes de cortes reales de pan.
+
+Esto es útil para definir parámetros de calidad que deben respetar los panes reales, y proveer una clasificación automática de los mismos.
+
+Se encontró que el MFS clasifica muestras de panes de manera comparable al estado del arte.
 
 \end{frame}
 
-\begin{frame}{Validación utilizando Aprendizaje Profundo}
+\begin{frame}
+\begin{table}[h!]
+\center
+% For LaTeX tables use
+\begin{tabular}{lllllll}
+\hline\noalign{\smallskip}
+Método & Haralick & Lbp & SIFT & MFS & MFS CIELab\\ % & Zernicke
+\noalign{\smallskip}\hline\noalign{\smallskip}
+SVM & 94\% & 78.5\% & 96.5\% & 94.5\% & \textbf{97.5\%} \\
+RF  & 91\% & 71.5\% & 92\% & 93.5\% & \textbf{96\%} \\
+NN & 79\% & 70\% & 86\%  & 90.5\% & \textbf{92\%} \\
+\noalign{\smallskip}\hline
+\#FDs & 13 & 36 & 128 & 20 & 60\\
+\hline
+\end{tabular}
+\caption{Resultados de la clasificación de migas de pan para diferentes características del estado del arte y diferentes algoritmos de clasificación.}
+\label{tab:other} 
+\end{table}
+\end{frame}
+
+\begin{frame}
+Correlación entre las dimensiones del MFS y \\
+
+\vspace{1cm}
+
+\begin{tabular}{cc}
+la fracción de vacío (VF) & el área media de las burbujas (MCA). \\
+\includegraphics[width=5cm]{../figures/VF} & \includegraphics[width=5cm]{../figures/MCA} \\
+\end{tabular}
+
+\end{frame}
+
+\begin{frame}
+Correlación entre las dimensiones del MFS y el desvío estándar del área media de las burbujas (stCA)
+
+\centerline{\includegraphics[width=5cm]{../figures/stMCA}}
+
+\end{frame}
+
+\begin{frame}{Conclusiones}
+\begin{itemize}
+\item Es posible utilizar el MFS no sólo para clasificar, sino para caracterizar muestras de panes.
+\item Clasificación comparable al estado del arte.
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Validación utilizando Técnicas de Aprendizaje Profundo}
 Recientemente se desarrollaron técnicas de Aprendizaje Profundo, los cuales clasifican una imagen entre miles de clases.
 
 Los clasificadores se encuentran online, por lo cual es sencillo probar la clasificación con las imágenes generadas. Los resultados en panes son promisorios
@@ -905,7 +1079,7 @@ Los clasificadores se encuentran online, por lo cual es sencillo probar la clasi
 
 \end{frame}
 
-\begin{frame}{Validación utilizando Aprendizaje Profundo}
+\begin{frame}{Validación utilizando Técnicas de Aprendizaje Profundo}
 
 \centerline{\includegraphics[width=4cm]{../figures/deep2}}
 \centerline{\includegraphics[width=4cm]{../figures/deep3}}
@@ -916,7 +1090,38 @@ Los clasificadores se encuentran online, por lo cual es sencillo probar la clasi
 \end{frame}
 
 
+
 \section{Conclusiones y Trabajos a Futuro}
+
+\begin{frame}{Conclusiones}
+\begin{block}{}
+\begin{itemize}
+\item Se introdujo un algoritmo procedimental de generación de geometrías porosas.
+\item Se presentó un algoritmo basado en el proceso real de formación del pan, eliminando decisiones ad-hoc en la generación de este material, obteniendo estructuras a lo largo de todo el proceso de formación.
+\item Se aplicó un algoritmo de renderizado, basado en la interacción lumínica con una escena, produciendo imágenes foto-realísticas de materiales porosos/cocidos/comestibles como pan, esponjas, y piedras. Se obtuvieron imágenes \textbf{foto-realísticas} en tiempo real, por medio de la utilización de la GPU.
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Conclusiones}
+\begin{block}{}
+\begin{itemize}
+\item Se validaron las geometrías generadas por el proceso inspirado en la formación del pan, contra muestras reales de pan.
+\item Se presentó un método para clasificar muestras de pan, superando a clasificadores del estado del arte.
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Trabajos a futuro}
+\begin{block}{}
+\begin{itemize}
+\item Generación procedimental de huesos y otros materiales
+\item Validación tridimensional de los resultados
+\item Validación utilizando técnicas de aprendizaje profundo
+\item Implementación en GPU de la generación procedimental
+\end{itemize}
+\end{block}
+\end{frame}
 
 \begin{frame}
 \centering
