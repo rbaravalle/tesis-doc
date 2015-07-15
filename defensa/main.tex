@@ -125,6 +125,17 @@ Dr. X X (UNX)
 
 \section{Introducción}
 
+\begin{frame}
+\begin{block}{}
+\begin{center}
+\vspace{1cm}
+\huge{Introducción}
+\vspace{1cm}
+\end{center}
+\end{block}
+\end{frame}
+
+
 \subsection{Modelado y Simulación Foto-Realística}
 \begin{frame}{}
 
@@ -201,37 +212,70 @@ El \textbf{foto-realismo} busca sintetizar imágenes que produzcan el \textbf{mi
 
 
 \begin{frame}{Modelado de la Apariencia de Materiales}
+\begin{block}{}
 \begin{itemize}
 \item El modelado de cada material depende de la escala buscada.
 \item Microscópico: detalles que no son visibles al ojo humano. Se utilizan diversas técnicas estadísticas.
 \item Macroscópico: detalles visibles al ojo humano. Se utilizan triángulos, texturas, etc.
 \end{itemize}
-
+\end{block}
 El material debe ser estudiado para comprender su apariencia, a partir de la cual derivar un modelo numérico del mismo
 
 \centerline{\includegraphics[scale = 0.25]{../figures/apariencia}}
+\end{frame}
+
+\begin{frame}
+\begin{block}{}
+Debido a las consideraciones anteriores, en esta tesis haremos hincapié en materiales \textbf{porosos}.
+
+\begin{itemize}
+\item Producir una geometría configurable, intuitiva y creíble de estos materiales.
+\item Implementación de un modelo inspirado en procesos físicos en la formación de un material poroso: el pan.
+\item Se busca renderización foto-realista en tiempo real.
+\item Se busca validar los resultados.
+\end{itemize}
+
+La tesis presenta algunos resultados favorables inesperados
+\begin{itemize}
+\item Caracterización y clasificación de imágenes de pan
+\item Generación de imágenes de materiales no porosos (madera, mármol..)
+\end{itemize}
+
+
+\end{block}
 \end{frame}
 
 
 
 
 \section{Trabajo Previo}
+
+\begin{frame}
+\begin{block}{}
+\begin{center}
+\vspace{1cm}
+\huge{Trabajo Previo}
+\vspace{1cm}
+\end{center}
+\end{block}
+\end{frame}
+
 \subsection{Materiales}
 
 \begin{frame}{Materiales con mayor aparición en escenas}
 
-En computación gráfica, los materiales para los cuales se ha desarrollado mayormente la literatura científica incluye al agua, la piel humana, metales y plásticos, entre otros. Esto se debe a la {\em facilidad del diseño}, a la necesidad de cierto {\em grado de realismo} en el mismo, y a su {\em aparición constante en escenas}.
+En computación gráfica, los materiales para los cuales se ha desarrollado mayormente la literatura científica incluye al agua, la piel humana, metales y plásticos, entre otros. Esto se debe a la \textbf{facilidad del diseño}, a la necesidad de cierto \textbf{grado de realismo}, y a su \textbf{aparición constante en escenas}.
 
 \end{frame}
 
 \begin{frame}{Materiales con menor aparición en escenas}
 
-Otros materiales, como es el caso de materiales cocidos, materiales porosos y materiales comestibles, poseen un grado de complejidad mayor, debido a varios factores:
+Otros materiales, como es el caso de materiales cocidos, materiales porosos y materiales comestibles, presentan mayor complejidad en el modelado:
 
 \begin{itemize}
-\item Geometría compleja y visible, rica interacción con la luz: translucencia, reflexión, absorción, etc.
-\item El ser humano puede distinguir con facilidad un modelo si el mismo no es tratado cuidadosamente.
-\item El costo computacional de modelar y renderizar estos materiales resultaba excesivo hasta la aparición masiva del hardware paralelo.
+\item \textbf{Geometría compleja y visible}, rica interacción con la luz: translucencia, reflexión, absorción, etc.
+\item El ser humano puede \textbf{distinguir con facilidad} un modelo si el mismo no es tratado cuidadosamente.
+\item El \textbf{costo computacional} de modelar y renderizar estos materiales resultaba excesivo hasta la aparición masiva del hardware paralelo.
 \end{itemize}
 
 Alan Fournier: `computer graphics has still not been
@@ -245,10 +289,10 @@ able to convincingly render a slice of bread' (2001).
 
 En determinados casos, el modelado por medio de supervisión humana repetitiva no es deseable.
 
-\vspace{1cm}
+\vspace{0.5cm}
 Por ejemplo, al diseñar un bosque. Diseñar separadamente cada árbol requeriría un tiempo excesivo.
 
-\vspace{1cm}
+\vspace{0.5cm}
 Debido a esto se desarrollaron técnicas artísticas, basadas en algoritmos, los cuales permiten diseñar geometrías de manera semi-automática, recibiendo el nombre de \textbf{Procedimentales}.
 
 \end{frame}
@@ -322,9 +366,9 @@ Sin embargo, es posible obtener representaciones más precisas atendiendo a proc
 
 \begin{frame}{Modelado Físico de materiales}
 
-Por medio de ecuaciones del comportamiento o crecimiento de los mismos, es posible obtener aproximaciones computacionales más precisas.
+Por medio de ecuaciones del \textbf{comportamiento} o \textbf{crecimiento} de los mismos, es posible obtener aproximaciones computacionales \textbf{más precisas}.
 
-Como ejemplo, las ecuaciones de Navier-Stokes se utilizan en la simulación realista de fluídos
+Las \textbf{ecuaciones de Navier-Stokes} se utilizan en la simulación realista de fluídos
 
 Dadas condiciones iniciales para $\bold{u}$ y $p$ cuando $t = 0$, la evolución de las cantidades puede describirse como sigue, independientemente del número de dimensiones,
 
@@ -345,9 +389,11 @@ Dadas condiciones iniciales para $\bold{u}$ y $p$ cuando $t = 0$, la evolución 
 
 \begin{frame}
 
-Hasta aquí dimos ejemplos del modelado de la geometría de los materiales.
+Hasta aquí dimos ejemplos del modelado de la \textbf{geometría} de los materiales.
 
-\vspace{1cm}
+\vspace{0.5cm}
+La geometría debe \textbf{renderizarse} para ser visualizada.
+\vspace{0.5cm}
 
 A continuación presentamos las ecuaciones necesarias para lograr representar el comportamiento de la luz en una escena, y por lo tanto, necesarias para obtener imágenes realistas de la interacción de estas geometrías con la luz.
 
@@ -368,7 +414,7 @@ De acuerdo al tipo de material a renderizar, existen dos clases principales de t
 
 
 \begin{frame}{Ecuación del Renderizado de Superficies}
-La misma modela la radiancia entrante en un punto $x$ por medio de todas las superficies $s_{i}$ de la escena, pasando por todos los puntos $x'$ de todas las superficies.
+La misma modela la \textbf{radiancia} entrante en un punto $x$ a través de \textbf{todas} las superficies $s_{i}$ de la escena, pasando por \textbf{todos} los puntos $x'$ de todas las superficies.
 \begin{equation*}
 L(\bold{x'} \rightarrow \bold{x}) =  g(\bold{x'}  \rightarrow \bold{x})  \left[ \epsilon(\bold{x'}  \rightarrow \bold{x}) + \int_{s}{\rho(\bold{x''}  \rightarrow \bold{x'}  \rightarrow \bold{x})L(\bold{x''}  \rightarrow \bold{x}) d\bold{x''}} \right]
 \end{equation*}
@@ -380,7 +426,7 @@ donde $L(\bold{x'} \rightarrow \bold{x})$ representa la intensidad de la luz que
 \includegraphics[scale = 0.6]{../figures/rendequation}
 \end{wrapfigure}
 
-Puede observarse que la ecuación presenta una definición recursiva, ya que la energía radiante saliente de un punto $x'$ depende de la energía radiante que llega desde todos los puntos de todas las superficies a ese punto.
+Es recursiva, ya que la \textbf{energía radiante saliente} de un punto $x'$ depende de la \textbf{energía radiante entrante} desde todos los puntos de todas las superficies a ese punto.
 De esta forma, $\bold{x}$,$\bold{x'}$ y $\bold{x''}$ varían sobre todas las superficies de la escena.
 %Además se asume una superficie $S_{0}$, la cual se modela como una semi-esfera que engloba a toda la escena.
 
@@ -418,7 +464,13 @@ La literatura utiliza ambos enfoques para producir materiales porosos. Cada uno 
 
 \ \\
 
-Los volúmenes permiten hacer cortes arbitrarios en el objeto, pero son generalmente más costosos, tanto en almacenamiento como en tiempo de renderizado.
+Volúmenes
+\begin{block}{}
+\begin{itemize}
+\item permiten \textbf{cortes arbitrarios} en el objeto
+\item son generalmente \textbf{más costosos}, tanto en almacenamiento como en tiempo de renderizado.
+\end{itemize}
+\end{block}
 \end{frame}
 
 \begin{frame}{Materiales porosos - Trabajo Previo}
@@ -434,11 +486,13 @@ Ratatouille (Película): modelo de pan basado en ruido de Voronoi + un mapa indi
 
 \begin{frame}{Materiales porosos - Trabajo Previo}
 Desventajas: 
+\begin{block}{}
 \begin{itemize}
 \item control sobre cantidad y tamaño de las burbujas
 \item deformación de burbujas
 \item el usuario debe ser experto
 \end{itemize}
+\end{block}
 
 \includegraphics[scale = 0.3]{../figures/ratatouille}
 
@@ -462,8 +516,19 @@ Capturas sobre materiales reales utilizando cámaras y lásers $\rightarrow$ se 
 \end{frame}
 
 
-\section{Modelado de Geometrías Porosas}
-\subsection{Modelado de Geometrías Porosas}
+\section[Mod. de Materiales Porosos]{Modelado Procedimental de Materiales Porosos}
+
+\begin{frame}
+\begin{block}{}
+\begin{center}
+\vspace{1cm}
+\huge{Modelado Procedimental de Materiales Porosos}
+\vspace{1cm}
+\end{center}
+\end{block}
+\end{frame}
+
+\subsection{Modelado Procedimental de Materiales Porosos}
 \begin{frame}{Modelado de Geometrías Porosas - Propuesta}
 Presentamos un modelo de generación de geometrías porosas basados en:
 \begin{itemize}
@@ -551,6 +616,8 @@ Para cada corte se establecen condiciones de contorno, estableciendo un campo ve
   \centerline{\includegraphics[width=8cm]{../figures/Fig4}}
 \end{frame}
 
+\subsection{Resultados}
+
 \begin{frame}{Resultados}
 Finalmente se centra el sistema dinámico en el {\em centro de masa} de cada corte, y junto a las condiciones de contorno, definen un patrón natural para el corte.
 
@@ -588,6 +655,20 @@ Parámetro {\em separación} = 2 entre partículas
 \begin{frame}{Piedras}
 
 \centerline{\includegraphics[width=9cm]{../figures/Fig14CAVW}}
+\end{frame}
+
+
+\section[Modelado de Pan]{Modelado procedimental de pan inspirado en su proceso de formación}
+
+
+\begin{frame}
+\begin{block}{}
+\begin{center}
+\vspace{1cm}
+\huge{Modelado procedimental de pan inspirado en su proceso de formación}
+\vspace{1cm}
+\end{center}
+\end{block}
 \end{frame}
 
 \subsection{Modelado procedimental de pan inspirado en su proceso de formación}
@@ -637,6 +718,7 @@ Se utiliza el mapa de distancias previamente discutido y un umbral, obteniéndos
 \centerline{\includegraphics[width=10cm]{../figures/prebakebunny}}
 \end{frame}
 
+\subsection{Cocción}
 
 \begin{frame}{Cocción}
 Procesos durante la cocción:
@@ -748,6 +830,8 @@ Finalmente, se escala la textura de acuerdo a la distribución de burbujas,
 
 \end{frame}
 
+\subsection{Corteza}
+
 \begin{frame}{Corteza}
 Tomamos colores CIELab de muestras reales, reportadas por Purlis et. al. (2009).
 
@@ -763,6 +847,7 @@ Se define la {\em densidad de la corteza} en cada posición de la textura volum�
 \end{frame}
 
 
+\subsection{Resultados}
 
 \begin{frame}{Resultados}
 
@@ -824,6 +909,19 @@ Total & 68.43 & 190.76 & 415.96 \\
 \end{frame}
 
 \section{Renderización}
+
+
+\begin{frame}
+\begin{block}{}
+\begin{center}
+\vspace{1cm}
+\huge{Renderización}
+\vspace{1cm}
+\end{center}
+\end{block}
+\end{frame}
+
+
 \subsection{Renderización}
 
 \begin{frame}{Renderización}
@@ -946,9 +1044,23 @@ Textura B muestreada en $N\times (x,y,z), N \in \mathbb{R}$
 \end{frame}
 
 \section{Validación}
+
+
+
+\begin{frame}
+\begin{block}{}
+\begin{center}
+\vspace{1cm}
+\huge{Validación}
+\vspace{1cm}
+\end{center}
+\end{block}
+\end{frame}
+
+
 \subsection{Validación automática}
 
-\begin{frame}{a}
+\begin{frame}{Validación automática}
 Pretendemos utilizar un \textbf{algoritmo} objetivo, en la validación de las geometrías porosas obtenidas, en oposición a una inspección subjetiva de los resultados.
 
 En la generación utilizamos el concepto de estructura fractal para construir la geometría de migas de pan.
@@ -1151,8 +1263,20 @@ Los clasificadores se encuentran online, por lo cual es sencillo probar la clasi
 
 
 
-\section{Conclusiones y Trabajos a Futuro}
+\section[Conclusiones]{Conclusiones y Trabajos a Futuro}
 
+
+\begin{frame}
+\begin{block}{}
+\begin{center}
+\vspace{1cm}
+\huge{Conclusiones}
+\vspace{1cm}
+\end{center}
+\end{block}
+\end{frame}
+
+\subsection{Conclusiones}
 \begin{frame}{Conclusiones}
 \begin{block}{}
 \begin{itemize}
@@ -1171,6 +1295,8 @@ Los clasificadores se encuentran online, por lo cual es sencillo probar la clasi
 \end{itemize}
 \end{block}
 \end{frame}
+
+\subsection{Trabajos a futuro}
 
 \begin{frame}{Trabajos a futuro}
 \begin{block}{}
