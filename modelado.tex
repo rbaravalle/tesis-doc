@@ -270,7 +270,7 @@ El procedimiento se describe, simplificadamente, en el Algoritmo $1$.
             \Comment{la posición ya fue explorada}
             \State{// Si la pos. o contorno pertenecen a otra partícula, descartar}
             \State{// borde\_libre chequea disponibilidad en el vecindario}
-            \If{$!(L^{2}[h] > 0 ~\&\&~ L^{2}[h] != i ~\&\&~ borde\_libre(separacion)$}
+            \If{$!(L^{2}[h] > 0 ~\&\&~ L^{2}[h] != i) ~\&\&~ borde\_libre(separacion)$}
                 \State{// Posición libre, ocupar}                
                 \State{$L[h] \gets 0$} \Comment{masa -> aire}
                 \State{$O[i].agregar(h)$}

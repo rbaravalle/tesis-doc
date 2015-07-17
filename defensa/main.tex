@@ -12,6 +12,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{tikz}
 \usepackage{wrapfig}
+\usepackage{algorithmic, algorithm}
 %% \usepackage{authblk}
 
 
@@ -19,8 +20,8 @@
 
 
 \usepackage{graphicx} 
-\usepackage{algorithmic}
-\usepackage{algorithm}
+%\usepackage{algorithmic}
+%\usepackage{algorithm}
 \newcommand{\formulasize}{\tiny}
 
 \definecolor{rojo}{rgb}{0.7,0.1,0.1}
@@ -573,6 +574,40 @@ Cada partícula posee:
 
 \end{frame}
 
+\begin{frame}
+
+\begin{algorithm}[H]
+\begin{algorithmic}[1]
+        \IF {$vacio?~C[i]$}
+            \STATE{morir()}
+        \ENDIF
+        \FOR{$h \in C[i]$}
+            \STATE{$C[i].eliminar(h)$}
+            %\COMMENT{la posición ya fue explorada}
+            %\STATE{// Si la pos. o contorno pertenecen a otra partícula, descartar}
+            %\STATE{// borde\_libre chequea disponibilidad en el vecindario}
+            \IF{$!(L^{2}[h] > 0 ~\&\&~ L^{2}[h] != i) ~\&\&~ borde\_libre(h,separacion)$}
+                %\State{// Posición libre, ocupar}                
+                \STATE{$L[h] \gets 0$} %\COMMENT{masa -> aire}
+                \STATE{$O[i].agregar(h)$}
+                \STATE{$C[i].agregar(vecindario(h))$} 
+                \STATE{$L^{2}.setear(vecindario(h),i)$} %\COMMENT{Marcar posiciones en $L^{2}$ como $i$}
+                \STATE{$L^{2}.setear(h,i)$}
+                \STATE{Break}
+                %\Comment{turno de la partícula $i+1$...}
+            \ENDIF
+        \ENDFOR
+\end{algorithmic}
+%\label{alg:seq}
+\end{algorithm}
+\end{frame}
+
+\begin{frame}
+La partícula 14 marcó en su contorno celdas previamente marcadas por la partícula 7 en su contorno
+\centerline{\includegraphics[scale = 0.45]{../figures/sistemaparticulas}}
+La partícula 14 \textbf{no} tomará las posiciones en rojo, ya que \textbf{borde\_libre} chequea que su contorno no pertenezca a otra partícula
+\end{frame}
+
 \begin{frame}{Ejemplo: crecimiento}
 \includegraphics[scale = 0.15]{../figures/modeladocrec}
 \end{frame}
@@ -589,29 +624,83 @@ De manera general, las ODEs se representan utilizando el siguiente sistema de ec
   \end{aligned}
 \end{equation*}
 
-Ejemplo en dos dimensiones (imagen de la izquierda),
+
+
+\end{frame}
+
+
+\begin{frame}{Crecimiento}
+El crecimiento de las partículas puede ser aleatorio o direccionado.
+
+Un campo vectorial (discreto), definido por un Sistema Dinámico (SD), puede utilizarse para direccionar las partículas 
+
+Ejemplo de SD en dos dimensiones (imagen de la izquierda),
 \begin{equation*} \label{eq:simple}  
   \begin{aligned}
     \dot{x} &= x^{2}-y^{2}+1,\\
     \dot{y} &= 2xy+1.
   \end{aligned}
 \end{equation*}
-
+  \centerline{\includegraphics[width=9cm]{../figures/Fig2}}
 \end{frame}
 
-\begin{frame}{Sistemas Dinámicos}
-  \centerline{\includegraphics[width=12cm]{../figures/Fig2}}
+\begin{frame}
+\begin{algorithm}[H]
+\begin{algorithmic}[1]
+\STATE $solucion = round(Runge\_Kutta(h))$
+%\Comment {Se calcula la siguiente posición}
+\STATE $vec = vecindario(h)$
+\STATE $mejor = abs(vec[0] - solucion)$
+\STATE $elegida = h$
+\STATE $vec.eliminar(h)$
+\FOR {$w \in vec$}
+%\STATE{// Se calcula la posición del vecindario que mejor aproxima al sistema}
+    \IF {$abs(vec[w]-solucion) < mejor$}
+        \STATE $mejor = abs(vec[w]-solucion)$
+        \STATE $elegida = w$
+    \ENDIF
+    \IF {$aleatorio() < aleatoriedad$} 
+    %\Comment {$0 <= aleatorio() <= 1$}
+        \STATE $C[i].agregar(w)$
+    \ENDIF
+\ENDFOR
+%\State{// Se agrega al vecindario sólo la posición que mejor aproxima la solución}
+\STATE $C[i].agregar(elegida)$
+\end{algorithmic}
+\end{algorithm}
 \end{frame}
 
 \begin{frame}{Sistemas de partículas + Sistemas Dinámicos}
-Utilizando distintos parámetros de aleatoriedad en el crecimiento, se obtienen distintas apariencias
+Utilizando distintos parámetros de aleatoriedad en el crecimiento, se obtienen distintas apariencias.
+
+En las imágenes, aleatoriedad = 0.3, 0.2, y 0.1
   \includegraphics[width=12cm]{../figures/Fig3}
 \end{frame}
 
-\begin{frame}{Condiciones de contorno}
-Dada una geometría tridimensional arbitraria, se elige un eje Cartesiano ($x$, $y$ o $z$) y se computan cortes bidimensionales sobre ese eje.
+\begin{frame}{Mapa de Distancias}
 
-Para cada corte se establecen condiciones de contorno, estableciendo un campo vectorial discreto que ``sigue'' al contorno: ortogonal al gradiente del corte.
+Dada una textura volumétrica $M$, el algoritmo genera una textura volumétrica a valores reales $DF_{M}$ con las mismas dimensiones que $M$,
+
+
+$$DF_{M}[i,j,k] = \min \bigg\{ \delta([i,j,k],[i',j',k']): M[i',j',k'] = 0 \bigg\},$$
+
+
+\noindent donde $[i,j,k]$ y $[i',j',k']$ son celdas en las respectivas texturas, representando las posiciones espaciales $(i,j,k)$ y $(i',j',k')$, y $\delta$ es la función que computa la distancia entre dos celdas, las cuales pueden ser la distancia de Manhattan, o la distancia Euclidiana.
+
+\end{frame}
+
+\begin{frame}{Mapa de Distancias}
+
+\centerline{\includegraphics[width=12cm]{../figures/distance}}
+
+\end{frame}
+
+\begin{frame}{Condiciones de contorno}
+Dada una geometría tridimensional \textbf{arbitraria}, se elige un eje Cartesiano ($x$, $y$ o $z$) y se computan cortes bidimensionales sobre ese eje.
+
+Para cada corte se establecen condiciones de contorno, a través de un campo vectorial discreto que ``sigue'' al contorno
+
+Ortogonal al gradiente del corte.
 
   \centerline{\includegraphics[width=8cm]{../figures/Fig4}}
 \end{frame}
@@ -657,6 +746,19 @@ Parámetro {\em separación} = 2 entre partículas
 \centerline{\includegraphics[width=9cm]{../figures/Fig14CAVW}}
 \end{frame}
 
+\begin{frame}{Conclusiones}
+\begin{block}{}
+\begin{itemize}
+\item Algoritmo procedimental fenomenológico
+\item Resultados adecuados para computación gráfica
+\item Permite representar diversos materiales porosos
+\item No requiere esfuerzo por parte del usuario
+
+\item Dificultad al controlar los sistemas dinámicos
+\end{itemize}
+\end{block}
+\end{frame}
+
 
 \section[Modelado de Pan]{Modelado procedimental de pan inspirado en su proceso de formación}
 
@@ -673,8 +775,9 @@ Parámetro {\em separación} = 2 entre partículas
 
 \subsection{Modelado procedimental de pan inspirado en su proceso de formación}
 \begin{frame}{Modelado procedimental de pan inspirado en su proceso de formación}
+\begin{block}{}
 \begin{itemize}
-\item Debido a que el proceso es extremadamente complejo, el mismo ha sido ignorado en gran medida en la literatura de computación gráfica.
+\item Debido a la complejidad del proceso, el mismo ha sido ignorado en gran medida en la literatura de computación gráfica.
 
 \item Sin embargo, ha sido ampliamente estudiado en ingeniería de los alimentos.
 
@@ -682,6 +785,7 @@ Parámetro {\em separación} = 2 entre partículas
 
 \item Es posible utilizar algunos de estos subprocesos para diseñar un algoritmo procedimental.
 \end{itemize}
+\end{block}
 \end{frame}
 
 \begin{frame}{Propuesta}
@@ -697,7 +801,7 @@ N(r) = \frac{k}{r^{d}},
 
 $k$ parámetro.
 
-\centerline{\includegraphics[width=6cm]{../figures/bubbles}}
+\centerline{\includegraphics[height=4cm]{../figures/bubbles}}
 \end{frame}
 
 \begin{frame}
@@ -793,7 +897,7 @@ Se aplica un filtrado gaussiano al gradiente de $R_{vol}$, obteniendo $g'$
 \end{align*}
 
 Efecto de $p = 5,10,15$, respectivamente
-\centerline{\includegraphics[width=12cm]{../figures/parameterp}}
+\centerline{\includegraphics[width=11cm]{../figures/parameterp}}
 
 \end{frame}
 
