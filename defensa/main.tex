@@ -939,15 +939,22 @@ Finalmente, se escala la textura de acuerdo a la distribución de burbujas,
 \begin{frame}{Corteza}
 Tomamos colores CIELab de muestras reales, reportadas por Purlis et. al. (2009).
 
-$$L = 40 \rightarrow \text{quemado}$$
+$$L = 40 \rightarrow \text{máxima cocción}$$
 
-$$L = 90 \rightarrow \text{crudo}$$
+$$L = 90 \rightarrow \text{sin cocción}$$
 
-los canales $a$ y $b$ no están reportados, pero se obtuvieron de fotografías. Se observa que varian suavemente.
+\centerline{\includegraphics[width=4cm]{../figures/browning}}
 
-Estos colores se distribuyen de acuerdo a la distribución de masa en la corteza. Donde hay menor masa, el canal $L$ será menor y viceversa.
+\end{frame}
 
-Se define la {\em densidad de la corteza} en cada posición de la textura volumétrica como $N_{v} / W_{size},$ donde $N_{v}$ es el número de voxels con valor $1$ en una ventana en el entorno de la posición, y $W_{size}$ es el número de voxels en esa ventana
+\begin{frame}
+
+Los valores de los canales $a$ y $b$ no están reportados. A partir de fotografías se observa que varian suavemente al cambiar $L$.
+
+{\em \textbf{Densidad} de la corteza}: $N_{v} / W_{size},$ donde $N_{v}$ número de voxels $= 1$ en una ventana en el entorno de la posición, y $W_{size}$ número de voxels en esa ventana.
+
+Los colores se distribuyen de acuerdo al valor de $L$. $<$ masa $\Rightarrow < L$.
+
 \end{frame}
 
 
@@ -1004,7 +1011,7 @@ Total & 68.43 & 190.76 & 415.96 \\
 \begin{frame}{Conclusiones}
 \begin{block}{}
 \begin{itemize}
-\item Modelo inspirado físicamente
+\item Modelo \textbf{inspirado} físicamente
 \item Elimina decisiones ad-hoc
 \item Se simula cocción, levantamiento de la masa, etc.
 \item Permite obtener imágenes en sucesivas etapas del proceso de formación
@@ -1030,9 +1037,12 @@ Total & 68.43 & 190.76 & 415.96 \\
 
 \begin{frame}{Renderización}
 
-Muchas técnicas de renderizado utilizan mallas para computar los resultados.
+Muchas técnicas de renderizado utilizan \textbf{mallas} para computar los resultados.
+Esto es, la geometría se representa por vértices, y conexiones entre ellos, formando triángulos u otras figuras geométricas.
 
-En nuestro caso, contamos con una textura volumétrica, por lo tanto proponemos utilizar Renderizado Directo de Volúmenes para evitar la construcción de una malla.
+\ \\
+
+En nuestro caso, contamos con una \textbf{textura volumétrica}, por lo tanto proponemos utilizar Renderizado Directo de Volúmenes para evitar la construcción de una malla.
 
 Además, de esta forma será posible obtener cortes arbitrarios del material.
 
@@ -1052,16 +1062,25 @@ Para obtener resultados en tiempo real, tomamos una versión simplificada de la 
 \begin{frame}{Renderización}
 
 
-Sea el coeficiente de absorción $ = \int_{p_i}^{p_j} k_a(t) \, dt$  $ = \tau_{(p_i, p_j)}$.
+Sea el \textbf{coeficiente de absorción} $ = \int_{p_i}^{p_j} k_a(t) \, dt$  $ = \tau_{(p_i, p_j)}$.
 
 
-Entonces la Transmitancia es la cantidad de luz que \texttt{atraviesa} un segmento del volumen:
+Entonces la \textbf{Transmitancia} es la cantidad de luz que \texttt{atraviesa} un segmento del volumen:
 
 \begin{equation*}
   T(p_i,p_j) = e^{-\tau_{(p_i, p_j)}}.
 \end{equation*}
 
-Radiancia: cantidad de luz que pasa o es emitida por un medio.
+
+\centerline{\includegraphics[scale = 0.25]{../figures/fenomenosrte}}
+
+
+\end{frame}
+
+\begin{frame}{Radiancia}
+
+
+\textbf{Radiancia}: cantidad de luz que pasa o es emitida por un medio.
 
 \begin{equation*}
   L(p_n) = L_b \ e^{-\tau(p_0, p_n)} + \int_{p_0}^{p_n} \rho \ e^{-\tau(t,p_n)} \, dt.
@@ -1080,17 +1099,20 @@ Radiancia: cantidad de luz que pasa o es emitida por un medio.
 
 
 \begin{frame}{DVR en GPU}
-\centering
-En el fragment shader,
+
 \begin{itemize}
 \item Computamos un rayo principal desde la cámara hacia el volumen
-\item Además, en cada paso del rayo, un rayo secundario computa la transmitancia desde la posición actual hacia la luz, produciendo sombras naturales
+\item Cada paso del rayo origina un rayo secundario, computando la transmitancia desde la posición actual hacia la luz, produciendo sombras
 \end{itemize}
-
 
 \centerline{\includegraphics[width=4cm]{../figures/fragmentshader}}
 
+\end{frame}
 
+\begin{frame}
+Esto se implementa en la GPU, en el denominado \textbf{fragment shader}, el cual es el paso del \textbf{pipeline gráfico} que opera sobre fragmentos (píxeles).
+
+\centerline{\includegraphics[width=13cm]{../figures/pipelinegrafico}}
 \end{frame}
 
 \begin{frame}{Tiempos de Cómputo}
@@ -1165,13 +1187,29 @@ Textura B muestreada en $N\times (x,y,z), N \in \mathbb{R}$
 \subsection{Validación automática}
 
 \begin{frame}{Validación automática}
-Pretendemos utilizar un \textbf{algoritmo} objetivo, en la validación de las geometrías porosas obtenidas, en oposición a una inspección subjetiva de los resultados.
+Proponemos utilizar un \textbf{algoritmo}, en la validación de las geometrías porosas obtenidas, en oposición a una inspección subjetiva de los resultados.
 
-En la generación utilizamos el concepto de estructura fractal para construir la geometría de migas de pan.
+En la generación utilizamos un algoritmo fractal para construir la geometría de migas de pan.
+
 La estructura visible de la miga de pan sugiere que un algoritmo de extracción de características fractales podría describirla.
 
 
 \end{frame}
+
+\begin{frame}{Idea}
+\begin{algorithm}[H]
+\begin{algorithmic}[1]
+\STATE Obtener espectro multifractal de muestras reales
+\FOR{valores de parámetros}
+\STATE Obtener espectro a partir de muestra sintética, generada con determinados valores de los parámetros
+\STATE Comparar espectros reales con sintéticos
+\ENDFOR
+\STATE Devolver los parámetros más cercanos a los reales
+\end{algorithmic}
+\end{algorithm}
+\end{frame}
+
+\subsection{Fractales y Multifractales}
 
 \begin{frame}{Dimensión Box}
 
@@ -1394,7 +1432,7 @@ Los clasificadores se encuentran online, por lo cual es sencillo probar la clasi
 \begin{frame}{Conclusiones}
 \begin{block}{}
 \begin{itemize}
-\item Se validaron las geometrías generadas por el proceso inspirado en la formación del pan, contra muestras reales de pan.
+\item Se validaron las geometrías generadas por el proceso inspirado en la formación del pan con muestras reales de pan.
 \item Se presentó un método para clasificar muestras de pan, superando a clasificadores del estado del arte.
 \end{itemize}
 \end{block}
