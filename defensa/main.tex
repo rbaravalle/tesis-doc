@@ -225,6 +225,29 @@ El material debe ser estudiado para comprender su apariencia, a partir de la cua
 \centerline{\includegraphics[scale = 0.25]{../figures/apariencia}}
 \end{frame}
 
+
+\begin{frame}{Materiales con mayor aparición en escenas}
+
+En computación gráfica, los materiales para los cuales se ha desarrollado mayormente la literatura científica incluye al agua, la piel humana, metales y plásticos, entre otros. Esto se debe a la \textbf{facilidad del diseño}, a la necesidad de cierto \textbf{grado de realismo}, y a su \textbf{aparición constante en escenas}.
+
+\end{frame}
+
+\begin{frame}{Materiales con menor aparición en escenas}
+
+Otros materiales, como es el caso de materiales cocidos, materiales porosos y materiales comestibles, presentan mayor complejidad en el modelado:
+
+\begin{itemize}
+\item \textbf{Geometría compleja y visible}, rica interacción con la luz: translucencia, reflexión, absorción, etc.
+\item El ser humano puede \textbf{distinguir con facilidad} un modelo si el mismo no es tratado cuidadosamente.
+\item El \textbf{costo computacional} de modelar y renderizar estos materiales resultaba excesivo hasta la aparición masiva del hardware paralelo.
+\end{itemize}
+
+Alan Fournier: `computer graphics has still not been
+able to convincingly render a slice of bread' (2001). 
+
+
+\end{frame}
+
 \begin{frame}
 \begin{block}{}
 Debido a las consideraciones anteriores, en esta tesis haremos hincapié en materiales \textbf{porosos}.
@@ -232,14 +255,14 @@ Debido a las consideraciones anteriores, en esta tesis haremos hincapié en mate
 \begin{itemize}
 \item Producir una geometría configurable, intuitiva y creíble de estos materiales.
 \item Implementación de un modelo inspirado en procesos físicos en la formación de un material poroso: el pan.
-\item Se busca renderización foto-realista en tiempo real.
-\item Se busca validar los resultados.
+\item Se busca \textbf{renderización foto-realista} en tiempo interactivo/real.
+\item Se busca \textbf{validar} los resultados.
 \end{itemize}
 
 La tesis presenta algunos resultados favorables inesperados
 \begin{itemize}
 \item Caracterización y clasificación de imágenes de pan
-\item Generación de imágenes de materiales no porosos (madera, mármol..)
+\item Generación de texturas de materiales no porosos (madera, mármol..)
 \end{itemize}
 
 
@@ -263,27 +286,6 @@ La tesis presenta algunos resultados favorables inesperados
 
 \subsection{Materiales}
 
-\begin{frame}{Materiales con mayor aparición en escenas}
-
-En computación gráfica, los materiales para los cuales se ha desarrollado mayormente la literatura científica incluye al agua, la piel humana, metales y plásticos, entre otros. Esto se debe a la \textbf{facilidad del diseño}, a la necesidad de cierto \textbf{grado de realismo}, y a su \textbf{aparición constante en escenas}.
-
-\end{frame}
-
-\begin{frame}{Materiales con menor aparición en escenas}
-
-Otros materiales, como es el caso de materiales cocidos, materiales porosos y materiales comestibles, presentan mayor complejidad en el modelado:
-
-\begin{itemize}
-\item \textbf{Geometría compleja y visible}, rica interacción con la luz: translucencia, reflexión, absorción, etc.
-\item El ser humano puede \textbf{distinguir con facilidad} un modelo si el mismo no es tratado cuidadosamente.
-\item El \textbf{costo computacional} de modelar y renderizar estos materiales resultaba excesivo hasta la aparición masiva del hardware paralelo.
-\end{itemize}
-
-Alan Fournier: `computer graphics has still not been
-able to convincingly render a slice of bread' (2001). 
-
-
-\end{frame}
 
 \subsection{Modelado de la Geometría: Técnicas Procedimentales}
 \begin{frame}{Modelado de la Geometría: Técnicas Procedimentales}
@@ -390,13 +392,13 @@ Dadas condiciones iniciales para $\bold{u}$ y $p$ cuando $t = 0$, la evolución 
 
 \begin{frame}
 
-Hasta aquí dimos ejemplos del modelado de la \textbf{geometría} de los materiales.
+Hasta aquí dimos ejemplos del \textbf{modelado} de la geometría de los materiales.
 
 \vspace{0.5cm}
 La geometría debe \textbf{renderizarse} para ser visualizada.
 \vspace{0.5cm}
 
-A continuación presentamos las ecuaciones necesarias para lograr representar el comportamiento de la luz en una escena, y por lo tanto, necesarias para obtener imágenes realistas de la interacción de estas geometrías con la luz.
+A continuación presentamos las ecuaciones que representan el comportamiento de la luz en una escena, necesarias para obtener imágenes realistas de escenas y materiales.
 
 \end{frame}
 
@@ -416,16 +418,27 @@ De acuerdo al tipo de material a renderizar, existen dos clases principales de t
 
 \begin{frame}{Ecuación del Renderizado de Superficies}
 La misma modela la \textbf{radiancia} entrante en un punto $x$ a través de \textbf{todas} las superficies $s_{i}$ de la escena, pasando por \textbf{todos} los puntos $x'$ de todas las superficies.
+
+\centerline{\includegraphics[scale = 0.6]{../figures/rendequation}}
+\vspace{-1cm}
+$$ L(\bold{x'} \rightarrow \bold{x}) =  g(\bold{x'}  \rightarrow \bold{x})  \left[ \epsilon(\bold{x'}  \rightarrow \bold{x}) + \int_{s}{\rho(\bold{x''}  \rightarrow \bold{x'}  \rightarrow \bold{x})L(\bold{x''}  \rightarrow \bold{x}) d\bold{x''}} \right] $$
+
+
+\end{frame}
+
+\begin{frame}
+$$ L(\bold{x'} \rightarrow \bold{x}) =  g(\bold{x'}  \rightarrow \bold{x})  \left[ \epsilon(\bold{x'}  \rightarrow \bold{x}) + \int_{s}{\rho(\bold{x''}  \rightarrow \bold{x'}  \rightarrow \bold{x})L(\bold{x''}  \rightarrow \bold{x}) d\bold{x''}} \right] $$
+
+$L(\bold{x'} \rightarrow \bold{x})$, intensidad de la luz que viaja del punto tridimensional $\bold{x'}$ a $\bold{x}$ (sin oclusiones)
+
+$g(\bold{x'} \rightarrow \bold{x})$: término geométrico que modela la oclusión que podría existir entre $\bold{x}$ y $\bold{x'}$, $\epsilon(\bold{x'} \rightarrow \bold{x})$ intensidad de la luz emitida desde $\bold{x'}$ a $\bold{x}$, $\rho(\bold{x''}  \rightarrow \bold{x'}  \rightarrow \bold{x})$ la intensidad de la luz emitida de $\bold{x''}$ a $\bold{x}$ por medio de una superficie en $\bold{x'}$ (esta cantidad será llamada función bidireccional de distribución de reflectancia, BRDF), y $S=\bigcup{s_{i}}$, unión de todas las superficies $s_{i}$ de la escena
+\end{frame}
+
+\begin{frame}
+
 \begin{equation*}
 L(\bold{x'} \rightarrow \bold{x}) =  g(\bold{x'}  \rightarrow \bold{x})  \left[ \epsilon(\bold{x'}  \rightarrow \bold{x}) + \int_{s}{\rho(\bold{x''}  \rightarrow \bold{x'}  \rightarrow \bold{x})L(\bold{x''}  \rightarrow \bold{x}) d\bold{x''}} \right]
 \end{equation*}
-donde $L(\bold{x'} \rightarrow \bold{x})$ representa la intensidad de la luz que viaja del punto tridimensional $\bold{x'}$ al punto $\bold{x}$ (sin oclusiones), $g(\bold{x'} \rightarrow \bold{x})$ un termino geométrico que modela la oclusión que podría existir entre $\bold{x}$ y $\bold{x'}$, $\epsilon(\bold{x'} \rightarrow \bold{x})$ la intensidad de la luz emitida desde $\bold{x'}$ a $\bold{x}$, $\rho(\bold{x''}  \rightarrow \bold{x'}  \rightarrow \bold{x})$ la intensidad de la luz emitida de $\bold{x''}$ a $\bold{x}$ por medio de una superficie en $\bold{x'}$ (esta cantidad será llamada función bidireccional de distribución de reflectancia, BRDF), y $S=\bigcup{s_{i}}$ la unión de todas las superficies $s_{i}$ de la escena
-\end{frame}
-
-\begin{frame}{Ecuación del Renderizado de Superficies}
-\begin{wrapfigure}{l}{6cm}
-\includegraphics[scale = 0.6]{../figures/rendequation}
-\end{wrapfigure}
 
 Es recursiva, ya que la \textbf{energía radiante saliente} de un punto $x'$ depende de la \textbf{energía radiante entrante} desde todos los puntos de todas las superficies a ese punto.
 De esta forma, $\bold{x}$,$\bold{x'}$ y $\bold{x''}$ varían sobre todas las superficies de la escena.
@@ -645,10 +658,20 @@ Ejemplo de SD en dos dimensiones (imagen de la izquierda),
 \end{frame}
 
 \begin{frame}
+Se establece una correspondencia entre los límites del plano y las posiciones de la grilla.
+
+De esta manera, la posición $(0,0)$ de la grilla se corresponderá con el mínimo en $X$ e $Y$, definido para el sistema dinámico, y la posición $(N,N)$ con el máximo $X$ e $Y$.
+
+Cada posición arbitraria en el plano tiene una posición específica en la grilla.
+
+Se utiliza regla de tres para convertir de un espacio al otro
+
+\end{frame}
+
+\begin{frame}
 \begin{algorithm}[H]
 \begin{algorithmic}[1]
-\STATE $solucion = round(Runge\_Kutta(h))$
-%\Comment {Se calcula la siguiente posición}
+\STATE $solucion = Runge\_Kutta(h)$
 \STATE $vec = vecindario(h)$
 \STATE $mejor = abs(vec[0] - solucion)$
 \STATE $elegida = h$
@@ -696,13 +719,15 @@ $$DF_{M}[i,j,k] = \min \bigg\{ \delta([i,j,k],[i',j',k']): M[i',j',k'] = 0 \bigg
 \end{frame}
 
 \begin{frame}{Condiciones de contorno}
-Dada una geometría tridimensional \textbf{arbitraria}, se elige un eje Cartesiano ($x$, $y$ o $z$) y se computan cortes bidimensionales sobre ese eje.
+Se utilizan geometrías tridimensionales \textbf{arbitrarias}.
+
+Se elige un eje Cartesiano ($x$, $y$ o $z$) y se computan cortes bidimensionales sobre ese eje.
 
 Para cada corte se establecen condiciones de contorno, a través de un campo vectorial discreto que ``sigue'' al contorno
 
-Ortogonal al gradiente del corte.
+Esto se logra por medio del \textbf{ortogonal al gradiente del corte}.
 
-  \centerline{\includegraphics[width=8cm]{../figures/Fig4}}
+  \centerline{\includegraphics[width=7cm]{../figures/Fig4}}
 \end{frame}
 
 \subsection{Resultados}
