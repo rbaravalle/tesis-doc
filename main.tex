@@ -90,7 +90,7 @@ Agradezco a mi novia, Estefi, y al resto de mi familia por su apoyo emocional a 
 \addcontentsline{toc}{chapter}{Resumen} % si queremos que aparezca en el índice
 \markboth{RESUMEN}{RESUMEN} % encabezado
 
-Las últimas décadas han sido testigos de la evolución sin precedentes en el modelado y visualización realistas de escenas en Computación Gráfica.
+Las últimas décadas nos han permitido atestiguar de la evolución sin precedentes en el modelado y visualización realistas de escenas en Computación Gráfica.
 Esto se debe, en gran medida, a dos factores: por un lado, el modelo físico que describe la distribución de luz en una escena fue aproximado en computación gráfica hace ya tres décadas, y por otro, la evolución del hardware gráfico ha experimentado un aumento exponencial en poder de cómputo, permitiendo aproximar el modelo mencionado a tasas de refresco interactivas o de tiempo real.
 Los objetos que integran una escena están a su vez compuestos por diversos materiales, los cuales deben ser tratados en detalle, para que su apariencia asemeje los objetos reales.
 
@@ -134,8 +134,8 @@ On the other hand, the evolution in the computing capabilities of graphics hardw
 This computing power enabled to approximate the computations at interactive or real time frame rates.
 
 Objects in a scene encompass several materials, which should be carefully designed to appear realistic.
-Over the years, the most predominant materials received great attention (water, fire, clouds, skin, etc.), but several other materials, either due to their structural complexity, or their complex interaction with light (reflectance, translucency, absorption), have been largely ignored, or treated only superficially.
-Among these materials, those that show porous geometries such as sponges, bread or bones, and those that results from a cooking process, such as bread (again), cakes, pizzas, and cookies, have been specially tricky to tackle, given humans are specially able to spot improper models.
+Over the years, the most predominant materials received great attention (water, fire, clouds, skin, etc.), but several other materials, either due to their structural complexity, or their complex interaction with light (reflectance, translucency, absorption), have been largely ignored, or treated only approximately.
+Among these materials, those that show porous geometries such as sponges, bread or bones, and those that results from a cooking process, such as bread (again), cakes, pizzas, and cookies, have been specially tricky to tackle, given that humans are specially able to spot improper models.
 
 This thesis deals with the simulation, modeling and rendering of these materials.
 For this, we start with bread, since it lies in the intersection of both families.
@@ -147,10 +147,10 @@ First, we propose a method for procedural generation of materials, based on part
 The system obtains acceptable images of materials such as wood and marble.
 Then, results were generalized to three dimensions, to obtain volume textures of porous geometries.
 In this generalization, the growth is guided by dynamical systems.
-Results are promising, obtaining a flexible procedure with the ability of representing several porous geometries, such as sponges and bread, without showing the limitations of a surface treatment, as for instance, the impossibility of getting arbitrary cuts of the material.
+Results are promising, obtaining a flexible procedure with the ability of representing several porous geometries, such as sponges and bread, without the limitations of a surface treatment, as for instance, the impossibility of getting arbitrary cuts of the material.
 
-In a second step, we incorporated physical processes such as a baking step, to the procedural generation of these geometries.
-Results show that these incorporations allows to eliminate ad-hoc parameters, while obtaining similar or better structural and visual results.
+In a second step, we incorporated physical processes, such as a baking step, to the procedural generation of these geometries.
+Results show that these enhancements allow to eliminate ad-hoc parameters, while obtaining similar or better structural and visual results.
 
 The rendering step was performed in the graphics hardware, using Direct Volume Rendering, which is a physically-based approximation to the Radiative Transfer Equation.
 This method demonstrated to be flexible for rendering our previous generated volumes, obtaining photo-realistic images at real time frame rates.
@@ -165,7 +165,13 @@ These results are worth to be employed in other materials and contexts.
 \clearpage
 \thispagestyle{empty}
 
+\renewcommand*\glspostdescription{\dotfill}
+\setlength{\glslistdottedwidth}{1\textwidth}
+\setlength{\glsdescwidth}{0.89\textwidth}
 \printglossary[type=\acronymtype,style=long3col, title=Acrónimos]
+
+\phantom{p. 1}
+\clearpage
 
 \tableofcontents % indice de contenidos
 

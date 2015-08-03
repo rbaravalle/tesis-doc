@@ -14,7 +14,7 @@ siendo descriptos.
 
 \section{Apariencia de los Materiales}
 Se define informalmente la {\em apariencia} de un material como la percepción del mismo por parte de una persona.
-En computación gráfica, se pretende simular de la manera más realista posible las diferentes apariencias o conjunto de estímulos visuales recibidos por una persona desde distintos materiales	.
+En computación gráfica, se pretende simular de la manera más realista posible las diferentes apariencias o conjunto de estímulos visuales recibidos por una persona desde distintos materiales.
 La apariencia de un material se codifica en aplicaciones gráficas por medio de datos, estructuras de datos y algoritmos, los cuales permiten representar las mismas.
 
 La idea subyacente en la producción de modelos sintéticos de materiales está representada por la {\em síntesis de imágenes} capaces de generar el mismo efecto producido por la observación directa de los materiales ({\em foto-realismo}).
@@ -116,7 +116,7 @@ p1 &: a \rightarrow b,\\
 p2 &: b \rightarrow ab,
 \end{align*}
 
-\noindent entonces una cadena de derivaciones podría resultar $a \Rightarrow b \Rightarrow ab \Rightarrow bb \Rightarrow abab \Rightarrow \dots$, donde las reglas aplicadas en cada paso serían $p1, p2, p1, p2$ (dos veces).
+\noindent entonces una cadena de derivaciones podría resultar $a \Rightarrow b \Rightarrow ab \Rightarrow bab \Rightarrow abbab \Rightarrow \dots$, donde las reglas aplicadas en cada paso serían $p1$, $p2$, $\{p1, p2\}$, $\{p2, p1, p2\}$.
 
 Estos sistemas fueron diseñados buscando representar las divisiones celulares existentes en ciertas algas (en particular la {\it annabena catenulla}).
 Sin embargo, luego se mostrará que los mismos pueden ser utilizados como modelos para capturar la geometría de diversos objetos.
@@ -137,7 +137,7 @@ Dado un tamaño de paso $d$ y un incremento angular de $\delta$, la tortuga se `
 
 Al interpretarse el comando $F$, el nuevo estado de la tortuga será $(x',y',\alpha)$, donde $x' = x + d * cos(\alpha)$ y $y' = y + d * sin(\alpha)$. Se dibuja además una línea entre $(x,y)$ y $(x',y')$.
 Al interpretarse el comando $f$ ocurre lo mismo, sólo que la línea no se dibuja.
-Cuando se lee el comando $+$ (girar a la izquierda). el nuevo estado pasa a ser $(x,y,\alpha-\delta)$ y cuando se interpreta $-$ (girar a la derecha), el nuevo estado resulta $(x,y,\alpha+\delta)$.
+Cuando se lee el comando $+$ (girar a la izquierda), el nuevo estado pasa a ser $(x,y,\alpha-\delta)$ y cuando se interpreta $-$ (girar a la derecha), el nuevo estado resulta $(x,y,\alpha+\delta)$.
 
 De esta forma, dada una cadena $\eta$, la interpretación de tortuga de la misma es la imagen generada al responder la tortuga a los comandos inducidos por $\eta$.
 La Fig.~\ref{fg:tortuga} muestra un ejemplo de la figura resultante de la cadena FF-FfF-FF, donde la tortuga comienza {\em mirando} hacia arriba ($\alpha = 90^{\circ}$), y $\delta = 90^{\circ}$.
@@ -277,23 +277,23 @@ En \cite{Mandelbrot1968}, se plantea una generalización del método llamada mov
 
 \begin{align*}
 B_{H}(0,w) &= b_{0},\\
-B_{H}(u,w)- B_{H}(0,w) &= \frac{1}{\Gamma(H+0.5)} \big\{ \int_{-\infty}^{u} [(u-s)^{H-0.5} - (-s)^{H-0.5} ] dB(s,w) + \\
-&  \int_{0}^{u} (u-s)^{H-0.5} dB(s,w) \big \},
+B_{H}(u,w)- B_{H}(0,w) &= \frac{1}{\Gamma(H+0.5)} \Bigg\{ \int_{-\infty}^{u} [(u-s)^{H-0.5} - (-s)^{H-0.5} ] dB(s,w) + \\
+&  \int_{0}^{u} (u-s)^{H-0.5} dB(s,w) \Bigg \},
 \end{align*}
 
 
-\noindent donde $b_{0}$ es un número real, $0 < H < 1$ es el coeficiente de Hurst, $-\infty < u < \infty $ y $w$ es un conjunto de valores aleatorios en un espacio uniforme de muestras.
+\noindent donde $b_{0}$ es un número real, $0 < H < 1$ es el coeficiente de Hurst, $-\infty < u < \infty $, $s$ la variable de integración temporal, y $w$ es un conjunto de valores aleatorios en un espacio uniforme de muestras.
 Cuando $H = 0.5$ se obtiene movimiento Browniano convencional.
 
-En el dominio frecuencial (al cual se puede acceder por medio de una transformada de Fourier), se observa que el fBm no posee una frecuencia dominante, es decir, la función está compuesta por frecuencias a todas las escalas.
-Además, la contribución de cada frecuencia es inversamente proporcional a la misma, es decir que el ruido pertenece a la clase de ruidos $\frac{1}{f}$.
-El ruido presenta autosimilaridad estadística.
-Intuitivamente significa que las características estadísticas del ruido son similares para todas las escalas.
+En el dominio frecuencial (al cual se puede acceder por medio de la transformada de Fourier), se observa que el fBm no posee una frecuencia dominante, es decir, la función está compuesta por un continuo de frecuencias, sin ninguna dominante.
+Además, la contribución de cada frecuencia es inversamente proporcional a la misma, es decir que, para valores de H entre 0 y 0.5, el ruido fBm pertenece a la clase de ruidos $\frac{1}{f}$.
+El ruido presenta autoafinidad estadística.
+Intuitivamente significa que las características estadísticas del ruido son similares si se aplica una combinación de escalas adecuada a la amplitud y al tiempo (determinada por H).
 
 El ruido resulta ser un fractal no determinístico con dimensión $2-H$.
 El parámetro $H$ permite simular perfiles con distintas rugosidades.
-Cuando $H = 0$, el ruido es indistinguible de un plano.
-Cuando $H = 1$, el ruido se transforma en una línea.
+Cuando $H = 0$, la función generada es densa a todas las escalas, por lo que topológicamente es indistinguible de un plano (la probabilidad de que la función pase por un disco de radio arbitrariamente pequeño es igual a uno).
+Cuando $H = 1$, la función es rectificable (aproximable con precisión arbitraria por una poligonal) y por lo tanto topológicamente indistinguible de un segmento de recta.
 Esto resulta útil para modelar perfiles de montañas con distintas rugosidades (más suaves o más pronunciadas), ver Fig.~\ref{fg:hurst}.
 
 \begin{figure}
@@ -308,7 +308,7 @@ En \cite{Fournier1982} se presenta un método de subdivisión recursiva, denomin
 El algoritmo tiene su base en una fórmula de esperanza condicional para $B_{H}(u,w)$ \cite{Mandelbrot1968}.
 Partiendo de $B_{H}(0,w) = 0$ y $B_{H}(1,w) = 1$, $0 \le u \le 1$ entonces $E[B_{H}(u,w)|B_{H}(1,w)] = \frac{1}{2} (u^{2H} + 1 - |u-1|^{2H})$.
 Si $u=\frac{1}{2}$, entonces la esperanza es igual a $\frac{1}{2}$, independientemente de $H$.
-Esto, junto a la autosimilaridad del proceso, permite diseñar un algoritmo que subdivide el segmento en su punto medio, y al valor esperado para el punto medio lo desplaza por un número aleatorio con media $0$ y variancia $1$ multiplicado por la variancia de $B_{H}(u,w)$ en el punto, la cual resulta igual a $2^{-H}$, en términos matemáticos, $2^{-H} * gauss(0,1) $\footnote{$gauss(0,1)$ devuelve un valor pseudo-aleatorio normalmente distribuido, con media $0$ y desvío estándar $1$. }.
+Esto, junto a la autosimilaridad del proceso, permite diseñar un algoritmo que subdivide el segmento en su punto medio, y al valor esperado para el punto medio lo desplaza por un número aleatorio con media $0$ y variancia $1$ multiplicado por la variancia de $B_{H}(u,w)$ en el punto, la cual resulta igual a $2^{-H}$, en términos matemáticos, $2^{-H} * \mathcal{N}(0,1) $\footnote{$\mathcal{N}(0,1) $ devuelve un valor pseudo-aleatorio normalmente distribuido, con media $0$ y variancia $1$. }.
 Una vez computado el punto medio, el intervalo se subdivide y se computan de manera recursiva las mitades resultantes, donde la nueva variancia será proporcional al tamaño del nuevo segmento.
 
 En la Fig.~\ref{fg:puntomedio} puede observarse un ejemplo de una curva obtenida utilizando distintas profundidades en el algoritmo recursivo.
@@ -439,7 +439,7 @@ Desafortunadamente, muchas veces este enfoque resulta prohibitivo, no solo debid
 
 Además de presentar una geometría compleja, los materiales exhiben fenómenos particulares en su interacción con la luz, entre los cuales se observan translucencia, reflectancia, absorción, etc.
 Cada fenómeno puede determinar de forma inequívoca la apariencia de un material determinado.
-Debido a esto, en las décadas posteriores al nacimiento de la informática gráfica, se desarrollaron distintas técnicas, inspiradas en determinadas ecuaciones físicas que fueron simplificadas y aproximadas para ser implementadas por medio de una computadora, permitiendo modelar la apariencia de una gran variedad de materiales.
+Debido a esto, en las décadas posteriores al nacimiento de la computación gráfica, se desarrollaron distintas técnicas, inspiradas en determinadas ecuaciones físicas que fueron simplificadas y aproximadas para ser implementadas por medio de una computadora, permitiendo modelar la apariencia de una gran variedad de materiales.
 
 \subsection{Ecuación del Renderizado}
 
@@ -454,19 +454,21 @@ donde $L(\bold{x'} \rightarrow \bold{x})$ representa la intensidad de la luz que
 
 
 Puede observarse que la ecuación presenta una definición recursiva, ya que la energía radiante saliente de un punto $x'$ depende de la energía radiante que llega desde todos los puntos de todas las superficies a ese punto.
-De esta forma, $\bold{x}$,$\bold{x'}$ y $\bold{x''}$ varían sobre todas las superficies de la escena.
+De esta forma, $\bold{x}$, $\bold{x'}$ y $\bold{x''}$ varían sobre todas las superficies de la escena.
 Además se asume una superficie $S_{0}$, la cual se modela como una semi-esfera que engloba a toda la escena.
 
 La ecuación aproxima las propiedades óptico-geométricas de las ecuaciones del electromagnetismo de Maxwell.
+Fuera de la ecuación quedan efectos más complejos, como la difracción y la polarización.
 $L$ representa la radiación de energía por unidad de tiempo por unidad de superficie de destino por unidad de superficie de origen ($joule/m^{4} s$).
 El término geométrico resulta $0$ si los puntos en consideración no son mutuamente visibles.
 
 El modelado de cada término, separadamente, posibilita la visualización fiel de una gran cantidad de superficies.
-Trabajos previos a la aparición de la ecuación del renderizado alcanzaron resultados parciales, sin lograr sintetizar un único método que englobe todos los fenómenos en investigación hasta ese entonces.
-Entre los casos particulares de la ecuación del renderizado, los más emblemáticos han sido el trazado de rayos \cite{Whitted1980} y la radiosidad \cite{Goral1984}.
+Trabajos previos a la aparición de la ecuación del renderizado alcanzaron resultados parciales por medio de diversos métodos ad-hoc, sin lograr sintetizar un único método que englobe todos los fenómenos en investigación hasta ese entonces.
+Los más emblemáticos han sido el trazado de rayos \cite{Whitted1980} y la radiosidad \cite{Goral1984}.
+%Entre los casos particulares de la ecuación del renderizado,  los cuales intentaron capturar diferentes comportamientos de las BRDFs.
 El primero resulta adecuado para renderizar escenas donde las superficies tienen BRDF únicamente especular (la luz se refleja en las superficies en direcciones específicas), mientras que la radiosidad resulta idónea para simular escenas donde las superficies tienen un comportamiento reflexivo idealmente difuso (Lambertiano).
-Fuera de la ecuación quedan efectos más complejos, como la difracción y la polarización.
-Más detalles de la misma pueden ser consultados en \cite{Kajiya1986}.
+Luego de propuesta la ecuación, se observó que ambos métodos eran casos particulares de la misma.
+Se pueden consultar más detalles de la ecuación en \cite{Kajiya1986}.
 Un esquema de esta ecuación puede observarse en la Fig. \ref{fg:rendequation}.
 
 \begin{figure}
@@ -513,7 +515,7 @@ $$ (\vec{\omega} \cdot \nabla_{o}) L(\bold{x} \rightarrow \vec{\omega}) = -\sigm
 
 $$(\vec{\omega} \cdot \nabla_{t}) L(\bold{x} \rightarrow \vec{\omega}) = -(\sigma_{a}(\bold{x})+\sigma_{s}(\bold{x})) L(\bold{x} \rightarrow \vec{\omega}) = -\sigma_{t}(\bold{x}) L(\bold{x} \rightarrow \vec{\omega}).$$
 
-Gracias a esta expresión se puede calcular una cantidad de interés, llamada {\em Transmitancia}, $T_{r}$, la cual describe la cantidad de fotones que pueden viajar sin obstrucciones entre dos puntos en un medio (en línea recta).
+Gracias a esta expresión se puede calcular una cantidad de interés, llamada {\em Transmitancia}, $T_{r}$, la cual describe la proporción de fotones que pueden viajar sin obstrucciones entre dos puntos en un medio (en línea recta).
 La integración de la ecuación anterior permite obtener una expresión para la transmitancia,
 
 $$T_{r}(\bold{x'} \leftrightarrow \bold{x}) = e^{-\tau(\bold{x'} \leftrightarrow \bold{x})},$$
@@ -606,7 +608,7 @@ Diversos fenómenos tienen lugar cuando un rayo de luz impacta una superficie de
 De esta forma sería posible modelar fenómenos tan complejos como la fosforescencia y la polarización.
 
 Una complejidad tal no resulta práctica en computación gráfica, por lo cual deben realizarse simplificaciones sobre los materiales subyacentes.
-Una simplificación muy común de esta función consiste en ignorar los fenómenos anteriores y limitar la definición de la BRDF a un par de ángulos de entrada y de salida, para cada punto de la superficie, como se muestra en la Fig. \ref{fg:brdf}.
+Una simplificación muy común de esta función consiste en ignorar los fenómenos anteriores y limitar la definición de la BRDF al par de ángulos de entrada y de salida, para cada punto de la superficie, como se muestra en la Fig. \ref{fg:brdf}.
 Esta simplificación resulta en una función de {\em seis} variables, que incluye las cuatro dimensiones definidas por las direcciones de entrada y de salida, y las dos que se corresponden a una representación paramétrica de una superficie.
 
 Debido a la prohibitiva complejidad aún presente en estas simplificaciones, los primeros modelos utilizados en computación gráfica eran funciones analíticas \cite{Phong1975,Blinn1977}, es decir, una función simple que no requería almacenamiento de datos (ya que el valor se calcula en el momento de llamar a la función).
@@ -614,13 +616,12 @@ De esta manera fue posible representar diversos materiales sencillos, sobre todo
 Las funciones no estaban basadas en ningún procedimiento de obtención, sino más bien en un procedimiento artístico que producía resultados aceptables desde lo fenomenológico.
 
 Posteriormente surgieron modelos más precisos, los cuales desarrollaron funciones analíticas teniendo en consideración mayores precisiones sobre los modelos geométricos subyacentes, por lo que resultaron más ajustadas a los fenómenos reales \cite{He1991,Ward1992,Lafortune1997}.
-Para esto, se modelaron las anisotropías en la reflectancia presentes en las superficies (reflectancia diferente para distintos ángulos).
-En otras palabras, la inclusión de no linealidad otorga un mayor realismo.
+Para esto, se modelaron las anisotropías en la reflectancia presentes en las superficies (reflectancia diferente para distintos ángulos), otorgando un mayor realismo.
 
 Otros trabajos \cite{Dana1999,Matusik2003} realizaron mediciones de la reflectancia de materiales por medio de dispositivos de captura (goniorreflectómetros), lo cual constituye una solución de fuerza bruta, pero adecuada en algunos casos.
 Los datos de las mediciones del material generalmente son publicados para uso de la comunidad gráfica y científica.
 
-Finalmente, se ha intentado representar los datos mesurados en materiales reales con modelos matemáticos, buscando reducir costos de almacenamiento \cite{Ngan2005}.
+Finalmente, se ha intentado representar los datos medidos en materiales reales con modelos matemáticos, buscando reducir costos de almacenamiento \cite{Ngan2005}.
 En estos casos, por medio de modelos estándar de BRDFs, o por una combinación de los mismos, se buscan explicar los datos obtenidos en las medidas, con lo cual resulta innecesario almacenar la información capturada, computando la misma a partir de la definición del nuevo modelo.
 Si bien estas aproximaciones no constituyen modelos de {\em la totalidad} de los datos capturados, generalmente obtienen buenas aproximaciones que emulan gran parte de las observaciones.
 
@@ -630,11 +631,11 @@ Una forma equivalente consiste en definir, para cada punto de una superficie, el
 
 $$\rho(\theta_{i},\phi_{i},\theta_{r},\phi_{r}) = \frac{dL_{r}(\theta_{r},\phi_{r})}{dE_{i}(\theta_{i},\phi_{i})},$$
 
-\noindent donde $E_{i}$ constituye la {\em irradiancia} entrante, definida como flujo incidente sobre unidad de área, y $L_{r}$ nota la radiancia reflejada.
+\noindent donde $E_{i}$ constituye la {\em irradiancia} entrante, definida como flujo incidente sobre unidad de área, y $L_{r}$ nota la radiancia reflejada (los ángulos coinciden con los de la Fig.~\ref{fg:brdf}).
 Intuitivamente, la BRDF mide la cantidad de luz reflejada a partir de la cantidad de energía incidente en la superficie, para cada ángulo de entrada y de salida.
 
 Muchas BRDF modelan por separado determinadas características comunes en materiales.
-Por ejemplo, las contribuciones especulares (reflejos perfectos) y difusa (la luz se disipa en todas las direcciones de manera equitativa).
+Por ejemplo, las contribuciones especulares (reflejos perfectos) y difusa (la luz se refleja en todas las direcciones de manera equitativa).
 La primera produce diferencias visibles en superficies, siendo característica la visualización de círculos o líneas blancas sobre determinadas direcciones en las que se posiciona el observador.
 
 La Fig.~\ref{fg:contribuciones} muestra ejemplos de estos rebotes.
@@ -771,9 +772,8 @@ Este ejemplo muestra con claridad que un mismo material puede presentar una ampl
 
 Determinados materiales porosos presentan micro-poros en la geometría de sus superficies.
 Estos poros afectan de manera directa la noción de superficie continua, asumida al modelar un material como una superficie y representar su comportamiento con la energía radiante por medio de una BRDF.
-
-Estos poros microscópicos son aún más pequeños que los poros presentes en la piel humana.
-Si bien su tamaño excede la longitud de onda de la luz, los mismos no son visibles al ojo humano.
+Estos poros microscópicos son aún más pequeños que los poros presentes en la piel humana, resultando invisibles al ojo humano.
+%Si bien su tamaño excede la longitud de onda de la luz.
 
 Entre los pocos trabajos sobre estos materiales, se encuentra el de Merillou \cite{Merillou2000}.
 En dicho trabajo se modifica la definición estándar de BRDF incluyendo términos matemáticos que representan la estructura y el comportamiento de materiales porosos.
@@ -785,7 +785,7 @@ Esto se traduce en la dirección del rayo de rebote, ya que la presencia del por
 Matemáticamente, el coeficiente difuso toma una parte del coeficiente especular.
 
 Para obtener una distribución estadística de las geometrías de los poros presentes en una superficie, se deben modelar los mismos.
-El modelado de los poros se lleva a cabo por medio de simulaciones estocásticas Monte Carlo sobre posibles geometrías microscópicas de poros bajo ciertas asunciones.
+El modelado de los poros se lleva a cabo por medio de simulaciones estocásticas Monte Carlo sobre posibles geometrías microscópicas de poros bajo ciertas suposiciones.
 Dos ejemplos diferentes de poros pueden observarse en la Fig.~\ref{fg:poro}.
 Se simula el rebote de rayos de luz sobre la geometría sintetizada, computándose las distribuciones de reflectancia para poros con distintas formas, utilizando un máximo en el número de rebotes.
 También resulta adecuado incorporar un factor de absorción en cada rebote, disminuyendo la radiancia del rayo siendo computado.
@@ -816,7 +816,7 @@ Su color está dado por gránulos de melanina en el córtex.
 Cuando no están presentes estos gránulos se observa un color blanco.
 
 
-Existen dos tipos principales de pelo: el {\em vello}, presente en prácticamente toda la superficie del cuerpo, con $1$ {\em mm} de alto, y el {pelo terminal}, presente únicamente en el cuero cabelludo.
+Existen dos tipos principales de pelo: el {\em vello}, presente en prácticamente toda la superficie del cuerpo, con $1mm$ de alto, y el {pelo terminal}, presente únicamente en el cuero cabelludo.
 Este último fue el que recibió mayor atención en computación gráfica.
 El pelo terminal tiene aproximadamente entre $50$ y $90$ micrones de diámetro.
 Existen entre $175$ y $300$ pelos terminales por {\em $cm^{2}$}.
