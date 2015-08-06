@@ -772,7 +772,13 @@ Basados en estos razonamientos, mapeamos el vector de temperaturas $Temp$ en $3D
 \noindent donde $R_{vol}$ es la textura volumétrica resultante del mapeo, y $x$, $y$ y $z$ son coordenadas $3D$ en $R_{vol}$. Cuando $DF_{M}[(x,y,z)] = 0$, la posición actual $3D$ se encuentra en la superficie de la geometría, y $Temp[0]$ se mapea $R[(x,y,z)]$.
 Cuando $DF_{M}[(x,y,z)] > 0$, mapeamos una temperatura menor a $R_{vol}$, ya que la posición actual se encuentra en el interior de la geometría.
 La Fig.~\ref{fg:baking} muestra cortes del resultado de este mapeo ($R_{vol}$), usando temperaturas resultantes de un tiempo arbitrario de cocción, en los tres planos Cartesianos. 
-Las imágenes son casi idénticas a lo que se obtendría con una simulación $3D$~\cite{Purlis2010}.
+Las distribuciones de temperaturas son cualitativamente similares a lo que se obtendría con una simulación $3D$~\cite{Purlis2010}, ver Fig.~\ref{fg:purlistemp}.
+
+\begin{figure*}
+\centerline{\includegraphics[width=6cm]{figures/purlistemp}}
+\caption[Distribución de temperaturas resultante de un modelo físico tridimensional del pan]{Distribución de temperaturas resultante de un modelo físico tridimensional del pan (imagen tomada de \cite{Purlis2010}).}
+\label{fg:purlistemp}
+\end{figure*}
 
 \begin{figure*}
 \includegraphics[width=12cm]{figures/tempsbunny}
@@ -815,10 +821,10 @@ La literatura muestra que, en escenarios típicos, la masa del pan crece hasta e
 En nuestro modelo, este proceso puede ser simulado utilizando la distribución de burbujas y sus radios, provenientes del proceso de leudado.
 Esta información la computamos creando una textura volumétrica auxiliar $P$, donde en cada entrada se computa el radio de las burbujas que ocurren en esa entrada, de la siguiente manera:
 
-$$P[x,y,z] = max \bigg\{r\bigg\},$$
+$$P[x,y,z] = m\acute{a}x \bigg\{r\bigg\},$$
 
 \noindent donde $r$ es el radio de una burbuja que ocurre en la entrada $[x,y,z]$.
-El término $max$ en el cómputo retiene el máximo radio que ocurre en la entrada $[x,y,z]$.
+El término $m\acute{a}x$ en el cómputo retiene el máximo radio que ocurre en la entrada $[x,y,z]$.
 Buscando obtener transiciones suaves de radio en la textura final, se aplica un filtro Gaussiano a $P$.
 Esta textura volumétrica permite definir distintas funciones útiles que simular aproximaciones plausibles del crecimiento de la masa durante la cocción.
 
@@ -966,8 +972,8 @@ Debido a los costos computacionales en resoluciones superiores, el usuario puede
 En esta sección presentamos imágenes de geometrías de pan obtenidas utilizando nuestro modelo, renderizadas con el método presentado en el siguiente capítulo.
 Los colores de corteza y miga son parámetros definibles por el usuario. Los cortes en la miga son fácilmente producidos anulando las regiones deseadas en la textura volumétrica luego de la cocción, y antes del renderizado.
 
-Las Figs.~\ref{fg:renders}{-{}-}\ref{fg:bakingdeform2} muestran imágenes de los volúmenes obtenidos por medio del proceso de formación presentado, renderizados utilizando DVR.
-Las Figs.~\ref{fg:renders} y ~\ref{fg:renders2} marcan las diferencias en calidad de la imagen resultante entre una versión de baja resolución ($256^{3}$) y una de alta resolución ($512^{3}$) respectivamente.
+Las Figs.~\ref{fg:renders}-\ref{fg:bakingdeform2} muestran imágenes de los volúmenes obtenidos por medio del proceso de formación presentado, renderizados utilizando DVR.
+Las Figs.~\ref{fg:renders} y \ref{fg:renders2} marcan las diferencias en calidad de la imagen resultante entre una versión de baja resolución ($256^{3}$) y una de alta resolución ($512^{3}$) respectivamente.
 La Fig.~\ref{fg:renders3} muestra versiones de alta resolución de otras geometrías de panes.
 La Fig.~\ref{fg:bakingcolors} muestra la misma corteza con diferentes historias de cocción.
 Este efecto se logra definiendo diferentes valores máximos en el canal $L$ del espacio de color $CIELab$ para cada imagen.
@@ -1042,6 +1048,6 @@ Luego aplicamos una simulación física de la cocción, la cual se utilizó para
 Finalmente, la corteza fue generada sobre la superficie del material.
 El algoritmo de renderizado utilizado será explicado en el siguiente capítulo, el mismo produjo imágenes realistas de diversos tipos de pan, en varias etapas del proceso de formación del mismo.
 
-Los modelos introducidos resultan más flexibles y poderosos que aquéllos del estado del arte actual en modelado de geometría de materiales porosos.
+Los modelos introducidos resultan más flexibles y poderosos que aquellos del estado del arte actual en modelado de geometría de materiales porosos.
 En un capítulo posterior, y con intención de validar el procedimiento de generación de panes, mostraremos que las geometrías obtenidas por el mismo arrojan distribuciones de burbujas coincidentes con panes reales.
 

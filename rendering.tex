@@ -31,7 +31,7 @@ De todas formas, el crecimiento notable en poder de cómputo debido al diseño m
 Estudios recientes utilizan consideraciones fenomenológicas sobre materiales porosos, pero la geometría resulta invariable (es decir, no procedimental) \cite{VanDyck2014}: una geometría fija no permite obtener diferentes tipos de pan fácilmente, ya que requiere un procedimiento de captura para cada uno de ellos.
 Adicionalmente, las distribuciones de burbujas no pueden ser controladas.
 
-La presencia de mesoestructuras (burbujas con formas complejas) provocan una clasificación de los materiales porosos como {\em quasi-homogéneos} \cite{Tong2005}. 
+La presencia de mesoestructuras (burbujas con formas complejas) provocan una clasificación de los materiales porosos como {\em cuasi-homogéneos} \cite{Tong2005}. 
 Por esta razón, modelar al material como una superficie no resulta adecuado.
 Técnicas típicas como BRDFs, BSSRDFs \cite{Donner2009} y BTFs, no resultan satisfactorias.
 Una publicación intenta resolver las limitaciones \cite{Tong2005}, pero las desventajas que acarrea (proceso de captura muy complejo, altos costos computacionales, invariabilidad geométrica), resultan en un proceso basado en fuerza bruta y muy poco práctico.
@@ -154,7 +154,7 @@ La literatura muestra que considerarla produce imágenes de mayor realismo \cite
 Debido a estas consideraciones proponemos computar la dispersión entrante, múltiple, calculando de manera offline un término de oclusión del ambiente para cada voxel en el campo escalar y almacenándolo como una textura volumétrica extra, la cual se suple al shader de fragmentos, permitiendo así mantener los tiempos computacionales en tasas razonables.
 Para cada voxel en la textura volumétrica resultante de alguno de los métodos del capítulo anterior, el cómputo de dicho término define un radio $r$, almacenando el valor medio de los voxels vecinos dentro de una esfera que contiene ese radio.
 Luego, este valor se utiliza para modular la contribución de cada paso del rayo.
-Experimentalmente encontramos que el valor $r$ resulta visualmente indistinguible al variarlo, por lo cual cualquier valor mayor que $0$ puede utilizarse para el cómputo.
+Experimentalmente encontramos que variar el valor de $r$ produce resultados visualmente indistinguibles, por lo cual cualquier valor mayor que $0$ puede utilizarse para el cómputo.
 La Fig.~\ref{fg:occlusion} muestra el realce que produce este concepto, resultando en un aspecto clave de nuestra implementación, a la hora de producir imágenes creíbles. 
 
 
@@ -179,7 +179,7 @@ N &= normalizar([x,y,z])
 \end{aligned}
 \end{equation}
 
-\noindent donde $\vec{i}$, $\vec{j}$ y $\vec{k}$ son los vectores unitarios que forman una base en $\mathbb{R}^{3}$
+\noindent donde $\vec{i}$, $\vec{j}$ y $\vec{k}$ son los vectores unitarios que forman una base en $\mathbb{R}^{3}$.
 
 La normal y el vector que representa la fuente de luz permiten determinar la contribución especular en el punto, aplicando un modelo de Phong con un exponente suave, y estableciendo un parámetro que permite al usuario especificar el impacto deseado para la componente especular.
 Se han testeado otros modelos especulares más complejos, pero no se encontró diferencia apreciable en la apariencia final de la textura de pan.
@@ -302,14 +302,13 @@ En las imágenes de prueba pueden distinguirse un budín (izquierda), un pedazo 
 En el caso de la esponja se modificaron los parámetros que definen la función de densidad, utilizando una mayor aleatoriedad, para producir una textura más homogénea.
 
 En las Figs.~\ref{fg:sponges} y \ref{fg:Fig14} se muestran esponjas y piedras porosas sintetizadas con el mismo procedimiento, utilizando distintos valores para la aleatoriedad, cantidad de burbujas iniciales, la especularidad, y el coeficiente de absorción.
-En la Fig.~\ref{fg:sponges} puede observarse que la utilización de oclusión de ambiente produce imágenes de esponja más realistas que las obtenidas sin su aplicación.
 La retro-iluminación también se aproxima en este modelo (ver Fig. \ref{fg:fig7}).
 En esa imagen puede apreciarse una esponja retro-iluminada junto con la propagación de luz a través del volumen que representa.
 Este efecto surge como una consecuencia natural del algoritmo volumétrico basado en RTE utilizado en este capítulo.
 
 \begin{figure*}[htb!]
-  \centerline{\includegraphics[width=10cm]{figures/fig6}}
-  \caption[Budín, torta y esponja renderizados]{Distintos materiales obtenidos a partir de diferentes configuraciones de parámetros. De izquierda a derecha: budín, torta y esponja, sin oclusión de ambiente. }
+  \centerline{\includegraphics[width=12cm]{figures/fig6}}
+  \caption[Budín, torta y esponja renderizados]{Distintos materiales obtenidos a partir de diferentes configuraciones de parámetros. De izquierda a derecha: budín, torta y esponja. }
   \label{fg:fig6}
 
 \end{figure*}
@@ -335,7 +334,8 @@ Este efecto surge como una consecuencia natural del algoritmo volumétrico basad
 
 \subsection{Renderizado Multi-escala}
 Debido a limitaciones del hardware, el tamaño de la textura influencia el rendimiento final del algoritmo.
-Una textura de resoluciones mayores a $256^{3}$ voxels compromete el desempeño de tiempo real del algoritmo de renderizado, sin embargo, como fue demostrado, para aumentar la calidad gráfica de la imagen es necesario superar esta barrera.
+Una textura de resoluciones mayores a $256^{3}$ voxels compromete el desempeño de tiempo real del algoritmo de renderizado.
+Sin embargo, como fue demostrado, para aumentar la calidad gráfica de la imagen es necesario superar esta barrera.
 
 Una posible solución a este conflicto está constituida por la utilización de más de una textura volumétrica en el modelado, donde una de ellas modela las características de mayor tamaño del objeto (por ejemplo, sus burbujas más grandes), y la otra se utiliza para representar detalles de menor escala.
 El resultado de la utilización de más de una textura puede observarse en la Fig.~\ref{fg:multiscale}, donde la diferencia es claramente visible.
