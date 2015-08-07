@@ -348,6 +348,8 @@ Estos valores pueden multiplicarse o sumarse para producir el valor final del vo
 El costo computacional agregado está representado por muestrear dos texturas en lugar de una.
 Si bien el muestreo es una operación costosa, el tiempo total resulta mucho menor al costo computacional de trabajar con texturas de mayores dimensiones.
 La textura que se muestrea a distintas escalas debe poseer cierta coherencia en sus bordes (arriba/abajo, izquierda/derecha, etc.), para poder ser ensamblada sin que se note el efecto del muestreo.
+Esta metodología plantea trabajos a futuro detallados en la sección correspondiente de esta tesis.
+
 
 \begin{figure}
   \centerline{\includegraphics[width=12cm]{figures/multiscale}}
@@ -357,7 +359,7 @@ La textura que se muestrea a distintas escalas debe poseer cierta coherencia en 
 
 \section{Discusión}
 
-Hasta donde podemos observar en la literatura, en el renderizado de panes y otros materiales porosos, este constituye el primer trabajo que involucra tasas de refresco de tiempo real, sin la utilización de estructuras intermedias, procesos de captura onerosos, o post-procesamientos.
+Hasta donde podemos observar en la literatura, en el renderizado de panes y otros materiales porosos, éste constituye el primer trabajo que involucra tasas de refresco de tiempo real, sin la utilización de estructuras intermedias, procesos de captura onerosos, o post-procesamientos.
 La literatura previa incluye pocos trabajos, como por ejemplo \cite{Cho2007}, pero las comparaciones con este método no son posibles, ya que los detalles claves del desarrollo no fueron explicados (tiempos de cómputo, método de renderización).
 El método propuesto resulta compatible con el renderizado de ráster en tiempo real disponible en las GPUs actuales, contando con la capacidad de producir un material realista.
 El método puede ser integrado con facilidad en cualquier motor $3D$ basado en shaders.
@@ -397,7 +399,7 @@ La utilización de un modelo multiescala, como fue discutido, puede subsanar est
 
 \section{Conclusiones}
 
-En este capítulo hemos aplicado el modelo de transmitancia del renderizado directo de volúmenes, utilizando la GPU, sobre un campo escalar tridimensional representando la estructura de la miga del pan (la cual fue computada en el capítulo anterior).
+En este capítulo hemos aplicado el modelo de transmitancia del renderizado directo de volúmenes, utilizando la GPU, sobre una textura volumétrica representando la estructura de la miga del pan (la cual fue computada en el capítulo anterior).
 Se obtuvieron imágenes realistas en tiempo real.
 Por medio de la utilización de texturas de mayores dimensiones se obtuvieron imágenes con mayor detalle, pero a tasas de refresco menores.
 Si bien el algoritmo de renderizado no es novedoso, sí lo es su aplicación en los materiales porosos discutidos, y la obtención de tasas de tiempo real a partir del mismo.

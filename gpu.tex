@@ -1,7 +1,7 @@
 \chapter{Programación de Placas Gráficas}
 
 \section{Introducci\'on}
-La constante demanda de poder en las aplicaciones gr\'aficas, motivada sobre todo por el auge de los videojuegos y las películas de animación, han provocado que el poder de cómputo de las unidades de hardware paralelo haya sufrido una marcada evoluci\'on desde su aparici\'on.
+La constante demanda de capacidad en las aplicaciones gr\'aficas, motivada sobre todo por el auge de los videojuegos y las películas de animación, han provocado que el poder de cómputo de las unidades de hardware paralelo haya sufrido una marcada evoluci\'on desde su aparici\'on.
 Dicha evoluci\'on ha tenido como consecuencia la rivalizaci\'on y posterior superaci\'on por parte de las GPUs al poder de procesamiento con el que cuentan las CPUs tradicionales \cite{Harris06}.
 En la siguiente sección se resume la historia de la programación de las placas gráficas, desde las primeras placas configurables, las cuales sólo permitían controlar superficialmente su comportamiento, hasta las placas que permiten una programación de propósito general sobre ellas.
 
@@ -18,7 +18,7 @@ Este procesamiento se realiza en paralelo ya que la computación resulta indepen
 En un principio, la placa gráfica interactuaba como una caja gris o negra, la cual podía ser configurada únicamente, para producir resultados limitados sobre algunos tipos de efectos, como el color final de un píxel.
 En la década de $1980$ comenzaron a surgir las placas gráficas programables, las cuales permitían modificar el assembler de determinados procesos internos a las mismas, logrando efectos personalizados.
 El assembler de estas placas no resultaba nada amigable al programador, el cual además difería para cada placa.
-Debido a esto, un programador debía distribuir código assembler para cada placa donde pretendía correr su programa.
+Debido a esto, un programador debía escribir código assembler para cada placa donde pretendía correr su programa.
 Similarmente a lo acaecido con la aparición de los lenguajes de programación de propósito general como C, COBOL o Lisp, comenzaron a surgir aproximadamente en el año $2000$ lenguajes más amigables para el programador, los cuales generaban código para el assembler específico de cada GPU.
 De esta forma surgieron GLSL\footnote{OpenGL Shading Language} (OpenGL, libre), HLSL (Microsoft) y Cg (nVidia).
 De ellos, el primero constituye el único que compila para diferentes plataformas, ya que los otros dos están orientados a dispositivos de sus respectivas empresas (por ejemplo, Cg no se puede utilizar en placas ATI).
@@ -67,7 +67,7 @@ La secuencia t\'ipica de procesamiento de la GPU est\'a ordenada de la siguiente
 \begin{itemize}
 \item Procesamiento de V\'ertices: los v\'ertices de los objetos de una escena son transformados (rotación, desplazamiento, escala, etc.).
 En este punto se permite programar el comportamiento de las transformaciones, por medio de un programa denominado shader de vértices.
-\item Ensamblamiento (generación de primitivas): los v\'ertices transformados se unen para formar primitivas: l\'ineas, tri\'angulos, etc., mediante la informaci\'on que aporta la CPU.
+\item Ensamblado (generación de primitivas): los v\'ertices transformados se unen para formar primitivas: l\'ineas, tri\'angulos, etc., mediante la informaci\'on que aporta la CPU.
 Además, se realizan los procesos de {\em clipping}: eliminaci\'on de partes de objetos que por su posici\'on no aparecer\'an en pantalla; y {\em culling}: eliminaci\'on de superficies no visibles, puesto que est\'an detr\'as de otras superficies desde el punto de vista de la c\'amara.
 \item Rasterización e Interpolaci\'on: se {\em rasterizan} (se {\em asocian} a posiciones en pantalla) y se {\em interpolan} los diferentes atributos de las primitivas, en el sub-espacio de clipping, generadas en la etapa previa (por ejemplo el color, la posición, etc.).
 Este proceso se conoce como {\em conversi\'on scan}.
