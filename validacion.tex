@@ -33,7 +33,7 @@ Se utilizan las DFs de Korcak \cite{Mandelbrot1983} y la dimensi\'on Box \cite{P
 La misma intenta simplificar el c\'alculo de la DF de Hausdorff, debido a que \'esta resulta muy dif\'icil de obtener \cite{Peitgen2004} (o imposible si el objeto no es estrictamente autosimilar).
 Dada una imagen, se la subdividide en una grilla de dimensiones $M\times M$ donde el largo del lado de cada cuadrado formado es $\delta$. Si $N(\delta)$ representa el n\'umero de cuadrados que contienen al menos un p\'ixel resultado de una binarizaci\'on de la imagen (p\'ixel blanco) para ese $\delta$, la dimensi\'on Box $D_{b}$ queda definida como:\\
 
-$D_{b} = \displaystyle\lim_{\delta \to 0}{\frac{\log(N(\delta))}{\log (1/\delta)}}$\\
+$$D_{b} = \displaystyle\lim_{\delta \to 0}{\frac{\log(N(\delta))}{\log (1/\delta)}}$$\\
 
 En el algoritmo resultante se utiliza una imagen binarizada computada a partir de la original. Sobre la misma se seleccionan distintos $\delta$, realizando un conteo de cuadrados que contienen p\'ixeles blancos en cada caso (para evitar inestabilidad num\'erica, se utiliza un promedio de casos, estableciendo distintas posiciones de la grilla sobre la imagen). Finalmente se realiza un ajuste por regresi\'on lineal de los datos obtenidos en el espacio $\log-\log$, cuya pendiente constituye por definici\'on la DF Box de la imagen.
 
@@ -349,7 +349,7 @@ Las imágenes muestran, a primera vista, clases fácilmente separables.
 Un clasificador podría determinar regiones del espacio y clasificar de manera adecuada las clases, ya que se encuentran claramente separadas unas de otras (no existen prácticamente celdas con más de un número de clase en ellas).
 En la Figura~\ref{fig:boxplotsMFS}, se muestran boxplots del MFS de los cuatro tipos de panes con la mediana de cada dimensión (en rojo) unida por una línea a trozos.
 Cada dimensión fractal corresponde a un valor de $\alpha_{i}$.
-En nuestros experimentos el vector de MFS contiene $20$ dimensiones fractales. De estos datos se infiere que la primer mitad del MFS (primeras $10$ DFs, $\alpha \in [0,0.53)$), la dispersión resulta mayor que en la segunda mitad del espectro  (últimas $10$ DFs, $\alpha \in [0.53,1]$).
+En nuestros experimentos el vector de MFS contiene $20$ dimensiones fractales. De estos datos se infiere que la primer mitad del MFS (primeras $10$ DFs, $\alpha \in [0: 0.53)$), la dispersión resulta mayor que en la segunda mitad del espectro  (últimas $10$ DFs, $\alpha \in [0.53: 1]$).
 Es decir, la segunda mitad del espectro puede identificar cada tipo de pan.
 
 
@@ -414,12 +414,12 @@ De las imágenes correspondientes a los coeficientes de correlación MCA y stCA 
 \label{fig:corrMCAstdev}
 \end{figure}
 
-Adicionalmente, las últimas $5$ dimensiones fractales  del espectro ($\alpha \in [0.79,1]$) están también (pero de manera inversa) correlacionadas con el MCA de las burbujas.
+Adicionalmente, las últimas $5$ dimensiones fractales  del espectro ($\alpha \in [0.79: 1]$) están también (pero de manera inversa) correlacionadas con el MCA de las burbujas.
 Esto quiere decir que las DFs se incrementan cuando el MCA se decrementa.
 La misma observación puede realizarse para el stCA, pero las correlaciones son menores.
 En ambos casos, los coeficientes de correlación de la clase {\em sandwich} son los menores entre todos los tipos de pan considerados.
 
-Resumiendo, las dimensiones del MFS que corresponden a valores de  $\alpha \in [0,0.23]$ son útiles para medir la porosidad de las muestras escaneadas. Además, granularidad y heterogeneidad pueden ser medidas por las dimensiones con  $\alpha \in [0.79,1]$.
+Resumiendo, las dimensiones del MFS que corresponden a valores de  $\alpha \in [0: 0.23]$ son útiles para medir la porosidad de las muestras escaneadas. Además, granularidad y heterogeneidad pueden ser medidas por las dimensiones con  $\alpha \in [0.79: 1]$.
 Es decir, con un único vector de dimensiones fractales medimos diferentes características claves de la miga de pan, como fue sugerido en \cite{Gonzales2008}.
 
 \subsection{Clasificaci\'on de imágenes de diferentes tipos de pan}
@@ -609,7 +609,7 @@ La Fig.~\ref{realbin} y la Fig.~\ref{best} muestran un ejemplo de binarizaciones
 
 
 \begin{figure}[!ht]
-\includegraphics[width=9cm]{figures/bestboxplot}
+\centerline{\includegraphics[width=9cm]{figures/bestboxplot}}
 \caption[Mejores parámetros de síntesis para el tipo de pan {\em baguette}]{Mejores parámetros de síntesis para el tipo de pan {\em baguette}. El error total en medianas es de $\sim 0.21$.}
 \label{bestboxplot}
 \end{figure}
@@ -645,7 +645,7 @@ La Fig.~\ref{realbin2} y  Fig.~\ref{best2} muestran un ejemplo de binarizaciones
 
 
 \begin{figure}[!ht]
-\includegraphics[width=9cm]{figures/bestboxplot2}
+\centerline{\includegraphics[width=9cm]{figures/bestboxplot2}}
 \caption[Mejores parámetros de síntesis para un tipo casero de pan]{Mejores parámetros de síntesis para un tipo casero de pan. El error total en medianas es de $\sim 0.88$.}
 \label{bestboxplot2}
 \end{figure}
@@ -673,8 +673,8 @@ La Fig.~\ref{realbin2} y  Fig.~\ref{best2} muestran un ejemplo de binarizaciones
 En este capítulo demostramos que los métodos fractales y sobre todo, multifractales, permiten capturar características útiles de panes, las cuales pueden utilizarse para caracterizarlos y clasificarlos.
 Además, la información capturada resulta lo suficientemente descriptiva para utilizarse en la definición de parámetros de entrada a un algoritmo que genera versiones sintéticas de los mismos, las cuales fueron también validadas.
 La apariencia de diferentes tipos de panes puede ser caracterizada exitosamente computando dimensiones multifractales de sus imágenes digitales.
-Las DFs obtenidas por el método MFS cuyo $\alpha \in [0,0.23]$ proveen una buena medida de la porosidad de la miga del pan, ya que mientras mayor la DF, mayor la porosidad.
-Además, las DFs cuyo $\alpha \in [0.79,1]$ permiten caracterizar la granularidad y la heterogeneidad en la distribución de sus burbujas.
+Las DFs obtenidas por el método MFS cuyo $\alpha \in [0: 0.23]$ proveen una buena medida de la porosidad de la miga del pan, ya que mientras mayor la DF, mayor la porosidad.
+Además, las DFs cuyo $\alpha \in [0.79: 1]$ permiten caracterizar la granularidad y la heterogeneidad en la distribución de sus burbujas.
 El MFS contiene datos útiles para caracterizar las tres medidas, combinando la información en un único vector de características.
 
 La utilización de características multifractales en la clasificación de dichas imágenes mostró además un excelente rendimiento.
