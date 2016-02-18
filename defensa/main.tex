@@ -94,16 +94,16 @@
     FCEIA, Universidad Nacional de Rosario. CIFASIS-CONICET.
 }
 
-\date{Tesis Doctoral, Febrero 2016}
+\date{Tesis Doctoral, Marzo 2016}
 
 \begin{frame}
 \begin{figure}
-{\includegraphics[width=0.1\textwidth]{../figures/logounr}}
+{\includegraphics[width=0.08\textwidth]{../figures/logounr}}
 \end{figure}
 \vspace{-1cm}
   \titlepage
 \centering
-\vspace{-.7cm}
+\vspace{-.4cm}
 \begin{tiny}
 Director: Dr. Claudio Delrieux, UNS
 
@@ -111,13 +111,13 @@ Co-Director: Dr. Juan Carlos Gómez, UNR
 
 \ \\
 
-Miembros del jurado:
+\it{Miembros del jurado:}
 
 Dr. Néstor Calvo (UNL)
 
 Dr. Marcelo Vénere (UNICEN)
 
-Dr. X X (UNX)
+Dr. Gustavo Galizzi (UNR)
 
 \end{tiny}
 
@@ -138,20 +138,22 @@ Dr. X X (UNX)
 
 
 \subsection{Modelado y Simulación Foto-Realística}
-\begin{frame}{}
+\begin{frame}{Modelado foto-realístico de escenas}
 
-\textbf{Modelado del comportamiento de la energía radiante en una escena}
-
-El área experimentó avances notables en los últimos años.
+El área experimentó avances notables desde su concepción.
 \begin{block}{}
 \begin{itemize}
-\item Calidad gráfica: se desarrollaron teorías computacionales que modelan el fenómeno físico: Ecuación del Renderizado de Superficies y Volúmenes.
-\item Velocidad (Tiempo interactivo / real): evolución exponencial del poder de cómputo (GPU's).
+\item \textbf{Nivel de Realismo}: se desarrollaron teorías computacionales que modelan fenómenos físicos subyacentes (intervinientes en la apariencia) ({\it e.g.} Ecuación del Renderizado de Superficies y Volúmenes).
+\item \textbf{Velocidad}: tasas de tiempo interactivo / real: evolución cuasi-exponencial del poder de cómputo (GPU's) en los últimos años.
 \end{itemize}
 \end{block}
 
-\includegraphics[scale = 0.15]{../figures/hd1.png}
-\includegraphics[scale = 0.15]{../figures/blinn5ed.png}
+\end{frame}
+
+\begin{frame}
+
+\includegraphics[scale = 0.18]{../figures/hd1.png}
+\includegraphics[scale = 0.18]{../figures/blinn5ed.png}
 
 (Imágenes: Brigade 2 Renderer)
 
@@ -164,8 +166,10 @@ El área experimentó avances notables en los últimos años.
 \begin{frame}{Síntesis de la Imagen de una Escena}
 Cada punto (o píxel) en una imagen de una escena a \textbf{renderizar}, debe computar la \textbf{radiancia} (o energía radiada) que arriba a la \textbf{cámara} desde toda la escena.
 
+\vspace{0.4cm}
 Cada objeto de la escena puede emitir radiancia, en todo el espectro electromagnético, hacia el observador.
 
+\vspace{0.4cm}
 La radiancia \textit{entrante} depende de numerosos factores, entre ellos la \textbf{forma} del objeto, el \textbf{material} del objeto, la \textbf{oclusión} existente entre el objeto y la cámara, su temperatura, etc.
 \end{frame}
 
@@ -175,9 +179,9 @@ La radiancia \textit{entrante} depende de numerosos factores, entre ellos la \te
 \begin{block}{Luz}
 \begin{itemize}
 \item La comprensión del fenómeno evolucionó considerablemente a lo largo del tiempo.
-\item Actualmente, se acuña el término ``dualidad onda-partícula'' para describirlo. El mismo es en extremo complejo, por lo tanto debe simplificarse su tratamiento en computación gráfica.
-\item La primera simplificación se da teniendo en cuenta que, en la mayoría de los casos, sólo la \textbf{luz visible} es la que debe modelarse, ya que la misma define la apariencia del objeto.
-\item La distribución de la luz visible en una escena se asume por medio de líneas rectas o \textbf{rayos}, es decir, se opta por la representación óptico geométrica del fenómeno, ya que se representará al mismo a escala macroscópica.
+\item Actualmente, se acuña el término ``dualidad onda-partícula'' para describirlo. Debe simplificarse su tratamiento en computación gráfica.
+\item En la mayoría de los casos, sólo la \textbf{luz visible} es la que debe modelarse (apariencia).
+\item La distribución de la luz visible en una escena se asume por medio de líneas rectas o \textbf{rayos}, es decir, se opta por la representación {\em óptico geométrica} del fenómeno (escala macroscópica).
 \end{itemize}
 \end{block}
 \end{frame}
@@ -259,11 +263,11 @@ Debido a las consideraciones anteriores, en esta tesis haremos hincapié en mate
 \item Se busca \textbf{validar} los resultados.
 \end{itemize}
 
-La tesis presenta algunos resultados favorables inesperados
-\begin{itemize}
-\item Caracterización y clasificación de imágenes de pan
-\item Generación de texturas de materiales no porosos (madera, mármol..)
-\end{itemize}
+%La tesis presenta algunos resultados favorables inesperados
+%\begin{itemize}
+%\item Caracterización y clasificación de imágenes de pan
+%\item Generación de texturas de materiales no porosos (madera, mármol..)
+%\end{itemize}
 
 
 \end{block}
@@ -293,7 +297,7 @@ La tesis presenta algunos resultados favorables inesperados
 En determinados casos, el modelado por medio de supervisión humana repetitiva no es deseable.
 
 \vspace{0.5cm}
-Por ejemplo, al diseñar un bosque. Diseñar separadamente cada árbol requeriría un tiempo excesivo.
+Por ejemplo, al diseñar un bosque, diseñar separadamente cada árbol requeriría un tiempo excesivo.
 
 \vspace{0.5cm}
 Debido a esto se desarrollaron técnicas artísticas, basadas en algoritmos, los cuales permiten diseñar geometrías de manera semi-automática, recibiendo el nombre de \textbf{Procedimentales}.
@@ -304,7 +308,8 @@ Debido a esto se desarrollaron técnicas artísticas, basadas en algoritmos, los
 El botánico Lindenmayer estudió y acuñó estos sistemas para describir la estructura visible de plantas. Fue capaz de representar objetos complejos de manera convincente, utilizando un procedimiento muy sencillo de generación.
 
 La estructura de una planta está representada por medio de una \textbf{cadena de caracteres}.
-A través de un procedimiento recursivo de reemplazo de caracteres basados en reglas sencillas, se pueden generar estructuras complejas.
+
+A través de un procedimiento {\it recursivo} de \textbf{reemplazo de caracteres} basados en reglas sencillas, se pueden generar estructuras complejas.
 
 \end{frame}
 
@@ -371,9 +376,9 @@ Sin embargo, es posible obtener representaciones más precisas atendiendo a proc
 
 Por medio de ecuaciones del \textbf{comportamiento} o \textbf{crecimiento} de los mismos, es posible obtener aproximaciones computacionales \textbf{más precisas}.
 
-Las \textbf{ecuaciones de Navier-Stokes} se utilizan en la simulación realista de fluídos
+Ejemplo: \textbf{ecuaciones de Navier-Stokes} (fluídos)
 
-Dadas condiciones iniciales para $\bold{u}$ y $p$ cuando $t = 0$, la evolución de las cantidades puede describirse como sigue, independientemente del número de dimensiones,
+Dadas condiciones iniciales para $\bold{u}$ y $p$ cuando $t = 0$, la evolución del sistema se describe como sigue:
 
 \begin{align*}
 \nabla \cdot \bold{u} &= 0\\
@@ -488,7 +493,7 @@ Volúmenes
 \end{frame}
 
 \begin{frame}{Materiales porosos - Trabajo Previo}
-Los modelos actuales de generación de geometría de materiales porosos en el área resultan de procesos artísticos.
+
 Se utilizan diversos ruidos, como los ruidos de Voronoi, Perlin y Worley. Sin embargo, los métodos deben combinarse con otras consideraciones ad-hoc.
 
 \includegraphics[scale = 0.2]{../figures/Fig8}
@@ -714,7 +719,8 @@ $$DF_{M}[i,j,k] = \min \bigg\{ \delta([i,j,k],[i',j',k']): M[i',j',k'] = 0 \bigg
 
 \begin{frame}{Mapa de Distancias}
 
-\centerline{\includegraphics[width=12cm]{../figures/distance}}
+%\centerline{\includegraphics[width=12cm]{../figures/distance}}
+\centerline{\includegraphics[width=12cm]{../figures/DistanceTransform}}
 
 \end{frame}
 
@@ -735,7 +741,7 @@ Esto se logra por medio del \textbf{ortogonal al gradiente del corte}.
 \begin{frame}{Resultados}
 Finalmente se centra el sistema dinámico en el {\em centro de masa} de cada corte, y junto a las condiciones de contorno, definen un patrón natural para el corte.
 
-Si bien esta elección no representa una parametrización completamente tridimensional, resulta más intuitivo definir un sistema dinámico en dos dimensiones.
+Parametrización bidimensional (más intuitiva).
 
 \includegraphics[width=12cm]{../figures/Fig5}
 \end{frame}
