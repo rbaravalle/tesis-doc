@@ -363,7 +363,9 @@ Por medio de una pila de estados, donde el caracter $[$ se utiliza para copiar e
 \end{frame}
 
 \begin{frame}
-Este ejemplo se basa en un modelado basado en la \textbf{similaridad} entre el objeto sintético resultante y el objeto real.
+Este ejemplo se basa en un modelado basado en una 
+
+\textbf{comparación subjetiva} entre el objeto sintético resultante y el objeto real.
 
 \vspace{1cm}
 
@@ -434,9 +436,12 @@ $$ L(\bold{x'} \rightarrow \bold{x}) =  g(\bold{x'}  \rightarrow \bold{x})  \lef
 \begin{frame}
 $$ L(\bold{x'} \rightarrow \bold{x}) =  g(\bold{x'}  \rightarrow \bold{x})  \left[ \epsilon(\bold{x'}  \rightarrow \bold{x}) + \int_{s}{\rho(\bold{x''}  \rightarrow \bold{x'}  \rightarrow \bold{x})L(\bold{x''}  \rightarrow \bold{x}) d\bold{x''}} \right] $$
 
-$L(\bold{x'} \rightarrow \bold{x})$, intensidad de la luz que viaja del punto tridimensional $\bold{x'}$ a $\bold{x}$ (sin oclusiones)
+$L(\bold{x'} \rightarrow \bold{x})$, intensidad de la luz que viaja del punto tridimensional $\bold{x'}$ a $\bold{x}$
+%(sin oclusiones)
 
-$g(\bold{x'} \rightarrow \bold{x})$: término geométrico que modela la oclusión que podría existir entre $\bold{x}$ y $\bold{x'}$, $\epsilon(\bold{x'} \rightarrow \bold{x})$ intensidad de la luz emitida desde $\bold{x'}$ a $\bold{x}$, $\rho(\bold{x''}  \rightarrow \bold{x'}  \rightarrow \bold{x})$ la intensidad de la luz emitida de $\bold{x''}$ a $\bold{x}$ por medio de una superficie en $\bold{x'}$ (esta cantidad será llamada función bidireccional de distribución de reflectancia, BRDF), y $S=\bigcup{s_{i}}$, unión de todas las superficies $s_{i}$ de la escena
+$g(\bold{x'} \rightarrow \bold{x})$: término geométrico que modela la oclusión que podría existir entre $\bold{x}$ y $\bold{x'}$, $\epsilon(\bold{x'} \rightarrow \bold{x})$ intensidad de la luz emitida desde $\bold{x'}$ a $\bold{x}$, $\rho(\bold{x''}  \rightarrow \bold{x'}  \rightarrow \bold{x})$ la intensidad de la luz emitida de $\bold{x''}$ a $\bold{x}$ por medio de una superficie en $\bold{x'}$ (esta cantidad será llamada función bidireccional de distribución de reflectancia, BRDF),
+
+y $S=\bigcup{s_{i}}$, unión de todas las superficies $s_{i}$ de la escena
 \end{frame}
 
 \begin{frame}
@@ -513,7 +518,7 @@ Desventajas:
 \end{itemize}
 \end{block}
 
-\includegraphics[scale = 0.3]{../figures/ratatouille}
+\centering{\includegraphics[scale = 0.3]{../figures/ratatouille}}
 
 \end{frame}
 
@@ -628,6 +633,9 @@ La partícula 14 \textbf{no} tomará las posiciones en rojo, ya que \textbf{bord
 
 \begin{frame}{Ejemplo: crecimiento}
 \includegraphics[scale = 0.15]{../figures/modeladocrec}
+
+\centering
+Dirección de crecimiento?
 \end{frame}
 
 
@@ -638,7 +646,7 @@ De manera general, las ODEs se representan utilizando el siguiente sistema de ec
   \begin{aligned}
     \dot{x_{1}} = f_{1}(x_{1},\ldots,x_{n}),\\
     \ldots\\
-    \dot{x_{n}} = f_{n}(x_{1},\ldots,x_{n}),
+    \dot{x_{n}} = f_{n}(x_{1},\ldots,x_{n}).
   \end{aligned}
 \end{equation*}
 
@@ -652,7 +660,7 @@ El crecimiento de las partículas puede ser aleatorio o direccionado.
 
 Un campo vectorial (discreto), definido por un Sistema Dinámico (SD), puede utilizarse para direccionar las partículas 
 
-Ejemplo de SD en dos dimensiones (imagen de la izquierda),
+Ejemplo de SD en dos dimensiones (imagen izquierda),
 \begin{equation*} \label{eq:simple}  
   \begin{aligned}
     \dot{x} &= x^{2}-y^{2}+1,\\
@@ -703,25 +711,6 @@ Utilizando distintos parámetros de aleatoriedad en el crecimiento, se obtienen 
 
 En las imágenes, aleatoriedad = 0.3, 0.2, y 0.1
   \includegraphics[width=12cm]{../figures/Fig3}
-\end{frame}
-
-\begin{frame}{Mapa de Distancias}
-
-Dada una textura volumétrica $M$, el algoritmo genera una textura volumétrica a valores reales $DF_{M}$ con las mismas dimensiones que $M$,
-
-
-$$DF_{M}[i,j,k] = \min \bigg\{ \delta([i,j,k],[i',j',k']): M[i',j',k'] = 0 \bigg\},$$
-
-
-\noindent donde $[i,j,k]$ y $[i',j',k']$ son celdas en las respectivas texturas, representando las posiciones espaciales $(i,j,k)$ y $(i',j',k')$, y $\delta$ es la función que computa la distancia entre dos celdas, las cuales pueden ser la distancia de Manhattan, o la distancia Euclidiana.
-
-\end{frame}
-
-\begin{frame}{Mapa de Distancias}
-
-%\centerline{\includegraphics[width=12cm]{../figures/distance}}
-\centerline{\includegraphics[width=12cm]{../figures/DistanceTransform}}
-
 \end{frame}
 
 \begin{frame}{Condiciones de contorno}
@@ -812,9 +801,9 @@ Parámetro {\em separación} = 2 entre partículas
 
 \item Sin embargo, ha sido ampliamente estudiado en ingeniería de los alimentos.
 
-\item No existe aún un modelo unificado. Los modelos existentes representan solamente subprocesos (cocción, leudado, formación de la corteza, etc.).
+\item No existe aún un modelo unificado (cocción, leudado, formación de la corteza, etc.).
 
-\item Es posible utilizar algunos de estos subprocesos para diseñar un algoritmo procedimental.
+\item Subproceso $\rightarrow$ algoritmo procedimental.
 \end{itemize}
 \end{block}
 \end{frame}
@@ -832,21 +821,44 @@ N(r) = \frac{k}{r^{d}},
 
 $k$ parámetro.
 
-\centerline{\includegraphics[height=4cm]{../figures/bubbles}}
+\includegraphics[height=3.5cm]{../figures/bubbles}
+\includegraphics[height=3.5cm]{../figures/proving}
 \end{frame}
 
 \begin{frame}
-Si bien el proceso de generación utiliza una ley fractal, la intersección de las burbujas produce una estructura que no es necesariamente fractal, como se demostrará más adelante.
+Si bien el proceso de generación utiliza una ley fractal, la intersección de las burbujas produce una estructura que no es necesariamente fractal
 
 \vspace{1cm}
 
-Es necesario disponer de las burbujas en una geometría de entrada, para esto, utilizar un enmascarado directo (multiplicación) produce resultados incorrectos:
+Es necesario disponer las burbujas en una geometría dada
+
+Enmascarado directo (multiplicación) (incorrecto):
 
 \centerline{\includegraphics[width=8cm]{../figures/intersectProblem}}
 \end{frame}
 
+\begin{frame}{Mapa de Distancias}
+
+Dada una textura volumétrica $M$, el algoritmo genera una textura volumétrica a valores reales $DF_{M}$ con las mismas dimensiones que $M$,
+
+
+$$DF_{M}[i,j,k] = \min \bigg\{ \delta([i,j,k],[i',j',k']): M[i',j',k'] = 0 \bigg\},$$
+
+
+\noindent donde $[i,j,k]$ y $[i',j',k']$ son celdas en las respectivas texturas, representando las posiciones espaciales $(i,j,k)$ y $(i',j',k')$, y $\delta$ es la función que computa la distancia entre dos celdas, las cuales pueden ser la distancia de Manhattan, o la distancia Euclidiana.
+
+\end{frame}
+
+\begin{frame}{Mapa de Distancias}
+
+\centerline{\includegraphics[width=11cm]{../figures/DistanceTransform}}
+
+\end{frame}
+
 \begin{frame}
-Se utiliza el mapa de distancias previamente discutido y un umbral, obteniéndose una región donde puede haber burbujas, permitiendo además obtener una corteza de ancho parametrizable.
+Se establece un umbral en el mapa de distancias
+
+Permitiendo además obtener una corteza de ancho parametrizable.
 
 
 \centerline{\includegraphics[width=10cm]{../figures/prebakebread}}
@@ -863,7 +875,7 @@ Procesos durante la cocción:
 \item Crecimiento de las burbujas
 \item Deformación de la masa original
 \item Formación de la corteza
-\item Reacciones químicas
+%\item Reacciones químicas
 \end{itemize}
 
 En nuestro caso, debe atenderse especialmente al efecto de dichos procesos sobre la \textbf{apariencia}.
@@ -1034,7 +1046,7 @@ Total & 68.43 & 190.76 & 415.96 \\
 %Rendering & 1s & 4s & 0\% \\
 \noalign{\smallskip}\hline
 \end{tabular}
-\caption{Tiempos de cómputo típicos en de las distintas etapas de la fabricación sintética de pan, expresados en segundos.}
+\caption{Tiempos de cómputo típicos de las distintas etapas de la fabricación sintética de pan, expresados en segundos.}
 \label{tab:computingtimes}
 \end{table}
 \end{frame}
@@ -1043,7 +1055,7 @@ Total & 68.43 & 190.76 & 415.96 \\
 \begin{block}{}
 \begin{itemize}
 \item Modelo \textbf{inspirado} físicamente
-\item Elimina decisiones ad-hoc
+%\item Elimina decisiones ad-hoc
 \item Se simula cocción, levantamiento de la masa, etc.
 \item Permite obtener imágenes en sucesivas etapas del proceso de formación
 \end{itemize}
@@ -1171,18 +1183,18 @@ Esto se implementa en la GPU, en el denominado \textbf{fragment shader}, el cual
 
 \end{frame}
 
-\begin{frame}{Renderizado utilizando más de una escala}
-A la hora de obtener complejidad en la imagen resultante, existen limitaciones en la resolución de la textura.
+%\begin{frame}{Renderizado utilizando más de una escala}
+%A la hora de obtener complejidad en la imagen resultante, existen limitaciones en la resolución de la textura.
 
-Una solución consiste en utilizar más de una textura
+%Una solución consiste en utilizar más de una textura
 
-\centerline{\includegraphics[width=10cm]{../figures/multiscale}}
+%\centerline{\includegraphics[width=10cm]{../figures/multiscale}}
 
-Textura A muestreada en $(x,y,z)$
+%Textura A muestreada en $(x,y,z)$
 
-Textura B muestreada en $N\times (x,y,z), N \in \mathbb{R}$
+%Textura B muestreada en $N\times (x,y,z), N \in \mathbb{R}$
 
-\end{frame}
+%\end{frame}
 
 
 
@@ -1190,12 +1202,13 @@ Textura B muestreada en $N\times (x,y,z), N \in \mathbb{R}$
 \begin{itemize}
 \item Imágenes realistas
 \item Tiempo real
-\item Implementación simple
+\item Implementación simple en GPU
 \end{itemize}
 
 \begin{block}{Trabajos a Futuro}
 \begin{itemize}
 \item Otros materiales
+\item Pre-cómputo de la radiancia
 \end{itemize}
 \end{block}
 \end{frame}
@@ -1240,23 +1253,25 @@ La estructura visible de la miga de pan sugiere que un algoritmo de extracción 
 \end{algorithm}
 \end{frame}
 
-\subsection{Fractales y Multifractales}
+%\subsection{Fractales y Multifractales}
 
-\begin{frame}{Dimensión Box}
+\subsection{Multifractales}
 
-\begin{wrapfigure}{r}{0.5\textwidth}
-\includegraphics[width=6cm]{../figures/fitbox}
-\end{wrapfigure}
+%\begin{frame}{Dimensión Box}
 
-Dada una imagen, se la subdividide en una grilla de dimensiones $M\times M$ donde el largo del lado de cada cuadrado formado es $\delta$. Si $N(\delta)$ representa el n\'umero de cuadrados que contienen al menos un p\'ixel resultado de una binarizaci\'on de la imagen (p\'ixel blanco) para ese $\delta$, la dimensi\'on Box $D_{b}$ queda definida como:\\
+%\begin{wrapfigure}{r}{0.5\textwidth}
+%\includegraphics[width=6cm]{../figures/fitbox}
+%\end{wrapfigure}
 
-$$D_{b} = \displaystyle\lim_{\delta \to 0}{\frac{\log(N(\delta))}{\log (1/\delta)}}$$
+%Dada una imagen, se la subdividide en una grilla de dimensiones $M\times M$ donde el largo del lado de cada cuadrado formado es $\delta$. Si $N(\delta)$ representa el n\'umero de cuadrados que contienen al menos un p\'ixel resultado de una binarizaci\'on de la imagen (p\'ixel blanco) para ese $\delta$, la dimensi\'on Box $D_{b}$ queda definida como:\\
+
+%$$D_{b} = \displaystyle\lim_{\delta \to 0}{\frac{\log(N(\delta))}{\log (1/\delta)}}$$
 
 
-\end{frame}
+%\end{frame}
 
 \begin{frame}
-Esto sugiere que podría ser útil utilizar más de una DF para caracterizar los resultados.
+%Esto sugiere que podría ser útil utilizar más de una DF para caracterizar los resultados.
 
 El espectro multifractal puede ser utilizado para capturar distintas estructuras fractales dentro del mismo objeto, o distintos comportamientos fractales dependiendo de la escala.
 
