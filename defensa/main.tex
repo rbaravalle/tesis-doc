@@ -140,11 +140,19 @@ Dr. Gustavo Galizzi (UNR)
 \subsection{Modelado y Simulación Foto-Realística}
 \begin{frame}{Modelado foto-realístico de escenas}
 
+
+
+\centerline{\includegraphics[scale = 0.25]{../figures/fotorealismo}}
+
+\textbf{Foto-realismo}: síntesis de imágenes que produzcan el \textbf{mismo efecto}, en la percepción, que una fotografía del material/escena.
+
+\vspace{0.2cm}
+
 El área experimentó avances notables desde su concepción.
 \begin{block}{}
 \begin{itemize}
-\item \textbf{Nivel de Realismo}: se desarrollaron teorías computacionales que modelan fenómenos físicos subyacentes (intervinientes en la apariencia) ({\it e.g.} Ecuación del Renderizado de Superficies y Volúmenes).
-\item \textbf{Velocidad}: tasas de tiempo interactivo / real: evolución cuasi-exponencial del poder de cómputo (GPU's) en los últimos años.
+\item \textbf{Nivel de Realismo}: se desarrollaron teorías computacionales que modelan fenómenos físicos subyacentes ({\it e.g.} Ecuación del Renderizado de Superficies y Volúmenes).
+\item \textbf{Velocidad}: tasas de tiempo interactivo / real: evolución cuasi-exponencial del poder de cómputo (GPU's).
 \end{itemize}
 \end{block}
 
@@ -164,13 +172,23 @@ El área experimentó avances notables desde su concepción.
 
 
 \begin{frame}{Síntesis de la Imagen de una Escena}
-Cada punto (o píxel) en una imagen de una escena a \textbf{renderizar}, debe computar la \textbf{radiancia} (o energía radiada) que arriba a la \textbf{cámara} desde toda la escena.
+\textbf{Renderización}:
+Computar \textbf{radiancia} que arriba a la \textbf{cámara} desde toda la escena.
 
 \vspace{0.4cm}
-Cada objeto de la escena puede emitir radiancia, en todo el espectro electromagnético, hacia el observador.
+La radiancia \textit{entrante}, a cada píxel, depende de numerosos factores
+\begin{itemize}
+\item \textbf{forma} del objeto
+\item \textbf{material}, 
+\item \textbf{oclusión} existente entre el objeto y la cámara
+\item temperatura
+\item etc.
+\end{itemize}
+
 
 \vspace{0.4cm}
-La radiancia \textit{entrante} depende de numerosos factores, entre ellos la \textbf{forma} del objeto, el \textbf{material} del objeto, la \textbf{oclusión} existente entre el objeto y la cámara, su temperatura, etc.
+Cada objeto de la escena puede emitir radiancia (en todo el espectro electromagnético) hacia el observador.
+
 \end{frame}
 
 
@@ -179,27 +197,18 @@ La radiancia \textit{entrante} depende de numerosos factores, entre ellos la \te
 \begin{block}{Luz}
 \begin{itemize}
 \item La comprensión del fenómeno evolucionó considerablemente a lo largo del tiempo.
-\item Actualmente, se acuña el término ``dualidad onda-partícula'' para describirlo. Debe simplificarse su tratamiento en computación gráfica.
+\item ``dualidad onda-partícula'': Debe simplificarse su tratamiento en computación gráfica.
 \item En la mayoría de los casos, sólo la \textbf{luz visible} es la que debe modelarse (apariencia).
-\item La distribución de la luz visible en una escena se asume por medio de líneas rectas o \textbf{rayos}, es decir, se opta por la representación {\em óptico geométrica} del fenómeno (escala macroscópica).
-\end{itemize}
-\end{block}
-\end{frame}
-
-\begin{frame}{}
-
-\centering
-%\includegraphics[scale = 0.15]{realidadVirtual.jpg}
-
-\begin{block}{Sin embargo, este es sólo un paso de muchos}
-\begin{itemize}
-\item Debe modelarse, además, la interacción de la luz con \textbf{cada objeto} en particular.
-\item Este problema es aún mayor ya que cada material se comporta de manera diferente.
-\item El problema es doble: debe simularse la interacción de la luz con el material \textbf{Y} la geometría del mismo.
+\item Se asume distribución en líneas rectas o \textbf{rayos} (representación {\em óptico geométrica}, escala macroscópica).
 \end{itemize}
 \end{block}
 
+\begin{block}{Debe modelarse, además, su interacción con \textbf{cada objeto}}
+Modelado \textbf{geometría}.
+\end{block}
+
 \end{frame}
+
 
 \begin{frame}{Materiales}
 ?`Qué es la apariencia de un material?
@@ -210,18 +219,14 @@ La radiancia \textit{entrante} depende de numerosos factores, entre ellos la \te
 %\item Se codifica en datos, estructuras de datos y algoritmos.
 \end{itemize}
 
-\centerline{\includegraphics[scale = 0.25]{../figures/fotorealismo}}
-
-El \textbf{foto-realismo} busca sintetizar imágenes que produzcan el \textbf{mismo efecto}, en la percepción, que aquél producido por la visualización de una fotografía del material/escena.
 \end{frame}
 
 
 \begin{frame}{Modelado de la Apariencia de Materiales}
-\begin{block}{}
+\begin{block}{El modelado de cada material depende de la escala buscada.}
 \begin{itemize}
-\item El modelado de cada material depende de la escala buscada.
-\item Microscópico: detalles que no son visibles al ojo humano. Se utilizan diversas técnicas estadísticas.
-\item Macroscópico: detalles visibles al ojo humano. Se utilizan triángulos, texturas, etc.
+\item \textbf{Microscópico}: detalles que no son visibles al ojo humano. Se utilizan diversas técnicas estadísticas.
+\item \textbf{Macroscópico}: detalles visibles al ojo humano. Se utilizan triángulos, texturas, etc.
 \end{itemize}
 \end{block}
 El material debe ser estudiado para comprender su apariencia, a partir de la cual derivar un modelo numérico del mismo
@@ -232,22 +237,36 @@ El material debe ser estudiado para comprender su apariencia, a partir de la cua
 
 \begin{frame}{Materiales con mayor aparición en escenas}
 
-En computación gráfica, los materiales para los cuales se ha desarrollado mayormente la literatura científica incluye al agua, la piel humana, metales y plásticos, entre otros. Esto se debe a la \textbf{facilidad del diseño}, a la necesidad de cierto \textbf{grado de realismo}, y a su \textbf{aparición constante en escenas}.
+\begin{itemize}
+\item Agua
+\item Piel humana
+\item Metales
+\item Plásticos
+\item etc. 
+\end{itemize}
+
+Posibles causas
+\begin{itemize}
+\item \textbf{facilidad} del diseño (realismo)
+\item aparición \textbf{constante} en escenas
+\end{itemize}
 
 \end{frame}
 
 \begin{frame}{Materiales con menor aparición en escenas}
 
-Otros materiales, como es el caso de materiales cocidos, materiales porosos y materiales comestibles, presentan mayor complejidad en el modelado:
+Ejemplo: materiales cocidos, materiales porosos y materiales comestibles
+
+Presentan mayor complejidad en el modelado
 
 \begin{itemize}
 \item \textbf{Geometría compleja y visible}, rica interacción con la luz: translucencia, reflexión, absorción, etc.
-\item El ser humano puede \textbf{distinguir con facilidad} un modelo si el mismo no es tratado cuidadosamente.
-\item El \textbf{costo computacional} de modelar y renderizar estos materiales resultaba excesivo hasta la aparición masiva del hardware paralelo.
+\item \textbf{Fácil detección} de modelos inadecuados.
+\item \textbf{Costo computacional}: resultaba excesivo hasta la aparición masiva del hardware paralelo.
 \end{itemize}
 
-Alan Fournier: `computer graphics has still not been
-able to convincingly render a slice of bread' (2001). 
+{\it Alan Fournier: `computer graphics has still not been
+able to convincingly render a slice of bread' (2001)}
 
 
 \end{frame}
@@ -256,6 +275,7 @@ able to convincingly render a slice of bread' (2001).
 \begin{block}{}
 Debido a las consideraciones anteriores, en esta tesis haremos hincapié en materiales \textbf{porosos}.
 
+Objetivos
 \begin{itemize}
 \item Producir una geometría configurable, intuitiva y creíble de estos materiales.
 \item Implementación de un modelo inspirado en procesos físicos en la formación de un material poroso: el pan.
@@ -294,30 +314,47 @@ Debido a las consideraciones anteriores, en esta tesis haremos hincapié en mate
 \subsection{Modelado de la Geometría: Técnicas Procedimentales}
 \begin{frame}{Modelado de la Geometría: Técnicas Procedimentales}
 
-En determinados casos, el modelado por medio de supervisión humana repetitiva no es deseable.
+\begin{block}{Problema}
+Supervisión humana repetitiva
+
+Ejemplo: Bosque: diseñar separadamente cada árbol
+\end{block}
 
 \vspace{0.5cm}
-Por ejemplo, al diseñar un bosque, diseñar separadamente cada árbol requeriría un tiempo excesivo.
-
-\vspace{0.5cm}
-Debido a esto se desarrollaron técnicas artísticas, basadas en algoritmos, los cuales permiten diseñar geometrías de manera semi-automática, recibiendo el nombre de \textbf{Procedimentales}.
+\begin{block}{Solución}
+Técnicas \textbf{Procedimentales}.
+\begin{itemize}
+\item Técnicas artísticas basadas en algoritmos
+\item Diseño de geometrías de manera semi-automática
+\end{itemize}
+\end{block}
 
 \end{frame}
 
 \begin{frame}{Sistemas-L}
-El botánico Lindenmayer estudió y acuñó estos sistemas para describir la estructura visible de plantas. Fue capaz de representar objetos complejos de manera convincente, utilizando un procedimiento muy sencillo de generación.
+(Lindenmayer)
 
-La estructura de una planta está representada por medio de una \textbf{cadena de caracteres}.
+\begin{itemize}
+\item Describen la estructura visible de plantas
+\item Representan objetos complejos de manera convincente
+\item Procedimiento muy sencillo de generación
+\item \textbf{Cadena de caracteres}
+\item Procedimiento {\it recursivo} de \textbf{reemplazo de caracteres}
+\end{itemize}
 
-A través de un procedimiento {\it recursivo} de \textbf{reemplazo de caracteres} basados en reglas sencillas, se pueden generar estructuras complejas.
 
 \end{frame}
 
 \begin{frame}
 
-La generación cuenta con un \textbf{axioma} y una o varias reglas \textbf{reglas de producción}.
+Procedimiento
+\begin{itemize}
+\item \textbf{axioma}
+\item una o varias reglas \textbf{reglas de producción}
+\item Número de iteraciones
+\end{itemize}
 
-Además, se especifica un número de iteraciones, donde en cada iteración se aplican reglas de producción a la cadena de caracteres resultante anterior.
+En cada iteración se aplican reglas de producción a la cadena de caracteres resultante anterior.
 
 \vspace{1cm}
 
