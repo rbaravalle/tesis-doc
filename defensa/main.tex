@@ -1,4 +1,4 @@
-\documentclass[spanish]{beamer}
+\documentclass[spanish,unknownkeysallowed]{beamer}
 %% \usetheme{Warsaw}
 %% \usetheme{Madrid}
 
@@ -417,8 +417,7 @@ Por medio de ecuaciones del \textbf{comportamiento} o \textbf{crecimiento} de lo
 
 Ejemplo: \textbf{ecuaciones de Navier-Stokes} (fluídos)
 
-Dadas condiciones iniciales para $\bold{u}$ y $p$ cuando $t = 0$, la evolución del sistema se describe como sigue:
-
+Dadas condiciones iniciales $\bold{u}$ y $p$ cuando $t = 0$,
 \begin{align*}
 \nabla \cdot \bold{u} &= 0\\
 \frac{\partial \bold{u} }{\partial t} &= - (\bold{u} \cdot \nabla) \bold{u} - \frac{1}{\rho} \nabla p + \nu \nabla^{2} \bold{u} + \bold{f},
@@ -473,12 +472,16 @@ $$ L(\bold{x'} \rightarrow \bold{x}) =  g(\bold{x'}  \rightarrow \bold{x})  \lef
 \begin{frame}
 $$ L(\bold{x'} \rightarrow \bold{x}) =  g(\bold{x'}  \rightarrow \bold{x})  \left[ \epsilon(\bold{x'}  \rightarrow \bold{x}) + \int_{s}{\rho(\bold{x''}  \rightarrow \bold{x'}  \rightarrow \bold{x})L(\bold{x''}  \rightarrow \bold{x}) d\bold{x''}} \right] $$
 
-$L(\bold{x'} \rightarrow \bold{x})$, intensidad de la luz que viaja del punto tridimensional $\bold{x'}$ a $\bold{x}$
+\begin{itemize}
+\item $L(\bold{x'} \rightarrow \bold{x})$, intensidad de la luz que viaja del punto tridimensional $\bold{x'}$ a $\bold{x}$
 %(sin oclusiones)
 
-$g(\bold{x'} \rightarrow \bold{x})$: término geométrico que modela la oclusión que podría existir entre $\bold{x}$ y $\bold{x'}$, $\epsilon(\bold{x'} \rightarrow \bold{x})$ intensidad de la luz emitida desde $\bold{x'}$ a $\bold{x}$, $\rho(\bold{x''}  \rightarrow \bold{x'}  \rightarrow \bold{x})$ la intensidad de la luz emitida de $\bold{x''}$ a $\bold{x}$ por medio de una superficie en $\bold{x'}$ (esta cantidad será llamada función bidireccional de distribución de reflectancia, BRDF),
+\item $g(\bold{x'} \rightarrow \bold{x})$: término geométrico que modela la oclusión que podría existir entre $\bold{x}$ y $\bold{x'}$,
+\item $\epsilon(\bold{x'} \rightarrow \bold{x})$ intensidad de la luz emitida desde $\bold{x'}$ a $\bold{x}$,
+\item $\rho(\bold{x''}  \rightarrow \bold{x'}  \rightarrow \bold{x})$ la intensidad de la luz emitida de $\bold{x''}$ a $\bold{x}$ por medio de una superficie en $\bold{x'}$ (esta cantidad será llamada función bidireccional de distribución de reflectancia, BRDF),
 
-y $S=\bigcup{s_{i}}$, unión de todas las superficies $s_{i}$ de la escena
+\item $S=\bigcup{s_{i}}$, unión de todas las superficies $s_{i}$ de la escena
+\end{itemize}
 \end{frame}
 
 \begin{frame}
@@ -491,7 +494,8 @@ Es recursiva, ya que la \textbf{energía radiante saliente} de un punto $x'$ dep
 De esta forma, $\bold{x}$,$\bold{x'}$ y $\bold{x''}$ varían sobre todas las superficies de la escena.
 %Además se asume una superficie $S_{0}$, la cual se modela como una semi-esfera que engloba a toda la escena.
 
-La ecuación aproxima las propiedades óptico-geométricas de las ecuaciones del electromagnetismo de Maxwell.
+\vspace{0.2cm}
+Aproximación de las propiedades óptico-geométricas de las ecuaciones del electromagnetismo de Maxwell.
 
 (Ray Tracing, Path Tracing)
 \end{frame}
@@ -599,7 +603,6 @@ Presentamos un modelo de generación de geometrías porosas basados en:
 \end{frame}
 
 \begin{frame}{Sistemas de partículas}
-Características
 \begin{itemize}
 \item Conjunto de \textbf{partículas}: una partícula posee posición, dirección, color, tiempo de vida, etc.
 \item Utilizado para representar fluídos, y objetos con interfaces sin definición precisa
@@ -610,16 +613,17 @@ Características
 \end{frame}
 
 \begin{frame}
-El sistema consta de un conjunto de partículas $P$, y dos grillas, $L$, y $L^{2}$:
-\begin{align*}
-  P = \{p_{1}, ... , p_{n}\}, n  \in \mathbb{N}, \\
-  L_{N\times N \times N},\\
-  L^{2}_{N\times N \times N},\\ N \in \mathbb{N}.
-\end{align*}
+El sistema consta de:
+\begin{itemize}
+\item un conjunto de partículas $P = \{p_{1}, ... , p_{n}\}, n  \in \mathbb{N}$
+\item y dos grillas, $L_{N\times N \times N},$, $L^{2}_{N\times N \times N}, N \in \mathbb{N}.$
+\end{itemize}
 
-inicialmente $L_{xyz}=1$: masa
-
-inicialmente $L^{2}_{xyz}=-1$: celda libre,
+Condiciones Iniciales:
+\begin{itemize}
+\item $L_{xyz}=1$: masa
+\item $L^{2}_{xyz}=-1$: celda libre,
+\end{itemize}
 
 Cada partícula posee:
 \begin{equation*}
@@ -710,11 +714,10 @@ Ejemplo de SD en dos dimensiones (imagen izquierda),
 \begin{frame}
 Se establece una correspondencia entre los límites del plano y las posiciones de la grilla.
 
-De esta manera, la posición $(0,0)$ de la grilla se corresponderá con el mínimo en $X$ e $Y$, definido para el sistema dinámico, y la posición $(N,N)$ con el máximo $X$ e $Y$.
-
-Cada posición arbitraria en el plano tiene una posición específica en la grilla.
-
-Se utiliza regla de tres para convertir de un espacio al otro
+\begin{itemize}
+\item Posición $(0,0)$ de la grilla $\rightarrow$ mínimo en $X$ e $Y$ (sistema dinámico)
+\item Posición $(N,N)$ con el máximo $X$ e $Y$.
+\end{itemize}
 
 \end{frame}
 
@@ -744,20 +747,21 @@ Se utiliza regla de tres para convertir de un espacio al otro
 \end{frame}
 
 \begin{frame}{Sistemas de partículas + Sistemas Dinámicos}
-Utilizando distintos parámetros de aleatoriedad en el crecimiento, se obtienen distintas apariencias.
 
-En las imágenes, aleatoriedad = 0.3, 0.2, y 0.1
+Aleatoriedad = 0.3, 0.2, y 0.1
+\vspace{0.1cm}
   \includegraphics[width=12cm]{../figures/Fig3}
 \end{frame}
 
 \begin{frame}{Condiciones de contorno}
-Se utilizan geometrías tridimensionales \textbf{arbitrarias}.
+Geometrías tridimensionales \textbf{arbitrarias}.
 
-Se elige un eje Cartesiano ($x$, $y$ o $z$) y se computan cortes bidimensionales sobre ese eje.
+\begin{itemize}
+\item Se elige un eje Cartesiano ($x$, $y$ o $z$) y se computan cortes bidimensionales sobre ese eje.
+\item Para cada corte se establecen condiciones de contorno, a través de un campo vectorial discreto que ``sigue'' al contorno
+\end{itemize}
 
-Para cada corte se establecen condiciones de contorno, a través de un campo vectorial discreto que ``sigue'' al contorno
-
-Esto se logra por medio del \textbf{ortogonal al gradiente del corte}.
+\textbf{Ortogonal al gradiente del corte}.
 
   \centerline{\includegraphics[width=7cm]{../figures/Fig4}}
 \end{frame}
@@ -765,7 +769,7 @@ Esto se logra por medio del \textbf{ortogonal al gradiente del corte}.
 \subsection{Resultados}
 
 \begin{frame}{Resultados}
-Finalmente se centra el sistema dinámico en el {\em centro de masa} de cada corte, y junto a las condiciones de contorno, definen un patrón natural para el corte.
+Centrado del SD en el {\em centro de masa} de cada corte
 
 Parametrización bidimensional (más intuitiva).
 
@@ -1031,8 +1035,15 @@ $$L = 90 \rightarrow \text{sin cocción}$$
 
 Los valores de los canales $a$ y $b$ no están reportados. A partir de fotografías se observa que varian suavemente al cambiar $L$.
 
-{\em \textbf{Densidad} de la corteza}: $N_{v} / W_{size},$ donde $N_{v}$ número de voxels $= 1$ en una ventana en el entorno de la posición, y $W_{size}$ número de voxels en esa ventana.
+\vspace{0.2cm}
 
+{\em \textbf{Densidad} de la corteza}: $N_{v} / W_{size},$
+
+donde $N_{v}$ número de voxels $= 1$ en una ventana en el entorno de la posición,
+
+y $W_{size}$ número de voxels en esa ventana.
+
+\vspace{0.2cm}
 Los colores se distribuyen de acuerdo al valor de $L$. $<$ masa $\Rightarrow < L$.
 
 \end{frame}
@@ -1268,9 +1279,8 @@ Esto se implementa en la GPU, en el denominado \textbf{fragment shader}, el cual
 \subsection{Validación automática}
 
 \begin{frame}{Validación automática}
-Proponemos utilizar un \textbf{algoritmo}, en la validación de las geometrías porosas obtenidas, en oposición a una inspección subjetiva de los resultados.
 
-En la generación utilizamos un algoritmo fractal para construir la geometría de migas de pan.
+Un algoritmo fractal para construye la geometría de migas de pan.
 
 La estructura visible de la miga de pan sugiere que un algoritmo de extracción de características fractales podría describirla.
 
@@ -1310,9 +1320,14 @@ La estructura visible de la miga de pan sugiere que un algoritmo de extracción 
 \begin{frame}
 %Esto sugiere que podría ser útil utilizar más de una DF para caracterizar los resultados.
 
-El espectro multifractal puede ser utilizado para capturar distintas estructuras fractales dentro del mismo objeto, o distintos comportamientos fractales dependiendo de la escala.
+Espectro Multifractal
 
-La dimensión generalizada de orden $q$ con el método Sandbox se define como:
+\begin{itemize}
+\item Captura distintas estructuras fractales dentro del mismo objeto,
+\item o distintos comportamientos fractales dependiendo de la escala.
+\end{itemize}
+
+Dimensión generalizada de orden $q$ (método Sandbox):
 
  \begin{align*}
 D_{q\ne 1}^{sb} &= \frac{1}{q-1} \lim_{R \rightarrow 0}{
