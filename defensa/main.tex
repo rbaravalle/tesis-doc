@@ -525,27 +525,34 @@ Ray Casting (Direct Volume Rendering)
 
 
 \begin{frame}{Materiales porosos - Trabajo Previo}
-La literatura utiliza ambos enfoques para producir materiales porosos. Cada uno de ellos con ventajas y desventajas.
+La literatura utiliza ambos enfoques para producir materiales porosos.
+
+Cada uno de ellos con ventajas y desventajas.
 
 \ \\
 
 Volúmenes
 \begin{block}{}
 \begin{itemize}
-\item permiten \textbf{cortes arbitrarios} en el objeto
-\item son generalmente \textbf{más costosos}, tanto en almacenamiento como en tiempo de renderizado.
+\item \textbf{cortes arbitrarios} en el objeto
+\item computacionalmente \textbf{más costosos}, (almacenamiento, tiempo de renderizado)
 \end{itemize}
 \end{block}
 \end{frame}
 
 \begin{frame}{Materiales porosos - Trabajo Previo}
 
-Se utilizan diversos ruidos, como los ruidos de Voronoi, Perlin y Worley. Sin embargo, los métodos deben combinarse con otras consideraciones ad-hoc.
+Se utilizan diversos ruidos
 
-\includegraphics[scale = 0.2]{../figures/Fig8}
-\includegraphics[scale = 0.2]{../figures/Fig9CAVW}
+\begin{itemize}
+\item Voronoi
+\item Perlin
+\item Worley.
+\item consideraciones ad-hoc
+\end{itemize}
 
-Ratatouille (Película): modelo de pan basado en ruido de Voronoi + un mapa indicando deformación de burbujas.
+\includegraphics[scale = 0.15]{../figures/Fig8}
+\includegraphics[scale = 0.15]{../figures/Fig9CAVW}
 \end{frame}
 
 
@@ -559,20 +566,21 @@ Desventajas:
 \end{itemize}
 \end{block}
 
+Ratatouille (Película): Voronoi + mapa (deformación de burbujas).
 \centering{\includegraphics[scale = 0.3]{../figures/ratatouille}}
 
 \end{frame}
 
 \begin{frame}
 
-Modelo fenomenológico: Tong et al (2005), "Modeling and Rendering of quasi-homogeneous Materials"
+{\it Tong et al (2005)}
 
-Capturas sobre materiales reales utilizando cámaras y lásers $\rightarrow$ se obtienen distribuciones precisas de radiancia en el material.
+Capturas (cámaras y lásers) $\rightarrow$ distribuciones precisas de radiancia.
 
 \begin{itemize}
 \item Proceso de captura muy complejo
 \item Limitado a una geometría
-\item Tiempos de cómputo no claramente establecidos
+\item Tiempos de cómputo?
 \item Imposibilidad de realizar cortes
 \end{itemize}
 
@@ -597,8 +605,8 @@ Capturas sobre materiales reales utilizando cámaras y lásers $\rightarrow$ se 
 \begin{frame}{Modelado de Geometrías Porosas - Propuesta}
 Presentamos un modelo de generación de geometrías porosas basados en:
 \begin{itemize}
-\item Sistemas de Partículas que crecen, evitándose
-\item Sistemas dinámicos como medio de crecimiento
+\item \textbf{Sistemas de Partículas} que crecen, evitándose
+\item \textbf{Sistemas dinámicos} como medio de crecimiento
 \end{itemize}
 \end{frame}
 
@@ -697,11 +705,18 @@ De manera general, las ODEs se representan utilizando el siguiente sistema de ec
 
 
 \begin{frame}{Crecimiento}
-El crecimiento de las partículas puede ser aleatorio o direccionado.
+\begin{itemize}
+\item Aleatorio
+\item Direccionado
+\end{itemize}
 
-Un campo vectorial (discreto), definido por un Sistema Dinámico (SD), puede utilizarse para direccionar las partículas 
+\vspace{0.1cm}
 
-Ejemplo de SD en dos dimensiones (imagen izquierda),
+Sistema Dinámico (SD) $\rightarrow$ campo vectorial (discreto) $\rightarrow$ dirección
+
+\vspace{0.1cm}
+
+SD 2D, imagen izquierda:
 \begin{equation*} \label{eq:simple}  
   \begin{aligned}
     \dot{x} &= x^{2}-y^{2}+1,\\
@@ -776,6 +791,13 @@ Parametrización bidimensional (más intuitiva).
 \includegraphics[width=12cm]{../figures/Fig5}
 \end{frame}
 
+
+\begin{frame}{Resultados}
+Parámetro {\em separación} = 2 entre partículas
+
+\centerline{\includegraphics[width=8cm]{../figures/Fig7}}
+\end{frame}
+
 \begin{frame}{Resultados}
 \centerline{\includegraphics[width=10cm]{../figures/Fig11CAVW}}
 
@@ -786,11 +808,6 @@ Sistemas dinámicos adaptativos (dependiendo del ancho y alto del corte).
 
 \end{frame}
 
-\begin{frame}{Resultados}
-Parámetro {\em separación} = 2 entre partículas
-
-\centerline{\includegraphics[width=8cm]{../figures/Fig7}}
-\end{frame}
 
 \begin{frame}{Renderizados}
 
@@ -854,55 +871,61 @@ Parámetro {\em separación} = 2 entre partículas
 \end{frame}
 
 \begin{frame}{Leudado}
-Se extraen esferas de un cubo, donde la cantidad de esferas $N(r)$ extraídas es inversamente proporcional al radio $r$ de la esfera, es decir, se utiliza la ley fractal
+Simulación por \textbf{extracción de esferas} de un cubo
 
-\begin{equation*}
-N(r) = \frac{k}{r^{d}},
-\end{equation*}
+$N(r)$: cantidad de esferas extraídas (inversamente proporcional al radio $r$ de la esfera). Ley fractal:
 
-$k$ parámetro.
+\begin{equation}
+N(r) = \frac{k}{r^{d}}
+\end{equation}
 
+\vspace{0.3cm}
+\centering
 \includegraphics[height=3.5cm]{../figures/bubbles}
 \includegraphics[height=3.5cm]{../figures/proving}
 \end{frame}
 
 \begin{frame}
-Si bien el proceso de generación utiliza una ley fractal, la intersección de las burbujas produce una estructura que no es necesariamente fractal
+La intersección de las burbujas produce una estructura que no es necesariamente fractal
 
 \vspace{1cm}
 
-Es necesario disponer las burbujas en una geometría dada
+\centering
+Burbujas $\cap$ Geometría
 
-Enmascarado directo (multiplicación) (incorrecto):
+Enmascarado directo (multiplicación)
 
 \centerline{\includegraphics[width=8cm]{../figures/intersectProblem}}
 \end{frame}
 
-\begin{frame}{Mapa de Distancias}
+%\begin{frame}{Mapa de Distancias}
 
-Dada una textura volumétrica $M$, el algoritmo genera una textura volumétrica a valores reales $DF_{M}$ con las mismas dimensiones que $M$,
-
-
-$$DF_{M}[i,j,k] = \min \bigg\{ \delta([i,j,k],[i',j',k']): M[i',j',k'] = 0 \bigg\},$$
+%Textura volumétrica a valores reales $DF_{M}$ con las mismas dimensiones que la entrada $M$,
 
 
-\noindent donde $[i,j,k]$ y $[i',j',k']$ son celdas en las respectivas texturas, representando las posiciones espaciales $(i,j,k)$ y $(i',j',k')$, y $\delta$ es la función que computa la distancia entre dos celdas, las cuales pueden ser la distancia de Manhattan, o la distancia Euclidiana.
+%$$DF_{M}[i,j,k] = \min \bigg\{ \delta([i,j,k],[i',j',k']): M[i',j',k'] = 0 \bigg\},$$
 
-\end{frame}
 
-\begin{frame}{Mapa de Distancias}
+%\begin{itemize}
+%\item $[i,j,k]$ y $[i',j',k']$ son celdas en las respectivas texturas (posiciones espaciales $(i,j,k)$ y $(i',j',k')$)
+%\item $\delta$ es la función que computa la distancia entre dos celdas (distancia de Manhattan, Euclidiana).
+%\end{itemize}
+
+%\end{frame}
+
+\begin{frame}{Solución: \textbf{Mapa de Distancias}}
 
 \centerline{\includegraphics[width=11cm]{../figures/DistanceTransform}}
 
 \end{frame}
 
 \begin{frame}
-Se establece un umbral en el mapa de distancias
+\textbf{Umbral} DF $\rightarrow$ corteza de ancho \textbf{parametrizable}.
 
-Permitiendo además obtener una corteza de ancho parametrizable.
-
+\vspace{0.3cm}
 
 \centerline{\includegraphics[width=10cm]{../figures/prebakebread}}
+
 \centerline{\includegraphics[width=10cm]{../figures/prebakebunny}}
 \end{frame}
 
@@ -924,7 +947,7 @@ En nuestro caso, debe atenderse especialmente al efecto de dichos procesos sobre
 \end{frame}
 
 \begin{frame}{Cocción}
-Modelo unidimensional
+Modelo unidimensional (Transferencia de calor y masa)
 
 \begin{equation}
 \label{Eq:heat}
@@ -942,57 +965,59 @@ T(x,0) &= T_{0}(x), 0\le x \le L/2,
 
 \end{frame}
 
-\begin{frame}{Cocción}
-Condiciones de borde (continuidad y suavidad)
-\begin{align*}
-\left ( \frac{\partial T}{\partial x} \right )_{x=L/2} &= 0 , t > 0 \\
--k \left ( \frac{\partial T}{\partial x} \right )_{x=0} &= h_{r}(T_{r}-T_{s}) + h_{c}(T_{air}-T_{s}) - \lambda \rho D_{w} \left (\frac{\partial W}{\partial x} \right )_{x=0}
-\end{align*}
+%\begin{frame}{Cocción}
+%Condiciones de borde (continuidad y suavidad)
+%\begin{align*}
+%\left ( \frac{\partial T}{\partial x} \right )_{x=L/2} &= 0 , t > 0 \\
+%-k \left ( \frac{\partial T}{\partial x} \right )_{x=0} &= h_{r}(T_{r}-T_{s}) + h_{c}(T_{air}-T_{s}) - \lambda \rho D_{w} \left (\frac{\partial W}{\partial x} \right )_{x=0}
+%\end{align*}
 %
 
-\end{frame}
+%\end{frame}
 
 \begin{frame}
-Horno a una temperatura típica (por defecto utilizamos $210^{\circ}C$) y discretiza el tiempo en intervalos $\Delta t = 30s$.
+$Temp$: Arreglo \textbf{unidimensional} de temperaturas
 
-
-De la simulación se obtiene un arreglo unidimensional $Temp$, de tamaño $N_{grid}$, compuesto por valores de temperatura.
-
-Luego, obtenemos una distribución 3D de la temperatura
+Distribución 3D de la temperatura utilizando el DF:
 \begin{equation*}
 \displaystyle R_{vol}[x,y,z] = Temp[ round( DF_{M}[x,y,z] ) ], 
 \end{equation*}
 
 $DF_{M}[(x,y,z)] = 0 \rightarrow$ contorno, $Temp[0] \rightarrow R_{vol}[(x,y,z)]$.
-$DF_{M}[(x,y,z)] > 0 \rightarrow$ interior, $<$ T  $\rightarrow R_{vol}[(x,y,z)]$, .
+$DF_{M}[(x,y,z)] > 0 \rightarrow$ interior, $<$ T  $\rightarrow R_{vol}[(x,y,z)]$.
 
 \centerline{\includegraphics[width=8cm]{../figures/tempsbunny}}
 \end{frame}
 
 \begin{frame}{Deformación por Temperatura}
 
-Utilizamos una operación de warping, deformando las burbujas de acuerdo a la temperatura, en tres dimensiones, reemplazando así los sistemas dinámicos de la sección anterior.
-
-Se aplica un filtrado gaussiano al gradiente de $R_{vol}$, obteniendo $g'$
+Operación de \textbf{warping}: deforma burbujas de acuerdo a la temperatura (3D, dirección de crecimiento, SD).
 
 \begin{align*}
 \displaystyle
 [x,y,z] = [u,v,w] + p\, g'[u,v,w],
 \end{align*}
 
-Efecto de $p = 5,10,15$, respectivamente
+$g' = gauss(\nabla R_{vol})$
+
+$p = 5,10,15$:
 \centerline{\includegraphics[width=11cm]{../figures/parameterp}}
 
 \end{frame}
 
 \begin{frame}{Levantamiento de la masa}
 
-Una segunda operación simula el levantamiento de la masa, basado en la distribución de burbujas durante el leudado.
+\textbf{Distribución} de burbujas durante el leudado
+
 \begin{equation*}
 P[x,y,z] = max \bigg\{r\bigg\}
 \end{equation*}
 
-El parámetro $p$ se trata localmente, entonces $p = P[u,v,w],$
+(mayor burbuja en $[x,y,z]$)
+
+\vspace{0.2cm}
+
+Deformación \textbf{local}: $p = P[u,v,w],$
 
 \begin{equation*}
 [r,s,t] = [u,v,w] + P[u,v,w] \, g'[u,v,w],
@@ -1001,14 +1026,12 @@ El parámetro $p$ se trata localmente, entonces $p = P[u,v,w],$
 %\noindent donde $[u,v,w]$ es la entrada original, y $[r,s,t]$ es la coordenada deformada.
 
 
-Finalmente, se escala la textura de acuerdo a la distribución de burbujas,
+Escalado de la textura (de acuerdo a la distribución de burbujas)
 
 
 \begin{equation}
 [x,y,z] = [r,s,t]\, S \, P[r,s,t],
 \end{equation}
-
-\noindent donde $[x,y,z]$ es la entrada final, luego de la deformación inducida por el crecimiento.
 
 \end{frame}
 
@@ -1021,11 +1044,12 @@ Finalmente, se escala la textura de acuerdo a la distribución de burbujas,
 \subsection{Corteza}
 
 \begin{frame}{Corteza}
-Tomamos colores CIELab de muestras reales, reportadas por Purlis et. al. (2009).
+Colores CIELab de muestras reales, reportadas por Purlis et. al. (2009).
 
-$$L = 40 \rightarrow \text{máxima cocción}$$
-
-$$L = 90 \rightarrow \text{sin cocción}$$
+\begin{align*}
+L &= 40 \rightarrow \text{máxima cocción}\\
+L &= 90 \rightarrow \text{sin cocción}
+\end{align*}
 
 \centerline{\includegraphics[width=4cm]{../figures/browning}}
 
@@ -1033,15 +1057,16 @@ $$L = 90 \rightarrow \text{sin cocción}$$
 
 \begin{frame}
 
-Los valores de los canales $a$ y $b$ no están reportados. A partir de fotografías se observa que varian suavemente al cambiar $L$.
+%Los valores de los canales $a$ y $b$ no están reportados. A partir de fotografías se observa que varian suavemente al cambiar $L$.
 
 \vspace{0.2cm}
 
 {\em \textbf{Densidad} de la corteza}: $N_{v} / W_{size},$
 
-donde $N_{v}$ número de voxels $= 1$ en una ventana en el entorno de la posición,
-
-y $W_{size}$ número de voxels en esa ventana.
+\begin{itemize}
+\item $N_{v}$ número de voxels $= 1$ en una ventana en el entorno de la posición,
+\item $W_{size}$ número de voxels en esa ventana.
+\end{itemize}
 
 \vspace{0.2cm}
 Los colores se distribuyen de acuerdo al valor de $L$. $<$ masa $\Rightarrow < L$.
@@ -1076,28 +1101,26 @@ Panes luego de la cocción mostrando diferentes crecimientos. De izquierda a der
 
 \end{frame}
 
-\begin{frame}{Tiempos de Cómputo}
+%\begin{frame}{Tiempos de Cómputo}
 
-\begin{table}[h!]
-       % Give a unique label
-% For LaTeX tables use
-\begin{tabular}{lllll}
-\hline\noalign{\smallskip}
-Resolución de la Textura Volumétrica & $256^{3}$ & $384^{3}$  & $512^{3}$ \\
-\noalign{\smallskip}\hline\noalign{\smallskip}
-Leudado & 3.62 & 12.07 & 31.29 \\
-Intersección & 8 & 10.27 & 14.97 \\
-Transformación de Distancia & 7 & 23.73 & 56 \\
-Cocción  & 49.81 & 144.69 & 313.7 \\
-\hline\noalign{\smallskip}
-Total & 68.43 & 190.76 & 415.96 \\
+%\begin{table}[h!]
+%\begin{tabular}{lllll}
+%\hline\noalign{\smallskip}
+%Resolución de la Textura Volumétrica & $256^{3}$ & $384^{3}$  & $512^{3}$ \\
+%\noalign{\smallskip}\hline\noalign{\smallskip}
+%Leudado & 3.62 & 12.07 & 31.29 \\
+%Intersección & 8 & 10.27 & 14.97 \\
+%Transformación de Distancia & 7 & 23.73 & 56 \\
+%Cocción  & 49.81 & 144.69 & 313.7 \\
+%\hline\noalign{\smallskip}
+%Total & 68.43 & 190.76 & 415.96 \\
 %Rendering & 1s & 4s & 0\% \\
-\noalign{\smallskip}\hline
-\end{tabular}
-\caption{Tiempos de cómputo típicos de las distintas etapas de la fabricación sintética de pan, expresados en segundos.}
-\label{tab:computingtimes}
-\end{table}
-\end{frame}
+%\noalign{\smallskip}\hline
+%\end{tabular}
+%\caption{Tiempos de cómputo típicos de las distintas etapas de la fabricación sintética de pan, expresados en segundos.}
+%\label{tab:computingtimes}
+%\end{table}
+%\end{frame}
 
 \begin{frame}{Conclusiones}
 \begin{block}{}
@@ -1128,39 +1151,46 @@ Total & 68.43 & 190.76 & 415.96 \\
 
 \begin{frame}{Renderización}
 
-Muchas técnicas de renderizado utilizan \textbf{mallas} para computar los resultados.
-Esto es, la geometría se representa por vértices, y conexiones entre ellos, formando triángulos u otras figuras geométricas.
+Muchas técnicas de renderizado utilizan \textbf{mallas} para computar los resultados (vértices, y conexiones entre ellos)
 
 \ \\
 
-En nuestro caso, contamos con una \textbf{textura volumétrica}, por lo tanto proponemos utilizar Renderizado Directo de Volúmenes para evitar la construcción de una malla.
+En nuestro caso, se propone
 
-Además, de esta forma será posible obtener cortes arbitrarios del material.
+\textbf{textura volumétrica} $\rightarrow$ \textbf{Renderizado Directo de Volúmenes}
+
+\begin{itemize}
+\item Evita construcción de una malla.
+\item Permite \textbf{cortes arbitrarios} del material (trivialmente).
+\end{itemize}
 
 \end{frame}
 
 \begin{frame}{DVR}
 DVR aproxima la Ecuación del Transporte Radiativo (RTE).
 
-Se computa un \textbf{rayo} para cada pixel, desde la pantalla al objeto. El algoritmo computa el cambio de radiancia a lo largo del medio.
+Se computa un \textbf{rayo} para cada pixel, desde la pantalla al objeto.
+
+\textbf{Cambio de radiancia} del rayo a lo largo del medio.
 
 
 \centerline{\includegraphics[width=9cm]{../figures/dvr}}
 
-Para obtener resultados en tiempo real, tomamos una versión simplificada de la RTE, teniendo en cuenta solamente la transmitancia.
+Para obtener resultados en tiempo real, tomamos una versión simplificada de la RTE, teniendo en cuenta solamente la \textbf{transmitancia}.
 \end{frame}
 
 \begin{frame}{Renderización}
 
 
-Sea el \textbf{coeficiente de absorción} $ = \int_{p_i}^{p_j} k_a(t) \, dt$  $ = \tau_{(p_i, p_j)}$.
 
-
-Entonces la \textbf{Transmitancia} es la cantidad de luz que \texttt{atraviesa} un segmento del volumen:
+\textbf{Transmitancia}: es la cantidad de luz que \texttt{atraviesa} un segmento del volumen:
 
 \begin{equation*}
   T(p_i,p_j) = e^{-\tau_{(p_i, p_j)}}.
 \end{equation*}
+
+donde el \textbf{coeficiente de absorción} $ = \int_{p_i}^{p_j} k_a(t) \, dt$  $ = \tau_{(p_i, p_j)}$.
+
 
 
 \centerline{\includegraphics[scale = 0.25]{../figures/fenomenosrte}}
@@ -1168,16 +1198,14 @@ Entonces la \textbf{Transmitancia} es la cantidad de luz que \texttt{atraviesa} 
 
 \end{frame}
 
-\begin{frame}{Radiancia}
-
-
-\textbf{Radiancia}: cantidad de luz que pasa o es emitida por un medio.
+\begin{frame}
+RTE sólo teniendo en cuenta transmitancia:
 
 \begin{equation*}
   L(p_n) = L_b \ e^{-\tau(p_0, p_n)} + \int_{p_0}^{p_n} \rho \ e^{-\tau(t,p_n)} \, dt.
 \end{equation*}
 
-(Radiancia de fondo $+$ Radiancia del medio)
+(Transmitancia de fondo $+$ Transmitancia del medio)
 
 %La implementación reemplazará la integral por una suma,
 
@@ -1192,8 +1220,8 @@ Entonces la \textbf{Transmitancia} es la cantidad de luz que \texttt{atraviesa} 
 \begin{frame}{DVR en GPU}
 
 \begin{itemize}
-\item Computamos un rayo principal desde la cámara hacia el volumen
-\item Cada paso del rayo origina un rayo secundario, computando la transmitancia desde la posición actual hacia la luz, produciendo sombras
+\item Computamos un \textbf{rayo principal} desde la cámara hacia el volumen
+\item \textbf{Sombras}: cada paso del rayo origina un \textbf{rayo secundario}, computando la transmitancia desde la posición actual hacia la luz
 \end{itemize}
 
 \centerline{\includegraphics[width=4cm]{../figures/fragmentshader}}
@@ -1201,12 +1229,9 @@ Entonces la \textbf{Transmitancia} es la cantidad de luz que \texttt{atraviesa} 
 \end{frame}
 
 \begin{frame}
-Esto se implementa en la GPU, en el denominado \textbf{fragment shader}, el cual es el paso del \textbf{pipeline gráfico} que opera sobre fragmentos (píxeles).
+Implementación en GPU, (\textbf{fragment shader}, dentro del \textbf{pipeline gráfico}).
 
 \centerline{\includegraphics[width=13cm]{../figures/pipelinegrafico}}
-\end{frame}
-
-\begin{frame}{Tiempos de Cómputo}
 
 \begin{table}[htb]
 \centering
@@ -1276,23 +1301,38 @@ Esto se implementa en la GPU, en el denominado \textbf{fragment shader}, el cual
 \end{frame}
 
 
+\subsection{Validación tradicional}
+\begin{frame}{Validación tradicional}
+\begin{itemize}
+\item Se utilizan procesos físicos en el renderizado o modelado
+\item Las imágenes pueden pasar una inspección poco detallista sobre su autenticidad
+\item Reviewer \#N dice \it{los resultados se ven muy atractivos}
+\end{itemize}
+
+En computación gráfica, el camino tradicional es el expuesto.
+
+Proponemos además, validar semi-automáticamente geometrías utilizando fractales.
+
+\end{frame}
+
 \subsection{Validación automática}
 
 \begin{frame}{Validación automática}
 
-Un algoritmo fractal para construye la geometría de migas de pan.
+Ley fractal $\rightarrow$ geometrías de migas de pan.
 
-La estructura visible de la miga de pan sugiere que un algoritmo de extracción de características fractales podría describirla.
+\textbf{Espectro Multifractal}
 
+\begin{itemize}
+\item Captura distintas estructuras fractales dentro del mismo objeto,
+\item o distintos comportamientos fractales dependiendo de la escala.
+\end{itemize}
 
-\end{frame}
-
-\begin{frame}{Idea}
 \begin{algorithm}[H]
 \begin{algorithmic}[1]
 \STATE Obtener espectro multifractal de muestras reales
 \FOR{valores de parámetros}
-\STATE Obtener espectro a partir de muestra sintética, generada con determinados valores de los parámetros
+\STATE parámetros $\rightarrow$ muestra sintética $\rightarrow$ espectro
 \STATE Comparar espectros reales con sintéticos
 \ENDFOR
 \STATE Devolver los parámetros más cercanos a los reales
@@ -1320,13 +1360,6 @@ La estructura visible de la miga de pan sugiere que un algoritmo de extracción 
 \begin{frame}
 %Esto sugiere que podría ser útil utilizar más de una DF para caracterizar los resultados.
 
-Espectro Multifractal
-
-\begin{itemize}
-\item Captura distintas estructuras fractales dentro del mismo objeto,
-\item o distintos comportamientos fractales dependiendo de la escala.
-\end{itemize}
-
 Dimensión generalizada de orden $q$ (método Sandbox):
 
  \begin{align*}
@@ -1342,9 +1375,11 @@ D_{q=1}^{sb} &= \lim_{R \rightarrow 0}{
 \end{frame}
 
 \begin{frame}
-Se computó el espectro multifractal en muestras reales ({\em baguette} y pan casero), obteniendo las medianas de cada dimensión, con $q \in [-10,10]$.
+Espectro multifractal en muestras reales ({\em baguette} y pan casero)
 
-Se compararon estos resultados con los sintéticos, por medio de la métrica de error:
+Medianas de cada dimensión, con $q \in [-10,10]$.
+
+Comparación con resultados sintéticos, por medio de la \textbf{métrica de error}:
 
 \begin{equation*}
 Error = \displaystyle \sum abs(medianas_{real}-medianas_{sint\acute{e}tico}).
@@ -1426,12 +1461,26 @@ Sintético:
 
 \subsection{Extras}
 
+\begin{frame}
+\begin{block}{}
+\begin{center}
+\vspace{1cm}
+\huge{Extras}
+\vspace{1cm}
+\end{center}
+\end{block}
+\end{frame}
+
 \begin{frame}{Clasificación de Imágenes de cortes de Pan}
-Adicionalmente se estudió el espectro multifractal para caracterizar y clasificar imágenes de cortes reales de pan.
+Adicionalmente se estudió el espectro multifractal para \textbf{caracterizar y clasificar} imágenes de cortes reales de pan.
+
+\vspace{0.3cm}
 
 Esto es útil para definir parámetros de calidad que deben respetar los panes reales, y proveer una clasificación automática de los mismos.
 
-Se encontró que el MFS clasifica muestras de panes de manera comparable al estado del arte.
+\vspace{0.3cm}
+
+Se encontró que el MFS \textbf{clasifica} muestras de panes de manera \textbf{comparable al estado del arte}.
 
 \end{frame}
 
@@ -1483,11 +1532,11 @@ Correlación entre las dimensiones del MFS y el desvío estándar del área medi
 
 
 \begin{frame}{Validación utilizando Técnicas de Aprendizaje Profundo}
-Recientemente se desarrollaron técnicas de Aprendizaje Profundo, los cuales clasifican una imagen entre miles de clases.
-
-Los clasificadores se encuentran online, por lo cual es sencillo probar la clasificación con las imágenes generadas. Los resultados en panes son promisorios
 
 \centerline{\includegraphics[width=5cm]{../figures/deep1}}
+
+\vspace{0.4cm}
+\url{http://deeplearning.cs.toronto.edu/}
 
 \end{frame}
 
@@ -1520,9 +1569,9 @@ Los clasificadores se encuentran online, por lo cual es sencillo probar la clasi
 \begin{frame}{Conclusiones}
 \begin{block}{}
 \begin{itemize}
-\item Se introdujo un algoritmo procedimental de generación de geometrías porosas.
-\item Se presentó un algoritmo basado en el proceso real de formación del pan, eliminando decisiones ad-hoc en la generación de este material, obteniendo estructuras a lo largo de todo el proceso de formación.
-\item Se aplicó un algoritmo de renderizado, basado en la interacción lumínica con una escena, produciendo imágenes foto-realísticas de materiales porosos/cocidos/comestibles como pan, esponjas, y piedras. Se obtuvieron imágenes \textbf{foto-realísticas} en tiempo real, por medio de la utilización de la GPU.
+\item Se introdujo un \textbf{algoritmo procedimental} de generación de geometrías \textbf{porosas}.
+\item Se presentó un algoritmo \textbf{basado} en el \textbf{proceso real de formación del pan}, eliminando decisiones ad-hoc en la generación de este material, obteniendo estructuras a lo largo de todo el \textbf{proceso de formación}.
+\item Se aplicó un algoritmo de renderizado, basado en la interacción lumínica con una escena, produciendo imágenes foto-realísticas de materiales porosos/cocidos/comestibles como pan, esponjas, y piedras. Se obtuvieron imágenes \textbf{foto-realísticas en tiempo real}, por medio de la utilización de la \textbf{GPU}.
 \end{itemize}
 \end{block}
 \end{frame}
@@ -1530,8 +1579,8 @@ Los clasificadores se encuentran online, por lo cual es sencillo probar la clasi
 \begin{frame}{Conclusiones}
 \begin{block}{}
 \begin{itemize}
-\item Se validaron las geometrías generadas por el proceso inspirado en la formación del pan con muestras reales de pan.
-\item Se presentó un método para clasificar muestras de pan, superando a clasificadores del estado del arte.
+\item Se \textbf{validaron} las geometrías generadas por el proceso inspirado en la formación del pan con muestras reales de pan.
+\item Se presentó un método para \textbf{clasificar} muestras de pan, superando a clasificadores del estado del arte.
 \end{itemize}
 \end{block}
 \end{frame}
@@ -1541,10 +1590,10 @@ Los clasificadores se encuentran online, por lo cual es sencillo probar la clasi
 \begin{frame}{Trabajos a futuro}
 \begin{block}{}
 \begin{itemize}
-\item Generación procedimental de huesos y otros materiales
+\item Generación procedimental de huesos y \textbf{otros materiales}
 \item Validación tridimensional de los resultados
 \item Validación utilizando técnicas de aprendizaje profundo
-\item Implementación en GPU de la generación procedimental
+\item Implementación en \textbf{GPU} de la \textbf{generación procedimental}
 \end{itemize}
 \end{block}
 \end{frame}
