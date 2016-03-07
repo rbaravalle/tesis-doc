@@ -229,37 +229,28 @@ Estudio del material $\rightarrow$ comprensión de su apariencia $\rightarrow$ m
 \end{frame}
 
 
-\begin{frame}{Materiales con mayor aparición en escenas}
+\begin{frame}{}
+
+\begin{block}{Materiales con mayor aparición en escenas}
+
+Agua, Piel humana, Metales, Plásticos, etc. 
+
+Posibles causas: \textbf{facilidad} del diseño (realismo), aparición \textbf{constante} en escenas
+
+\end{block}
+
+\begin{block}{Materiales con menor aparición en escenas}
+Materiales cocidos, porosos y comestibles
+
 
 \begin{itemize}
-\item Agua
-\item Piel humana
-\item Metales
-\item Plásticos
-\item etc. 
+\item \textbf{Geometría compleja y visible}
+\item \textbf{Fácil detección} de modelos inadecuados
+\item \textbf{Costo computacional} excesivo
 \end{itemize}
+\end{block}
 
-Posibles causas
-\begin{itemize}
-\item \textbf{facilidad} del diseño (realismo)
-\item aparición \textbf{constante} en escenas
-\end{itemize}
-
-\end{frame}
-
-\begin{frame}{Materiales con menor aparición en escenas}
-
-Ejemplo: materiales cocidos, materiales porosos y materiales comestibles
-
-Presentan mayor complejidad en el modelado
-
-\begin{itemize}
-\item \textbf{Geometría compleja y visible}, rica interacción con la luz: translucencia, reflexión, absorción, etc.
-\item \textbf{Fácil detección} de modelos inadecuados.
-\item \textbf{Costo computacional}: resultaba excesivo hasta la aparición masiva del hardware paralelo.
-\end{itemize}
-
-{\it Alan Fournier: `computer graphics has still not been
+{\it Alain Fournier: `computer graphics has still not been
 able to convincingly render a slice of bread' (2001)}
 
 
@@ -288,91 +279,49 @@ Objetivos
 \end{frame}
 
 
+\subsection{Trabajo Previo}
 
+\begin{frame}{Modelado de la Geometría}
 
-\section{Trabajo Previo}
+\textbf{Problema}
 
-\begin{frame}
-\begin{block}{}
-\begin{center}
-\vspace{1cm}
-\huge{Trabajo Previo}
-\vspace{1cm}
-\end{center}
-\end{block}
-\end{frame}
+Supervisión humana repetitiva. Ejemplo: diseñar separadamente cada árbol de un bosque
 
-\subsection{Modelado de la Geometría}
-\begin{frame}{Modelado de la Geometría: Técnicas Procedimentales}
-
-\begin{block}{Problema}
-Supervisión humana repetitiva
-
-Ejemplo: Bosque: diseñar separadamente cada árbol
-\end{block}
-
-\vspace{0.5cm}
 \begin{block}{Solución}
-Técnicas \textbf{Procedimentales}.
+Técnicas \textbf{Procedimentales} (técnicas semi-automáticas basadas en algoritmos)
+\end{block}
+
+\begin{block}{Sistemas-L (Lindenmayer)}
+
+Describen la estructura visible de plantas
+
+
 \begin{itemize}
-\item Técnicas artísticas basadas en algoritmos
-\item Diseño de geometrías de manera semi-automática
+\item \textbf{axioma}, reglas \textbf{reglas de producción}, número de iteraciones
 \end{itemize}
 \end{block}
 
-\end{frame}
+%En cada iteración se aplican reglas de producción a la cadena de caracteres resultante anterior.
 
-\begin{frame}{Sistemas-L}
-(Lindenmayer)
+Axioma: $F$, $P1: F \rightarrow FfF$.
 
-\begin{itemize}
-\item Describen la estructura visible de plantas
-\item Representan objetos complejos de manera convincente
-\item Procedimiento muy sencillo de generación
-\item \textbf{Cadena de caracteres}
-\item Procedimiento {\it recursivo} de \textbf{reemplazo de caracteres}
-\end{itemize}
-
-
-\end{frame}
-
-\begin{frame}
-
-Procedimiento
-\begin{itemize}
-\item \textbf{axioma}
-\item una o varias reglas \textbf{reglas de producción}
-\item Número de iteraciones
-\end{itemize}
-
-En cada iteración se aplican reglas de producción a la cadena de caracteres resultante anterior.
-
-\vspace{1cm}
-
-Ejemplo:
-
-Axioma: $F$
-
-$P1: F \rightarrow FfF$
-
-Produce las derivaciones:
 $F \rightarrow FfF \rightarrow \textbf{FfF}f\textbf{FfF} \ldots$
 
 \end{frame}
 
-\begin{frame}{Sistemas-L: Ejemplo y ``Renderización''}
+\begin{frame}{Ejemplo}
 \begin{itemize}
 \item Estado inicial ($x$,$y$,$90^{\circ}$)
 \item \textbf{Axioma:} F
 \item Regla de producción $F \rightarrow FF-FfF-FF$
 \end{itemize}
 
-\begin{itemize}
-\item F, moverse hacia adelante un paso $d$, dibujando,
-\item f, moverse hacia adelante un paso $d$, sin dibujar,
-\item +, rotar un ángulo $\delta$,
-\item -, rotar un ángulo $-\delta$.
-\end{itemize}
+%\begin{itemize}
+%\item F, moverse hacia adelante un paso $d$, dibujando,
+%\item f, moverse hacia adelante un paso $d$, sin dibujar,
+%\item +, rotar un ángulo $\delta$,
+%\item -, rotar un ángulo $-\delta$.
+%\end{itemize}
 
 \center
 \includegraphics[width=4cm]{../figures/tortuga}
@@ -388,32 +337,24 @@ Pila de estados
 
 \center
 \includegraphics[width=6.3cm]{../figures/sistemalcorchete}
+\includegraphics[width=5cm]{../figures/3dlsystem}
 
 \end{frame}
 
-\begin{frame}{Sistemas-L: Arboles 3D}
+\begin{frame}{}
+\begin{block}{Sistemas-L}
+\textbf{Comparación subjetiva}: objeto sintético $\leftrightarrow$ objeto real
+\end{block}
+
+\begin{block}{Modelado Físico de materiales}
+
+Ecuaciones del \textbf{comportamiento} o \textbf{crecimiento} de los mismos.
+
+\textbf{Ecuaciones de Navier-Stokes} (fluídos)
 \center
-\includegraphics[width=6.3cm]{../figures/3dlsystem}
-
-\end{frame}
-
-\begin{frame}
-Este ejemplo se basa en un modelado basado en una 
-
-\textbf{comparación subjetiva} entre el objeto sintético resultante y el objeto real.
-
-\vspace{1cm}
-
-Sin embargo, es posible obtener representaciones más precisas atendiendo a procesos de formación de materiales.
-\end{frame}
-
-\subsection{Modelado Físico de materiales}
-
-\begin{frame}{Modelado Físico de materiales}
-
-Por medio de ecuaciones del \textbf{comportamiento} o \textbf{crecimiento} de los mismos, es posible obtener aproximaciones computacionales \textbf{más precisas}.
-
-Ejemplo: \textbf{ecuaciones de Navier-Stokes} (fluídos)
+\includegraphics[width=3cm]{../figures/smoke}
+\includegraphics[width=6cm]{../figures/water}
+\end{block}
 
 %Dadas condiciones iniciales $\bold{u}$ y $p$ cuando $t = 0$,
 %\begin{align*}
@@ -426,27 +367,20 @@ Ejemplo: \textbf{ecuaciones de Navier-Stokes} (fluídos)
 %\end{frame}
 
 %\begin{frame}{Ecuaciones de Navier-Stokes, humo}
-\center
-\includegraphics[width=5cm]{../figures/smoke}
 
-\end{frame}
-
-\begin{frame}
-
-Hasta aquí dimos ejemplos del \textbf{modelado} de la geometría de los materiales.
-
-\vspace{0.5cm}
-La geometría debe \textbf{renderizarse} para ser visualizada.
-\vspace{0.5cm}
-
-A continuación presentamos las ecuaciones que representan el comportamiento de la luz en una escena, necesarias para obtener imágenes realistas de escenas y materiales.
 
 \end{frame}
 
 \subsection{Renderizado}
 
 \begin{frame}
-De acuerdo al tipo de material a renderizar, existen dos clases principales de técnicas de modelado:
+Las geometrías obtenidas deben \textbf{renderizarse} para ser visualizadas.
+\vspace{0.5cm}
+
+Se desarrollaron ecuaciones que representan el comportamiento de la luz en una escena.
+Las mismas obtienen imágenes \textbf{foto-realistas} de escenas y materiales.
+
+Existen dos clases principales de técnicas de modelado:
 
 \begin{block}{}
 \begin{itemize}
@@ -533,30 +467,19 @@ Ray Casting (Direct Volume Rendering)
 
 
 \begin{frame}{Materiales porosos - Trabajo Previo}
-La literatura utiliza ambos enfoques para producir materiales porosos.
-
-Cada uno de ellos con ventajas y desventajas.
-
-\ \\
 
 Volúmenes
 \begin{block}{}
 \begin{itemize}
 \item \textbf{cortes arbitrarios} en el objeto
-\item computacionalmente \textbf{más costosos}, (almacenamiento, tiempo de renderizado)
+\item \textbf{más costosos}, (almacenamiento, tiempo de renderizado)
 \end{itemize}
 \end{block}
-\end{frame}
-
-\begin{frame}{Materiales porosos - Trabajo Previo}
 
 Se utilizan diversos ruidos
 
 \begin{itemize}
-\item Voronoi
-\item Perlin
-\item Worley.
-\item consideraciones ad-hoc
+\item Voronoi, Perlin, Worley. $+$ consideraciones ad-hoc
 \end{itemize}
 
 \includegraphics[scale = 0.15]{../figures/Fig8}
@@ -581,7 +504,7 @@ Ratatouille (Película): Voronoi + mapa (deformación de burbujas).
 
 \begin{frame}
 
-{\it Tong et al (2005)}
+Superficies: {\it Tong et al (2005)}
 
 Capturas (cámaras y lásers) $\rightarrow$ distribuciones precisas de radiancia.
 
@@ -616,15 +539,16 @@ Presentamos un modelo de generación de geometrías porosas basados en:
 \item \textbf{Sistemas de Partículas} que crecen, evitándose
 \item \textbf{Sistemas dinámicos} como medio de crecimiento
 \end{itemize}
-\end{frame}
 
-\begin{frame}{Sistemas de partículas}
+\vspace{0.4cm}
+
+\textbf{Sistemas de partículas}
 \begin{itemize}
-\item Conjunto de \textbf{partículas}: una partícula posee posición, dirección, color, tiempo de vida, etc.
-\item Utilizado para representar fluídos, y objetos con interfaces sin definición precisa
+\item Partícula: posición, dirección, color, tiempo de vida, etc.
+\item Fluídos, objetos con interfaces sin definición precisa
 
-\includegraphics[scale = 0.3]{../figures/fire}
-\includegraphics[scale = 0.277]{../figures/fireworks}
+\includegraphics[scale = 0.216]{../figures/fire}
+\includegraphics[scale = 0.2]{../figures/fireworks}
 \end{itemize}
 \end{frame}
 
@@ -635,11 +559,11 @@ El sistema consta de:
 \item y dos grillas, $L_{N\times N \times N},$, $L^{2}_{N\times N \times N}, N \in \mathbb{N}.$
 \end{itemize}
 
-Condiciones Iniciales:
-\begin{itemize}
-\item $L_{xyz}=1$: masa
-\item $L^{2}_{xyz}=-1$: celda libre,
-\end{itemize}
+%Condiciones Iniciales:
+%\begin{itemize}
+%\item $L_{xyz}=1$: masa
+%\item $L^{2}_{xyz}=-1$: celda libre,
+%\end{itemize}
 
 Cada partícula posee:
 \begin{equation*}
@@ -698,7 +622,7 @@ Dirección de crecimiento?
 
 \begin{frame}{Sistemas dinámicos}
 
-De manera general, las ODEs se representan utilizando el siguiente sistema de ecuaciones:
+Las ODEs se representan utilizando el siguiente sistema de ecuaciones:
 \begin{equation*}
   \begin{aligned}
     \dot{x_{1}} = f_{1}(x_{1},\ldots,x_{n}),\\
@@ -723,28 +647,28 @@ De manera general, las ODEs se representan utilizando el siguiente sistema de ec
 
 Sistema Dinámico (SD) $\rightarrow$ campo vectorial (discreto) $\rightarrow$ dirección
 
-\vspace{0.1cm}
+%\vspace{0.1cm}
 
-\end{frame}
+%\end{frame}
 
-\begin{frame}{Crecimiento}
-SD 2D, imagen izquierda:
-\begin{equation*} \label{eq:simple}  
-  \begin{aligned}
-    \dot{x} &= x^{2}-y^{2}+1,\\
-    \dot{y} &= 2xy+1.
-  \end{aligned}
-\end{equation*}
+%\begin{frame}{Crecimiento}
+%SD 2D, imagen izquierda:
+%\begin{equation*} \label{eq:simple}  
+%  \begin{aligned}
+%    \dot{x} &= x^{2}-y^{2}+1,\\
+%    \dot{y} &= 2xy+1.
+%  \end{aligned}
+%\end{equation*}
   \centerline{\includegraphics[width=8cm]{../figures/Fig2}}
 %\end{frame}
 
 %\begin{frame}
 %Se establece una correspondencia entre los límites del plano y las posiciones de la grilla.
 
-\begin{itemize}
-\item Posición $(0,0)$ de la grilla $\rightarrow$ mínimo en $X$ e $Y$ (sistema dinámico)
-\item Posición $(N,N)$ con el máximo $X$ e $Y$.
-\end{itemize}
+%\begin{itemize}
+%\item Posición $(0,0)$ de la grilla $\rightarrow$ mínimo en $X$ e $Y$ (sistema dinámico)
+%\item Posición $(N,N)$ con el máximo $X$ e $Y$.
+%\end{itemize}
 
 \end{frame}
 
@@ -884,9 +808,9 @@ Simulación por \textbf{extracción de esferas} de un cubo
 
 $N(r)$: cantidad de esferas extraídas (inversamente proporcional al radio $r$ de la esfera). Ley fractal:
 
-\begin{equation}
+\begin{equation*}
 N(r) = \frac{k}{r^{d}}
-\end{equation}
+\end{equation*}
 
 \vspace{0.3cm}
 \centering
@@ -1054,9 +978,9 @@ Deformación \textbf{local}: $p = P[u,v,w],$
 Escalado de la textura (de acuerdo a la distribución de burbujas)
 
 
-\begin{equation}
+\begin{equation*}
 [x,y,z] = [r,s,t]\, S \, P[r,s,t],
-\end{equation}
+\end{equation*}
 
 \end{frame}
 
@@ -1065,8 +989,6 @@ Escalado de la textura (de acuerdo a la distribución de burbujas)
 \centerline{\includegraphics[width=9cm]{../figures/Fig9}}
 
 \end{frame}
-
-\subsection{Corteza}
 
 \begin{frame}{Corteza}
 Colores CIELab de muestras reales, reportadas por Purlis et. al. (2009).
@@ -1326,7 +1248,7 @@ Implementación en GPU, (\textbf{fragment shader}, dentro del \textbf{pipeline g
 \end{frame}
 
 
-\subsection{Validación tradicional}
+\subsection{Validación tradicional y automática}
 \begin{frame}{Validación tradicional}
 \begin{itemize}
 \item Se utilizan procesos físicos en el renderizado o modelado
@@ -1339,8 +1261,6 @@ En computación gráfica, el camino tradicional es el expuesto.
 Proponemos además, validar semi-automáticamente geometrías utilizando fractales.
 
 \end{frame}
-
-\subsection{Validación automática}
 
 \begin{frame}{Validación automática}
 
@@ -1420,55 +1340,13 @@ N &= \frac{k}{r^{d}},\\ r &= r_{min}+paso*j, j \in [0,\frac{r_{max}}{paso}],
 \end{frame}
 
 \begin{frame}
-\begin{figure}[!ht]
-\includegraphics[width=7cm]{../figures/bestboxplot}
-\caption[Mejores parámetros de síntesis para el tipo de pan {\em baguette}]{Mejores parámetros de síntesis para el tipo de pan {\em baguette}. El error total en medianas es de $\sim 0.21$.}
-\label{bestboxplot}
-\end{figure}
+\includegraphics[width=4cm]{../figures/bestboxplot}
+\includegraphics[width=4.5cm]{../figures/realbin}
+\includegraphics[width=2cm]{../figures/best}
 
-\end{frame}
-
-\begin{frame}
-\begin{figure}
-\begin{center}
-\includegraphics[width=6.5cm]{../figures/realbin}
-\caption{ Pan {\em baguette} real y binarización.}
-\label{realbin}
-\end{center}
-\end{figure}
-Sintético:
-\begin{center}
-\includegraphics[width=3cm]{../figures/best}
-\end{center}
-\end{frame}
-
-
-\begin{frame}
-\begin{figure}
-\includegraphics[width=7cm]{../figures/bestboxplot2}
-\caption[Mejores parámetros de síntesis para un tipo casero de pan]{Mejores parámetros de síntesis para un tipo casero de pan. El error total en medianas es de $\sim 0.88$.}
-\label{bestboxplot2}
-\end{figure}
-
-\end{frame}
-
-\begin{frame}
-
-\begin{figure}
-\begin{center}
-\includegraphics[width=7cm]{../figures/realbin2}
-\caption{ Pan casero real y ejemplo de binarización.}
-\label{realbin2}
-\end{center}
-\end{figure}
-
-\begin{figure}
-\begin{center}
-\includegraphics[width=5cm]{../figures/best2}
-\caption{Ejemplo de pan sintético con características similares a imágenes de un pan casero.}
-\label{best2}
-\end{center}
-\end{figure}
+\includegraphics[width=4cm]{../figures/bestboxplot2}
+\includegraphics[width=4cm]{../figures/realbin2}
+\includegraphics[width=2.5cm]{../figures/best2}
 \end{frame}
 
 
