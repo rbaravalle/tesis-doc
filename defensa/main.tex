@@ -197,39 +197,33 @@ Cada objeto de la escena puede emitir radiancia (en todo el espectro electromagn
 \begin{block}{Luz}
 \begin{itemize}
 \item La comprensión del fenómeno evolucionó considerablemente a lo largo del tiempo.
-\item ``dualidad onda-partícula'': Debe simplificarse su tratamiento en computación gráfica.
+%\item ``dualidad onda-partícula'': Debe simplificarse su tratamiento en computación gráfica.
 \item En la mayoría de los casos, sólo la \textbf{luz visible} es la que debe modelarse (apariencia).
 \item Se asume distribución en líneas rectas o \textbf{rayos} (representación {\em óptico geométrica}, escala macroscópica).
 \end{itemize}
 \end{block}
 
 \begin{block}{Debe modelarse, además, su interacción con \textbf{cada objeto}}
-Modelado \textbf{geometría}.
+Modelado de la \textbf{geometría}.
 \end{block}
 
 \end{frame}
 
 
 \begin{frame}{Materiales}
-?`Qué es la apariencia de un material?
+\textbf{Apariencia} de un material
 \begin{itemize}
 \item Definición informal: {\em percepción} del mismo por parte de una persona.
 \item Conjunto de estímulos visuales.
-
-%\item Se codifica en datos, estructuras de datos y algoritmos.
 \end{itemize}
 
-\end{frame}
-
-
-\begin{frame}{Modelado de la Apariencia de Materiales}
-\begin{block}{El modelado de cada material depende de la escala buscada.}
+Depende de la escala buscada
 \begin{itemize}
-\item \textbf{Microscópico}: detalles que no son visibles al ojo humano. Se utilizan diversas técnicas estadísticas.
-\item \textbf{Macroscópico}: detalles visibles al ojo humano. Se utilizan triángulos, texturas, etc.
+\item \textbf{Microscópico}: detalles invisibles al ojo humano (técnicas estadísticas)
+\item \textbf{Macroscópico}: visible (triángulos, texturas, etc)
 \end{itemize}
-\end{block}
-El material debe ser estudiado para comprender su apariencia, a partir de la cual derivar un modelo numérico del mismo
+
+Estudio del material $\rightarrow$ comprensión de su apariencia $\rightarrow$ modelo numérico
 
 \centerline{\includegraphics[scale = 0.25]{../figures/apariencia}}
 \end{frame}
@@ -308,10 +302,7 @@ Objetivos
 \end{block}
 \end{frame}
 
-\subsection{Materiales}
-
-
-\subsection{Modelado de la Geometría: Técnicas Procedimentales}
+\subsection{Modelado de la Geometría}
 \begin{frame}{Modelado de la Geometría: Técnicas Procedimentales}
 
 \begin{block}{Problema}
@@ -370,7 +361,11 @@ $F \rightarrow FfF \rightarrow \textbf{FfF}f\textbf{FfF} \ldots$
 \end{frame}
 
 \begin{frame}{Sistemas-L: Ejemplo y ``Renderización''}
-Dado un estado inicial ($x$,$y$,$90^{\circ}$), el \textbf{axioma} F, y una regla de producción $F \rightarrow FF-FfF-FF$, donde
+\begin{itemize}
+\item Estado inicial ($x$,$y$,$90^{\circ}$)
+\item \textbf{Axioma:} F
+\item Regla de producción $F \rightarrow FF-FfF-FF$
+\end{itemize}
 
 \begin{itemize}
 \item F, moverse hacia adelante un paso $d$, dibujando,
@@ -380,13 +375,16 @@ Dado un estado inicial ($x$,$y$,$90^{\circ}$), el \textbf{axioma} F, y una regla
 \end{itemize}
 
 \center
-\includegraphics[width=5cm]{../figures/tortuga}
+\includegraphics[width=4cm]{../figures/tortuga}
 
 \end{frame}
 
 \begin{frame}{Sistemas-L: Arboles}
-Por medio de una pila de estados, donde el caracter $[$ se utiliza para copiar el estado actual en la pila (operación {\em push}), y el caracter $]$ implica un reemplazo del estado actual por el de la cabeza de la pila ({\em pop}):
-
+Pila de estados
+\begin{itemize}
+\item $[$ : estado actual $\rightarrow$ pila ({\em push})
+\item $]$ : cabeza de la pila $\rightarrow$ estado actual ({\em pop}):
+\end{itemize}
 
 \center
 \includegraphics[width=6.3cm]{../figures/sistemalcorchete}
@@ -417,19 +415,19 @@ Por medio de ecuaciones del \textbf{comportamiento} o \textbf{crecimiento} de lo
 
 Ejemplo: \textbf{ecuaciones de Navier-Stokes} (fluídos)
 
-Dadas condiciones iniciales $\bold{u}$ y $p$ cuando $t = 0$,
-\begin{align*}
-\nabla \cdot \bold{u} &= 0\\
-\frac{\partial \bold{u} }{\partial t} &= - (\bold{u} \cdot \nabla) \bold{u} - \frac{1}{\rho} \nabla p + \nu \nabla^{2} \bold{u} + \bold{f},
-\end{align*}
+%Dadas condiciones iniciales $\bold{u}$ y $p$ cuando $t = 0$,
+%\begin{align*}
+%\nabla \cdot \bold{u} &= 0\\
+%\frac{\partial \bold{u} }{\partial t} &= - (\bold{u} \cdot \nabla) \bold{u} - \frac{1}{\rho} \nabla p + \nu \nabla^{2} \bold{u} + \bold{f},
+%\end{align*}
 
-\noindent donde $\nu$ representa la viscosidad cinemática del fluido, $\rho$ la densidad y $\bold{f}$ una fuerza externa.
+%\noindent donde $\nu$ representa la viscosidad cinemática del fluido, $\rho$ la densidad y $\bold{f}$ una fuerza externa.
 
-\end{frame}
+%\end{frame}
 
-\begin{frame}{Ecuaciones de Navier-Stokes, humo}
+%\begin{frame}{Ecuaciones de Navier-Stokes, humo}
 \center
-\includegraphics[width=6.3cm]{../figures/smoke}
+\includegraphics[width=5cm]{../figures/smoke}
 
 \end{frame}
 
@@ -459,62 +457,72 @@ De acuerdo al tipo de material a renderizar, existen dos clases principales de t
 \end{frame}
 
 
-\begin{frame}{Ecuación del Renderizado de Superficies}
-La misma modela la \textbf{radiancia} entrante en un punto $x$ a través de \textbf{todas} las superficies $s_{i}$ de la escena, pasando por \textbf{todos} los puntos $x'$ de todas las superficies.
+\begin{frame}{Ecuación del Renderizado de Superficies:}
 
-\centerline{\includegraphics[scale = 0.6]{../figures/rendequation}}
+\textbf{Radiancia entrante} en $x$ (por medio de \textbf{todos} los puntos $x'$ de \textbf{todas las superficies}).
+
+\centerline{\includegraphics[scale = 0.4]{../figures/rendequation}}
 \vspace{-1cm}
 $$ L(\bold{x'} \rightarrow \bold{x}) =  g(\bold{x'}  \rightarrow \bold{x})  \left[ \epsilon(\bold{x'}  \rightarrow \bold{x}) + \int_{s}{\rho(\bold{x''}  \rightarrow \bold{x'}  \rightarrow \bold{x})L(\bold{x''}  \rightarrow \bold{x}) d\bold{x''}} \right] $$
 
+\textbf{Recursiva}
+%: la \textbf{energía radiante saliente} de $x'$ depende de la \textbf{energía radiante entrante} desde todos los puntos de todas las superficies.
 
-\end{frame}
-
-\begin{frame}
-$$ L(\bold{x'} \rightarrow \bold{x}) =  g(\bold{x'}  \rightarrow \bold{x})  \left[ \epsilon(\bold{x'}  \rightarrow \bold{x}) + \int_{s}{\rho(\bold{x''}  \rightarrow \bold{x'}  \rightarrow \bold{x})L(\bold{x''}  \rightarrow \bold{x}) d\bold{x''}} \right] $$
-
-\begin{itemize}
-\item $L(\bold{x'} \rightarrow \bold{x})$, intensidad de la luz que viaja del punto tridimensional $\bold{x'}$ a $\bold{x}$
-%(sin oclusiones)
-
-\item $g(\bold{x'} \rightarrow \bold{x})$: término geométrico que modela la oclusión que podría existir entre $\bold{x}$ y $\bold{x'}$,
-\item $\epsilon(\bold{x'} \rightarrow \bold{x})$ intensidad de la luz emitida desde $\bold{x'}$ a $\bold{x}$,
-\item $\rho(\bold{x''}  \rightarrow \bold{x'}  \rightarrow \bold{x})$ la intensidad de la luz emitida de $\bold{x''}$ a $\bold{x}$ por medio de una superficie en $\bold{x'}$ (esta cantidad será llamada función bidireccional de distribución de reflectancia, BRDF),
-
-\item $S=\bigcup{s_{i}}$, unión de todas las superficies $s_{i}$ de la escena
-\end{itemize}
-\end{frame}
-
-\begin{frame}
-
-\begin{equation*}
-L(\bold{x'} \rightarrow \bold{x}) =  g(\bold{x'}  \rightarrow \bold{x})  \left[ \epsilon(\bold{x'}  \rightarrow \bold{x}) + \int_{s}{\rho(\bold{x''}  \rightarrow \bold{x'}  \rightarrow \bold{x})L(\bold{x''}  \rightarrow \bold{x}) d\bold{x''}} \right]
-\end{equation*}
-
-Es recursiva, ya que la \textbf{energía radiante saliente} de un punto $x'$ depende de la \textbf{energía radiante entrante} desde todos los puntos de todas las superficies a ese punto.
-De esta forma, $\bold{x}$,$\bold{x'}$ y $\bold{x''}$ varían sobre todas las superficies de la escena.
-%Además se asume una superficie $S_{0}$, la cual se modela como una semi-esfera que engloba a toda la escena.
-
-\vspace{0.2cm}
-Aproximación de las propiedades óptico-geométricas de las ecuaciones del electromagnetismo de Maxwell.
+$\bold{x}$,$\bold{x'}$ y $\bold{x''}$ varían sobre todas las superficies.
 
 (Ray Tracing, Path Tracing)
+
 \end{frame}
+
+%\begin{frame}
+%$$ L(\bold{x'} \rightarrow \bold{x}) =  g(\bold{x'}  \rightarrow \bold{x})  \left[ \epsilon(\bold{x'}  \rightarrow \bold{x}) + \int_{s}{\rho(\bold{x''}  \rightarrow \bold{x'}  \rightarrow \bold{x})L(\bold{x''}  \rightarrow \bold{x}) d\bold{x''}} \right] $$
+
+%\begin{itemize}
+%\item $L(\bold{x'} \rightarrow \bold{x})$, intensidad de la luz que viaja del punto tridimensional $\bold{x'}$ a $\bold{x}$
+%(sin oclusiones)
+
+%\item $g(\bold{x'} \rightarrow \bold{x})$: término geométrico que modela la oclusión que podría existir entre $\bold{x}$ y $\bold{x'}$,
+%\item $\epsilon(\bold{x'} \rightarrow \bold{x})$ intensidad de la luz emitida desde $\bold{x'}$ a $\bold{x}$,
+%\item $\rho(\bold{x''}  \rightarrow \bold{x'}  \rightarrow \bold{x})$ la intensidad de la luz emitida de $\bold{x''}$ a $\bold{x}$ por medio de una superficie en $\bold{x'}$ (esta cantidad será llamada función bidireccional de distribución de reflectancia, BRDF),
+
+%\item $S=\bigcup{s_{i}}$, unión de todas las superficies $s_{i}$ de la escena
+%\end{itemize}
+%\end{frame}
+
+%\begin{frame}
+
+%\begin{equation*}
+%L(\bold{x'} \rightarrow \bold{x}) =  g(\bold{x'}  \rightarrow \bold{x})  \left[ \epsilon(\bold{x'}  \rightarrow \bold{x}) + \int_{s}{\rho(\bold{x''}  \rightarrow \bold{x'}  \rightarrow \bold{x})L(\bold{x''}  \rightarrow \bold{x}) d\bold{x''}} \right]
+%\end{equation*}
+
+
+%Además se asume una superficie $S_{0}$, la cual se modela como una semi-esfera que engloba a toda la escena.
+
+%\vspace{0.2cm}
+%Aproximación de las propiedades óptico-geométricas de las ecuaciones del electromagnetismo de Maxwell.
+
+%(Ray Tracing, Path Tracing)
+%\end{frame}
 
 
 \begin{frame}{Ecuación del Renderizado de Volúmenes}
-La misma expresa que el cambio ($\nabla$) de radiancia $L$ de un rayo de luz en un medio, en una dirección dada ($\vec{\omega}$) está dado por cuatro fenómenos: absorción, dispersión saliente, emisión (del medio) y dispersión entrante.
+Cambio de radiancia ($L$) en una dirección dada ($\vec{\omega}$) 
+
+Absorción, dispersión saliente, emisión y dispersión entrante.
 \begin{equation*}
 \begin{aligned}
 (\vec{\omega} \cdot \nabla) L(\bold{x} \rightarrow \vec{\omega}) = - \sigma_{a}(\bold{x}) L(\bold{x} \rightarrow \vec{\omega}) - \sigma_{s}(\bold{x}) L(\bold{x} \rightarrow \vec{\omega}) + \\
 \sigma_{a}(\bold{x}) L_{e}(\bold{x} \rightarrow \vec{\omega}) + \sigma_{s}(\bold{x}) L_{i}(\bold{x} \rightarrow \vec{\omega}).
 \end{aligned}
 \end{equation*}
-donde $\sigma_{a}$: coeficiente de absorción del medio, $\sigma_{s}$: coeficiente de dispersión del medio.
 
-\end{frame}
+$\sigma_{a}$: coef. absorción, $\sigma_{s}$: coef. dispersión.
 
-\begin{frame}{Ecuación del Renderizado de Volúmenes}
-\includegraphics[scale = 0.55]{../figures/fenomenosrte}
+%\end{frame}
+
+%\begin{frame}{Ecuación del Renderizado de Volúmenes}
+\centering
+\includegraphics[scale = 0.3]{../figures/fenomenosrte}
 
 Ray Casting (Direct Volume Rendering)
 \end{frame}
@@ -646,33 +654,33 @@ Cada partícula posee:
 
 \end{frame}
 
-\begin{frame}
+%\begin{frame}
 
-\begin{algorithm}[H]
-\begin{algorithmic}[1]
-        \IF {$vacio?~C[i]$}
-            \STATE{morir()}
-        \ENDIF
-        \FOR{$h \in C[i]$}
-            \STATE{$C[i].eliminar(h)$}
-            %\COMMENT{la posición ya fue explorada}
-            %\STATE{// Si la pos. o contorno pertenecen a otra partícula, descartar}
-            %\STATE{// borde\_libre chequea disponibilidad en el vecindario}
-            \IF{$!(L^{2}[h] > 0 ~\&\&~ L^{2}[h] != i) ~\&\&~ borde\_libre(h,separacion)$}
-                %\State{// Posición libre, ocupar}                
-                \STATE{$L[h] \gets 0$} %\COMMENT{masa -> aire}
-                \STATE{$O[i].agregar(h)$}
-                \STATE{$C[i].agregar(vecindario(h))$} 
-                \STATE{$L^{2}.setear(vecindario(h),i)$} %\COMMENT{Marcar posiciones en $L^{2}$ como $i$}
-                \STATE{$L^{2}.setear(h,i)$}
-                \STATE{Break}
-                %\Comment{turno de la partícula $i+1$...}
-            \ENDIF
-        \ENDFOR
-\end{algorithmic}
+%\begin{algorithm}[H]
+%\begin{algorithmic}[1]
+%        \IF {$vacio?~C[i]$}
+%            \STATE{morir()}
+%        \ENDIF
+%        \FOR{$h \in C[i]$}
+%            \STATE{$C[i].eliminar(h)$}
+%            %\COMMENT{la posición ya fue explorada}
+%            %\STATE{// Si la pos. o contorno pertenecen a otra partícula, descartar}
+%            %\STATE{// borde\_libre chequea disponibilidad en el vecindario}
+%            \IF{$!(L^{2}[h] > 0 ~\&\&~ L^{2}[h] != i) ~\&\&~ borde\_libre(h,separacion)$}
+%                %\State{// Posición libre, ocupar}                
+%                \STATE{$L[h] \gets 0$} %\COMMENT{masa -> aire}
+%                \STATE{$O[i].agregar(h)$}
+%                \STATE{$C[i].agregar(vecindario(h))$} 
+%                \STATE{$L^{2}.setear(vecindario(h),i)$} %\COMMENT{Marcar posiciones en $L^{2}$ como $i$}
+%                \STATE{$L^{2}.setear(h,i)$}
+%                \STATE{Break}
+%                %\Comment{turno de la partícula $i+1$...}
+%            \ENDIF
+%        \ENDFOR
+%\end{algorithmic}
 %\label{alg:seq}
-\end{algorithm}
-\end{frame}
+%\end{algorithm}
+%\end{frame}
 
 \begin{frame}
 La partícula 14 marcó en su contorno celdas previamente marcadas por la partícula 7 en su contorno
@@ -701,14 +709,15 @@ De manera general, las ODEs se representan utilizando el siguiente sistema de ec
 
 
 
-\end{frame}
+%\end{frame}
 
 
-\begin{frame}{Crecimiento}
-\begin{itemize}
-\item Aleatorio
-\item Direccionado
-\end{itemize}
+%\begin{frame}{Crecimiento}
+%Crecimiento:
+%\begin{itemize}
+%\item Aleatorio
+%\item Direccionado
+%\end{itemize}
 
 \vspace{0.1cm}
 
@@ -716,6 +725,9 @@ Sistema Dinámico (SD) $\rightarrow$ campo vectorial (discreto) $\rightarrow$ di
 
 \vspace{0.1cm}
 
+\end{frame}
+
+\begin{frame}{Crecimiento}
 SD 2D, imagen izquierda:
 \begin{equation*} \label{eq:simple}  
   \begin{aligned}
@@ -723,11 +735,11 @@ SD 2D, imagen izquierda:
     \dot{y} &= 2xy+1.
   \end{aligned}
 \end{equation*}
-  \centerline{\includegraphics[width=9cm]{../figures/Fig2}}
-\end{frame}
+  \centerline{\includegraphics[width=8cm]{../figures/Fig2}}
+%\end{frame}
 
-\begin{frame}
-Se establece una correspondencia entre los límites del plano y las posiciones de la grilla.
+%\begin{frame}
+%Se establece una correspondencia entre los límites del plano y las posiciones de la grilla.
 
 \begin{itemize}
 \item Posición $(0,0)$ de la grilla $\rightarrow$ mínimo en $X$ e $Y$ (sistema dinámico)
@@ -736,30 +748,30 @@ Se establece una correspondencia entre los límites del plano y las posiciones d
 
 \end{frame}
 
-\begin{frame}
-\begin{algorithm}[H]
-\begin{algorithmic}[1]
-\STATE $solucion = Runge\_Kutta(h)$
-\STATE $vec = vecindario(h)$
-\STATE $mejor = abs(vec[0] - solucion)$
-\STATE $elegida = h$
-\STATE $vec.eliminar(h)$
-\FOR {$w \in vec$}
-%\STATE{// Se calcula la posición del vecindario que mejor aproxima al sistema}
-    \IF {$abs(vec[w]-solucion) < mejor$}
-        \STATE $mejor = abs(vec[w]-solucion)$
-        \STATE $elegida = w$
-    \ENDIF
-    \IF {$aleatorio() < aleatoriedad$} 
-    %\Comment {$0 <= aleatorio() <= 1$}
-        \STATE $C[i].agregar(w)$
-    \ENDIF
-\ENDFOR
-%\State{// Se agrega al vecindario sólo la posición que mejor aproxima la solución}
-\STATE $C[i].agregar(elegida)$
-\end{algorithmic}
-\end{algorithm}
-\end{frame}
+%\begin{frame}
+%\begin{algorithm}[H]
+%\begin{algorithmic}[1]
+%\STATE $solucion = Runge\_Kutta(h)$
+%\STATE $vec = vecindario(h)$
+%\STATE $mejor = abs(vec[0] - solucion)$
+%\STATE $elegida = h$
+%\STATE $vec.eliminar(h)$
+%\FOR {$w \in vec$}
+%%\STATE{// Se calcula la posición del vecindario que mejor aproxima al sistema}
+%    \IF {$abs(vec[w]-solucion) < mejor$}
+%        \STATE $mejor = abs(vec[w]-solucion)$
+%        \STATE $elegida = w$
+%    \ENDIF
+%    \IF {$aleatorio() < aleatoriedad$} 
+%    %\Comment {$0 <= aleatorio() <= 1$}
+%        \STATE $C[i].agregar(w)$
+%    \ENDIF
+%\ENDFOR
+%%\State{// Se agrega al vecindario sólo la posición que mejor aproxima la solución}
+%\STATE $C[i].agregar(elegida)$
+%\end{algorithmic}
+%\end{algorithm}
+%\end{frame}
 
 \begin{frame}{Sistemas de partículas + Sistemas Dinámicos}
 
@@ -814,14 +826,11 @@ Sistemas dinámicos adaptativos (dependiendo del ancho y alto del corte).
 \centerline{\includegraphics[width=10cm]{../figures/Fig12CAVW}}
 \end{frame}
 
-\begin{frame}{Esponjas}
+\begin{frame}{}
 
-\centerline{\includegraphics[width=7cm]{../figures/Fig13CAVW}}
-\end{frame}
+\includegraphics[width=6cm, height=7cm]{../figures/Fig13CAVW}
+\includegraphics[width=6cm, height=6cm]{../figures/Fig14CAVW}
 
-\begin{frame}{Piedras}
-
-\centerline{\includegraphics[width=9cm]{../figures/Fig14CAVW}}
 \end{frame}
 
 \begin{frame}{Conclusiones}
@@ -886,9 +895,9 @@ N(r) = \frac{k}{r^{d}}
 \end{frame}
 
 \begin{frame}
-La intersección de las burbujas produce una estructura que no es necesariamente fractal
+Intersección de burbujas $\rightarrow$ estructura no necesariamente fractal
 
-\vspace{1cm}
+%\vspace{1cm}
 
 \centering
 Burbujas $\cap$ Geometría
@@ -896,7 +905,7 @@ Burbujas $\cap$ Geometría
 Enmascarado directo (multiplicación)
 
 \centerline{\includegraphics[width=8cm]{../figures/intersectProblem}}
-\end{frame}
+%\end{frame}
 
 %\begin{frame}{Mapa de Distancias}
 
@@ -913,9 +922,9 @@ Enmascarado directo (multiplicación)
 
 %\end{frame}
 
-\begin{frame}{Solución: \textbf{Mapa de Distancias}}
-
-\centerline{\includegraphics[width=11cm]{../figures/DistanceTransform}}
+%\begin{frame}{Solución: \textbf{Mapa de Distancias}}
+Solución: \textbf{Mapa de Distancias}
+\centerline{\includegraphics[width=7cm]{../figures/DistanceTransform}}
 
 \end{frame}
 
@@ -944,24 +953,38 @@ Procesos durante la cocción:
 
 En nuestro caso, debe atenderse especialmente al efecto de dichos procesos sobre la \textbf{apariencia}.
 
-\end{frame}
+%\end{frame}
 
-\begin{frame}{Cocción}
-Modelo unidimensional (Transferencia de calor y masa)
+%\begin{frame}{Cocción}
 
-\begin{equation}
-\label{Eq:heat}
-\frac{\partial T}{\partial t} = \frac{1}{\rho C_{p}} \frac{\partial}{\partial x} \left ( k \frac{\partial T}{\partial x} \right ) + \frac{\lambda}{C_{p}} \frac{\partial W}{\partial t}+\frac{\lambda W}{ \rho C_{p} }\frac{\partial \rho}{\partial t},
-\end{equation}
+Cocción $3D$:
+
+\begin{itemize}
+\item Costoso
+\item Complejo
+\end{itemize}
+
+
+Modelo $1D$:
+
+\begin{itemize}
+\item Se obtienen soluciones similares para nuestros propósitos.
+\end{itemize}
+
+
+%\begin{equation}
+%\label{Eq:heat}
+%\frac{\partial T}{\partial t} = \frac{1}{\rho C_{p}} \frac{\partial}{\partial x} \left ( k \frac{\partial T}{\partial x} \right ) + \frac{\lambda}{C_{p}} \frac{\partial W}{\partial t}+\frac{\lambda W}{ \rho C_{p} }\frac{\partial \rho}{\partial t},
+%\end{equation}
 %
-\noindent donde
+%\noindent donde
 
-$T$ temperatura, $x$ es la coordenada radial, $t$ tiempo, $C_{p}$ calor específico, $\rho$ densidad, $k$ conductividad térmica, $\lambda$ calor latente de la evaporación de agua, y $W(x,t)$ contenido de agua líquida.
+%$T$ temperatura, $x$ es la coordenada radial, $t$ tiempo, $C_{p}$ calor específico, $\rho$ densidad, $k$ conductividad térmica, $\lambda$ calor latente de la evaporación de agua, y $W(x,t)$ contenido de agua líquida.
 
-Condiciones iniciales:
-\begin{align*}
-T(x,0) &= T_{0}(x), 0\le x \le L/2,
-\end{align*}
+%Condiciones iniciales:
+%\begin{align*}
+%T(x,0) &= T_{0}(x), 0\le x \le L/2,
+%\end{align*}
 
 \end{frame}
 
@@ -976,7 +999,9 @@ T(x,0) &= T_{0}(x), 0\le x \le L/2,
 %\end{frame}
 
 \begin{frame}
-$Temp$: Arreglo \textbf{unidimensional} de temperaturas
+
+$Temp$: Arreglo \textbf{unidimensional} de temperaturas.
+
 
 Distribución 3D de la temperatura utilizando el DF:
 \begin{equation*}
@@ -1053,15 +1078,15 @@ L &= 90 \rightarrow \text{sin cocción}
 
 \centerline{\includegraphics[width=4cm]{../figures/browning}}
 
-\end{frame}
+%\end{frame}
 
-\begin{frame}
+%\begin{frame}
 
 %Los valores de los canales $a$ y $b$ no están reportados. A partir de fotografías se observa que varian suavemente al cambiar $L$.
 
-\vspace{0.2cm}
+%\vspace{0.2cm}
 
-{\em \textbf{Densidad} de la corteza}: $N_{v} / W_{size},$
+{\em \textbf{Densidad} de la corteza}: $N_{v} / W_{size} \rightarrow L$
 
 \begin{itemize}
 \item $N_{v}$ número de voxels $= 1$ en una ventana en el entorno de la posición,
@@ -1179,42 +1204,42 @@ Se computa un \textbf{rayo} para cada pixel, desde la pantalla al objeto.
 Para obtener resultados en tiempo real, tomamos una versión simplificada de la RTE, teniendo en cuenta solamente la \textbf{transmitancia}.
 \end{frame}
 
-\begin{frame}{Renderización}
+%\begin{frame}{Renderización}
 
 
 
-\textbf{Transmitancia}: es la cantidad de luz que \texttt{atraviesa} un segmento del volumen:
+%\textbf{Transmitancia}: es la cantidad de luz que \texttt{atraviesa} un segmento del volumen:
 
-\begin{equation*}
-  T(p_i,p_j) = e^{-\tau_{(p_i, p_j)}}.
-\end{equation*}
+%\begin{equation*}
+%  T(p_i,p_j) = e^{-\tau_{(p_i, p_j)}}.
+%\end{equation*}
 
-donde el \textbf{coeficiente de absorción} $ = \int_{p_i}^{p_j} k_a(t) \, dt$  $ = \tau_{(p_i, p_j)}$.
-
-
-
-\centerline{\includegraphics[scale = 0.25]{../figures/fenomenosrte}}
+%donde el \textbf{coeficiente de absorción} $ = \int_{p_i}^{p_j} k_a(t) \, dt$  $ = \tau_{(p_i, p_j)}$.
 
 
-\end{frame}
 
-\begin{frame}
-RTE sólo teniendo en cuenta transmitancia:
+%\centerline{\includegraphics[scale = 0.25]{../figures/fenomenosrte}}
 
-\begin{equation*}
-  L(p_n) = L_b \ e^{-\tau(p_0, p_n)} + \int_{p_0}^{p_n} \rho \ e^{-\tau(t,p_n)} \, dt.
-\end{equation*}
 
-(Transmitancia de fondo $+$ Transmitancia del medio)
+%\end{frame}
+
+%\begin{frame}
+%RTE sólo teniendo en cuenta transmitancia:
+
+%\begin{equation*}
+%  L(p_n) = L_b \ e^{-\tau(p_0, p_n)} + \int_{p_0}^{p_n} \rho \ e^{-\tau(t,p_n)} \, dt.
+%\end{equation*}
+
+%(Transmitancia de fondo $+$ Transmitancia del medio)
 
 %La implementación reemplazará la integral por una suma,
 
-\begin{equation*}
-  L(p_n) = L_b \ e^{-\tau(p_0, p_n)} + \sum_{p_0}^{p_n} \rho \ e^{-\tau(p_i,p_n)}.
-\end{equation*}
+%\begin{equation*}
+%  L(p_n) = L_b \ e^{-\tau(p_0, p_n)} + \sum_{p_0}^{p_n} \rho \ e^{-\tau(p_i,p_n)}.
+%\end{equation*}
 
 
-\end{frame}
+%\end{frame}
 
 
 \begin{frame}{DVR en GPU}
@@ -1357,22 +1382,22 @@ Ley fractal $\rightarrow$ geometrías de migas de pan.
 
 %\end{frame}
 
-\begin{frame}
+%\begin{frame}
 %Esto sugiere que podría ser útil utilizar más de una DF para caracterizar los resultados.
 
-Dimensión generalizada de orden $q$ (método Sandbox):
+%Dimensión generalizada de orden $q$ (método Sandbox):
 
- \begin{align*}
-D_{q\ne 1}^{sb} &= \frac{1}{q-1} \lim_{R \rightarrow 0}{
-\frac{ln   { \left\langle  (M(R)/M_{0})^{q-1} \right\rangle   }}
-{ln {(R/L)}       }},\\
-D_{q=1}^{sb} &= \lim_{R \rightarrow 0}{
-\frac{ \left\langle ln   { (M(R)/M_{0})  }  \right\rangle}
-{ln {(R/L)}       }},
-\end{align*}
+% \begin{align*}
+%D_{q\ne 1}^{sb} &= \frac{1}{q-1} \lim_{R \rightarrow 0}{
+%\frac{ln   { \left\langle  (M(R)/M_{0})^{q-1} \right\rangle   }}
+%{ln {(R/L)}       }},\\
+%D_{q=1}^{sb} &= \lim_{R \rightarrow 0}{
+%\frac{ \left\langle ln   { (M(R)/M_{0})  }  \right\rangle}
+%{ln {(R/L)}       }},
+%\end{align*}
 
-\noindent donde $M_{0}$ es la cantidad de píxeles blancos en la imagen binarizada y $M(R)$ es el número de puntos que pertenecen a la estructura en un círculo de radio $R$ centrado en un punto de la misma.
-\end{frame}
+%\noindent donde $M_{0}$ es la cantidad de píxeles blancos en la imagen binarizada y $M(R)$ es el número de puntos que pertenecen a la estructura en un círculo de radio $R$ centrado en un punto de la misma.
+%\end{frame}
 
 \begin{frame}
 Espectro multifractal en muestras reales ({\em baguette} y pan casero)
@@ -1521,9 +1546,11 @@ Correlación entre las dimensiones del MFS y el desvío estándar del área medi
 
 \centerline{\includegraphics[width=5cm]{../figures/stMCA}}
 
-\end{frame}
+%\end{frame}
 
-\begin{frame}{Conclusiones}
+%\begin{frame}{Conclusiones}
+
+Conclusiones
 \begin{itemize}
 \item Es posible utilizar el MFS no sólo para clasificar, sino para caracterizar muestras de panes.
 \item Clasificación comparable al estado del arte.
@@ -1533,20 +1560,21 @@ Correlación entre las dimensiones del MFS y el desvío estándar del área medi
 
 \begin{frame}{Validación utilizando Técnicas de Aprendizaje Profundo}
 
-\centerline{\includegraphics[width=5cm]{../figures/deep1}}
+
+
+%\end{frame}
+
+%\begin{frame}{Validación utilizando Técnicas de Aprendizaje Profundo}
+\centering
+\includegraphics[width=3cm]{../figures/deep1}
+\includegraphics[width=3cm]{../figures/deep4}
+
+\includegraphics[width=3cm]{../figures/deep2}
+\includegraphics[width=3cm]{../figures/deep3}
+
 
 \vspace{0.4cm}
 \url{http://deeplearning.cs.toronto.edu/}
-
-\end{frame}
-
-\begin{frame}{Validación utilizando Técnicas de Aprendizaje Profundo}
-
-\centerline{\includegraphics[width=4cm]{../figures/deep2}}
-\centerline{\includegraphics[width=4cm]{../figures/deep3}}
-\end{frame}
-\begin{frame}{Validación utilizando Aprendizaje Profundo}
-\centerline{\includegraphics[width=5cm]{../figures/deep4}}
 
 \end{frame}
 
@@ -1583,12 +1611,12 @@ Correlación entre las dimensiones del MFS y el desvío estándar del área medi
 \item Se presentó un método para \textbf{clasificar} muestras de pan, superando a clasificadores del estado del arte.
 \end{itemize}
 \end{block}
-\end{frame}
+%\end{frame}
 
-\subsection{Trabajos a futuro}
+%\subsection{Trabajos a futuro}
 
-\begin{frame}{Trabajos a futuro}
-\begin{block}{}
+%\begin{frame}{Trabajos a futuro}
+\begin{block}{Trabajos a Futuro}
 \begin{itemize}
 \item Generación procedimental de huesos y \textbf{otros materiales}
 \item Validación tridimensional de los resultados
