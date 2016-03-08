@@ -20,6 +20,11 @@
 
 
 \usepackage{graphicx} 
+%\usepackage{multimedia} 
+\usepackage{xmpmulti}
+\usepackage{animate}
+
+
 %\usepackage{algorithmic}
 %\usepackage{algorithm}
 \newcommand{\formulasize}{\tiny}
@@ -699,9 +704,13 @@ Sistema Dinámico (SD) $\rightarrow$ campo vectorial (discreto) $\rightarrow$ di
 
 \begin{frame}{Sistemas de partículas + Sistemas Dinámicos}
 
+\centering
 Aleatoriedad = 0.3, 0.2, y 0.1
+
 \vspace{0.1cm}
-  \includegraphics[width=12cm]{../figures/Fig3}
+  \includegraphics[width=8cm]{../figures/Fig3}
+
+\animategraphics[loop,controls,height=3cm]{12}{../figures/particles/optimised-}{0}{84}
 \end{frame}
 
 \begin{frame}{Condiciones de contorno}
@@ -716,6 +725,7 @@ Geometrías tridimensionales \textbf{arbitrarias}.
 
   \centerline{\includegraphics[width=7cm]{../figures/Fig4}}
 \end{frame}
+
 
 \subsection{Resultados}
 
@@ -752,8 +762,8 @@ Sistemas dinámicos adaptativos (dependiendo del ancho y alto del corte).
 
 \begin{frame}{}
 
-\includegraphics[width=6cm, height=7cm]{../figures/Fig13CAVW}
-\includegraphics[width=6cm, height=6cm]{../figures/Fig14CAVW}
+\includegraphics[width=6cm, height=5cm]{../figures/Fig13CAVW}
+\includegraphics[width=6cm, height=5cm]{../figures/Fig14CAVW}
 
 \end{frame}
 
