@@ -1,4 +1,4 @@
-\documentclass[spanish,unknownkeysallowed]{beamer}
+\documentclass[spanish,unknownkeysallowed,10pt]{beamer}
 %% \usetheme{Warsaw}
 %% \usetheme{Madrid}
 
@@ -143,207 +143,89 @@ Dr. Gustavo Galizzi (UNR)
 
 
 \subsection{Modelado y Simulación Foto-Realística}
-\begin{frame}{Modelado foto-realístico de escenas}
+\begin{frame}{}
 
-
-
-\centerline{\includegraphics[scale = 0.25]{../figures/fotorealismo}}
+\centerline{\includegraphics[scale = 0.2]{../figures/fotorealismo}}
 
 \textbf{Foto-realismo}: síntesis de imágenes que produzcan el \textbf{mismo efecto}, en la percepción, que una fotografía del material/escena.
 
 \vspace{0.2cm}
 
-El área experimentó avances notables desde su concepción.
-\begin{block}{}
-\begin{itemize}
-\item \textbf{Nivel de Realismo}: se desarrollaron teorías computacionales que modelan fenómenos físicos subyacentes ({\it e.g.} Ecuación del Renderizado de Superficies y Volúmenes).
-\item \textbf{Velocidad}: tasas de tiempo interactivo / real: evolución cuasi-exponencial del poder de cómputo (GPU's).
-\end{itemize}
-\end{block}
+El área experimentó avances notables desde su concepción: \textbf{realismo}, \textbf{velocidad}
+%\begin{block}{}
+%\begin{itemize}
+%\item \textbf{Nivel de Realismo}: se desarrollaron teorías computacionales que modelan fenómenos físicos subyacentes ({\it e.g.} Ecuación del Renderizado de Superficies y Volúmenes).
+%\item \textbf{Velocidad}: tasas de tiempo interactivo / real: evolución cuasi-exponencial del poder de cómputo (GPU's).
+%\end{itemize}
+%\end{block}
+
+%\end{frame}
+
+%\begin{frame}
+
+\includegraphics[scale = 0.15]{../figures/brigade3}
+\includegraphics[scale = 0.15]{../figures/brigade3_2}
+
+Brigade 3 Renderer: tiempo real!
+
 
 \end{frame}
 
-\begin{frame}
-
-\includegraphics[scale = 0.18]{../figures/hd1.png}
-\includegraphics[scale = 0.18]{../figures/blinn5ed.png}
-
-(Imágenes: Brigade 2 Renderer)
-
-
-\end{frame}
 
 
 
-
-\begin{frame}{Síntesis de la Imagen de una Escena}
+\begin{frame}{}
 \textbf{Renderización}:
-Computar \textbf{radiancia} que arriba a la \textbf{cámara} desde toda la escena.
+Computar \textbf{radiancia entrante}:  \textbf{escena}  $\rightarrow$ \textbf{cámara}
 
-\vspace{0.4cm}
-La radiancia \textit{entrante}, a cada píxel, depende de numerosos factores
+\vspace{0.2cm}
+
+\begin{block}{Debe modelarse}
 \begin{itemize}
-\item \textbf{forma} del objeto
-\item \textbf{material}, 
-\item \textbf{oclusión} existente entre el objeto y la cámara
-\item temperatura
-\item etc.
-\end{itemize}
-
-
-\vspace{0.4cm}
-Cada objeto de la escena puede emitir radiancia (en todo el espectro electromagnético) hacia el observador.
-
-\end{frame}
-
-
-
-\begin{frame}[Luz]
-\begin{block}{Luz}
-\begin{itemize}
-\item La comprensión del fenómeno evolucionó considerablemente a lo largo del tiempo.
-%\item ``dualidad onda-partícula'': Debe simplificarse su tratamiento en computación gráfica.
-\item En la mayoría de los casos, sólo la \textbf{luz visible} es la que debe modelarse (apariencia).
-\item Se asume distribución en líneas rectas o \textbf{rayos} (representación {\em óptico geométrica}, escala macroscópica).
+\item \textbf{luz visible}, distribución en líneas rectas o \textbf{rayos}.
+\item interacción Luz $\leftrightarrow$ \textbf{cada} objeto y/o material
 \end{itemize}
 \end{block}
 
-\begin{block}{Debe modelarse, además, su interacción con \textbf{cada objeto}}
-Modelado de la \textbf{geometría}.
-\end{block}
+\vspace{0.2cm}
 
-\end{frame}
+Modelar \textbf{apariencia} de un material: \textbf{micro-geometría}, \textbf{macro-geometría}. \textbf{color}, \textbf{forma}, \textbf{oclusión}, temperatura, etc.
 
-
-\begin{frame}{Materiales}
-\textbf{Apariencia} de un material
-\begin{itemize}
-\item Definición informal: {\em percepción} del mismo por parte de una persona.
-\item Conjunto de estímulos visuales.
-\end{itemize}
-
-Depende de la escala buscada
-\begin{itemize}
-\item \textbf{Microscópico}: detalles invisibles al ojo humano (técnicas estadísticas)
-\item \textbf{Macroscópico}: visible (triángulos, texturas, etc)
-\end{itemize}
+\vspace{0.2cm}
 
 Estudio del material $\rightarrow$ comprensión de su apariencia $\rightarrow$ modelo numérico
 
 \centerline{\includegraphics[scale = 0.25]{../figures/apariencia}}
-\end{frame}
 
 
-\begin{frame}{}
-
-\begin{block}{Materiales con mayor aparición en escenas}
-
-Agua, Piel humana, Metales, Plásticos, etc. 
-
-Posibles causas: \textbf{facilidad} del diseño (realismo), aparición \textbf{constante} en escenas
-
-\end{block}
-
-\begin{block}{Materiales con menor aparición en escenas}
-Materiales cocidos, porosos y comestibles
-
-
-\begin{itemize}
-\item \textbf{Geometría compleja y visible}
-\item \textbf{Fácil detección} de modelos inadecuados
-\item \textbf{Costo computacional} excesivo
-\end{itemize}
-\end{block}
-
-{\it Alain Fournier: `computer graphics has still not been
-able to convincingly render a slice of bread' (2001)}
-
-
-\end{frame}
-
-\begin{frame}
-\begin{block}{}
-Debido a las consideraciones anteriores, en esta tesis haremos hincapié en materiales \textbf{porosos}.
-
-Objetivo: producir una geometría configurable, intuitiva y creíble de estos materiales. Se busca \textbf{renderización foto-realista} en tiempo interactivo/real.
-
-%La tesis presenta algunos resultados favorables inesperados
+%La modelización depende de la escala
 %\begin{itemize}
-%\item Caracterización y clasificación de imágenes de pan
-%\item Generación de texturas de materiales no porosos (madera, mármol..)
+%\item \textbf{Microscópico}: detalles invisibles al ojo humano (técnicas estadísticas)
+%\item \textbf{Macroscópico}: visible (triángulos, texturas, etc)
 %\end{itemize}
 
 
-\end{block}
 \end{frame}
-
 
 \subsection{Trabajo Previo}
 
-\begin{frame}{Modelado de la Geometría}
+\begin{frame}{Modelado Procedimental de Materiales}
 
-\textbf{Problema}
+Técnicas semi-automáticas basadas en algoritmos
 
-Supervisión humana repetitiva. Ejemplo: diseñar separadamente cada árbol de un bosque
+Sistemas-L  (Lindenmayer): \textbf{Axioma}, estado inicial, \textbf{reglas de producción}
 
-\begin{block}{Solución}
-Técnicas \textbf{Procedimentales} (técnicas semi-automáticas basadas en algoritmos)
-\end{block}
-
-\begin{block}{Sistemas-L (Lindenmayer)}
-
-Describen la estructura visible de plantas
-
-
-\begin{itemize}
-\item \textbf{axioma}, reglas \textbf{reglas de producción}, número de iteraciones
-\end{itemize}
-\end{block}
-
-%En cada iteración se aplican reglas de producción a la cadena de caracteres resultante anterior.
-
-Axioma: $F$, $P1: F \rightarrow FfF$.
-
-$F \rightarrow FfF \rightarrow \textbf{FfF}f\textbf{FfF} \ldots$
-
-\end{frame}
-
-\begin{frame}{Ejemplo}
-\begin{itemize}
-\item Estado inicial ($x$,$y$,$90^{\circ}$)
-\item \textbf{Axioma:} F
-\item Regla de producción $F \rightarrow FF-FfF-FF$
-\end{itemize}
-
-%\begin{itemize}
-%\item F, moverse hacia adelante un paso $d$, dibujando,
-%\item f, moverse hacia adelante un paso $d$, sin dibujar,
-%\item +, rotar un ángulo $\delta$,
-%\item -, rotar un ángulo $-\delta$.
-%\end{itemize}
 
 \center
-\includegraphics[width=4cm]{../figures/tortuga}
 
-\end{frame}
+\includegraphics[width=5.3cm]{../figures/sistemalcorchete}
+\includegraphics[width=4cm]{../figures/3dlsystem}
 
-\begin{frame}{Sistemas-L: Arboles}
-Pila de estados
-\begin{itemize}
-\item $[$ : estado actual $\rightarrow$ pila ({\em push})
-\item $]$ : cabeza de la pila $\rightarrow$ estado actual ({\em pop}):
-\end{itemize}
-
-\center
-\includegraphics[width=6.3cm]{../figures/sistemalcorchete}
-\includegraphics[width=5cm]{../figures/3dlsystem}
+\textbf{Comparación subjetiva}: objeto sintético $\leftrightarrow$ objeto real
 
 \end{frame}
 
 \begin{frame}{}
-\begin{block}{Sistemas-L}
-\textbf{Comparación subjetiva}: objeto sintético $\leftrightarrow$ objeto real
-\end{block}
 
 \begin{block}{Modelado Físico de materiales}
 
@@ -355,166 +237,56 @@ Ecuaciones del \textbf{comportamiento} o \textbf{crecimiento} de los mismos.
 \includegraphics[width=6cm]{../figures/water}
 \end{block}
 
-%Dadas condiciones iniciales $\bold{u}$ y $p$ cuando $t = 0$,
-%\begin{align*}
-%\nabla \cdot \bold{u} &= 0\\
-%\frac{\partial \bold{u} }{\partial t} &= - (\bold{u} \cdot \nabla) \bold{u} - \frac{1}{\rho} \nabla p + \nu \nabla^{2} \bold{u} + \bold{f},
-%\end{align*}
-
-%\noindent donde $\nu$ representa la viscosidad cinemática del fluido, $\rho$ la densidad y $\bold{f}$ una fuerza externa.
-
-%\end{frame}
-
-%\begin{frame}{Ecuaciones de Navier-Stokes, humo}
-
-
 \end{frame}
 
-\subsection{Renderizado}
 
-\begin{frame}
-Las geometrías obtenidas deben \textbf{renderizarse} para ser visualizadas.
-\vspace{0.5cm}
+\begin{frame}{}
 
-Se desarrollaron ecuaciones que representan el comportamiento de la luz en una escena.
-Las mismas obtienen imágenes \textbf{foto-realistas} de escenas y materiales.
+\begin{block}{Materiales con mayor aparición en escenas}
 
-Existen dos clases principales de técnicas de modelado:
+Agua, Piel humana, Metales, Plásticos, etc. 
+
+\textbf{facilidad} del diseño (realismo), aparición \textbf{constante} en escenas
+
+\end{block}
+
+\begin{block}{Materiales con menor aparición en escenas}
+Materiales cocidos, porosos y comestibles
+
+\textbf{Geometría compleja y visible}, \textbf{fácil detección} de modelos inadecuados, \textbf{costo computacional}
+\end{block}
+
+{\it Alain Fournier: `computer graphics has still not been
+able to convincingly render a slice of bread' (2001)}
 
 \begin{block}{}
-\begin{itemize}
-\item Superficies (Metales, plásticos)
-\item Volúmenes (Humo, fuego)
-\end{itemize}
+En esta tesis haremos hincapié en materiales \textbf{porosos}.
+
+Objetivo: producir una geometría configurable, intuitiva y creíble de estos materiales. Se busca \textbf{renderización foto-realista} en tiempo interactivo/real.
+
 \end{block}
-\end{frame}
 
-
-\begin{frame}{Ecuación del Renderizado de Superficies:}
-
-\textbf{Radiancia entrante} en $x$ (por medio de \textbf{todos} los puntos $x'$ de \textbf{todas las superficies}).
-
-\centerline{\includegraphics[scale = 0.4]{../figures/rendequation}}
-\vspace{-1cm}
-$$ L(\bold{x'} \rightarrow \bold{x}) =  g(\bold{x'}  \rightarrow \bold{x})  \left[ \epsilon(\bold{x'}  \rightarrow \bold{x}) + \int_{s}{\rho(\bold{x''}  \rightarrow \bold{x'}  \rightarrow \bold{x})L(\bold{x''}  \rightarrow \bold{x}) d\bold{x''}} \right] $$
-
-\textbf{Recursiva}
-%: la \textbf{energía radiante saliente} de $x'$ depende de la \textbf{energía radiante entrante} desde todos los puntos de todas las superficies.
-
-$\bold{x}$,$\bold{x'}$ y $\bold{x''}$ varían sobre todas las superficies.
-
-(Ray Tracing, Path Tracing)
-
-\end{frame}
-
-%\begin{frame}
-%$$ L(\bold{x'} \rightarrow \bold{x}) =  g(\bold{x'}  \rightarrow \bold{x})  \left[ \epsilon(\bold{x'}  \rightarrow \bold{x}) + \int_{s}{\rho(\bold{x''}  \rightarrow \bold{x'}  \rightarrow \bold{x})L(\bold{x''}  \rightarrow \bold{x}) d\bold{x''}} \right] $$
-
-%\begin{itemize}
-%\item $L(\bold{x'} \rightarrow \bold{x})$, intensidad de la luz que viaja del punto tridimensional $\bold{x'}$ a $\bold{x}$
-%(sin oclusiones)
-
-%\item $g(\bold{x'} \rightarrow \bold{x})$: término geométrico que modela la oclusión que podría existir entre $\bold{x}$ y $\bold{x'}$,
-%\item $\epsilon(\bold{x'} \rightarrow \bold{x})$ intensidad de la luz emitida desde $\bold{x'}$ a $\bold{x}$,
-%\item $\rho(\bold{x''}  \rightarrow \bold{x'}  \rightarrow \bold{x})$ la intensidad de la luz emitida de $\bold{x''}$ a $\bold{x}$ por medio de una superficie en $\bold{x'}$ (esta cantidad será llamada función bidireccional de distribución de reflectancia, BRDF),
-
-%\item $S=\bigcup{s_{i}}$, unión de todas las superficies $s_{i}$ de la escena
-%\end{itemize}
-%\end{frame}
-
-%\begin{frame}
-
-%\begin{equation*}
-%L(\bold{x'} \rightarrow \bold{x}) =  g(\bold{x'}  \rightarrow \bold{x})  \left[ \epsilon(\bold{x'}  \rightarrow \bold{x}) + \int_{s}{\rho(\bold{x''}  \rightarrow \bold{x'}  \rightarrow \bold{x})L(\bold{x''}  \rightarrow \bold{x}) d\bold{x''}} \right]
-%\end{equation*}
-
-
-%Además se asume una superficie $S_{0}$, la cual se modela como una semi-esfera que engloba a toda la escena.
-
-%\vspace{0.2cm}
-%Aproximación de las propiedades óptico-geométricas de las ecuaciones del electromagnetismo de Maxwell.
-
-%(Ray Tracing, Path Tracing)
-%\end{frame}
-
-
-\begin{frame}{Ecuación del Renderizado de Volúmenes}
-Cambio de radiancia ($L$) en una dirección dada ($\vec{\omega}$) 
-
-Absorción, dispersión saliente, emisión y dispersión entrante.
-\begin{equation*}
-\begin{aligned}
-(\vec{\omega} \cdot \nabla) L(\bold{x} \rightarrow \vec{\omega}) = - \sigma_{a}(\bold{x}) L(\bold{x} \rightarrow \vec{\omega}) - \sigma_{s}(\bold{x}) L(\bold{x} \rightarrow \vec{\omega}) + \\
-\sigma_{a}(\bold{x}) L_{e}(\bold{x} \rightarrow \vec{\omega}) + \sigma_{s}(\bold{x}) L_{i}(\bold{x} \rightarrow \vec{\omega}).
-\end{aligned}
-\end{equation*}
-
-$\sigma_{a}$: coef. absorción, $\sigma_{s}$: coef. dispersión.
-
-%\end{frame}
-
-%\begin{frame}{Ecuación del Renderizado de Volúmenes}
-\centering
-\includegraphics[scale = 0.3]{../figures/fenomenosrte}
-
-Ray Casting (Direct Volume Rendering)
 \end{frame}
 
 
 
 \subsection{Materiales porosos}
 
-
 \begin{frame}{Materiales porosos - Trabajo Previo}
 
-Volúmenes
-\begin{block}{}
-\begin{itemize}
-\item \textbf{cortes arbitrarios} en el objeto
-\item \textbf{más costosos}, (almacenamiento, tiempo de renderizado)
-\end{itemize}
-\end{block}
+\textbf{Volúmenes}: el usuario debe ser \textbf{experto}
 
-Se utilizan diversos ruidos
+Ruido Voronoi, Perlin, Worley. $+$ consideraciones ad-hoc (Ratatouille Película)
 
-\begin{itemize}
-\item Voronoi, Perlin, Worley. $+$ consideraciones ad-hoc
-\end{itemize}
+\centerline{\includegraphics[scale = 0.2]{../figures/ratatouille}}
 
-\includegraphics[scale = 0.15]{../figures/Fig8}
-\includegraphics[scale = 0.15]{../figures/Fig9CAVW}
-\end{frame}
+\textbf{Superficies}: {\it Tong et al (2005)}
 
+Capturas (cámaras y lásers) $\rightarrow$ radiancia.
 
-\begin{frame}{Materiales porosos - Trabajo Previo}
-Desventajas: 
-\begin{block}{}
-\begin{itemize}
-\item control sobre cantidad y tamaño de las burbujas
-\item deformación de burbujas
-\item el usuario debe ser experto
-\end{itemize}
-\end{block}
+Proceso de captura muy complejo, limitado a una geometría. Tiempos de cómputo?, cortes
 
-Ratatouille (Película): Voronoi + mapa (deformación de burbujas).
-\centering{\includegraphics[scale = 0.3]{../figures/ratatouille}}
-
-\end{frame}
-
-\begin{frame}
-
-Superficies: {\it Tong et al (2005)}
-
-Capturas (cámaras y lásers) $\rightarrow$ distribuciones precisas de radiancia.
-
-\begin{itemize}
-\item Proceso de captura muy complejo
-\item Limitado a una geometría
-\item Tiempos de cómputo?
-\item Imposibilidad de realizar cortes
-\end{itemize}
-
-\includegraphics[scale = 0.3]{../figures/esponja}
+\centerline{\includegraphics[scale = 0.2]{../figures/esponja}}
 
 \end{frame}
 
@@ -533,7 +305,7 @@ Capturas (cámaras y lásers) $\rightarrow$ distribuciones precisas de radiancia
 
 \subsection{Modelado Procedimental de Materiales Porosos}
 \begin{frame}{Modelado de Geometrías Porosas - Propuesta}
-Presentamos un modelo de generación de geometrías porosas basados en:
+Presentamos un modelo \textbf{procedimental} de generación de geometrías porosas
 \begin{itemize}
 \item \textbf{Sistemas de Partículas} que crecen, evitándose
 \item \textbf{Sistemas dinámicos} como medio de crecimiento
@@ -544,7 +316,6 @@ Presentamos un modelo de generación de geometrías porosas basados en:
 \textbf{Sistemas de partículas}
 \begin{itemize}
 \item Partícula: posición, dirección, color, tiempo de vida, etc.
-\item Fluídos, objetos con interfaces sin definición precisa
 
 \includegraphics[scale = 0.216]{../figures/fire}
 \includegraphics[scale = 0.2]{../figures/fireworks}
@@ -554,8 +325,8 @@ Presentamos un modelo de generación de geometrías porosas basados en:
 \begin{frame}
 El sistema consta de:
 \begin{itemize}
-\item un conjunto de partículas $P = \{p_{1}, ... , p_{n}\}, n  \in \mathbb{N}$
-\item y dos grillas, $L_{N\times N \times N},$, $L^{2}_{N\times N \times N}, N \in \mathbb{N}.$
+\item un conjunto de partículas $P$
+\item y dos grillas tridimensionales, $L$, $L^{2}$
 \end{itemize}
 
 %Condiciones Iniciales:
@@ -566,16 +337,16 @@ El sistema consta de:
 
 Cada partícula posee:
 \begin{equation*}
-  p_{i} = \{O_{i}, C_{i}\}, 1 \le i \le n,
+  p_{i} = \{O_{i}, C_{i}\}
 \end{equation*}
 
 \begin{itemize}
-\item $O_{i} = \{o_{1}, ... , o_{n_{i}}\}$:posiciones ocupadas por la part\'icula en $L$.
+\item $O_{i}$:posiciones ocupadas por la part\'icula en $L$.
 
-\item $C_{i} = \{c_{1}, ... , c_{m_{i}}\}$:posiciones en el {\em contorno} de la part\'icula en $L$.
+\item $C_{i}$:posiciones en el {\em contorno} de la part\'icula en $L$.
 \end{itemize}
 
-\end{frame}
+%\end{frame}
 
 %\begin{frame}
 
@@ -605,10 +376,10 @@ Cada partícula posee:
 %\end{algorithm}
 %\end{frame}
 
-\begin{frame}
-La partícula 14 marcó en su contorno celdas previamente marcadas por la partícula 7 en su contorno
-\centerline{\includegraphics[scale = 0.45]{../figures/sistemaparticulas}}
-La partícula 14 \textbf{no} tomará las posiciones en rojo, ya que \textbf{borde\_libre} chequea que su contorno no pertenezca a otra partícula
+%\begin{frame}
+Ejemplo: La partícula 14 marcó en su contorno celdas previamente marcadas por la partícula 7 en su contorno
+\centerline{\includegraphics[scale = 0.35]{../figures/sistemaparticulas}}
+La partícula 14 \textbf{no} tomará las posiciones en rojo, ya que chequea que su contorno no pertenezca a otra partícula
 \end{frame}
 
 \begin{frame}{Ejemplo: crecimiento}
@@ -715,9 +486,9 @@ Geometrías tridimensionales \textbf{arbitrarias}.
 \item Para cada corte se establecen condiciones de contorno, a través de un campo vectorial discreto que ``sigue'' al contorno
 \end{itemize}
 
-\textbf{Ortogonal al gradiente del corte}.
+voxelización $\rightarrow$ gaussiano (ventana $k$) $\rightarrow$ gradiente $\rightarrow$ ortogonal
 
-  \centerline{\includegraphics[width=7cm]{../figures/Fig4}}
+  \centerline{\includegraphics[width=5cm]{../figures/Fig4}}
 \end{frame}
 
 
@@ -733,35 +504,19 @@ Parametrización bidimensional (más intuitiva).
 
 
 \begin{frame}{Resultados}
-Parámetro {\em separación} = 2 entre partículas
+Parámetro {\em separación} = 2 entre partículas, Adaptativo (dependiendo del ancho y alto del corte).
 
-\centerline{\includegraphics[width=8cm]{../figures/Fig7}}
-\end{frame}
-
-\begin{frame}{Resultados}
-\centerline{\includegraphics[width=10cm]{../figures/Fig11CAVW}}
+\includegraphics[width=5cm]{../figures/Fig7}
+\includegraphics[width=6cm]{../figures/Fig6}
 
 
-Sistemas dinámicos adaptativos (dependiendo del ancho y alto del corte).
 
-\centerline{\includegraphics[width=7cm]{../figures/Fig6}}
+
 
 \end{frame}
 
 
-\begin{frame}{Renderizados}
-
-\centerline{\includegraphics[width=10cm]{../figures/Fig12CAVW}}
-\end{frame}
-
-\begin{frame}{}
-
-\includegraphics[width=6cm, height=5cm]{../figures/Fig13CAVW}
-\includegraphics[width=6cm, height=5cm]{../figures/Fig14CAVW}
-
-\end{frame}
-
-\begin{frame}{Conclusiones}
+\begin{frame}{Conclusiones\footnote{Realistic Modeling of Porous Materials, {\it J. Computer Animation and Virtual Worlds}, Baravalle et.al. 2016}}
 \begin{block}{}
 \begin{itemize}
 \item Algoritmo procedimental fenomenológico
@@ -823,47 +578,16 @@ N(r) = \frac{k}{r^{d}}
 \end{frame}
 
 \begin{frame}
-Intersección de burbujas $\rightarrow$ estructura no necesariamente fractal
+\textbf{Mapa de Distancias}
+\centerline{\includegraphics[width=5cm]{../figures/DistanceTransform}}
 
-%\vspace{1cm}
-
-\centering
-Burbujas $\cap$ Geometría
-
-Enmascarado directo (multiplicación)
-
-\centerline{\includegraphics[width=8cm]{../figures/intersectProblem}}
-%\end{frame}
-
-%\begin{frame}{Mapa de Distancias}
-
-%Textura volumétrica a valores reales $DF_{M}$ con las mismas dimensiones que la entrada $M$,
-
-
-%$$DF_{M}[i,j,k] = \min \bigg\{ \delta([i,j,k],[i',j',k']): M[i',j',k'] = 0 \bigg\},$$
-
-
-%\begin{itemize}
-%\item $[i,j,k]$ y $[i',j',k']$ son celdas en las respectivas texturas (posiciones espaciales $(i,j,k)$ y $(i',j',k')$)
-%\item $\delta$ es la función que computa la distancia entre dos celdas (distancia de Manhattan, Euclidiana).
-%\end{itemize}
-
-%\end{frame}
-
-%\begin{frame}{Solución: \textbf{Mapa de Distancias}}
-Solución: \textbf{Mapa de Distancias}
-\centerline{\includegraphics[width=7cm]{../figures/DistanceTransform}}
-
-\end{frame}
-
-\begin{frame}
 \textbf{Umbral} DF $\rightarrow$ corteza de ancho \textbf{parametrizable}.
 
 \vspace{0.3cm}
 
-\centerline{\includegraphics[width=10cm]{../figures/prebakebread}}
+\centerline{\includegraphics[width=9cm]{../figures/prebakebread}}
 
-\centerline{\includegraphics[width=10cm]{../figures/prebakebunny}}
+\centerline{\includegraphics[width=8cm]{../figures/prebakebunny}}
 \end{frame}
 
 \subsection{Cocción}
@@ -896,7 +620,7 @@ Cocción $3D$:
 Modelo $1D$:
 
 \begin{itemize}
-\item Se obtienen soluciones similares para nuestros propósitos.
+\item Se obtienen soluciones similares para nuestros propósitos (apariencia creíble																																				).
 \end{itemize}
 
 
@@ -936,8 +660,9 @@ Distribución 3D de la temperatura utilizando el DF:
 \displaystyle R_{vol}[x,y,z] = Temp[ round( DF_{M}[x,y,z] ) ], 
 \end{equation*}
 
-$DF_{M}[(x,y,z)] = 0 \rightarrow$ contorno, $Temp[0] \rightarrow R_{vol}[(x,y,z)]$.
-$DF_{M}[(x,y,z)] > 0 \rightarrow$ interior, $<$ T  $\rightarrow R_{vol}[(x,y,z)]$.
+$DF_{M} = 0 \rightarrow$ contorno, mayor $T$ $Temp[0] \rightarrow R_{vol}$
+
+$DF_{M} > 0 \rightarrow$ interior, menor $T$  $\rightarrow R_{vol}$
 
 \centerline{\includegraphics[width=8cm]{../figures/tempsbunny}}
 \end{frame}
@@ -976,8 +701,6 @@ Deformación \textbf{local}: $p = P[u,v,w],$
 [r,s,t] = [u,v,w] + P[u,v,w] \, g'[u,v,w],
 \end{equation*}
 
-%\noindent donde $[u,v,w]$ es la entrada original, y $[r,s,t]$ es la coordenada deformada.
-
 
 Escalado de la textura (de acuerdo a la distribución de burbujas)
 
@@ -1004,13 +727,6 @@ L &= 90 \rightarrow \text{sin cocción}
 
 \centerline{\includegraphics[width=4cm]{../figures/browning}}
 
-%\end{frame}
-
-%\begin{frame}
-
-%Los valores de los canales $a$ y $b$ no están reportados. A partir de fotografías se observa que varian suavemente al cambiar $L$.
-
-%\vspace{0.2cm}
 
 {\em \textbf{Densidad} de la corteza}: $N_{v} / W_{size} \rightarrow L$
 
@@ -1031,7 +747,7 @@ Los colores se distribuyen de acuerdo al valor de $L$. $<$ masa $\Rightarrow < L
 
 \centerline{\includegraphics[width=9cm]{../figures/Fig11}}
 
-$S$ con valores aleatorios en cada punto, picos visibles en la corteza.
+%$S$ con valores aleatorios en cada punto, picos visibles en la corteza.
 
 \end{frame}
 
@@ -1073,7 +789,7 @@ Panes luego de la cocción mostrando diferentes crecimientos. De izquierda a der
 %\end{table}
 %\end{frame}
 
-\begin{frame}{Conclusiones}
+\begin{frame}{Conclusiones\footnote{Procedural Bread Making, {\it J. Computers \& Graphics}, Baravalle et.al. 2015}}
 \begin{block}{}
 \begin{itemize}
 \item Modelo \textbf{inspirado} físicamente
@@ -1099,6 +815,78 @@ Panes luego de la cocción mostrando diferentes crecimientos. De izquierda a der
 
 
 \subsection{Renderización}
+
+\begin{frame}{Ecuación del Renderizado de Superficies:}
+
+\textbf{Radiancia entrante} en $x$ (por medio de \textbf{todos} los puntos $x'$ de \textbf{todas las superficies}).
+
+\centerline{\includegraphics[scale = 0.4]{../figures/rendequation}}
+\vspace{-1cm}
+$$ L(\bold{x'} \rightarrow \bold{x}) =  g(\bold{x'}  \rightarrow \bold{x})  \left[ \epsilon(\bold{x'}  \rightarrow \bold{x}) + \int_{s}{\rho(\bold{x''}  \rightarrow \bold{x'}  \rightarrow \bold{x})L(\bold{x''}  \rightarrow \bold{x}) d\bold{x''}} \right] $$
+
+\textbf{Recursiva}
+%: la \textbf{energía radiante saliente} de $x'$ depende de la \textbf{energía radiante entrante} desde todos los puntos de todas las superficies.
+
+$\bold{x}$,$\bold{x'}$ y $\bold{x''}$ varían sobre todas las superficies.
+
+(Ray Tracing, Path Tracing)
+
+\end{frame}
+
+%\begin{frame}
+%$$ L(\bold{x'} \rightarrow \bold{x}) =  g(\bold{x'}  \rightarrow \bold{x})  \left[ \epsilon(\bold{x'}  \rightarrow \bold{x}) + \int_{s}{\rho(\bold{x''}  \rightarrow \bold{x'}  \rightarrow \bold{x})L(\bold{x''}  \rightarrow \bold{x}) d\bold{x''}} \right] $$
+
+%\begin{itemize}
+%\item $L(\bold{x'} \rightarrow \bold{x})$, intensidad de la luz que viaja del punto tridimensional $\bold{x'}$ a $\bold{x}$
+%(sin oclusiones)
+
+%\item $g(\bold{x'} \rightarrow \bold{x})$: término geométrico que modela la oclusión que podría existir entre $\bold{x}$ y $\bold{x'}$,
+%\item $\epsilon(\bold{x'} \rightarrow \bold{x})$ intensidad de la luz emitida desde $\bold{x'}$ a $\bold{x}$,
+%\item $\rho(\bold{x''}  \rightarrow \bold{x'}  \rightarrow \bold{x})$ la intensidad de la luz emitida de $\bold{x''}$ a $\bold{x}$ por medio de una superficie en $\bold{x'}$ (esta cantidad será llamada función bidireccional de distribución de reflectancia, BRDF),
+
+%\item $S=\bigcup{s_{i}}$, unión de todas las superficies $s_{i}$ de la escena
+%\end{itemize}
+%\end{frame}
+
+%\begin{frame}
+
+%\begin{equation*}
+%L(\bold{x'} \rightarrow \bold{x}) =  g(\bold{x'}  \rightarrow \bold{x})  \left[ \epsilon(\bold{x'}  \rightarrow \bold{x}) + \int_{s}{\rho(\bold{x''}  \rightarrow \bold{x'}  \rightarrow \bold{x})L(\bold{x''}  \rightarrow \bold{x}) d\bold{x''}} \right]
+%\end{equation*}
+
+
+%Además se asume una superficie $S_{0}$, la cual se modela como una semi-esfera que engloba a toda la escena.
+
+%\vspace{0.2cm}
+%Aproximación de las propiedades óptico-geométricas de las ecuaciones del electromagnetismo de Maxwell.
+
+%(Ray Tracing, Path Tracing)
+%\end{frame}
+
+
+\begin{frame}{Ecuación del Renderizado de Volúmenes}
+Cambio de radiancia ($L$) en una dirección dada ($\vec{\omega}$) 
+
+Absorción, dispersión saliente, emisión y dispersión entrante.
+\begin{equation*}
+\begin{aligned}
+(\vec{\omega} \cdot \nabla) L(\bold{x} \rightarrow \vec{\omega}) = - \sigma_{a}(\bold{x}) L(\bold{x} \rightarrow \vec{\omega}) - \sigma_{s}(\bold{x}) L(\bold{x} \rightarrow \vec{\omega}) + \\
+\sigma_{a}(\bold{x}) L_{e}(\bold{x} \rightarrow \vec{\omega}) + \sigma_{s}(\bold{x}) L_{i}(\bold{x} \rightarrow \vec{\omega}).
+\end{aligned}
+\end{equation*}
+
+$\sigma_{a}$: coef. absorción, $\sigma_{s}$: coef. dispersión.
+
+%\end{frame}
+
+%\begin{frame}{Ecuación del Renderizado de Volúmenes}
+\centering
+\includegraphics[scale = 0.3]{../figures/fenomenosrte}
+
+Ray Casting (Direct Volume Rendering)
+\end{frame}
+
+
 
 \begin{frame}{Renderización}
 
@@ -1179,6 +967,20 @@ Para obtener resultados en tiempo real, tomamos una versión simplificada de la 
 
 \end{frame}
 
+\begin{frame}{}
+
+\centerline{\includegraphics[width=7cm]{../figures/Fig11CAVW}}
+
+\centerline{\includegraphics[width=9.5cm]{../figures/Fig12CAVW}}
+\end{frame}
+
+\begin{frame}{}
+
+\includegraphics[width=6cm, height=5cm]{../figures/Fig13CAVW}
+\includegraphics[width=6cm, height=5cm]{../figures/Fig14CAVW}
+
+\end{frame}
+
 \begin{frame}
 Implementación en GPU, (\textbf{fragment shader}, dentro del \textbf{pipeline gráfico}).
 
@@ -1222,7 +1024,7 @@ Implementación en GPU, (\textbf{fragment shader}, dentro del \textbf{pipeline g
 
 
 
-\begin{frame}{Conclusiones}
+\begin{frame}{Conclusiones\footnote{Modelado para la Renderización foto-realista de pan, {\it Mecánica Computacional}, Baravalle et.al. 2014}}
 \begin{itemize}
 \item Imágenes realistas
 \item Tiempo real
@@ -1432,7 +1234,7 @@ Correlación entre las dimensiones del MFS y el desvío estándar del área medi
 
 %\begin{frame}{Conclusiones}
 
-Conclusiones
+Conclusiones\footnote{Multifractal Characterisation and Classification of Bread Crumb Digital Images, {\it EURASIP Journal on Image and Video Processing}, Baravalle et.al. 2015}
 \begin{itemize}
 \item Es posible utilizar el MFS no sólo para clasificar, sino para caracterizar muestras de panes.
 \item Clasificación comparable al estado del arte.
@@ -1504,6 +1306,7 @@ Conclusiones
 \item Validación tridimensional de los resultados
 \item Validación utilizando técnicas de aprendizaje profundo
 \item Implementación en \textbf{GPU} de la \textbf{generación procedimental}
+\item Producir un {\it plug-in} de blender (o similar)
 \end{itemize}
 \end{block}
 \end{frame}
