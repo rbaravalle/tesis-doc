@@ -324,82 +324,11 @@ Posición $\rightarrow$ Chequear que los \textbf{vecinos} de la posición estén
 \vspace{0.1cm}
 
 Sistema Dinámico (SD) $\rightarrow$ campo vectorial (discreto) $\rightarrow$ dirección
-%\end{frame}
 
+\centerline{\includegraphics[width=8cm]{../figures/Fig2}}
 
-%\begin{frame}{Sistemas dinámicos}
-
-%Las ODEs se representan utilizando el siguiente sistema de ecuaciones:
-%\begin{equation*}
-%  \begin{aligned}
-%    \dot{x_{1}} = f_{1}(x_{1},\ldots,x_{n}),\\
-%    \ldots\\
-%    \dot{x_{n}} = f_{n}(x_{1},\ldots,x_{n}).
-%  \end{aligned}
-%\end{equation*}
-
-
-
-%\end{frame}
-
-
-%\begin{frame}{Crecimiento}
-%Crecimiento:
-%\begin{itemize}
-%\item Aleatorio
-%\item Direccionado
-%\end{itemize}
-
-
-%\vspace{0.1cm}
-
-%\end{frame}
-
-%\begin{frame}{Crecimiento}
-%SD 2D, imagen izquierda:
-%\begin{equation*} \label{eq:simple}  
-%  \begin{aligned}
-%    \dot{x} &= x^{2}-y^{2}+1,\\
-%    \dot{y} &= 2xy+1.
-%  \end{aligned}
-%\end{equation*}
-  \centerline{\includegraphics[width=8cm]{../figures/Fig2}}
-%\end{frame}
-
-%\begin{frame}
-%Se establece una correspondencia entre los límites del plano y las posiciones de la grilla.
-
-%\begin{itemize}
-%\item Posición $(0,0)$ de la grilla $\rightarrow$ mínimo en $X$ e $Y$ (sistema dinámico)
-%\item Posición $(N,N)$ con el máximo $X$ e $Y$.
-%\end{itemize}
 
 \end{frame}
-
-%\begin{frame}
-%\begin{algorithm}[H]
-%\begin{algorithmic}[1]
-%\STATE $solucion = Runge\_Kutta(h)$
-%\STATE $vec = vecindario(h)$
-%\STATE $mejor = abs(vec[0] - solucion)$
-%\STATE $elegida = h$
-%\STATE $vec.eliminar(h)$
-%\FOR {$w \in vec$}
-%%\STATE{// Se calcula la posición del vecindario que mejor aproxima al sistema}
-%    \IF {$abs(vec[w]-solucion) < mejor$}
-%        \STATE $mejor = abs(vec[w]-solucion)$
-%        \STATE $elegida = w$
-%    \ENDIF
-%    \IF {$aleatorio() < aleatoriedad$} 
-%    %\Comment {$0 <= aleatorio() <= 1$}
-%        \STATE $C[i].agregar(w)$
-%    \ENDIF
-%\ENDFOR
-%%\State{// Se agrega al vecindario sólo la posición que mejor aproxima la solución}
-%\STATE $C[i].agregar(elegida)$
-%\end{algorithmic}
-%\end{algorithm}
-%\end{frame}
 
 \begin{frame}{Sistemas de partículas + Sistemas Dinámicos}
 
@@ -440,6 +369,20 @@ Parámetro {\em separación} = 2 entre partículas, Adaptativo (dependiendo del 
 
 
 
+
+\end{frame}
+
+
+
+\begin{frame}{Resultados - Modelado de Materiales Porosos}
+
+\centerline{\includegraphics[width=9.5cm]{../figures/Fig12CAVW}}
+\end{frame}
+
+\begin{frame}{Resultados - Modelado de Materiales Porosos}
+
+\includegraphics[width=6cm, height=5cm]{../figures/Fig13CAVW}
+\includegraphics[width=6cm, height=5cm]{../figures/Fig14CAVW}
 
 \end{frame}
 
@@ -500,6 +443,20 @@ N(r) = \frac{k}{r^{d}}
 Mapa de Distancias $\rightarrow$ zona de exclusión
 \end{frame}
 
+\begin{frame}{Resultados - Proceso formación Pan}
+\textbf{Mapa de Distancias}
+\centerline{\includegraphics[width=4cm]{../figures/DistanceTransform}}
+
+\textbf{Umbral} DF $\rightarrow$ corteza de ancho \textbf{parametrizable}.
+
+\vspace{0.3cm}
+
+\centerline{\includegraphics[width=8cm]{../figures/prebakebread}}
+
+\centerline{\includegraphics[width=8cm]{../figures/prebakebunny}}
+\end{frame}
+
+
 \subsection{Cocción}
 
 \begin{frame}{Cocción}
@@ -526,13 +483,6 @@ $DF_{M} > 0 \rightarrow$ interior, menor $T$  $\rightarrow R_{vol}$
 \begin{frame}{}
 \textbf{Deformación por Temperatura} - \textbf{Warping}
 
-%\begin{align*}
-%\displaystyle
-%[x,y,z] = [u,v,w] + p\, \nabla R_{vol}[u,v,w], 
-%\end{align*}
-
-%$p = 5,10,15$:
-
 
 \textbf{Burbujas} durante el leudado $\rightarrow P[x,y,z] = max \bigg\{r\bigg\}$
 
@@ -557,13 +507,43 @@ Escalado de la textura (distribución de burbujas)
 
 \end{frame}
 
+\begin{frame}{Resultados - Proceso formación Pan}
+
+\centerline{\includegraphics[width=8cm]{../figures/Fig13}}
+Cortezas con diferentes historias de cocción ($L_{MAX}$).
+
+Colores CIELab de muestras reales (Purlis et. al. (2009))
+
+$L = 40 \rightarrow$ \text{máxima cocción}, $L = 90 \rightarrow$ \text{sin cocción}
+
+\centerline{\includegraphics[width=2cm]{../figures/browning}}
+
+{\em \textbf{Densidad} de la corteza}: $N_{v} / W_{size} \rightarrow L$
+
+\begin{itemize}
+\item $N_{v}$ núm. voxels $= 1$ en una ventana en el entorno de la posición,
+\end{itemize}
+
+$<$ masa $\Rightarrow < L$.
+
+\end{frame}
+
+\begin{frame}{Resultados - Proceso formación Pan}
+\includegraphics[width=10cm]{../figures/Fig14}
+
+Panes luego de la cocción mostrando diferentes crecimientos. De izquierda a derecha se incrementa el parámetro $S$.
+
+\includegraphics[width=7cm]{../figures/Fig15}
+
+
+\end{frame}
+
 
 \begin{frame}{Validación}
 
 Ley fractal $\rightarrow$ geometrías de migas de pan.
 
 \begin{block}{Espectro Multifractal (MFS)}
-%\textbf{Espectro Multifractal (MFS)}
 
 \begin{itemize}
 \item \textbf{Vector}, captura distintas estructuras fractales dentro del mismo objeto,
@@ -580,10 +560,6 @@ $N$ muestras sintéticas $\rightarrow MFS_{sint\acute{e}tico}$, para ciertos par
 \begin{equation*}
 Error = \displaystyle \sum_{i} abs(mediana_{i}(MFS_{real})-mediana_{i}(MFS_{sint\acute{e}tico})).
 \end{equation*}
-
-%Parámetros (leudado) $N = \frac{k}{r^{d}}, r = r_{min}+paso*j$
-
-%$k,d,r_{min},r_{max},step$ que controlan la generación de burbujas.
 
 \end{frame}
 
@@ -666,17 +642,12 @@ Ray Casting (Direct Volume Rendering)
 
 \begin{frame}{Renderización}
 
-Se propone \textbf{textura volumétrica} $\rightarrow$ \textbf{Renderizado Directo de Volúmenes}
+Se propone \textbf{textura volumétrica} $\rightarrow$ \textbf{Renderizado Directo de Volúmenes} (DVR)
 
 \begin{itemize}
 \item Evita construcción de una malla.
 \item Permite \textbf{cortes arbitrarios} del material (trivialmente).
 \end{itemize}
-
-%\end{frame}
-
-%\begin{frame}{DVR}
-DVR aproxima la Ecuación del Transporte Radiativo (RTE).
 
 Se computa un \textbf{rayo} para cada pixel, desde la pantalla al objeto.
 
@@ -695,84 +666,6 @@ Para obtener resultados en tiempo real, tomamos una versión simplificada de la 
 \end{itemize}
 
 \centerline{\includegraphics[width=4cm]{../figures/fragmentshader}}
-
-\end{frame}
-
-
-%\begin{frame}{Corteza}
-
-%\end{frame}
-
-
-\begin{frame}
-\begin{block}{}
-\begin{center}
-\vspace{1cm}
-\huge{Resultados}
-\vspace{1cm}
-\end{center}
-\end{block}
-\end{frame}
-
-\subsection{Resultados}
-
-
-\begin{frame}{Resultados - Proceso formación Pan}
-\textbf{Mapa de Distancias}
-\centerline{\includegraphics[width=4cm]{../figures/DistanceTransform}}
-
-\textbf{Umbral} DF $\rightarrow$ corteza de ancho \textbf{parametrizable}.
-
-\vspace{0.3cm}
-
-\centerline{\includegraphics[width=8cm]{../figures/prebakebread}}
-
-\centerline{\includegraphics[width=8cm]{../figures/prebakebunny}}
-\end{frame}
-
-
-\begin{frame}{Resultados - Proceso formación Pan}
-
-\centerline{\includegraphics[width=8cm]{../figures/Fig13}}
-Cortezas con diferentes historias de cocción ($L_{MAX}$).
-
-Colores CIELab de muestras reales (Purlis et. al. (2009))
-
-$L = 40 \rightarrow$ \text{máxima cocción}, $L = 90 \rightarrow$ \text{sin cocción}
-
-\centerline{\includegraphics[width=2cm]{../figures/browning}}
-
-{\em \textbf{Densidad} de la corteza}: $N_{v} / W_{size} \rightarrow L$
-
-\begin{itemize}
-\item $N_{v}$ núm. voxels $= 1$ en una ventana en el entorno de la posición,
-\end{itemize}
-
-$<$ masa $\Rightarrow < L$.
-
-\end{frame}
-
-\begin{frame}{Resultados - Proceso formación Pan}
-\includegraphics[width=10cm]{../figures/Fig14}
-
-Panes luego de la cocción mostrando diferentes crecimientos. De izquierda a derecha se incrementa el parámetro $S$.
-
-\includegraphics[width=7cm]{../figures/Fig15}
-
-
-\end{frame}
-
-\begin{frame}{Resultados - Modelado de Materiales Porosos}
-
-%\centerline{\includegraphics[width=7cm]{../figures/Fig11CAVW}}
-
-\centerline{\includegraphics[width=9.5cm]{../figures/Fig12CAVW}}
-\end{frame}
-
-\begin{frame}{Resultados - Modelado de Materiales Porosos}
-
-\includegraphics[width=6cm, height=5cm]{../figures/Fig13CAVW}
-\includegraphics[width=6cm, height=5cm]{../figures/Fig14CAVW}
 
 \end{frame}
 
@@ -818,47 +711,6 @@ Implementación en GPU, (\textbf{fragment shader}, dentro del \textbf{pipeline g
 \end{itemize}
 \end{block}
 \end{frame}
-
-%\section{Validación}
-
-
-
-%\begin{frame}
-%\begin{block}{}
-%\begin{center}
-%\vspace{1cm}
-%\huge{Validación}
-%\vspace{1cm}
-%\end{center}
-%\end{block}
-%\end{frame}
-
-
-%\subsection{Validación tradicional y automática}
-%\begin{frame}{Validación tradicional}
-%\begin{itemize}
-%\item Se utilizan procesos físicos en el renderizado o modelado
-%\item Las imágenes pueden pasar una inspección poco detallista sobre su autenticidad
-%\item Reviewer \#N dice \it{los resultados se ven muy atractivos}
-%\end{itemize}
-
-%En computación gráfica, el camino tradicional es el expuesto.
-
-%Proponemos además, validar semi-automáticamente geometrías utilizando fractales.
-
-%\end{frame}
-
-
-%\begin{frame}{Conclusiones}
-%\begin{block}{}
-%\begin{itemize}
-%\item Algoritmo semi-automático para comparar muestras reales y sintéticas
-%\item Es posible utilizarlo para alimentar la generación a partir de una muestra real, y obtener un pan sintético con características estadísticamente similares.
-%\item Es posible mejorar el algoritmo hallando automáticamente los parámetros iniciales.
-%\end{itemize}
-%\end{block}
-
-%\end{frame}
 
 \subsection{Extras}
 
