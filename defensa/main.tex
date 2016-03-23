@@ -171,7 +171,7 @@ Computar \textbf{radiancia entrante}:  \textbf{cámara}  $\leftarrow$ \textbf{es
 
 \begin{block}{Debe modelarse}
 \begin{itemize}
-\item \textbf{Luz Visible} (líneas rectas o \textbf{Rayos}) (Resuelto)
+\item \textbf{Luz Visible} (líneas rectas o \textbf{Rayos})
 \item Interacción Luz $\leftrightarrow$ \textbf{cada} material
 \end{itemize}
 \end{block}
@@ -190,7 +190,7 @@ Estudio de la \textbf{apariencia} de un material $\rightarrow$ Modelo Numérico
 
 \end{frame}
 
-\subsection{Trabajo Previo}
+\subsection{Modelado de Materiales}
 
 \begin{frame}{}
 
@@ -202,14 +202,14 @@ Técnicas algorítmicas. Sistemas-L (\textbf{Comparación subjetiva}: sintético
 \center
 
 \includegraphics[width=3.7cm]{../figures/sistemalcorchete}
-\includegraphics[width=3.4cm]{../figures/3dlsystem}
+\includegraphics[width=3.54cm]{../figures/3dlsystem}
 
 \end{block}
 \begin{block}{}
 
 Ecuaciones de \textbf{comportamiento}, \textbf{crecimiento}. Navier-Stokes (fluídos)
 \center
-\includegraphics[width=2.2cm]{../figures/smoke}
+\includegraphics[width=2.385cm]{../figures/smoke}
 \includegraphics[width=4cm]{../figures/water}
 \end{block}
 
@@ -246,6 +246,18 @@ Obtener \textbf{geometría} configurable, intuitiva y creíble de estos material
 
 \end{frame}
 
+\begin{frame}{Esquema de la Charla}
+
+\begin{block}{Esquema de la Charla}
+\begin{itemize}
+\item Modelado \textbf{procedimental} de materiales porosos
+\item Modelado \textbf{procedimental} del proceso de formación del pan
+\item Renderización de materiales porosos
+\item Conclusiones, Trabajos a Futuro
+\end{itemize}
+\end{block}
+
+\end{frame}
 
 \section[Mod. de Materiales Porosos]{Modelado Procedimental de Materiales Porosos}
 
@@ -296,9 +308,9 @@ Presentamos un modelo \textbf{procedimental}, semi-automático de generación de
 \end{frame}
 
 \begin{frame}
-El sistema consta de:
+\textbf{Propuesta}
 \begin{itemize}
-\item $P$: partículas
+\item $P$: partículas (conjunto)
 \item $L$, $L^{2}$: texturas 3D
 \end{itemize}
 
@@ -346,7 +358,7 @@ Geometrías tridimensionales \textbf{arbitrarias} $\rightarrow$ voxelización
 
 \begin{itemize}
 \item Cortes bidimensionales sobre un Eje Cartesiano ($x$, $y$ o $z$)
-\item Para cada corte se establecen condiciones de contorno, a través de un campo vectorial discreto que ``sigue'' al contorno (gaussiano (ventana $k$) $\rightarrow$ gradiente $\rightarrow$ ortogonal)
+\item Para cada corte se establecen condiciones de contorno, a través de un campo vectorial discreto que ``sigue'' al contorno (blur (ventana $k$) $\rightarrow$ gradiente $\rightarrow$ ortogonal)
 \item Centrado del SD en el {\em centro de masa} de cada corte
 \item Parametrización bidimensional (más intuitiva).
 
@@ -436,11 +448,11 @@ N(r) = \frac{k}{r^{d}}
 \end{equation*}
 
 \vspace{0.3cm}
+Sintético \hspace{2.1cm} Real \hspace{2.6cm} Real
 \centering
 \includegraphics[height=3.5cm]{../figures/bubbles}
 \includegraphics[height=3.5cm]{../figures/proving}
 
-Mapa de Distancias $\rightarrow$ zona de exclusión
 \end{frame}
 
 \begin{frame}{Resultados - Proceso formación Pan}
@@ -512,17 +524,23 @@ Escalado de la textura (distribución de burbujas)
 \centerline{\includegraphics[width=8cm]{../figures/Fig13}}
 Cortezas con diferentes historias de cocción ($L_{MAX}$).
 
-Colores CIELab de muestras reales (Purlis et. al. (2009))
+\vspace{0.2cm}
+
+Colores CIELab (Luminancia, Cromaticidad) de muestras reales (Purlis et. al. (2009))
+
+\vspace{0.2cm}
 
 $L = 40 \rightarrow$ \text{máxima cocción}, $L = 90 \rightarrow$ \text{sin cocción}
 
+\vspace{0.2cm}
+
 \centerline{\includegraphics[width=2cm]{../figures/browning}}
 
-{\em \textbf{Densidad} de la corteza}: $N_{v} / W_{size} \rightarrow L$
+%{\em \textbf{Densidad} de la corteza}: $N_{v} / W_{size} \rightarrow L$
 
-\begin{itemize}
-\item $N_{v}$ núm. voxels $= 1$ en una ventana en el entorno de la posición,
-\end{itemize}
+%\begin{itemize}
+%\item $N_{v}$ núm. voxels $= 1$ en una ventana en el entorno de la posición,
+%\end{itemize}
 
 $<$ masa $\Rightarrow < L$.
 
@@ -546,14 +564,18 @@ Ley fractal $\rightarrow$ geometrías de migas de pan.
 \begin{block}{Espectro Multifractal (MFS)}
 
 \begin{itemize}
-\item \textbf{Vector}, captura distintas estructuras fractales dentro del mismo objeto,
-\item o distintos comportamientos fractales dependiendo de la escala.
+\item \textbf{Vector}, captura distintas estructuras fractales dentro del mismo objeto
+\item Computa distintas medidas fractales: información, box-count, correlación, etc.
 \end{itemize}
 \end{block}
+
+\vspace{0.2cm}
 
 $N$ muestras reales del mismo tipo de pan $\rightarrow MFS_{real}$
 
 $N$ muestras sintéticas $\rightarrow MFS_{sint\acute{e}tico}$, para ciertos parámetros del leudado
+
+\vspace{0.2cm}
 
 \textbf{Métrica de error}:
 
@@ -568,9 +590,13 @@ Error = \displaystyle \sum_{i} abs(mediana_{i}(MFS_{real})-mediana_{i}(MFS_{sint
 \includegraphics[width=4.5cm]{../figures/realbin}
 \includegraphics[width=2cm]{../figures/best}
 
+\hspace{4.7cm} Real \hspace{0.6cm} Binarización \hspace{0.5cm} Sintético
+
 \includegraphics[width=4cm]{../figures/bestboxplot2}
 \includegraphics[width=4cm]{../figures/realbin2}
 \includegraphics[width=2.5cm]{../figures/best2}
+
+\hspace{4.7cm} Real \hspace{0.5cm} Binarización \hspace{0.5cm} Sintético
 \end{frame}
 
 
@@ -712,20 +738,20 @@ Implementación en GPU, (\textbf{fragment shader}, dentro del \textbf{pipeline g
 \end{block}
 \end{frame}
 
-\subsection{Extras}
+\subsection{Extra}
 
 \begin{frame}
 \begin{block}{}
 \begin{center}
 \vspace{1cm}
-\huge{Extras}
+\huge{Extra}
 \vspace{1cm}
 \end{center}
 \end{block}
 \end{frame}
 
 \begin{frame}{Clasificación de Imágenes de cortes de Pan}
-Se estudió el espectro multifractal para \textbf{caracterizar y clasificar} imágenes de cortes reales de pan (Parámetros de calidad que deben respetar los panes reales, clasificación automática)\footnote{Multifractal Characterisation and Classification of Bread Crumb Digital Images, {\it EURASIP Journal on Image and Video Processing}, Baravalle et.al. 2015}
+Se estudió el espectro multifractal para \textbf{caracterizar y clasificar} imágenes de cortes reales de pan (baguette, sandwich, lactal, etc.) (Parámetros de calidad que deben respetar los panes reales, clasificación automática)\footnote{Multifractal Characterisation and Classification of Bread Crumb Digital Images, {\it EURASIP Journal on Image and Video Processing}, Baravalle et.al. 2015}
 
 \begin{table}[h!]
 \center
@@ -748,24 +774,6 @@ Se encontraron correlaciones entre las dimensiones del MFS, la fracción de vac�
 
 \end{frame}
 
-\begin{frame}{Validación utilizando Técnicas de Aprendizaje Profundo?}
-
-
-\centering
-\includegraphics[width=3cm]{../figures/deep1}
-\includegraphics[width=3cm]{../figures/deep4}
-
-\includegraphics[width=3cm]{../figures/deep2}
-\includegraphics[width=3cm]{../figures/deep3}
-
-
-\vspace{0.4cm}
-\url{http://deeplearning.cs.toronto.edu/}
-
-\end{frame}
-
-
-
 \section[Conclusiones]{Conclusiones y Trabajos a Futuro}
 
 
@@ -783,31 +791,44 @@ Se encontraron correlaciones entre las dimensiones del MFS, la fracción de vac�
 \begin{frame}{Conclusiones}
 \begin{block}{}
 \begin{itemize}
-\item Se introdujo un \textbf{algoritmo procedimental} de generación de geometrías \textbf{porosas} creibles de manera automática.
+\item Se introdujo un \textbf{algoritmo procedimental} de generación de geometrías \textbf{porosas} creíbles de manera automática.
 \item Se presentó un algoritmo \textbf{basado} en el \textbf{proceso real de formación del pan}, eliminando decisiones ad-hoc en la generación de este material, obteniendo estructuras a lo largo de todo el \textbf{proceso de formación}.
 \item Se aplicó un algoritmo de renderizado, basado en la interacción lumínica con una escena, produciendo imágenes foto-realísticas de materiales porosos/cocidos/comestibles como pan, esponjas, y piedras. Se obtuvieron imágenes \textbf{foto-realísticas en tiempo real}, por medio de la utilización de la \textbf{GPU}.
+\item Se \textbf{validaron} las geometrías generadas por el proceso inspirado en la formación del pan con muestras reales de pan.
+\item Se presentó un método para \textbf{clasificar} muestras de pan, superando a clasificadores del estado del arte.
 \end{itemize}
 \end{block}
 \end{frame}
 
 \begin{frame}{Conclusiones}
-\begin{block}{}
-\begin{itemize}
-\item Se \textbf{validaron} las geometrías generadas por el proceso inspirado en la formación del pan con muestras reales de pan.
-\item Se presentó un método para \textbf{clasificar} muestras de pan, superando a clasificadores del estado del arte.
-\end{itemize}
-\end{block}
-
 \begin{block}{Trabajos a Futuro}
 \begin{itemize}
 \item Generación procedimental de huesos y \textbf{otros materiales}
 \item Validación tridimensional de los resultados
-\item Validación utilizando técnicas de aprendizaje profundo
 \item Implementación en \textbf{GPU} de la \textbf{generación procedimental}
 \item Producir un {\it plug-in} de blender (o similar)
+\item Validación utilizando técnicas de aprendizaje profundo
 \end{itemize}
 \end{block}
 \end{frame}
+
+
+\begin{frame}{Validación utilizando Técnicas de Aprendizaje Profundo?}
+
+
+\centering
+\includegraphics[width=3cm]{../figures/deep1}
+\includegraphics[width=3cm]{../figures/deep4}
+
+\includegraphics[width=3cm]{../figures/deep2}
+\includegraphics[width=3cm]{../figures/deep3}
+
+
+\vspace{0.4cm}
+\url{http://deeplearning.cs.toronto.edu/}
+
+\end{frame}
+
 
 \begin{frame}
 \centering
