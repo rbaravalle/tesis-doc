@@ -14,3 +14,5 @@ main.pdf
 *.alg
 *.acn
 *.acr
+*.glg
+*.gls
